@@ -218634,8 +218634,8 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     id: 'theme',
     label: '跟随主题'
   }, {
-    id: 'solid',
-    label: '纯色'
+    id: 'follow',
+    label: '封面主色'
   }, {
     id: 'blur',
     label: '封面模糊'
@@ -218643,10 +218643,22 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   var _default = exports.default = (0, _react.memo)(function () {
     var theme = (0, _$$_REQUIRE(_dependencyMap[5], "../../../../../store/theme/hook").useTheme)();
     var bgType = (0, _$$_REQUIRE(_dependencyMap[6], "../../../../../store/setting/hook").useSettingValue)('playDetail.background.type');
-    var handleTypeChange = (0, _react.useCallback)(function (type) {
-      (0, _$$_REQUIRE(_dependencyMap[7], "../../../../../core/common").updateSetting)({
-        'playDetail.background.type': type
-      });
+    var followCover = (0, _$$_REQUIRE(_dependencyMap[6], "../../../../../store/setting/hook").useSettingValue)('playDetail.background.followCover');
+
+    // 当前激活的模式:theme / follow / blur
+    var activeMode = bgType === 'solid' && followCover ? 'follow' : bgType;
+    var handleTypeChange = (0, _react.useCallback)(function (mode) {
+      if (mode === 'follow') {
+        (0, _$$_REQUIRE(_dependencyMap[7], "../../../../../core/common").updateSetting)({
+          'playDetail.background.type': 'solid',
+          'playDetail.background.followCover': true
+        });
+      } else {
+        (0, _$$_REQUIRE(_dependencyMap[7], "../../../../../core/common").updateSetting)({
+          'playDetail.background.type': mode,
+          'playDetail.background.followCover': false
+        });
+      }
     }, []);
     return /*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.View, {
       style: styles.container,
@@ -218659,7 +218671,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
         style: styles.row,
         children: BG_TYPES.map(function (type) {
           return /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.TouchableOpacity, {
-            style: [styles.chip, bgType === type.id && {
+            style: [styles.chip, activeMode === type.id && {
               backgroundColor: theme['c-primary']
             }],
             onPress: function onPress() {
@@ -218667,7 +218679,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
             },
             children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
               size: 12,
-              color: bgType === type.id ? '#fff' : theme['c-font'],
+              color: activeMode === type.id ? '#fff' : theme['c-font'],
               children: type.label
             })
           }, type.id);
