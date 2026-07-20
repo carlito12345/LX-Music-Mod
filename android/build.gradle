@@ -7,7 +7,7 @@ buildscript {
         compileSdkVersion = 36
         targetSdkVersion = 29
 
-        ndkVersion = "26.1.10909125"
+        ndkVersion = "27.3.13750724"
         kotlinVersion = "1.9.24" // Or any version above 1.3.x
         RNNKotlinVersion = kotlinVersion
 
@@ -26,3 +26,16 @@ buildscript {
 }
 
 apply plugin: "com.facebook.react.rootproject"
+
+allprojects {
+    plugins.withId('com.android.library') {
+        android {
+            ndkVersion rootProject.ext.ndkVersion
+        }
+    }
+    plugins.withId('com.android.application') {
+        android {
+            ndkVersion rootProject.ext.ndkVersion
+        }
+    }
+}

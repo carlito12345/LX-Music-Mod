@@ -17,6 +17,7 @@ import IsAlwaysKeepStatusbarHeight from './IsAlwaysKeepStatusbarHeight'
 import IsShowBackBtn from './IsShowBackBtn'
 import IsShowExitBtn from './IsShowExitBtn'
 import DrawerLayoutPosition from './DrawerLayoutPosition'
+import DownloadSection from '../Download'
 import { useI18n } from '@/lang/i18n'
 
 export default memo(() => {
@@ -41,6 +42,7 @@ export default memo(() => {
       <ShareType />
       <Source />
       <SourceName />
+      <DownloadSection />
     </Section>
   )
 })

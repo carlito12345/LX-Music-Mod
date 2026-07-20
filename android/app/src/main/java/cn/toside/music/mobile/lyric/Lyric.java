@@ -265,6 +265,11 @@ public class Lyric extends LyricPlayer {
     refreshLyric();
   }
 
+  public void setGradient(String[] colors, float[] positions) {
+    if (lyricView == null) return;
+    lyricView.setGradient(colors, positions);
+  }
+
   public void setPlayedColor(String unplayColor, String playedColor, String shadowColor) {
     if (lyricView == null) return;
     lyricView.setColor(unplayColor, playedColor, shadowColor);

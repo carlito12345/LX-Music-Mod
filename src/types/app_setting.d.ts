@@ -305,6 +305,14 @@ declare global {
         * 桌面歌词字体阴影颜色
         */
       'desktopLyric.style.lyricShadowColor': string
+      /**
+       * 桌面歌词已播放字体渐变颜色数组
+       */
+      'desktopLyric.style.lyricGradientColors': string[] | null
+      /**
+       * 桌面歌词已播放字体渐变位置数组(0~1,与颜色数组等长)
+       */
+      'desktopLyric.style.lyricGradientPositions': number[] | null
 
       /**
        * 是否显示热门搜索
@@ -350,6 +358,10 @@ declare global {
        * 文件命名方式
        */
       'download.fileName': '歌名 - 歌手' | '歌手 - 歌名' | '歌名'
+  /**
+   * 下载开关
+   */
+  'download.enabled': boolean
 
       /**
        * 是否启用同步
@@ -359,3 +371,44 @@ declare global {
   }
 }
 
+
+  /**
+   * 播放详情背景类型
+   */
+  'playDetail.background.type': 'theme' | 'solid' | 'blur'
+  /**
+   * 播放详情纯色背景颜色
+   */
+  'playDetail.background.solidColor': string
+  /**
+   * 播放详情背景是否跟随封面主色
+   */
+  'playDetail.background.followCover': boolean
+  /**
+   * 播放详情高斯模糊半径
+   */
+  'playDetail.background.blurRadius': number
+  /**
+   * 播放详情封面样式
+   */
+  'playDetail.cover.style': 'circle' | 'square' | 'rounded' | 'vinyl'
+  /**
+   * 播放详情封面特效:发光
+   */
+  'playDetail.cover.effect.glow': boolean
+  /**
+   * 播放详情封面特效:粒子
+   */
+  'playDetail.cover.effect.particles': boolean
+  /**
+   * 播放详情封面特效:旋转
+   */
+  'playDetail.cover.effect.rotate': boolean
+  /**
+   * 播放详情封面特效:滑动切歌
+   */
+  'playDetail.cover.effect.swipe': boolean
+  /**
+   * 进度条流光特效
+   */
+  'playDetail.progress.shimmer': boolean

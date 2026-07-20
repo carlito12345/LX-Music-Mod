@@ -37,6 +37,16 @@ const defaultSetting: LX.AppSetting = {
 
   // 'playDetail.isZoomActiveLrc': false,
   // 'playDetail.isShowLyricProgressSetting': false,
+  'playDetail.background.type': 'theme',
+  'playDetail.background.solidColor': '#000000',
+  'playDetail.background.followCover': false,
+  'playDetail.background.blurRadius': 20,
+  'playDetail.cover.style': 'circle',
+  'playDetail.cover.effect.glow': true,
+  'playDetail.cover.effect.particles': true,
+  'playDetail.cover.effect.rotate': true,
+  'playDetail.cover.effect.swipe': true,
+  'playDetail.progress.shimmer': true,
   'playDetail.style.align': 'left',
   'playDetail.vertical.style.lrcFontSize': 210,
   'playDetail.horizontal.style.lrcFontSize': 220,
@@ -57,6 +67,8 @@ const defaultSetting: LX.AppSetting = {
   'desktopLyric.style.lyricUnplayColor': 'rgba(255, 255, 255, 1)',
   'desktopLyric.style.lyricPlayedColor': 'rgba(7, 197, 86, 1)',
   'desktopLyric.style.lyricShadowColor': 'rgba(0, 0, 0, 0.6)',
+  'desktopLyric.style.lyricGradientColors': null,
+  'desktopLyric.style.lyricGradientPositions': null,
 
   'search.isShowHotSearch': false,
   'search.isShowHistorySearch': false,
@@ -69,6 +81,7 @@ const defaultSetting: LX.AppSetting = {
   'list.addMusicLocationType': 'top',
 
   'download.fileName': '歌名 - 歌手',
+  'download.enabled': false,
 
   'sync.enable': false,
 

@@ -11,6 +11,7 @@ import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 
 public class LyricModule extends ReactContextBaseJavaModule {
@@ -143,6 +144,32 @@ public class LyricModule extends ReactContextBaseJavaModule {
   @ReactMethod
   public void setColor(String unplayColor, String playedColor, String shadowColor, Promise promise) {
     if (lyric != null) lyric.setPlayedColor(unplayColor, playedColor, shadowColor);
+    promise.resolve(null);
+  }
+
+  @ReactMethod
+  public void setGradient(ReadableArray colors, ReadableArray positions, Promise promise) {
+    if (lyric == null) {
+      promise.resolve(null);
+      return;
+    }
+    if (colors == null || colors.size() < 2) {
+      lyric.setGradient(null, null);
+      promise.resolve(null);
+      return;
+    }
+    String[] colorArr = new String[colors.size()];
+    for (int i = 0; i < colors.size(); i++) {
+      colorArr[i] = colors.getString(i);
+    }
+    float[] positionArr = null;
+    if (positions != null && positions.size() == colors.size()) {
+      positionArr = new float[positions.size()];
+      for (int i = 0; i < positions.size(); i++) {
+        positionArr[i] = (float) positions.getDouble(i);
+      }
+    }
+    lyric.setGradient(colorArr, positionArr);
     promise.resolve(null);
   }
 

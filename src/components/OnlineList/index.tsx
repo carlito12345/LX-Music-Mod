@@ -1,12 +1,12 @@
 import { useRef, forwardRef, useImperativeHandle } from 'react'
 import { View } from 'react-native'
-// import LoadingMask, { LoadingMaskType } from '@/components/common/LoadingMask'
 import List, { type ListProps, type ListType, type Status, type RowInfoType } from './List'
 import ListMenu, { type ListMenuType, type Position, type SelectInfo } from './ListMenu'
 import ListMusicMultiAdd, { type MusicMultiAddModalType as ListAddMultiType } from '@/components/MusicMultiAddModal'
 import ListMusicAdd, { type MusicAddModalType as ListMusicAddType } from '@/components/MusicAddModal'
+import DownloadQualityModal, { type DownloadQualityModalType } from '@/components/DownloadQualityModal'
 import MultipleModeBar, { type MultipleModeBarType, type SelectMode } from './MultipleModeBar'
-import { handleDislikeMusic, handlePlay, handlePlayLater, handleShare, handleShowMusicSourceDetail } from './listAction'
+import { handleDislikeMusic, handlePlay, handlePlayLater, handleShare, handleShowMusicSourceDetail, handleDownload } from './listAction'
 import { createStyle } from '@/utils/tools'
 
 export interface OnlineListProps {
@@ -37,7 +37,7 @@ export default forwardRef<OnlineListType, OnlineListProps>(({
   const listMusicAddRef = useRef<ListMusicAddType>(null)
   const listMusicMultiAddRef = useRef<ListAddMultiType>(null)
   const listMenuRef = useRef<ListMenuType>(null)
-  // const loadingMaskRef = useRef<LoadingMaskType>(null)
+  const downloadQualityRef = useRef<DownloadQualityModalType>(null)
 
   useImperativeHandle(ref, () => ({
     setList(list, isAppend = false, showSource = false) {
@@ -78,6 +78,14 @@ export default forwardRef<OnlineListType, OnlineListProps>(({
     }
   }
 
+  const handleDownloadClick = (info: SelectInfo) => {
+    downloadQualityRef.current?.show(info.musicInfo)
+  }
+
+  const handleDownloadConfirm = (musicInfo: LX.Music.MusicInfoOnline, quality: string) => {
+    handleDownload({ musicInfo }, quality)
+  }
+
   return (
     <View style={styles.container}>
       <View style={{ flex: 1 }}>
@@ -103,6 +111,7 @@ export default forwardRef<OnlineListType, OnlineListProps>(({
       </View>
       <ListMusicAdd ref={listMusicAddRef} onAdded={() => { hancelExitSelect() }} />
       <ListMusicMultiAdd ref={listMusicMultiAddRef} onAdded={() => { hancelExitSelect() }} />
+      <DownloadQualityModal ref={downloadQualityRef} onDownload={handleDownloadConfirm} />
       <ListMenu
         ref={listMenuRef}
         onPlay={info => { handlePlay(info.musicInfo) }}
@@ -111,12 +120,11 @@ export default forwardRef<OnlineListType, OnlineListProps>(({
         onAdd={handleAddMusic}
         onMusicSourceDetail={info => { void handleShowMusicSourceDetail(info.musicInfo) }}
         onDislikeMusic={info => { void handleDislikeMusic(info.musicInfo) }}
+        onDownload={handleDownloadClick}
       />
-      {/* <LoadingMask ref={loadingMaskRef} /> */}
     </View>
   )
 })
-
 
 const styles = createStyle({
   container: {
@@ -130,4 +138,3 @@ const styles = createStyle({
     height: 40,
   },
 })
-

@@ -3,6 +3,10 @@ import { ScrollView, View } from 'react-native'
 import Popup, { type PopupType, type PopupProps } from '@/components/common/Popup'
 import { useI18n } from '@/lang'
 
+import SettingTimer from './settings/SettingTimer'
+import SettingBackground from './settings/SettingBackground'
+import SettingCover from './settings/SettingCover'
+import SettingProgressShimmer from './settings/SettingProgressShimmer'
 import SettingLyricProgress from './settings/SettingLyricProgress'
 import SettingVolume from './settings/SettingVolume'
 import SettingPlaybackRate from './settings/SettingPlaybackRate'
@@ -20,7 +24,6 @@ export interface SettingPopupType {
 export default forwardRef<SettingPopupType, SettingPopupProps>(({ direction, ...props }, ref) => {
   const [visible, setVisible] = useState(false)
   const popupRef = useRef<PopupType>(null)
-  // console.log('render import export')
   const t = useI18n()
 
   useImperativeHandle(ref, () => ({
@@ -28,29 +31,28 @@ export default forwardRef<SettingPopupType, SettingPopupProps>(({ direction, ...
       if (visible) popupRef.current?.setVisible(true)
       else {
         setVisible(true)
-        requestAnimationFrame(() => {
-          popupRef.current?.setVisible(true)
-        })
+        requestAnimationFrame(() => { popupRef.current?.setVisible(true) })
       }
     },
   }))
 
-
   return (
-    visible
-      ? (
-        <Popup ref={popupRef} title={t('play_detail_setting_title')} {...props}>
-          <ScrollView>
-            <View onStartShouldSetResponder={() => true}>
-              <SettingLyricProgress />
-              <SettingVolume />
-              <SettingPlaybackRate />
-              <SettingLrcFontSize direction={direction} />
-              <SettingLrcAlign />
-            </View>
-          </ScrollView>
-        </Popup>
-        )
-      : null
+    visible ? (
+      <Popup ref={popupRef} title={t('play_detail_setting_title')} {...props}>
+        <ScrollView>
+          <View onStartShouldSetResponder={() => true}>
+            <SettingTimer />
+            <SettingBackground />
+            <SettingCover />
+            <SettingProgressShimmer />
+            <SettingLyricProgress />
+            <SettingVolume />
+            <SettingPlaybackRate />
+            <SettingLrcFontSize direction={direction} />
+            <SettingLrcAlign />
+          </View>
+        </ScrollView>
+      </Popup>
+    ) : null
   )
 })

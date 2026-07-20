@@ -10,6 +10,7 @@ import {
   // Setting,
 } from '@/screens'
 import { Provider } from '@/store/Provider'
+import { PaperProvider, MD3DarkTheme, MD3LightTheme } from 'react-native-paper'
 
 import {
   HOME_SCREEN,
@@ -29,9 +30,11 @@ function WrappedComponent(Component: any) {
   return function inject(props: Record<string, any>) {
     const EnhancedComponent = () => (
       <Provider>
-        <Component
-          {...props}
-        />
+        <PaperProvider theme={MD3DarkTheme}>
+          <Component
+            {...props}
+          />
+        </PaperProvider>
       </Provider>
     )
 

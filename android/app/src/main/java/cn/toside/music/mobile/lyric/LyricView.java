@@ -72,6 +72,10 @@ public class LyricView extends Activity implements View.OnTouchListener {
   private int mLastRotation;
   private OrientationEventListener orientationEventListener = null;
 
+  // 渐变支持
+  private int[] gradientColors = null;
+  private float[] gradientPositions = null;
+
   final Handler fixViewPositionHandler;
   final Runnable fixViewPositionRunnable = this::updateViewPosition;
 
@@ -198,7 +202,7 @@ public class LyricView extends Activity implements View.OnTouchListener {
 //        }
 //      }
 //    } else {
-//      //Android6.0以下，不用动态声明权限
+//      //Android6.0以下,不用动态声明权限
 //      if (mFloatView!=null && mFloatView.isShow()==false) {
 //        mFloatView.show();
 //      }
@@ -220,6 +224,11 @@ public class LyricView extends Activity implements View.OnTouchListener {
     textSize = (float) options.getDouble("textSize", textSize);
     widthPercentage = (float) options.getDouble("width", 100) / 100f;
     maxLineNum = (int) options.getDouble("maxLineNum", maxLineNum);
+
+    // 读取渐变配置
+    gradientColors = options.getIntArray("gradientColors");
+    gradientPositions = options.getFloatArray("gradientPositions");
+
     handleShowLyric();
     listenOrientationEvent();
   }
@@ -257,6 +266,10 @@ public class LyricView extends Activity implements View.OnTouchListener {
     textView.setAlpha(alpha);
     textView.setTextSize(textSize);
     // Log.d("Lyric", "alpha: " + alpha + " text size: " + textSize);
+
+    if (gradientColors != null && gradientColors.length >= 2) {
+      textView.setGradientColors(gradientColors, gradientPositions);
+    }
 
     //监听 OnTouch 事件 为了实现"移动歌词"功能
     textView.setOnTouchListener(this);
@@ -304,13 +317,13 @@ public class LyricView extends Activity implements View.OnTouchListener {
       // winWidth = (int)(outMetrics.widthPixels * 0.92);
     }
 
-    // 注意，悬浮窗只有一个，而当打开应用的时候才会产生悬浮窗，所以要判断悬浮窗是否已经存在，
+    // 注意,悬浮窗只有一个,而当打开应用的时候才会产生悬浮窗,所以要判断悬浮窗是否已经存在,
     if (textView != null) {
       windowManager.removeView(textView);
     }
 
     // 使用Application context
-    // 创建UI控件，避免Activity销毁导致上下文出现问题,因为现在的悬浮窗是系统级别的，不依赖与Activity存在
+    // 创建UI控件,避免Activity销毁导致上下文出现问题,因为现在的悬浮窗是系统级别的,不依赖与Activity存在
     //创建自定义的TextView
     createTextView();
 
@@ -340,8 +353,8 @@ public class LyricView extends Activity implements View.OnTouchListener {
     }
 
     // TYPE_SYSTEM_ALERT  系统提示,它总是出现在应用程序窗口之上
-    // TYPE_SYSTEM_OVERLAY   系统顶层窗口。显示在其他一切内容之上。此窗口不能获得输入焦点，否则影响锁屏
-    // FLAG_NOT_FOCUSABLE 悬浮窗口较小时，后面的应用图标由不可长按变为可长按,不设置这个flag的话，home页的划屏会有问题
+    // TYPE_SYSTEM_OVERLAY   系统顶层窗口。显示在其他一切内容之上。此窗口不能获得输入焦点,否则影响锁屏
+    // FLAG_NOT_FOCUSABLE 悬浮窗口较小时,后面的应用图标由不可长按变为可长按,不设置这个flag的话,home页的划屏会有问题
     // FLAG_NOT_TOUCH_MODAL不阻塞事件传递到后面的窗口
     layoutParams.gravity = Gravity.TOP | Gravity.START;  //显示在屏幕上中部
 
@@ -424,14 +437,14 @@ public class LyricView extends Activity implements View.OnTouchListener {
 
     switch (event.getAction()){
       case MotionEvent.ACTION_DOWN:
-        // 获取按下时的X，Y坐标
+        // 获取按下时的X,Y坐标
         lastX = event.getRawX();
         lastY = event.getRawY();
 
         preY = lastY;
         break;
       case MotionEvent.ACTION_MOVE:
-        // 获取移动时的X，Y坐标
+        // 获取移动时的X,Y坐标
         nowX = event.getRawX();
         nowY = event.getRawY();
         if (preY == 0){
@@ -520,6 +533,21 @@ public class LyricView extends Activity implements View.OnTouchListener {
     textView.setTextColor(parseColor(playedColor));
     textView.setShadowColor(parseColor(shadowColor));
     // windowManager.updateViewLayout(textView, layoutParams);
+  }
+
+  public void setGradient(String[] colors, float[] positions) {
+    if (colors == null || colors.length < 2) {
+      this.gradientColors = null;
+      this.gradientPositions = null;
+    } else {
+      this.gradientColors = new int[colors.length];
+      for (int i = 0; i < colors.length; i++) {
+        this.gradientColors[i] = parseColor(colors[i]);
+      }
+      this.gradientPositions = positions;
+    }
+    if (textView == null) return;
+    textView.setGradientColors(this.gradientColors, this.gradientPositions);
   }
 
   public void setLyricTextPosition(String textX, String textY) {

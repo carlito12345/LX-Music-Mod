@@ -18,6 +18,7 @@ import {
   setMaxLineNum,
   setWidth,
   setLyricTextPosition,
+  setGradient,
   checkOverlayPermission,
   openOverlayPermissionActivity,
   onPositionChange,
@@ -33,6 +34,8 @@ export {
 export const showDesktopLyric = async() => {
   const setting = settingState.setting
   await showDesktopLyricView({
+    gradientColors: setting["desktopLyric.style.lyricGradientColors"],
+    gradientPositions: setting["desktopLyric.style.lyricGradientPositions"],
     isShowToggleAnima: setting['desktopLyric.showToggleAnima'],
     isSingleLine: setting['desktopLyric.isSingleLine'],
     isLock: setting['desktopLyric.isLock'],
@@ -79,6 +82,10 @@ export const setDesktopLyricColor = async(unplayColor: string | null, playedColo
     playedColor ?? settingState.setting['desktopLyric.style.lyricPlayedColor'],
     shadowColor ?? settingState.setting['desktopLyric.style.lyricShadowColor'],
   )
+}
+
+export const setDesktopLyricGradient = async(colors: string[] | null, positions?: number[] | null) => {
+  return setGradient(colors, positions)
 }
 export const setDesktopLyricAlpha = setAlpha
 export const setDesktopLyricTextSize = setTextSize

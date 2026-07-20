@@ -53,6 +53,8 @@ export const showDesktopLyricView = async({
   unplayColor,
   playedColor,
   shadowColor,
+  gradientColors,
+  gradientPositions,
   opacity,
   textSize,
   positionX,
@@ -68,6 +70,8 @@ export const showDesktopLyricView = async({
   unplayColor: string
   playedColor: string
   shadowColor: string
+  gradientColors: string[] | null
+  gradientPositions: number[] | null
   opacity: number
   textSize: number
   positionX: number
@@ -82,6 +86,8 @@ export const showDesktopLyricView = async({
     unplayColor,
     playedColor,
     shadowColor,
+    gradientColors,
+    gradientPositions,
     alpha: getAlpha(opacity),
     textSize: getTextSize(textSize),
     lyricViewX: positionX,
@@ -241,3 +247,7 @@ export const onLyricLinePlay = (handler: (lineInfo: { text: string, extendedLyri
   }
 }
 
+
+export const setGradient = async(colors: string[] | null, positions?: number[] | null): Promise<void> => {
+  return LyricModule.setGradient(colors, positions ?? null)
+}

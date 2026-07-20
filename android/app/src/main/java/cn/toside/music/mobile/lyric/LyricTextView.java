@@ -3,7 +3,9 @@ package cn.toside.music.mobile.lyric;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.LinearGradient;
 import android.graphics.Paint;
+import android.graphics.Shader;
 import android.util.Log;
 import android.view.Gravity;
 import android.widget.TextView;
@@ -28,12 +30,24 @@ public class LyricTextView extends TextView {
   public static final int startScrollDelay = 1500;
   public static final int invalidateDelay = 10;
 
+  // 渐变支持
+  private int[] gradientColors = null;
+  private float[] gradientPositions = null;
+  private boolean useGradient = false;
+
   public LyricTextView(Context context) {
     super(context);
     mStartScrollRunnable = LyricTextView.this::startScroll;
     invalidateRunnable = LyricTextView.this::invalidate;
     mPaint = getPaint();
     speed = SPEED_LIMIT * getTextSize();
+  }
+
+  public void setGradientColors(int[] colors, float[] positions) {
+    this.gradientColors = colors;
+    this.gradientPositions = positions;
+    this.useGradient = colors != null && colors.length >= 2;
+    postInvalidate();
   }
 
   private void init() {
@@ -116,6 +130,15 @@ public class LyricTextView extends TextView {
 
   @Override
   protected void onDraw(Canvas canvas) {
+    if (useGradient && mPaint != null) {
+      float w = getMeasuredWidth();
+      float h = getMeasuredHeight();
+      LinearGradient shader = new LinearGradient(0, 0, w, 0, gradientColors, gradientPositions, Shader.TileMode.CLAMP);
+      mPaint.setShader(shader);
+    } else if (mPaint != null) {
+      mPaint.setShader(null);
+    }
+
     float mSpeed = speed;
     if (text != null) {
       Log.d("Lyric", "getHeight: " + getHeight() + " y: " + y);

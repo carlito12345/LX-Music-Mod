@@ -18,7 +18,7 @@ import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 
-// https://github.com/Block-Network/StatusBarLyric/blob/main/app/src/main/java/statusbar/lyric/view/LyricSwitchView.kt
+// https://github.com/Block-Network/StatusBarLyric/blob/main/app/src/main/java/statusbar/lyric/view/LyricTextView.kt
 @SuppressLint({"ViewConstructor"})
 public final class LyricSwitchView extends TextSwitcher {
   private final TextView textView;
@@ -28,6 +28,10 @@ public final class LyricSwitchView extends TextSwitcher {
   private boolean isShowAnima;
 
   private boolean isSingleLine;
+
+  // 渐变支持
+  private int[] gradientColors = null;
+  private float[] gradientPositions = null;
 
   public LyricSwitchView(Context context, boolean isSingleLine, boolean isShowAnima) {
     super(context);
@@ -46,8 +50,8 @@ public final class LyricSwitchView extends TextSwitcher {
 //      }
     } else {
       viewArray = new ArrayList<>(2);
-      textView = new TextView(context);
-      textView2 = new TextView(context);
+      textView = new GradientTextView(context);
+      textView2 = new GradientTextView(context);
       viewArray.add(textView);
       viewArray.add(textView2);
       for (TextView v : viewArray) {
@@ -197,6 +201,18 @@ public final class LyricSwitchView extends TextSwitcher {
 
   public void setGravity(int i) {
     for (TextView v : viewArray) v.setGravity(i);
+  }
+
+  public void setGradientColors(int[] colors, float[] positions) {
+    this.gradientColors = colors;
+    this.gradientPositions = positions;
+    for (TextView v : viewArray) {
+      if (v instanceof LyricTextView) {
+        ((LyricTextView) v).setGradientColors(colors, positions);
+      } else if (v instanceof GradientTextView) {
+        ((GradientTextView) v).setGradientColors(colors, positions);
+      }
+    }
   }
 
 }
