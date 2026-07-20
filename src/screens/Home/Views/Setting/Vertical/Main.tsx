@@ -23,6 +23,7 @@ const styles = createStyle({
     paddingRight: 15,
     paddingTop: 15,
     paddingBottom: 15,
+    flex: 0,
   },
 })
 
@@ -54,7 +55,11 @@ export default () => {
       renderItem={renderItem}
       keyExtractor={getkey}
       contentContainerStyle={styles.content}
-      showsVerticalScrollIndicator={true}
+      maxToRenderPerBatch={2}
+      // updateCellsBatchingPeriod={80}
+      windowSize={2}
+      // removeClippedSubviews={true}
+      initialNumToRender={1}
     />
   )
 }

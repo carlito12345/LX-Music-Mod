@@ -2,6 +2,7 @@ import { memo, useCallback, useEffect, useRef, useState } from 'react'
 import { View, PanResponder, Animated, Easing } from 'react-native'
 import { createStyle } from '@/utils/tools'
 import { useTheme } from '@/store/theme/hook'
+import { useSettingValue } from '@/store/setting/hook'
 import { scaleSizeW, scaleSizeH } from '@/utils/pixelRatio'
 import { useDrag } from '@/utils/hooks'
 
@@ -11,6 +12,7 @@ const progressContentHeight = progressContentPadding * 2 + progressHeight
 
 // 呼吸发光点 - 放在 overflow:visible 容器内
 const GlowDot = memo(({ theme, pct }: { theme: any; pct: string }) => {
+  const shimmerEnabled = useSettingValue('playDetail.progress.shimmer')
   const primaryColor = theme['c-primary'] || '#07c556'
   const breathe = useRef(new Animated.Value(0)).current
 
@@ -91,7 +93,8 @@ const GlowDot = memo(({ theme, pct }: { theme: any; pct: string }) => {
 })
 
 // 流光 - 细长柔光,仅在进度条内显示
-const ShimmerEffect = memo(() => {
+const ShimmerEffect = memo(({ enabled }: { enabled: boolean }) => {
+  if (!enabled) return null
   const shimmerAnim = useRef(new Animated.Value(0)).current
 
   useEffect(() => {
@@ -166,6 +169,7 @@ const Progress = ({ progress, duration, buffered }: {
     global.app_event.setProgress(p * durationRef.current)
   }, [])
 
+  const shimmerEnabled = useSettingValue('playDetail.progress.shimmer')
   const primaryColor = theme['c-primary'] || '#07c556'
   const bgColor = theme['c-primary-light-300-alpha-800'] || 'rgba(7,197,86,0.2)'
   const bufferedColor = theme['c-primary-light-400-alpha-700'] || 'rgba(7,197,86,0.3)'
@@ -184,7 +188,7 @@ const Progress = ({ progress, duration, buffered }: {
           {/* 高光层 */}
           <View style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '50%', backgroundColor: 'rgba(255,255,255,0.25)', borderRadius: 4 }} />
           {/* 流光 */}
-          <ShimmerEffect />
+          <ShimmerEffect enabled={shimmerEnabled} />
         </View>
       </View>
 

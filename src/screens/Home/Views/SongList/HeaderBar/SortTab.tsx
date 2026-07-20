@@ -1,5 +1,5 @@
-import { forwardRef, useImperativeHandle, useMemo, useRef, useState, useEffect } from 'react'
-import { ScrollView, TouchableOpacity, Animated, Easing } from 'react-native'
+import { forwardRef, useImperativeHandle, useMemo, useRef, useState } from 'react'
+import { ScrollView, TouchableOpacity } from 'react-native'
 import songlistState, { type SortInfo, type Source } from '@/store/songlist/state'
 import { useI18n } from '@/lang'
 import { useTheme } from '@/store/theme/hook'
@@ -20,23 +20,6 @@ export default forwardRef<SortTabType, SortTabProps>(({ onSortChange }, ref) => 
   const t = useI18n()
   const theme = useTheme()
   const scrollViewRef = useRef<ScrollView>(null)
-
-  // 流光动画
-  const shimmer = useRef(new Animated.Value(0)).current
-  useEffect(() => {
-    Animated.loop(
-      Animated.timing(shimmer, {
-        toValue: 1,
-        duration: 2000,
-        easing: Easing.linear,
-        useNativeDriver: false,
-      })
-    ).start()
-  }, [shimmer])
-  const shimmerOpacity = shimmer.interpolate({
-    inputRange: [0, 0.5, 1],
-    outputRange: [0.3, 0.8, 0.3],
-  })
 
   useImperativeHandle(ref, () => ({
     setSource(source, activeTab) {
@@ -61,11 +44,7 @@ export default forwardRef<SortTabType, SortTabProps>(({ onSortChange }, ref) => 
         sorts.map(s => {
           const isActive = activeId == s.id
           return (
-            <TouchableOpacity
-              key={s.id}
-              style={styles.button}
-              onPress={() => handleSortChange(s.id)}
-            >
+            <TouchableOpacity key={s.id} style={styles.button} onPress={() => handleSortChange(s.id)}>
               <Text
                 size={14}
                 color={isActive ? theme['c-primary-font-active'] : theme['c-font-label']}
@@ -74,13 +53,7 @@ export default forwardRef<SortTabType, SortTabProps>(({ onSortChange }, ref) => 
                 {s.label}
               </Text>
               {isActive && (
-                <Animated.View
-                  style={[
-                    styles.indicator,
-                    { backgroundColor: theme['c-primary'] },
-                    { opacity: shimmerOpacity },
-                  ]}
-                />
+                <View style={[styles.indicator, { backgroundColor: theme['c-primary'] }]} />
               )}
             </TouchableOpacity>
           )

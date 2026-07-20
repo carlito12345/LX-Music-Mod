@@ -57,13 +57,25 @@ export default memo(({ componentId }: { componentId: string }) => {
   // 根据背景类型决定背景样式
   const backgroundStyle = useMemo(() => {
     if (bgType === 'solid') {
-      return { backgroundColor: followCover ? theme['c-primary'] : solidColor }
+      return { backgroundColor: followCover && mi.pic ? 'transparent' : solidColor }
     }
     return { backgroundColor: theme['c-content-background'] }
   }, [bgType, solidColor, followCover, theme])
 
   return (
     <View style={[styles.wrapper, backgroundStyle]}>
+      {/* 跟随封面色 - 用高斯模糊封面作为背景取色 */}
+      {bgType === 'solid' && followCover && mi.pic && (
+        <View style={StyleSheet.absoluteFill} pointerEvents="none">
+          <Image
+            source={{ uri: mi.pic }}
+            style={StyleSheet.absoluteFill}
+            resizeMode="cover"
+            blurRadius={50}
+          />
+          <View style={[StyleSheet.absoluteFill, { backgroundColor: 'rgba(0,0,0,0.55)' }]} />
+        </View>
+      )}
       {/* 高斯模糊背景层 */}
       {bgType === 'blur' && mi.pic && (
         <View style={StyleSheet.absoluteFill} pointerEvents="none">
