@@ -217908,47 +217908,61 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     value: true
   });
   exports.default = void 0;
-  var _react = _$$_REQUIRE(_dependencyMap[1], "react");
-  var _reactNative = _$$_REQUIRE(_dependencyMap[2], "react-native");
-  var _Header = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[3], "./components/Header"));
-  var _Player = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[4], "./Player"));
-  var _Pic = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[5], "./Pic"));
-  var _Lyric = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[6], "./Lyric"));
-  var _state = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[7], "../../../store/common/state"));
-  var _jsxRuntime = _$$_REQUIRE(_dependencyMap[8], "react/jsx-runtime");
+  var _slicedToArray2 = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[1], "@babel/runtime/helpers/slicedToArray"));
+  var _react = _$$_REQUIRE(_dependencyMap[2], "react");
+  var _reactNative = _$$_REQUIRE(_dependencyMap[3], "react-native");
+  var _Header = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[4], "./components/Header"));
+  var _Player = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[5], "./Player"));
+  var _Pic = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[6], "./Pic"));
+  var _Lyric = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[7], "./Lyric"));
+  var _state = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[8], "../../../store/common/state"));
+  var _jsxRuntime = _$$_REQUIRE(_dependencyMap[9], "react/jsx-runtime");
   var _this = this,
     _jsxFileName = "/data/data/com.termux/files/home/lx-music-mobile/src/screens/PlayDetail/Vertical/index.tsx";
   var _default = exports.default = (0, _react.memo)(function (_ref) {
     var componentId = _ref.componentId;
-    var mi = (0, _$$_REQUIRE(_dependencyMap[9], "../../../store/player/hook").usePlayerMusicInfo)();
-    var theme = (0, _$$_REQUIRE(_dependencyMap[10], "../../../store/theme/hook").useTheme)();
+    var mi = (0, _$$_REQUIRE(_dependencyMap[10], "../../../store/player/hook").usePlayerMusicInfo)();
+    var theme = (0, _$$_REQUIRE(_dependencyMap[11], "../../../store/theme/hook").useTheme)();
     var showLyricRef = (0, _react.useRef)(true);
-    var bgType = (0, _$$_REQUIRE(_dependencyMap[11], "../../../store/setting/hook").useSettingValue)('playDetail.background.type');
-    var solidColor = (0, _$$_REQUIRE(_dependencyMap[11], "../../../store/setting/hook").useSettingValue)('playDetail.background.solidColor');
-    var followCover = (0, _$$_REQUIRE(_dependencyMap[11], "../../../store/setting/hook").useSettingValue)('playDetail.background.followCover');
-    var blurRadius = (0, _$$_REQUIRE(_dependencyMap[11], "../../../store/setting/hook").useSettingValue)('playDetail.background.blurRadius');
+    var bgType = (0, _$$_REQUIRE(_dependencyMap[12], "../../../store/setting/hook").useSettingValue)('playDetail.background.type');
+    var solidColor = (0, _$$_REQUIRE(_dependencyMap[12], "../../../store/setting/hook").useSettingValue)('playDetail.background.solidColor');
+    var followCover = (0, _$$_REQUIRE(_dependencyMap[12], "../../../store/setting/hook").useSettingValue)('playDetail.background.followCover');
+    var blurRadius = (0, _$$_REQUIRE(_dependencyMap[12], "../../../store/setting/hook").useSettingValue)('playDetail.background.blurRadius');
+
+    // 提取封面主色
+    var _useState = (0, _react.useState)('#1a1a2e'),
+      _useState2 = (0, _slicedToArray2.default)(_useState, 2),
+      dominantColor = _useState2[0],
+      setDominantColor = _useState2[1];
+    (0, _react.useEffect)(function () {
+      var _NativeModules$Palett;
+      if (bgType !== 'solid' || !followCover || !mi.pic) return;
+      (_NativeModules$Palett = _reactNative.NativeModules.PaletteModule) == null ? void 0 : _NativeModules$Palett.getDominantColor(mi.pic).then(function (color) {
+        setDominantColor(color);
+      }).catch(function () {});
+    }, [mi.pic, bgType, followCover]);
 
     // 歌词始终可见,保持唤醒
     (0, _react.useEffect)(function () {
-      (0, _$$_REQUIRE(_dependencyMap[12], "../../../utils/nativeModules/utils").screenkeepAwake)();
+      (0, _$$_REQUIRE(_dependencyMap[13], "../../../utils/nativeModules/utils").screenkeepAwake)();
       var appstateListener = _reactNative.AppState.addEventListener('change', function (state) {
         switch (state) {
           case 'active':
-            if (!_state.default.componentIds.comment) (0, _$$_REQUIRE(_dependencyMap[12], "../../../utils/nativeModules/utils").screenkeepAwake)();
+            if (!_state.default.componentIds.comment) (0, _$$_REQUIRE(_dependencyMap[13], "../../../utils/nativeModules/utils").screenkeepAwake)();
             break;
           case 'background':
-            (0, _$$_REQUIRE(_dependencyMap[12], "../../../utils/nativeModules/utils").screenUnkeepAwake)();
+            (0, _$$_REQUIRE(_dependencyMap[13], "../../../utils/nativeModules/utils").screenUnkeepAwake)();
             break;
         }
       });
       var handleComponentIdsChange = function handleComponentIdsChange(ids) {
-        if (ids.comment) (0, _$$_REQUIRE(_dependencyMap[12], "../../../utils/nativeModules/utils").screenUnkeepAwake)();else if (_reactNative.AppState.currentState == 'active') (0, _$$_REQUIRE(_dependencyMap[12], "../../../utils/nativeModules/utils").screenkeepAwake)();
+        if (ids.comment) (0, _$$_REQUIRE(_dependencyMap[13], "../../../utils/nativeModules/utils").screenUnkeepAwake)();else if (_reactNative.AppState.currentState == 'active') (0, _$$_REQUIRE(_dependencyMap[13], "../../../utils/nativeModules/utils").screenkeepAwake)();
       };
       global.state_event.on('componentIdsUpdated', handleComponentIdsChange);
       return function () {
         global.state_event.off('componentIdsUpdated', handleComponentIdsChange);
         appstateListener.remove();
-        (0, _$$_REQUIRE(_dependencyMap[12], "../../../utils/nativeModules/utils").screenUnkeepAwake)();
+        (0, _$$_REQUIRE(_dependencyMap[13], "../../../utils/nativeModules/utils").screenUnkeepAwake)();
       };
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -217957,31 +217971,16 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     var backgroundStyle = (0, _react.useMemo)(function () {
       if (bgType === 'solid') {
         return {
-          backgroundColor: followCover && mi.pic ? 'transparent' : solidColor
+          backgroundColor: followCover ? dominantColor : solidColor
         };
       }
       return {
         backgroundColor: theme['c-content-background']
       };
-    }, [bgType, solidColor, followCover, theme]);
+    }, [bgType, solidColor, followCover, dominantColor, theme]);
     return /*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.View, {
       style: [styles.wrapper, backgroundStyle],
-      children: [bgType === 'solid' && followCover && mi.pic && /*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.View, {
-        style: _reactNative.StyleSheet.absoluteFill,
-        pointerEvents: "none",
-        children: [/*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.Image, {
-          source: {
-            uri: mi.pic
-          },
-          style: _reactNative.StyleSheet.absoluteFill,
-          resizeMode: "cover",
-          blurRadius: 50
-        }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.View, {
-          style: [_reactNative.StyleSheet.absoluteFill, {
-            backgroundColor: 'rgba(0,0,0,0.55)'
-          }]
-        })]
-      }), bgType === 'blur' && mi.pic && /*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.View, {
+      children: [bgType === 'blur' && mi.pic && /*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.View, {
         style: _reactNative.StyleSheet.absoluteFill,
         pointerEvents: "none",
         children: [/*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.Image, {
@@ -218010,7 +218009,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_Player.default, {})]
     });
   });
-  var styles = (0, _$$_REQUIRE(_dependencyMap[13], "../../../utils/tools").createStyle)({
+  var styles = (0, _$$_REQUIRE(_dependencyMap[14], "../../../utils/tools").createStyle)({
     wrapper: {
       flex: 1,
       flexDirection: 'column'
@@ -218027,7 +218026,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       flex: 1
     }
   });
-},1362,[6,65,15,1363,1379,1390,1391,688,106,1166,965,976,666,543],"src/screens/PlayDetail/Vertical/index.tsx");
+},1362,[6,7,65,15,1363,1379,1390,1391,688,106,1166,965,976,666,543],"src/screens/PlayDetail/Vertical/index.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {

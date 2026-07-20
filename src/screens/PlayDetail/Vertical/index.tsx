@@ -1,5 +1,5 @@
-import { memo, useState, useRef, useMemo, useEffect } from 'react'
-import { View, AppState, StyleSheet, Image } from 'react-native'
+import { memo, useState, useRef, useMemo, useEffect, useCallback } from 'react'
+import { View, AppState, StyleSheet, Image, NativeModules } from 'react-native'
 import { BlurView } from '@react-native-community/blur'
 import { useTheme } from '@/store/theme/hook'
 import { useSettingValue } from '@/store/setting/hook'
@@ -23,6 +23,15 @@ export default memo(({ componentId }: { componentId: string }) => {
   const solidColor = useSettingValue('playDetail.background.solidColor')
   const followCover = useSettingValue('playDetail.background.followCover')
   const blurRadius = useSettingValue('playDetail.background.blurRadius')
+
+  // 提取封面主色
+  const [dominantColor, setDominantColor] = useState<string>('#1a1a2e')
+  useEffect(() => {
+    if (bgType !== 'solid' || !followCover || !mi.pic) return
+    NativeModules.PaletteModule?.getDominantColor(mi.pic).then((color: string) => {
+      setDominantColor(color)
+    }).catch(() => {})
+  }, [mi.pic, bgType, followCover])
 
   // 歌词始终可见,保持唤醒
   useEffect(() => {
@@ -57,25 +66,13 @@ export default memo(({ componentId }: { componentId: string }) => {
   // 根据背景类型决定背景样式
   const backgroundStyle = useMemo(() => {
     if (bgType === 'solid') {
-      return { backgroundColor: followCover && mi.pic ? 'transparent' : solidColor }
+      return { backgroundColor: followCover ? dominantColor : solidColor }
     }
     return { backgroundColor: theme['c-content-background'] }
-  }, [bgType, solidColor, followCover, theme])
+  }, [bgType, solidColor, followCover, dominantColor, theme])
 
   return (
     <View style={[styles.wrapper, backgroundStyle]}>
-      {/* 跟随封面色 - 用高斯模糊封面作为背景取色 */}
-      {bgType === 'solid' && followCover && mi.pic && (
-        <View style={StyleSheet.absoluteFill} pointerEvents="none">
-          <Image
-            source={{ uri: mi.pic }}
-            style={StyleSheet.absoluteFill}
-            resizeMode="cover"
-            blurRadius={50}
-          />
-          <View style={[StyleSheet.absoluteFill, { backgroundColor: 'rgba(0,0,0,0.55)' }]} />
-        </View>
-      )}
       {/* 高斯模糊背景层 */}
       {bgType === 'blur' && mi.pic && (
         <View style={StyleSheet.absoluteFill} pointerEvents="none">
