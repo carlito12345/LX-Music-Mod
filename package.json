@@ -103,5 +103,8 @@
     "@typescript-eslint/typescript-estree": {
       "minimatch": "^9"
     }
+  },
+  "allowScripts": {
+    "github:lyswhut/react-native-track-player#bfe33933793460e7588d4d8f38eddf7910806f29": true
   }
 }

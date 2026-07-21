@@ -1,100 +1,41 @@
 /**
- * SpectrumBars - 频谱柱状条
- * 优先使用真实频谱数据,不可用时回退到模拟动画
+ * SpectrumBars - 频谱柱状条(模拟数据驱动)
  */
-import React, { memo, useEffect, useRef, useCallback, useState } from 'react'
+import React, { memo, useEffect, useRef, useState } from 'react'
 import { View, Animated, Easing, StyleSheet } from 'react-native'
 import { useIsPlay } from '@/store/player/hook'
-import { startSpectrum, stopSpectrum, onSpectrumData } from '@/plugins/spectrum'
 
 const BAR_COUNT = 16
 
-// 模拟频谱数据(兜底)
-const generateSimulatedData = (): number[] => {
-  return Array.from({ length: BAR_COUNT }, () => 0.05 + Math.random() * 0.4)
-}
-
 export const SpectrumBars = memo(({ primaryColor }: { primaryColor: string }) => {
   const isPlay = useIsPlay()
-  const [hasSpectrum, setHasSpectrum] = useState(false)
-
-  // 每个柱子一个动画值
   const barAnims = useRef(
     Array.from({ length: BAR_COUNT }, () => new Animated.Value(0.05))
   ).current
 
-  // 启动/停止频谱监听
   useEffect(() => {
     if (!isPlay) {
-      setHasSpectrum(false)
-      stopSpectrum().catch(() => {})
+      barAnims.forEach(a => {
+        Animated.timing(a, { toValue: 0.05, duration: 300, useNativeDriver: false }).start()
+      })
       return
     }
 
-    let cancelled = false
-    startSpectrum().then(success => {
-      if (!cancelled) setHasSpectrum(success)
-    })
-
-    return () => {
-      cancelled = true
-      stopSpectrum().catch(() => {})
-    }
-  }, [isPlay])
-
-  // 频谱数据回调
-  useEffect(() => {
-    if (!isPlay) return
-
-    const unsubscribe = onSpectrumData((data: number[]) => {
-      if (!data || data.length === 0) return
-
-      // 将 32 bins 降采样到 BAR_COUNT
-      barAnims.forEach((anim, i) => {
-        const srcIdx = Math.floor((i / BAR_COUNT) * data.length)
-        const val = data[srcIdx] ?? 0
-        Animated.timing(anim, {
-          toValue: Math.max(val, 0.05),
-          duration: 60,
-          useNativeDriver: false,
-        }).start()
-      })
-    })
-
-    return unsubscribe
-  }, [isPlay])
-
-  // 回退:无真实频谱时使用模拟数据
-  useEffect(() => {
-    if (hasSpectrum || !isPlay) return
-
     let timeoutId: ReturnType<typeof setTimeout>
     const simulate = () => {
-      const simData = generateSimulatedData()
       barAnims.forEach((anim, i) => {
+        const target = 0.1 + Math.random() * 0.7
         Animated.timing(anim, {
-          toValue: simData[i],
+          toValue: target,
           duration: 150 + Math.random() * 100,
           easing: Easing.out(Easing.ease),
           useNativeDriver: false,
         }).start()
       })
-      timeoutId = setTimeout(simulate, 200 + Math.random() * 200)
+      timeoutId = setTimeout(simulate, 180 + Math.random() * 150)
     }
     simulate()
     return () => clearTimeout(timeoutId)
-  }, [hasSpectrum, isPlay])
-
-  // 暂停时平滑回落
-  useEffect(() => {
-    if (isPlay) return
-    barAnims.forEach(a => {
-      Animated.timing(a, {
-        toValue: 0.05,
-        duration: 300,
-        useNativeDriver: false,
-      }).start()
-    })
   }, [isPlay])
 
   return (
@@ -111,11 +52,7 @@ export const SpectrumBars = memo(({ primaryColor }: { primaryColor: string }) =>
         return (
           <Animated.View
             key={i}
-            style={[styles.bar, {
-              height,
-              backgroundColor: primaryColor,
-              opacity,
-            }]}
+            style={[styles.bar, { height, backgroundColor: primaryColor, opacity }]}
           />
         )
       })}

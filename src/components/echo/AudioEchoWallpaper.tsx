@@ -8,7 +8,6 @@ import React, { memo, useEffect, useRef, useMemo, useState } from 'react'
 import { View, Animated, Easing, Dimensions, StyleSheet } from 'react-native'
 import { useIsPlay } from '@/store/player/hook'
 import { useSettingValue } from '@/store/setting/hook'
-import { startSpectrum, stopSpectrum, onSpectrumData, getLatestData } from '@/plugins/spectrum'
 
 const { width: SCREEN_W, height: SCREEN_H } = Dimensions.get('window')
 
