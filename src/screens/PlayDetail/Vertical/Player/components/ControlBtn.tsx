@@ -7,15 +7,18 @@ import { Icon } from '@/components/common/Icon'
 import { playNext, playPrev, togglePlay } from '@/core/player/player'
 import { useIsPlay } from '@/store/player/hook'
 import { useTheme } from '@/store/theme/hook'
+import { useSettingValue } from '@/store/setting/hook'
 import { createStyle } from '@/utils/tools'
 import { useWindowSize } from '@/utils/hooks'
 import { BTN_WIDTH } from './MoreBtn/Btn'
 
 const PressBtn = memo(({ icon, size, onPress }: { icon: string; size: number; onPress: () => void }) => {
   const theme = useTheme()
+  const controlBtnEnabled = useSettingValue('playDetail.effect.controlBtn.enabled')
   const scale = useRef(new Animated.Value(1)).current
 
   const handlePressIn = () => {
+    if (!controlBtnEnabled) return
     Animated.spring(scale, {
       toValue: 0.88,
       tension: 300,
@@ -25,6 +28,7 @@ const PressBtn = memo(({ icon, size, onPress }: { icon: string; size: number; on
   }
 
   const handlePressOut = () => {
+    if (!controlBtnEnabled) return
     Animated.spring(scale, {
       toValue: 1,
       tension: 200,
@@ -51,9 +55,11 @@ const PressBtn = memo(({ icon, size, onPress }: { icon: string; size: number; on
 const PlayBtn = memo(({ size }: { size: number }) => {
   const isPlay = useIsPlay()
   const theme = useTheme()
+  const controlBtnEnabled = useSettingValue('playDetail.effect.controlBtn.enabled')
   const scale = useRef(new Animated.Value(1)).current
 
   const handlePressIn = () => {
+    if (!controlBtnEnabled) return
     Animated.spring(scale, {
       toValue: 0.88,
       tension: 300,
@@ -63,6 +69,7 @@ const PlayBtn = memo(({ size }: { size: number }) => {
   }
 
   const handlePressOut = () => {
+    if (!controlBtnEnabled) return
     Animated.spring(scale, {
       toValue: 1,
       tension: 200,

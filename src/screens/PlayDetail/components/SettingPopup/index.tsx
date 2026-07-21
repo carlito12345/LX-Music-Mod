@@ -12,6 +12,7 @@ import SettingVolume from './settings/SettingVolume'
 import SettingPlaybackRate from './settings/SettingPlaybackRate'
 import SettingLrcFontSize from './settings/SettingLrcFontSize'
 import SettingLrcAlign from './settings/SettingLrcAlign'
+import SettingEffects from './settings/SettingEffects'
 
 export interface SettingPopupProps extends Omit<PopupProps, 'children'> {
   direction: 'vertical' | 'horizontal'
@@ -44,6 +45,7 @@ export default forwardRef<SettingPopupType, SettingPopupProps>(({ direction, ...
             <SettingTimer />
             <SettingBackground />
             <SettingCover />
+            <SettingEffects />
             <SettingProgressShimmer />
             <SettingLyricProgress />
             <SettingVolume />

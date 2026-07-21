@@ -1,5 +1,5 @@
 import { memo, useState, useRef, useMemo, useEffect, useCallback } from 'react'
-import { View, AppState, StyleSheet, Image, NativeModules } from 'react-native'
+import { View, AppState, StyleSheet, Image, Animated, NativeModules } from 'react-native'
 import { BlurView } from '@react-native-community/blur'
 import { useTheme } from '@/store/theme/hook'
 import { useSettingValue } from '@/store/setting/hook'
@@ -12,11 +12,19 @@ import { screenkeepAwake, screenUnkeepAwake } from '@/utils/nativeModules/utils'
 import commonState, { type InitState as CommonState } from '@/store/common/state'
 import { createStyle } from '@/utils/tools'
 import { usePlayerMusicInfo } from '@/store/player/hook'
+import { useEntryAnimation, useBackgroundCrossfade } from '@/components/cinematic/CinematicTransition'
+import { StarfieldBackground } from '@/components/starfield/StarfieldBackground'
+import { AudioEchoWallpaper } from '@/components/echo/AudioEchoWallpaper'
+import { SpectrumBars } from '@/components/echo/SpectrumBars'
 
 
 export default memo(({ componentId }: { componentId: string }) => {
   const mi = usePlayerMusicInfo()
   const theme = useTheme()
+  const cinematicEnabled = useSettingValue('playDetail.effect.cinematic.enabled')
+  const spectrumEnabled = useSettingValue('playDetail.effect.spectrum.enabled')
+  const { scaleAnim, opacityAnim } = useEntryAnimation([mi.pic])
+  const bgFadeAnim = useBackgroundCrossfade([mi.pic])
   const showLyricRef = useRef(true)
   
   const bgType = useSettingValue('playDetail.background.type')
@@ -76,24 +84,26 @@ export default memo(({ componentId }: { componentId: string }) => {
       {/* 高斯模糊背景层 */}
       {bgType === 'blur' && mi.pic && (
         <View style={StyleSheet.absoluteFill} pointerEvents="none">
-          <Image
+          <Animated.Image
             source={{ uri: mi.pic }}
-            style={StyleSheet.absoluteFill}
+            style={[StyleSheet.absoluteFill, cinematicEnabled ? { opacity: bgFadeAnim } : {}]}
             resizeMode="cover"
             blurRadius={blurRadius}
           />
           <View style={[StyleSheet.absoluteFill, { backgroundColor: 'rgba(0,0,0,0.3)' }]} />
         </View>
       )}
+      {spectrumEnabled && <SpectrumBars primaryColor={theme['c-primary']} />}
       <Header />
       <View style={styles.container}>
-        <View style={styles.picArea}>
+        <Animated.View style={[styles.picArea, cinematicEnabled ? { opacity: opacityAnim, transform: [{ scale: scaleAnim }] } : {}]}>
           <Pic componentId={componentId} />
-        </View>
+        </Animated.View>
         <View style={styles.lyricArea}>
           <Lyric />
         </View>
       </View>
+      <AudioEchoWallpaper />
       <Player />
     </View>
   )

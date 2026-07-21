@@ -69,6 +69,16 @@ const LrcLine = memo(({ line, lineNum, activeLine, onLayout }: LineProps) => {
   const size = lrcFontSize / 10
   const lineHeight = setSpText(size) * 1.3
 
+  const stageEnabled = useSettingValue('playDetail.effect.lyricStage.enabled')
+  const stageStyle = useMemo(() => {
+    const active = activeLine == lineNum
+    return active && stageEnabled ? {
+      textShadowColor: theme['c-primary'],
+      textShadowOffset: { width: 0, height: 0 },
+      textShadowRadius: 6,
+    } : {}
+  }, [activeLine, lineNum, stageEnabled, theme])
+
   const colors = useMemo(() => {
     const active = activeLine == lineNum
     return active ? [
@@ -95,6 +105,7 @@ const LrcLine = memo(({ line, lineNum, activeLine, onLayout }: LineProps) => {
         ...styles.lineText,
         textAlign,
         lineHeight,
+        ...stageStyle,
       }} textBreakStrategy="simple" color={colors[0]} opacity={colors[2]} size={size}>{line.text}</AnimatedColorText>
       {
         line.extendedLyrics.map((lrc, index) => {

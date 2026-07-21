@@ -46,6 +46,26 @@ const defaultSetting: LX.AppSetting = {
   'playDetail.cover.effect.particles': true,
   'playDetail.cover.effect.rotate': true,
   'playDetail.cover.effect.swipe': true,
+
+  'playDetail.effect.starfield.enabled': true,
+  'playDetail.effect.starfield.particleCount': 40,
+  'playDetail.effect.starfield.particleSize': 2,
+  'playDetail.effect.starfield.speed': 1,
+  'playDetail.effect.starfield.pattern': 'random',
+
+  'playDetail.effect.lyricStage.enabled': true,
+
+  'playDetail.effect.cinematic.enabled': true,
+  'playDetail.effect.cinematic.zoomIntensity': 0.92,
+  'playDetail.effect.cinematic.crossfadeDuration': 500,
+
+  'playDetail.effect.controlBtn.enabled': true,
+  'playDetail.effect.echo.enabled': true,
+  'playDetail.effect.echo.color': '',
+  'playDetail.effect.echo.speed': 1,
+  'playDetail.effect.echo.amplitude': 1,
+  'playDetail.effect.spectrum.enabled': true,
+
   'playDetail.progress.shimmer': true,
   'playDetail.style.align': 'left',
   'playDetail.vertical.style.lrcFontSize': 210,

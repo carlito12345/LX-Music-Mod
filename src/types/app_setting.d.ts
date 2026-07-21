@@ -409,6 +409,51 @@ declare global {
    */
   'playDetail.cover.effect.swipe': boolean
   /**
+   * 特效: 粒子星空背景
+   */
+  'playDetail.effect.starfield.enabled': boolean
+  /**
+   * 特效: 粒子数量
+   */
+  'playDetail.effect.starfield.particleCount': number
+  /**
+   * 特效: 粒子大小
+   */
+  'playDetail.effect.starfield.particleSize': number
+  /**
+   * 特效: 粒子动画速度
+   */
+  'playDetail.effect.starfield.speed': number
+  /**
+   * 特效: 粒子图案 (random/nebula/spiral)
+   */
+  'playDetail.effect.starfield.pattern': 'random' | 'nebula' | 'spiral'
+  /**
+   * 特效: 歌词舞台增强
+   */
+  'playDetail.effect.lyricStage.enabled': boolean
+  /**
+   * 特效: 电影镜头转场
+   */
+  'playDetail.effect.cinematic.enabled': boolean
+  /**
+   * 特效: 镜头缩放强度
+   */
+  'playDetail.effect.cinematic.zoomIntensity': number
+  /**
+   * 特效: 背景交叉淡入淡出时长(ms)
+   */
+  'playDetail.effect.cinematic.crossfadeDuration': number
+  /**
+   * 特效: 播放器控件动效
+   */
+  'playDetail.effect.controlBtn.enabled': boolean
+  'playDetail.effect.echo.enabled': boolean
+  'playDetail.effect.echo.color': string
+  'playDetail.effect.echo.speed': number
+  'playDetail.effect.echo.amplitude': number
+  'playDetail.effect.spectrum.enabled': boolean
+  /**
    * 进度条流光特效
    */
   'playDetail.progress.shimmer': boolean
