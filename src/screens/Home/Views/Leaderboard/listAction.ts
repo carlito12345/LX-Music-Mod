@@ -11,38 +11,33 @@ const getListId = (id: string) => `board__${id}`
 
 export const handlePlay = async(id: string, list?: LX.Music.MusicInfoOnline[], index = 0) => {
   const listId = getListId(id)
-  toast('正在加载列表...')
   
-  // 首先尝试加载完整列表
-  let playList_data: LX.Music.MusicInfoOnline[] = []
-  try {
-    playList_data = await getListDetailAll(id)
-  } catch (e) {
-    console.warn('[Leaderboard] Failed to load full list, trying page 1:', e)
-  }
-  
-  // 如果完整列表加载失败,尝试加载第一页
-  if (playList_data.length === 0) {
+  // 直接使用传入的列表(UI已经加载的歌曲)
+  if (list && list.length > 0) {
+    await setTempList(listId, [...list])
+    void playList(LIST_IDS.TEMP, index)
+    
+    // 后台尝试加载完整列表并更新
+    try {
+      const fullList = await getListDetailAll(id)
+      if (fullList.length > list.length) {
+        await setTempList(listId, [...fullList])
+      }
+    } catch (e) {
+      console.warn('[Leaderboard] Failed to load full list in background:', e)
+    }
+  } else {
+    // 如果传入的列表为空,尝试加载第一页
     try {
       const detail = await getListDetail(id, 1)
-      playList_data = detail.list || []
+      const playList_data = detail.list || []
+      if (playList_data.length > 0) {
+        await setTempList(listId, [...playList_data])
+        void playList(LIST_IDS.TEMP, index)
+      }
     } catch (e) {
-      console.error('[Leaderboard] Failed to load page 1:', e)
+      console.error('[Leaderboard] Failed to load any songs:', e)
     }
-  }
-  
-  // 如果还是失败,使用传入的列表
-  if (playList_data.length === 0 && list && list.length > 0) {
-    playList_data = list
-  }
-  
-  // 播放列表
-  if (playList_data.length > 0) {
-    await setTempList(listId, [...playList_data])
-    void playList(LIST_IDS.TEMP, index)
-    toast(`已加载 ${playList_data.length} 首歌曲`)
-  } else {
-    toast('加载列表失败')
   }
 }
 
