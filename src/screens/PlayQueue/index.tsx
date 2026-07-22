@@ -19,9 +19,9 @@ import { LIST_IDS } from '@/config/constant'
 import StatusBar from '@/components/common/StatusBar'
 import { toast } from '@/utils/tools'
 
-export interface PlayQueueProps { componentId: string }
+export interface PlayQueueProps { componentId: string; initialQueue?: any[]; listId?: string }
 
-export default memo(({ componentId }: PlayQueueProps) => {
+export default memo(({ componentId, initialQueue = [], listId: propListId }: PlayQueueProps) => {
   const t = (global.i18n?.t) || ((s: string) => s)
   const theme = useTheme()
   const mi = usePlayerMusicInfo()
@@ -49,9 +49,14 @@ export default memo(({ componentId }: PlayQueueProps) => {
 
   // 加载当前播放列表全部歌曲
   useEffect(() => {
-    const targetId = playerListId || LIST_IDS.TEMP
+    const targetId = playerListId || propListId || LIST_IDS.TEMP
+    if (initialQueue && initialQueue.length > 0 && currentListSongs.length === 0) {
+      setCurrentListSongs(initialQueue)
+    }
     getListMusics(targetId).then(list => {
-      setCurrentListSongs(list || [])
+      if (list && list.length > 0) {
+        setCurrentListSongs(list)
+      }
     }).catch(() => {})
   }, [playMusicInfo, playerListId])
 

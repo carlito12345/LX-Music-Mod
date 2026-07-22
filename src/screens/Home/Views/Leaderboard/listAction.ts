@@ -10,24 +10,16 @@ import { confirmDialog, toMD5, toast } from '@/utils/tools'
 const getListId = (id: string) => `board__${id}`
 
 export const handlePlay = async(id: string, list?: LX.Music.MusicInfoOnline[], index = 0) => {
-  let isPlayingList = false
-  // console.log(list)
   const listId = getListId(id)
-  if (!list?.length) list = (await getListDetail(id, 1)).list
-  if (list?.length) {
-    await setTempList(listId, [...list])
+  // 先加载完整列表
+  const fullList = await getListDetailAll(id).catch(() => [])
+  const playList_data = fullList.length > 0 ? fullList : (list || (await getListDetail(id, 1).catch(() => ({ list: [] }))).list)
+  
+  if (playList_data && playList_data.length > 0) {
+    await setTempList(listId, [...playList_data])
     void playList(LIST_IDS.TEMP, index)
-    isPlayingList = true
-  }
-  const fullList = await getListDetailAll(id)
-  if (!fullList.length) return
-  if (isPlayingList) {
-    if (listState.tempListMeta.id == listId) {
-      await setTempList(listId, [...fullList])
-    }
   } else {
-    await setTempList(listId, [...fullList])
-    void playList(LIST_IDS.TEMP, index)
+    console.warn('[Leaderboard] No songs loaded for id:', id)
   }
 }
 

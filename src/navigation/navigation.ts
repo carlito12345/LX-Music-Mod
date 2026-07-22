@@ -87,9 +87,16 @@ export async function pushHomeScreen() {
   })
 }
 export function pushPlayQueueScreen(componentId: string) {
+  // 获取当前播放队列数据并传递
+  const { getListMusicSync } = require('@/utils/listManage')
+  const playerState = require('@/store/player/state').default
+  const listId = playerState.playInfo.playerListId || '__temp__'
+  const queueData = getListMusicSync(listId) || []
+
   Navigation.push(componentId, {
     component: {
       name: PLAY_QUEUE_SCREEN,
+      passProps: { initialQueue: queueData, listId },
       options: {
         topBar: { visible: false, drawBehind: true, animate: false },
         layout: { backgroundColor: 'transparent', componentBackgroundColor: 'transparent' },

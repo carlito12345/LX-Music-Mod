@@ -167075,9 +167075,19 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     return _pushHomeScreen.apply(this, arguments);
   }
   function pushPlayQueueScreen(componentId) {
+    // 获取当前播放队列数据并传递
+    var _require = _$$_REQUIRE(_dependencyMap[6], "../utils/listManage"),
+      getListMusicSync = _require.getListMusicSync;
+    var playerState = _$$_REQUIRE(_dependencyMap[7], "../store/player/state").default;
+    var listId = playerState.playInfo.playerListId || '__temp__';
+    var queueData = getListMusicSync(listId) || [];
     _$$_REQUIRE(_dependencyMap[3], "react-native-navigation").Navigation.push(componentId, {
       component: {
         name: _$$_REQUIRE(_dependencyMap[4], "./screenNames").PLAY_QUEUE_SCREEN,
+        passProps: {
+          initialQueue: queueData,
+          listId: listId
+        },
         options: {
           topBar: {
             visible: false,
@@ -167153,14 +167163,14 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
             animations: {
               push: skipAnimation ? {} : {
                 sharedElementTransitions: [{
-                  fromId: _$$_REQUIRE(_dependencyMap[6], "../config/constant").NAV_SHEAR_NATIVE_IDS.playDetail_pic,
-                  toId: _$$_REQUIRE(_dependencyMap[6], "../config/constant").NAV_SHEAR_NATIVE_IDS.playDetail_pic,
+                  fromId: _$$_REQUIRE(_dependencyMap[8], "../config/constant").NAV_SHEAR_NATIVE_IDS.playDetail_pic,
+                  toId: _$$_REQUIRE(_dependencyMap[8], "../config/constant").NAV_SHEAR_NATIVE_IDS.playDetail_pic,
                   interpolation: {
                     type: 'spring'
                   }
                 }],
                 elementTransitions: [{
-                  id: _$$_REQUIRE(_dependencyMap[6], "../config/constant").NAV_SHEAR_NATIVE_IDS.playDetail_header,
+                  id: _$$_REQUIRE(_dependencyMap[8], "../config/constant").NAV_SHEAR_NATIVE_IDS.playDetail_header,
                   alpha: {
                     from: 0,
                     // We don't declare 'to' value as that is the element's current alpha value, here we're essentially animating from 0 to 1
@@ -167172,7 +167182,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
                     duration: 300
                   }
                 }, {
-                  id: _$$_REQUIRE(_dependencyMap[6], "../config/constant").NAV_SHEAR_NATIVE_IDS.playDetail_player,
+                  id: _$$_REQUIRE(_dependencyMap[8], "../config/constant").NAV_SHEAR_NATIVE_IDS.playDetail_player,
                   alpha: {
                     from: 0,
                     // We don't declare 'to' value as that is the element's current alpha value, here we're essentially animating from 0 to 1
@@ -167196,7 +167206,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
                 content: {
                   translationX: {
                     from: 0,
-                    to: _$$_REQUIRE(_dependencyMap[7], "../utils/windowSizeTools").windowSizeTools.getSize().width,
+                    to: _$$_REQUIRE(_dependencyMap[9], "../utils/windowSizeTools").windowSizeTools.getSize().width,
                     duration: 300
                   }
                 }
@@ -167238,14 +167248,14 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
             animations: {
               push: {
                 sharedElementTransitions: [{
-                  fromId: `${_$$_REQUIRE(_dependencyMap[6], "../config/constant").NAV_SHEAR_NATIVE_IDS.songlistDetail_pic}_from_${info.id}`,
-                  toId: `${_$$_REQUIRE(_dependencyMap[6], "../config/constant").NAV_SHEAR_NATIVE_IDS.songlistDetail_pic}_to_${info.id}`,
+                  fromId: `${_$$_REQUIRE(_dependencyMap[8], "../config/constant").NAV_SHEAR_NATIVE_IDS.songlistDetail_pic}_from_${info.id}`,
+                  toId: `${_$$_REQUIRE(_dependencyMap[8], "../config/constant").NAV_SHEAR_NATIVE_IDS.songlistDetail_pic}_to_${info.id}`,
                   interpolation: {
                     type: 'spring'
                   }
                 }],
                 elementTransitions: [{
-                  id: _$$_REQUIRE(_dependencyMap[6], "../config/constant").NAV_SHEAR_NATIVE_IDS.songlistDetail_title,
+                  id: _$$_REQUIRE(_dependencyMap[8], "../config/constant").NAV_SHEAR_NATIVE_IDS.songlistDetail_title,
                   alpha: {
                     from: 0,
                     // We don't declare 'to' value as that is the element's current alpha value, here we're essentially animating from 0 to 1
@@ -167277,14 +167287,14 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
               },
               pop: {
                 sharedElementTransitions: [{
-                  fromId: `${_$$_REQUIRE(_dependencyMap[6], "../config/constant").NAV_SHEAR_NATIVE_IDS.songlistDetail_pic}_to_${info.id}`,
-                  toId: `${_$$_REQUIRE(_dependencyMap[6], "../config/constant").NAV_SHEAR_NATIVE_IDS.songlistDetail_pic}_from_${info.id}`,
+                  fromId: `${_$$_REQUIRE(_dependencyMap[8], "../config/constant").NAV_SHEAR_NATIVE_IDS.songlistDetail_pic}_to_${info.id}`,
+                  toId: `${_$$_REQUIRE(_dependencyMap[8], "../config/constant").NAV_SHEAR_NATIVE_IDS.songlistDetail_pic}_from_${info.id}`,
                   interpolation: {
                     type: 'spring'
                   }
                 }],
                 elementTransitions: [{
-                  id: _$$_REQUIRE(_dependencyMap[6], "../config/constant").NAV_SHEAR_NATIVE_IDS.songlistDetail_title,
+                  id: _$$_REQUIRE(_dependencyMap[8], "../config/constant").NAV_SHEAR_NATIVE_IDS.songlistDetail_title,
                   alpha: {
                     to: 0,
                     // We don't declare 'to' value as that is the element's current alpha value, here we're essentially animating from 0 to 1
@@ -167371,7 +167381,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
               push: {
                 content: {
                   translationX: {
-                    from: _$$_REQUIRE(_dependencyMap[7], "../utils/windowSizeTools").windowSizeTools.getSize().width,
+                    from: _$$_REQUIRE(_dependencyMap[9], "../utils/windowSizeTools").windowSizeTools.getSize().width,
                     to: 0,
                     duration: 300
                   }
@@ -167381,7 +167391,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
                 content: {
                   translationX: {
                     from: 0,
-                    to: _$$_REQUIRE(_dependencyMap[7], "../utils/windowSizeTools").windowSizeTools.getSize().width,
+                    to: _$$_REQUIRE(_dependencyMap[9], "../utils/windowSizeTools").windowSizeTools.getSize().width,
                     duration: 300
                   }
                 }
@@ -167594,7 +167604,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     })
   }
    */
-},718,[6,13,719,720,717,961,680,682],"src/navigation/navigation.ts");
+},718,[6,13,719,720,717,961,694,704,680,682],"src/navigation/navigation.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
     value: true
@@ -205857,26 +205867,22 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   };
   var handlePlay = exports.handlePlay = /*#__PURE__*/function () {
     var _ref = (0, _asyncToGenerator2.default)(function* (id, list) {
-      var _list, _list2;
       var index = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
-      var isPlayingList = false;
-      // console.log(list)
       var listId = getListId(id);
-      if (!((_list = list) != null && _list.length)) list = (yield (0, _$$_REQUIRE(_dependencyMap[5], "../../../../core/leaderboard").getListDetail)(id, 1)).list;
-      if ((_list2 = list) != null && _list2.length) {
-        yield (0, _$$_REQUIRE(_dependencyMap[6], "../../../../core/list").setTempList)(listId, (0, _toConsumableArray2.default)(list));
+      // 先加载完整列表
+      var fullList = yield (0, _$$_REQUIRE(_dependencyMap[5], "../../../../core/leaderboard").getListDetailAll)(id).catch(function () {
+        return [];
+      });
+      var playList_data = fullList.length > 0 ? fullList : list || (yield (0, _$$_REQUIRE(_dependencyMap[5], "../../../../core/leaderboard").getListDetail)(id, 1).catch(function () {
+        return {
+          list: []
+        };
+      })).list;
+      if (playList_data && playList_data.length > 0) {
+        yield (0, _$$_REQUIRE(_dependencyMap[6], "../../../../core/list").setTempList)(listId, (0, _toConsumableArray2.default)(playList_data));
         void (0, _$$_REQUIRE(_dependencyMap[7], "../../../../core/player/player").playList)(_$$_REQUIRE(_dependencyMap[8], "../../../../config/constant").LIST_IDS.TEMP, index);
-        isPlayingList = true;
-      }
-      var fullList = yield (0, _$$_REQUIRE(_dependencyMap[5], "../../../../core/leaderboard").getListDetailAll)(id);
-      if (!fullList.length) return;
-      if (isPlayingList) {
-        if (_state.default.tempListMeta.id == listId) {
-          yield (0, _$$_REQUIRE(_dependencyMap[6], "../../../../core/list").setTempList)(listId, (0, _toConsumableArray2.default)(fullList));
-        }
       } else {
-        yield (0, _$$_REQUIRE(_dependencyMap[6], "../../../../core/list").setTempList)(listId, (0, _toConsumableArray2.default)(fullList));
-        void (0, _$$_REQUIRE(_dependencyMap[7], "../../../../core/player/player").playList)(_$$_REQUIRE(_dependencyMap[8], "../../../../config/constant").LIST_IDS.TEMP, index);
+        console.warn('[Leaderboard] No songs loaded for id:', id);
       }
     });
     return function handlePlay(_x, _x2) {
@@ -227565,7 +227571,10 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
    */
   var _default = exports.default = (0, _react.memo)(function (_ref) {
     var _global$i18n, _playMusicInfo$musicI;
-    var componentId = _ref.componentId;
+    var componentId = _ref.componentId,
+      _ref$initialQueue = _ref.initialQueue,
+      initialQueue = _ref$initialQueue === void 0 ? [] : _ref$initialQueue,
+      propListId = _ref.listId;
     var t = ((_global$i18n = global.i18n) == null ? void 0 : _global$i18n.t) || function (s) {
       return s;
     };
@@ -227607,9 +227616,14 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
 
     // 加载当前播放列表全部歌曲
     (0, _react.useEffect)(function () {
-      var targetId = playerListId || _$$_REQUIRE(_dependencyMap[12], "../../config/constant").LIST_IDS.TEMP;
+      var targetId = playerListId || propListId || _$$_REQUIRE(_dependencyMap[12], "../../config/constant").LIST_IDS.TEMP;
+      if (initialQueue && initialQueue.length > 0 && currentListSongs.length === 0) {
+        setCurrentListSongs(initialQueue);
+      }
       (0, _$$_REQUIRE(_dependencyMap[13], "../../core/list").getListMusics)(targetId).then(function (list) {
-        setCurrentListSongs(list || []);
+        if (list && list.length > 0) {
+          setCurrentListSongs(list);
+        }
       }).catch(function () {});
     }, [playMusicInfo, playerListId]);
 
