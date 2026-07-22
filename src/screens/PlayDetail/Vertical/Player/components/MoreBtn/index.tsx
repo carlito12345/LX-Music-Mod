@@ -4,6 +4,7 @@ import PlayModeBtn from './PlayModeBtn'
 import MusicAddBtn from './MusicAddBtn'
 import DesktopLyricBtn from './DesktopLyricBtn'
 import CommentBtn from './CommentBtn'
+import PlaylistBtn from './PlaylistBtn'
 
 interface MoreBtnProps {
   backgroundColor: string
@@ -12,6 +13,7 @@ interface MoreBtnProps {
 export default ({ backgroundColor }: MoreBtnProps) => {
   return (
     <View style={styles.container}>
+      <PlaylistBtn backgroundColor={backgroundColor} />
       <DesktopLyricBtn backgroundColor={backgroundColor} />
       <MusicAddBtn backgroundColor={backgroundColor} />
       <PlayModeBtn backgroundColor={backgroundColor} />
@@ -26,6 +28,7 @@ const styles = createStyle({
     width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-around',
+    justifyContent: 'space-evenly',
+    paddingHorizontal: 4,
   },
 })

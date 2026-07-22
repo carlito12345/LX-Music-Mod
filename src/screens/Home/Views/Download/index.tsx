@@ -12,27 +12,32 @@ import { updateSetting } from '@/core/common'
 import RNFS from 'react-native-fs'
 import { toast } from '@/utils/tools'
 
-const handlePlayLocalFile = async (filePath: string) => {
+const handlePlayLocalFile = async (filePath: string, allTasks: DownloadTask[]) => {
   try {
-    const name = filePath.split('/').pop()?.replace(/\.[^/.]+$/, '') || '本地文件'
-    const ext = filePath.includes('.') ? filePath.split('.').pop() || '' : ''
-    const musicInfo = {
-      id: filePath,
-      name,
-      singer: '本地文件',
-      source: 'local' as const,
-      quality: 'unknown',
-      interval: null,
-      meta: { filePath, ext },
-    }
-    await setTempList('from_download', [musicInfo as any])
-    await playList(LIST_IDS.TEMP, 0)
+    const completedTasks = allTasks.filter(t => t.status === 'completed' && t.filePath)
+    const musicList = completedTasks.map(t => {
+      const fp = t.filePath || ''
+      const name = fp.split('/').pop()?.replace(/\.[^/.]+$/, '') || t.musicInfo.name || '未知'
+      const ext = fp.includes('.') ? fp.split('.').pop() || '' : ''
+      return {
+        id: fp,
+        name,
+        singer: t.musicInfo.singer || '本地文件',
+        source: 'local' as const,
+        quality: 'unknown',
+        interval: null,
+        meta: { filePath: fp, ext },
+      }
+    })
+    const playIndex = musicList.findIndex(m => m.id === filePath)
+    await setTempList('from_download', musicList as any)
+    await playList(LIST_IDS.TEMP, Math.max(0, playIndex))
   } catch (err: any) {
     toast(`播放失败: ${err.message}`)
   }
 }
 
-const DownloadItem = memo(({ task, theme }: { task: DownloadTask; theme: any }) => {
+const DownloadItem = memo(({ task, theme, allTasks }: { task: DownloadTask; theme: any; allTasks: DownloadTask[] }) => {
   const statusText = {
     waiting: '等待中',
     downloading: `下载中 ${Math.round(task.progress * 100)}%`,
@@ -42,7 +47,7 @@ const DownloadItem = memo(({ task, theme }: { task: DownloadTask; theme: any }) 
 
   const handleClick = () => {
     if (task.status === 'completed' && task.filePath) {
-      void handlePlayLocalFile(task.filePath)
+      void handlePlayLocalFile(task.filePath, allTasks)
     } else {
       toast('文件未下载完成')
     }
@@ -164,7 +169,7 @@ export default memo(() => {
         <FlatList
           data={tasks}
           keyExtractor={(item) => item.id}
-          renderItem={({ item }) => <DownloadItem task={item} theme={theme} />}
+          renderItem={({ item }) => <DownloadItem task={item} theme={theme} allTasks={tasks} />}
           style={styles.list}
         />
       )}

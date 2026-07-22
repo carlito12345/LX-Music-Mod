@@ -110,10 +110,16 @@ const LrcLine = memo(({ line, lineNum, activeLine, onLayout, backgroundColor }: 
         ...styles.lineText,
         textAlign,
         lineHeight,
-        ...stageStyle,
-        textShadowColor: 'rgba(0,0,0,0.5)',
-        textShadowOffset: { width: 0, height: 1 },
-        textShadowRadius: 3,
+        // 歌词舞台特效开启时使用彩色发光, 否则使用通用阴影
+        ...(stageEnabled && activeLine === lineNum ? {
+          textShadowColor: theme['c-primary'],
+          textShadowOffset: { width: 0, height: 0 },
+          textShadowRadius: 6,
+        } : {
+          textShadowColor: 'rgba(0,0,0,0.5)',
+          textShadowOffset: { width: 0, height: 1 },
+          textShadowRadius: 3,
+        }),
       }} textBreakStrategy="simple" color={colors[0]} opacity={colors[2]} size={size}>{line.text}</AnimatedColorText>
       {
         line.extendedLyrics.map((lrc, index) => {

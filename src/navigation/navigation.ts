@@ -6,6 +6,7 @@ import {
   PLAY_DETAIL_SCREEN,
   SONGLIST_DETAIL_SCREEN,
   COMMENT_SCREEN,
+  PLAY_QUEUE_SCREEN,
   // SETTING_SCREEN,
 } from './screenNames'
 
@@ -88,13 +89,10 @@ export async function pushHomeScreen() {
 export function pushPlayQueueScreen(componentId: string) {
   Navigation.push(componentId, {
     component: {
-      name: 'PLAY_QUEUE',
+      name: PLAY_QUEUE_SCREEN,
       options: {
-        topBar: { visible: false, drawBehind: true, animate: true },
-        animations: {
-          push: { content: { x: { translation: -300, from: 300, to: 0 }, alpha: { from: 0.5, to: 1 }, duration: 250 } },
-          pop: { content: { x: { translation: 300, from: 0, to: 300 }, alpha: { from: 1, to: 0.5 }, duration: 250 } },
-        },
+        topBar: { visible: false, drawBehind: true, animate: false },
+        layout: { backgroundColor: 'transparent', componentBackgroundColor: 'transparent' },
       },
     },
   })
