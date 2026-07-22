@@ -128,17 +128,23 @@ export default memo(({ componentId }: { componentId: string }) => {
     return '#1a1a2e'
   }, [wallpaperEnabled, slideshowEnabled, bgType, followCover, dominantColor, solidColor, theme])
 
-  // 向右滑动打开播放列表
+  // 右滑返回,左滑展开播放列表
   const SWIPE_THRESHOLD = 80
   const panResponder = useRef(
     PanResponder.create({
       onMoveShouldSetPanResponder: (_, gestureState) => {
-        // 只响应右滑手势(水平位移大于垂直,且向右)
-        return gestureState.dx > 30 && Math.abs(gestureState.dx) > Math.abs(gestureState.dy) * 2
+        return Math.abs(gestureState.dx) > 30 && Math.abs(gestureState.dx) > Math.abs(gestureState.dy) * 2
       },
       onPanResponderRelease: (_, gestureState) => {
         if (gestureState.dx > SWIPE_THRESHOLD) {
+          // 右滑 → 返回主页
           void pop(commonState.componentIds.playDetail!)
+        } else if (gestureState.dx < -SWIPE_THRESHOLD) {
+          // 左滑 → 返回主页后聚焦当前播放列表
+          const playDetailId = commonState.componentIds.playDetail
+          if (playDetailId) {
+            void pop(playDetailId)
+          }
         }
       },
     })

@@ -218894,16 +218894,22 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       return '#1a1a2e';
     }, [wallpaperEnabled, slideshowEnabled, bgType, followCover, dominantColor, solidColor, theme]);
 
-    // 向右滑动打开播放列表
+    // 右滑返回,左滑展开播放列表
     var SWIPE_THRESHOLD = 80;
     var panResponder = (0, _react.useRef)(_reactNative.PanResponder.create({
       onMoveShouldSetPanResponder: function onMoveShouldSetPanResponder(_, gestureState) {
-        // 只响应右滑手势(水平位移大于垂直,且向右)
-        return gestureState.dx > 30 && Math.abs(gestureState.dx) > Math.abs(gestureState.dy) * 2;
+        return Math.abs(gestureState.dx) > 30 && Math.abs(gestureState.dx) > Math.abs(gestureState.dy) * 2;
       },
       onPanResponderRelease: function onPanResponderRelease(_, gestureState) {
         if (gestureState.dx > SWIPE_THRESHOLD) {
+          // 右滑 → 返回主页
           void (0, _$$_REQUIRE(_dependencyMap[15], "../../../navigation").pop)(_state.default.componentIds.playDetail);
+        } else if (gestureState.dx < -SWIPE_THRESHOLD) {
+          // 左滑 → 返回主页后聚焦当前播放列表
+          var playDetailId = _state.default.componentIds.playDetail;
+          if (playDetailId) {
+            void (0, _$$_REQUIRE(_dependencyMap[15], "../../../navigation").pop)(playDetailId);
+          }
         }
       }
     })).current;
