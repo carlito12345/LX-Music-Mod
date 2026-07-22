@@ -11,15 +11,35 @@ const getListId = (id: string) => `board__${id}`
 
 export const handlePlay = async(id: string, list?: LX.Music.MusicInfoOnline[], index = 0) => {
   const listId = getListId(id)
-  // 先加载完整列表
-  const fullList = await getListDetailAll(id).catch(() => [])
-  const playList_data = fullList.length > 0 ? fullList : (list || (await getListDetail(id, 1).catch(() => ({ list: [] }))).list)
   
-  if (playList_data && playList_data.length > 0) {
+  // 优先使用传入的列表(当前已加载的歌曲)
+  let playList_data = list && list.length > 0 ? list : []
+  
+  // 如果传入的列表为空,尝试加载第一页
+  if (playList_data.length === 0) {
+    try {
+      const detail = await getListDetail(id, 1)
+      playList_data = detail.list || []
+    } catch (e) {
+      console.error('[Leaderboard] Failed to load page 1:', e)
+    }
+  }
+  
+  // 立即播放已有数据
+  if (playList_data.length > 0) {
     await setTempList(listId, [...playList_data])
     void playList(LIST_IDS.TEMP, index)
-  } else {
-    console.warn('[Leaderboard] No songs loaded for id:', id)
+  }
+  
+  // 后台加载完整列表并更新
+  try {
+    const fullList = await getListDetailAll(id)
+    if (fullList.length > playList_data.length) {
+      await setTempList(listId, [...fullList])
+      // 如果用户还在播放同一首歌,不需要重新播放,列表已更新
+    }
+  } catch (e) {
+    console.warn('[Leaderboard] Failed to load full list:', e)
   }
 }
 

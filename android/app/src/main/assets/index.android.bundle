@@ -205869,20 +205869,35 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     var _ref = (0, _asyncToGenerator2.default)(function* (id, list) {
       var index = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
       var listId = getListId(id);
-      // 先加载完整列表
-      var fullList = yield (0, _$$_REQUIRE(_dependencyMap[5], "../../../../core/leaderboard").getListDetailAll)(id).catch(function () {
-        return [];
-      });
-      var playList_data = fullList.length > 0 ? fullList : list || (yield (0, _$$_REQUIRE(_dependencyMap[5], "../../../../core/leaderboard").getListDetail)(id, 1).catch(function () {
-        return {
-          list: []
-        };
-      })).list;
-      if (playList_data && playList_data.length > 0) {
+
+      // 优先使用传入的列表(当前已加载的歌曲)
+      var playList_data = list && list.length > 0 ? list : [];
+
+      // 如果传入的列表为空,尝试加载第一页
+      if (playList_data.length === 0) {
+        try {
+          var detail = yield (0, _$$_REQUIRE(_dependencyMap[5], "../../../../core/leaderboard").getListDetail)(id, 1);
+          playList_data = detail.list || [];
+        } catch (e) {
+          console.error('[Leaderboard] Failed to load page 1:', e);
+        }
+      }
+
+      // 立即播放已有数据
+      if (playList_data.length > 0) {
         yield (0, _$$_REQUIRE(_dependencyMap[6], "../../../../core/list").setTempList)(listId, (0, _toConsumableArray2.default)(playList_data));
         void (0, _$$_REQUIRE(_dependencyMap[7], "../../../../core/player/player").playList)(_$$_REQUIRE(_dependencyMap[8], "../../../../config/constant").LIST_IDS.TEMP, index);
-      } else {
-        console.warn('[Leaderboard] No songs loaded for id:', id);
+      }
+
+      // 后台加载完整列表并更新
+      try {
+        var fullList = yield (0, _$$_REQUIRE(_dependencyMap[5], "../../../../core/leaderboard").getListDetailAll)(id);
+        if (fullList.length > playList_data.length) {
+          yield (0, _$$_REQUIRE(_dependencyMap[6], "../../../../core/list").setTempList)(listId, (0, _toConsumableArray2.default)(fullList));
+          // 如果用户还在播放同一首歌,不需要重新播放,列表已更新
+        }
+      } catch (e) {
+        console.warn('[Leaderboard] Failed to load full list:', e);
       }
     });
     return function handlePlay(_x, _x2) {
