@@ -205869,35 +205869,38 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     var _ref = (0, _asyncToGenerator2.default)(function* (id, list) {
       var index = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
       var listId = getListId(id);
+      (0, _$$_REQUIRE(_dependencyMap[5], "../../../../utils/tools").toast)('正在加载列表...');
 
-      // 优先使用传入的列表(当前已加载的歌曲)
-      var playList_data = list && list.length > 0 ? list : [];
+      // 首先尝试加载完整列表
+      var playList_data = [];
+      try {
+        playList_data = yield (0, _$$_REQUIRE(_dependencyMap[6], "../../../../core/leaderboard").getListDetailAll)(id);
+      } catch (e) {
+        console.warn('[Leaderboard] Failed to load full list, trying page 1:', e);
+      }
 
-      // 如果传入的列表为空,尝试加载第一页
+      // 如果完整列表加载失败,尝试加载第一页
       if (playList_data.length === 0) {
         try {
-          var detail = yield (0, _$$_REQUIRE(_dependencyMap[5], "../../../../core/leaderboard").getListDetail)(id, 1);
+          var detail = yield (0, _$$_REQUIRE(_dependencyMap[6], "../../../../core/leaderboard").getListDetail)(id, 1);
           playList_data = detail.list || [];
         } catch (e) {
           console.error('[Leaderboard] Failed to load page 1:', e);
         }
       }
 
-      // 立即播放已有数据
-      if (playList_data.length > 0) {
-        yield (0, _$$_REQUIRE(_dependencyMap[6], "../../../../core/list").setTempList)(listId, (0, _toConsumableArray2.default)(playList_data));
-        void (0, _$$_REQUIRE(_dependencyMap[7], "../../../../core/player/player").playList)(_$$_REQUIRE(_dependencyMap[8], "../../../../config/constant").LIST_IDS.TEMP, index);
+      // 如果还是失败,使用传入的列表
+      if (playList_data.length === 0 && list && list.length > 0) {
+        playList_data = list;
       }
 
-      // 后台加载完整列表并更新
-      try {
-        var fullList = yield (0, _$$_REQUIRE(_dependencyMap[5], "../../../../core/leaderboard").getListDetailAll)(id);
-        if (fullList.length > playList_data.length) {
-          yield (0, _$$_REQUIRE(_dependencyMap[6], "../../../../core/list").setTempList)(listId, (0, _toConsumableArray2.default)(fullList));
-          // 如果用户还在播放同一首歌,不需要重新播放,列表已更新
-        }
-      } catch (e) {
-        console.warn('[Leaderboard] Failed to load full list:', e);
+      // 播放列表
+      if (playList_data.length > 0) {
+        yield (0, _$$_REQUIRE(_dependencyMap[7], "../../../../core/list").setTempList)(listId, (0, _toConsumableArray2.default)(playList_data));
+        void (0, _$$_REQUIRE(_dependencyMap[8], "../../../../core/player/player").playList)(_$$_REQUIRE(_dependencyMap[9], "../../../../config/constant").LIST_IDS.TEMP, index);
+        (0, _$$_REQUIRE(_dependencyMap[5], "../../../../utils/tools").toast)(`已加载 ${playList_data.length} 首歌曲`);
+      } else {
+        (0, _$$_REQUIRE(_dependencyMap[5], "../../../../utils/tools").toast)('加载列表失败');
       }
     });
     return function handlePlay(_x, _x2) {
@@ -205911,7 +205914,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
         return l.sourceListId == listId;
       });
       if (targetList) {
-        var confirm = yield (0, _$$_REQUIRE(_dependencyMap[9], "../../../../utils/tools").confirmDialog)({
+        var confirm = yield (0, _$$_REQUIRE(_dependencyMap[5], "../../../../utils/tools").confirmDialog)({
           message: global.i18n.t('duplicate_list_tip', {
             name: targetList.name
           }),
@@ -205922,21 +205925,21 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
         void (0, _syncSourceList.default)(targetList);
         return;
       }
-      var list = yield (0, _$$_REQUIRE(_dependencyMap[5], "../../../../core/leaderboard").getListDetailAll)(id);
-      yield (0, _$$_REQUIRE(_dependencyMap[6], "../../../../core/list").createList)({
+      var list = yield (0, _$$_REQUIRE(_dependencyMap[6], "../../../../core/leaderboard").getListDetailAll)(id);
+      yield (0, _$$_REQUIRE(_dependencyMap[7], "../../../../core/list").createList)({
         name: name,
-        id: `${source}_${(0, _$$_REQUIRE(_dependencyMap[9], "../../../../utils/tools").toMD5)(listId)}`,
+        id: `${source}_${(0, _$$_REQUIRE(_dependencyMap[5], "../../../../utils/tools").toMD5)(listId)}`,
         list: list,
         source: source,
         sourceListId: listId
       });
-      (0, _$$_REQUIRE(_dependencyMap[9], "../../../../utils/tools").toast)(global.i18n.t('collect_success'));
+      (0, _$$_REQUIRE(_dependencyMap[5], "../../../../utils/tools").toast)(global.i18n.t('collect_success'));
     });
     return function handleCollect(_x3, _x4, _x5) {
       return _ref2.apply(this, arguments);
     };
   }();
-},1204,[6,41,13,990,1015,1016,988,982,680,543],"src/screens/Home/Views/Leaderboard/listAction.ts");
+},1204,[6,41,13,990,1015,543,1016,988,982,680],"src/screens/Home/Views/Leaderboard/listAction.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -226301,26 +226304,40 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   };
   var handlePlay = exports.handlePlay = /*#__PURE__*/function () {
     var _ref = (0, _asyncToGenerator2.default)(function* (id, source, list) {
-      var _list, _list2;
       var index = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
       var listId = getListId(id, source);
-      var isPlayingList = false;
-      // console.log(list)
-      if (!((_list = list) != null && _list.length)) list = (yield (0, _$$_REQUIRE(_dependencyMap[5], "../../core/songlist").getListDetail)(id, source, 1)).list;
-      if ((_list2 = list) != null && _list2.length) {
-        yield (0, _$$_REQUIRE(_dependencyMap[6], "../../core/list").setTempList)(listId, (0, _toConsumableArray2.default)(list));
-        void (0, _$$_REQUIRE(_dependencyMap[7], "../../core/player/player").playList)(_$$_REQUIRE(_dependencyMap[8], "../../config/constant").LIST_IDS.TEMP, index);
-        isPlayingList = true;
+      (0, _$$_REQUIRE(_dependencyMap[5], "../../utils/tools").toast)('正在加载列表...');
+
+      // 首先尝试加载完整列表
+      var playList_data = [];
+      try {
+        playList_data = yield (0, _$$_REQUIRE(_dependencyMap[6], "../../core/songlist").getListDetailAll)(source, id);
+      } catch (e) {
+        console.warn('[Songlist] Failed to load full list, trying page 1:', e);
       }
-      var fullList = yield (0, _$$_REQUIRE(_dependencyMap[5], "../../core/songlist").getListDetailAll)(source, id);
-      if (!fullList.length) return;
-      if (isPlayingList) {
-        if (_state.default.tempListMeta.id == listId) {
-          yield (0, _$$_REQUIRE(_dependencyMap[6], "../../core/list").setTempList)(listId, (0, _toConsumableArray2.default)(fullList));
+
+      // 如果完整列表加载失败,尝试加载第一页
+      if (playList_data.length === 0) {
+        try {
+          var detail = yield (0, _$$_REQUIRE(_dependencyMap[6], "../../core/songlist").getListDetail)(id, source, 1);
+          playList_data = detail.list || [];
+        } catch (e) {
+          console.error('[Songlist] Failed to load page 1:', e);
         }
+      }
+
+      // 如果还是失败,使用传入的列表
+      if (playList_data.length === 0 && list && list.length > 0) {
+        playList_data = list;
+      }
+
+      // 播放列表
+      if (playList_data.length > 0) {
+        yield (0, _$$_REQUIRE(_dependencyMap[7], "../../core/list").setTempList)(listId, (0, _toConsumableArray2.default)(playList_data));
+        void (0, _$$_REQUIRE(_dependencyMap[8], "../../core/player/player").playList)(_$$_REQUIRE(_dependencyMap[9], "../../config/constant").LIST_IDS.TEMP, index);
+        (0, _$$_REQUIRE(_dependencyMap[5], "../../utils/tools").toast)(`已加载 ${playList_data.length} 首歌曲`);
       } else {
-        yield (0, _$$_REQUIRE(_dependencyMap[6], "../../core/list").setTempList)(listId, (0, _toConsumableArray2.default)(fullList));
-        void (0, _$$_REQUIRE(_dependencyMap[7], "../../core/player/player").playList)(_$$_REQUIRE(_dependencyMap[8], "../../config/constant").LIST_IDS.TEMP, index);
+        (0, _$$_REQUIRE(_dependencyMap[5], "../../utils/tools").toast)('加载列表失败');
       }
     });
     return function handlePlay(_x, _x2, _x3) {
@@ -226334,7 +226351,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
         return l.sourceListId == listId;
       });
       if (targetList) {
-        var confirm = yield (0, _$$_REQUIRE(_dependencyMap[9], "../../utils/tools").confirmDialog)({
+        var confirm = yield (0, _$$_REQUIRE(_dependencyMap[5], "../../utils/tools").confirmDialog)({
           message: global.i18n.t('duplicate_list_tip', {
             name: targetList.name
           }),
@@ -226345,21 +226362,21 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
         void (0, _syncSourceList.default)(targetList);
         return;
       }
-      var list = yield (0, _$$_REQUIRE(_dependencyMap[5], "../../core/songlist").getListDetailAll)(source, id);
-      yield (0, _$$_REQUIRE(_dependencyMap[6], "../../core/list").createList)({
+      var list = yield (0, _$$_REQUIRE(_dependencyMap[6], "../../core/songlist").getListDetailAll)(source, id);
+      yield (0, _$$_REQUIRE(_dependencyMap[7], "../../core/list").createList)({
         name: name,
-        id: `${source}_${(0, _$$_REQUIRE(_dependencyMap[9], "../../utils/tools").toMD5)(listId)}`,
+        id: `${source}_${(0, _$$_REQUIRE(_dependencyMap[5], "../../utils/tools").toMD5)(listId)}`,
         list: list,
         source: source,
         sourceListId: id
       });
-      (0, _$$_REQUIRE(_dependencyMap[9], "../../utils/tools").toast)(global.i18n.t('collect_success'));
+      (0, _$$_REQUIRE(_dependencyMap[5], "../../utils/tools").toast)(global.i18n.t('collect_success'));
     });
     return function handleCollect(_x4, _x5, _x6) {
       return _ref2.apply(this, arguments);
     };
   }();
-},1435,[6,41,13,990,1015,1008,988,982,680,543],"src/screens/SonglistDetail/listAction.ts");
+},1435,[6,41,13,990,1015,543,1008,988,982,680],"src/screens/SonglistDetail/listAction.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {

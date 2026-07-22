@@ -11,11 +11,17 @@ const getListId = (id: string) => `board__${id}`
 
 export const handlePlay = async(id: string, list?: LX.Music.MusicInfoOnline[], index = 0) => {
   const listId = getListId(id)
+  toast('正在加载列表...')
   
-  // 优先使用传入的列表(当前已加载的歌曲)
-  let playList_data = list && list.length > 0 ? list : []
+  // 首先尝试加载完整列表
+  let playList_data: LX.Music.MusicInfoOnline[] = []
+  try {
+    playList_data = await getListDetailAll(id)
+  } catch (e) {
+    console.warn('[Leaderboard] Failed to load full list, trying page 1:', e)
+  }
   
-  // 如果传入的列表为空,尝试加载第一页
+  // 如果完整列表加载失败,尝试加载第一页
   if (playList_data.length === 0) {
     try {
       const detail = await getListDetail(id, 1)
@@ -25,23 +31,21 @@ export const handlePlay = async(id: string, list?: LX.Music.MusicInfoOnline[], i
     }
   }
   
-  // 立即播放已有数据
+  // 如果还是失败,使用传入的列表
+  if (playList_data.length === 0 && list && list.length > 0) {
+    playList_data = list
+  }
+  
+  // 播放列表
   if (playList_data.length > 0) {
     await setTempList(listId, [...playList_data])
     void playList(LIST_IDS.TEMP, index)
-  }
-  
-  // 后台加载完整列表并更新
-  try {
-    const fullList = await getListDetailAll(id)
-    if (fullList.length > playList_data.length) {
-      await setTempList(listId, [...fullList])
-      // 如果用户还在播放同一首歌,不需要重新播放,列表已更新
-    }
-  } catch (e) {
-    console.warn('[Leaderboard] Failed to load full list:', e)
+    toast(`已加载 ${playList_data.length} 首歌曲`)
+  } else {
+    toast('加载列表失败')
   }
 }
+
 
 export const handleCollect = async(id: string, name: string, source: LX.OnlineSource) => {
   const listId = getListId(id)

@@ -11,25 +11,41 @@ const getListId = (id: string, source: LX.OnlineSource) => `${source}__${id}`
 
 export const handlePlay = async(id: string, source: Source, list?: LX.Music.MusicInfoOnline[], index = 0) => {
   const listId = getListId(id, source)
-  let isPlayingList = false
-  // console.log(list)
-  if (!list?.length) list = (await getListDetail(id, source, 1)).list
-  if (list?.length) {
-    await setTempList(listId, [...list])
-    void playList(LIST_IDS.TEMP, index)
-    isPlayingList = true
+  toast('正在加载列表...')
+  
+  // 首先尝试加载完整列表
+  let playList_data: LX.Music.MusicInfoOnline[] = []
+  try {
+    playList_data = await getListDetailAll(source, id)
+  } catch (e) {
+    console.warn('[Songlist] Failed to load full list, trying page 1:', e)
   }
-  const fullList = await getListDetailAll(source, id)
-  if (!fullList.length) return
-  if (isPlayingList) {
-    if (listState.tempListMeta.id == listId) {
-      await setTempList(listId, [...fullList])
+  
+  // 如果完整列表加载失败,尝试加载第一页
+  if (playList_data.length === 0) {
+    try {
+      const detail = await getListDetail(id, source, 1)
+      playList_data = detail.list || []
+    } catch (e) {
+      console.error('[Songlist] Failed to load page 1:', e)
     }
-  } else {
-    await setTempList(listId, [...fullList])
+  }
+  
+  // 如果还是失败,使用传入的列表
+  if (playList_data.length === 0 && list && list.length > 0) {
+    playList_data = list
+  }
+  
+  // 播放列表
+  if (playList_data.length > 0) {
+    await setTempList(listId, [...playList_data])
     void playList(LIST_IDS.TEMP, index)
+    toast(`已加载 ${playList_data.length} 首歌曲`)
+  } else {
+    toast('加载列表失败')
   }
 }
+
 
 export const handleCollect = async(id: string, source: Source, name: string) => {
   const listId = getListId(id, source)
