@@ -218893,8 +218893,23 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       // 默认使用深色
       return '#1a1a2e';
     }, [wallpaperEnabled, slideshowEnabled, bgType, followCover, dominantColor, solidColor, theme]);
-    return /*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.View, {
-      style: [styles.wrapper, backgroundStyle],
+
+    // 向右滑动打开播放列表
+    var SWIPE_THRESHOLD = 80;
+    var panResponder = (0, _react.useRef)(_reactNative.PanResponder.create({
+      onMoveShouldSetPanResponder: function onMoveShouldSetPanResponder(_, gestureState) {
+        // 只响应右滑手势(水平位移大于垂直,且向右)
+        return gestureState.dx > 30 && Math.abs(gestureState.dx) > Math.abs(gestureState.dy) * 2;
+      },
+      onPanResponderRelease: function onPanResponderRelease(_, gestureState) {
+        if (gestureState.dx > SWIPE_THRESHOLD) {
+          void (0, _$$_REQUIRE(_dependencyMap[15], "../../../navigation").pop)(_state.default.componentIds.playDetail);
+        }
+      }
+    })).current;
+    return /*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.View, Object.assign({
+      style: [styles.wrapper, backgroundStyle]
+    }, panResponder.panHandlers, {
       children: [bgType === 'blur' && mi.pic && !wallpaperEnabled && /*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.View, {
         style: _reactNative.StyleSheet.absoluteFill,
         pointerEvents: "none",
@@ -218912,9 +218927,9 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
             backgroundColor: 'rgba(0,0,0,0.3)'
           }]
         })]
-      }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_$$_REQUIRE(_dependencyMap[15], "../../../components/starfield/StarfieldBackground").StarfieldBackground, {
+      }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_$$_REQUIRE(_dependencyMap[16], "../../../components/starfield/StarfieldBackground").StarfieldBackground, {
         active: true
-      }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_$$_REQUIRE(_dependencyMap[16], "../../../components/wallpaper/WallpaperView").WallpaperView, {}), /*#__PURE__*/(0, _jsxRuntime.jsx)(_$$_REQUIRE(_dependencyMap[17], "../../../components/slideshow/SlideshowBg").SlideshowBg, {}), spectrumEnabled && /*#__PURE__*/(0, _jsxRuntime.jsx)(_$$_REQUIRE(_dependencyMap[18], "../../../components/echo/SpectrumBars").SpectrumBars, {
+      }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_$$_REQUIRE(_dependencyMap[17], "../../../components/wallpaper/WallpaperView").WallpaperView, {}), /*#__PURE__*/(0, _jsxRuntime.jsx)(_$$_REQUIRE(_dependencyMap[18], "../../../components/slideshow/SlideshowBg").SlideshowBg, {}), spectrumEnabled && /*#__PURE__*/(0, _jsxRuntime.jsx)(_$$_REQUIRE(_dependencyMap[19], "../../../components/echo/SpectrumBars").SpectrumBars, {
         primaryColor: theme['c-primary']
       }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_Header.default, {
         backgroundColor: contrastBgColor
@@ -218936,12 +218951,12 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
             backgroundColor: contrastBgColor
           })
         })]
-      }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_$$_REQUIRE(_dependencyMap[19], "../../../components/echo/AudioEchoWallpaper").AudioEchoWallpaper, {}), /*#__PURE__*/(0, _jsxRuntime.jsx)(_Player.default, {
+      }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_$$_REQUIRE(_dependencyMap[20], "../../../components/echo/AudioEchoWallpaper").AudioEchoWallpaper, {}), /*#__PURE__*/(0, _jsxRuntime.jsx)(_Player.default, {
         backgroundColor: contrastBgColor
       })]
-    });
+    }));
   });
-  var styles = (0, _$$_REQUIRE(_dependencyMap[20], "../../../utils/tools").createStyle)({
+  var styles = (0, _$$_REQUIRE(_dependencyMap[21], "../../../utils/tools").createStyle)({
     wrapper: {
       flex: 1,
       flexDirection: 'column'
@@ -218958,7 +218973,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       flex: 1
     }
   });
-},1364,[6,7,65,15,1365,1384,1395,1396,688,106,1166,965,976,1399,666,1400,1401,1409,1410,1411,543],"src/screens/PlayDetail/Vertical/index.tsx");
+},1364,[6,7,65,15,1365,1384,1395,1396,688,106,1166,965,976,1399,666,716,1400,1401,1409,1410,1411,543],"src/screens/PlayDetail/Vertical/index.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {

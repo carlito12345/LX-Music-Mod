@@ -1,9 +1,10 @@
 import { memo, useState, useRef, useMemo, useEffect, useCallback } from 'react'
-import { View, AppState, StyleSheet, Image, Animated, NativeModules } from 'react-native'
+import { View, AppState, StyleSheet, Image, Animated, NativeModules, PanResponder, Dimensions } from 'react-native'
 import { BlurView } from '@react-native-community/blur'
 import { useTheme } from '@/store/theme/hook'
 import { useSettingValue } from '@/store/setting/hook'
 
+import { pop } from '@/navigation'
 import Header from './components/Header'
 import Player from './Player'
 import Pic from './Pic'
@@ -127,8 +128,24 @@ export default memo(({ componentId }: { componentId: string }) => {
     return '#1a1a2e'
   }, [wallpaperEnabled, slideshowEnabled, bgType, followCover, dominantColor, solidColor, theme])
 
+  // 向右滑动打开播放列表
+  const SWIPE_THRESHOLD = 80
+  const panResponder = useRef(
+    PanResponder.create({
+      onMoveShouldSetPanResponder: (_, gestureState) => {
+        // 只响应右滑手势(水平位移大于垂直,且向右)
+        return gestureState.dx > 30 && Math.abs(gestureState.dx) > Math.abs(gestureState.dy) * 2
+      },
+      onPanResponderRelease: (_, gestureState) => {
+        if (gestureState.dx > SWIPE_THRESHOLD) {
+          void pop(commonState.componentIds.playDetail!)
+        }
+      },
+    })
+  ).current
+
   return (
-    <View style={[styles.wrapper, backgroundStyle]}>
+    <View style={[styles.wrapper, backgroundStyle]} {...panResponder.panHandlers}>
       {/* 高斯模糊背景层 */}
       {bgType === 'blur' && mi.pic && !wallpaperEnabled && (
         <View style={StyleSheet.absoluteFill} pointerEvents="none">
