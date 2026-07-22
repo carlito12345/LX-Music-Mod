@@ -61,7 +61,16 @@ const defaultSetting: LX.AppSetting = {
 
   'playDetail.effect.controlBtn.enabled': true,
   'playDetail.effect.echo.enabled': true,
+  'playDetail.effect.wallpaper.enabled': false,
+  'playDetail.effect.lyric3d.enabled': false,
+  'playDetail.effect.slideshow.enabled': false,
+  'playDetail.effect.lyricGlow.enabled': true,
+  'playDetail.effect.cinemaShake.enabled': false,
+  'playDetail.effect.wallpaper.color': '',
+  'playDetail.vertical.style.lrcLineCount': 7,
   'playDetail.effect.echo.color': '',
+  'playDetail.effect.whiteParticles.enabled': true,
+  'playDetail.effect.blurMask.enabled': false,
   'playDetail.effect.echo.speed': 1,
   'playDetail.effect.echo.amplitude': 1,
   'playDetail.effect.spectrum.enabled': true,
@@ -101,6 +110,8 @@ const defaultSetting: LX.AppSetting = {
   'list.addMusicLocationType': 'top',
 
   'download.fileName': '歌名 - 歌手',
+  'download.dir': '',
+  'download.conflictAction': 'overwrite',
   'download.enabled': false,
 
   'sync.enable': false,

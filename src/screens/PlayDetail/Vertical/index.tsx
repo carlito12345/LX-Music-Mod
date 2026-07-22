@@ -13,7 +13,10 @@ import commonState, { type InitState as CommonState } from '@/store/common/state
 import { createStyle } from '@/utils/tools'
 import { usePlayerMusicInfo } from '@/store/player/hook'
 import { useEntryAnimation, useBackgroundCrossfade } from '@/components/cinematic/CinematicTransition'
+import { CoverEnhance } from '@/components/coverenhance/CoverEnhance'
 import { StarfieldBackground } from '@/components/starfield/StarfieldBackground'
+import { WallpaperView } from '@/components/wallpaper/WallpaperView'
+import { SlideshowBg } from '@/components/slideshow/SlideshowBg'
 import { AudioEchoWallpaper } from '@/components/echo/AudioEchoWallpaper'
 import { SpectrumBars } from '@/components/echo/SpectrumBars'
 
@@ -23,6 +26,10 @@ export default memo(({ componentId }: { componentId: string }) => {
   const theme = useTheme()
   const cinematicEnabled = useSettingValue('playDetail.effect.cinematic.enabled')
   const spectrumEnabled = useSettingValue('playDetail.effect.spectrum.enabled')
+  const coverStyle = useSettingValue('playDetail.cover.style')
+  const whiteParticlesEnabled = useSettingValue('playDetail.effect.whiteParticles.enabled')
+  const blurMaskEnabled = useSettingValue('playDetail.effect.blurMask.enabled')
+  const slideshowEnabled = useSettingValue('playDetail.effect.slideshow.enabled')
   const { scaleAnim, opacityAnim } = useEntryAnimation([mi.pic])
   const bgFadeAnim = useBackgroundCrossfade([mi.pic])
   const showLyricRef = useRef(true)
@@ -72,17 +79,58 @@ export default memo(({ componentId }: { componentId: string }) => {
   }, [])
 
   // 根据背景类型决定背景样式
+  const wallpaperEnabled = useSettingValue('playDetail.effect.wallpaper.enabled')
   const backgroundStyle = useMemo(() => {
+    if (wallpaperEnabled) {
+      return { backgroundColor: 'transparent' }
+    }
     if (bgType === 'solid') {
       return { backgroundColor: followCover ? dominantColor : solidColor }
     }
     return { backgroundColor: theme['c-content-background'] }
-  }, [bgType, solidColor, followCover, dominantColor, theme])
+  }, [bgType, solidColor, followCover, dominantColor, theme, wallpaperEnabled])
+
+  // 用于对比度计算的实际背景色(不考虑透明效果)
+  const contrastBgColor = useMemo(() => {
+    // 壁纸模式:使用深色背景
+    if (wallpaperEnabled) {
+      return '#1a1a2e'
+    }
+    // 幻灯片模式:使用深色背景
+    if (slideshowEnabled) {
+      return '#1a1a2e'
+    }
+    // 模糊模式:使用封面主色或深色
+    if (bgType === 'blur') {
+      return followCover ? dominantColor : '#1a1a2e'
+    }
+    // 纯色模式:使用对应颜色
+    if (bgType === 'solid') {
+      return followCover ? dominantColor : solidColor
+    }
+    // 跟随主题: 将主题背景色转为可用的对比色
+    if (bgType === 'theme') {
+      const themeBg = theme['c-content-background'] || '#FFFFFF'
+      // 如果是 rgb 格式,转为 hex
+      if (themeBg.startsWith('rgb')) {
+        const match = themeBg.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/)
+        if (match) {
+          const r = parseInt(match[1])
+          const g = parseInt(match[2])
+          const b = parseInt(match[3])
+          return '#' + [r,g,b].map(x => x.toString(16).padStart(2,'0')).join('')
+        }
+      }
+      return themeBg
+    }
+    // 默认使用深色
+    return '#1a1a2e'
+  }, [wallpaperEnabled, slideshowEnabled, bgType, followCover, dominantColor, solidColor, theme])
 
   return (
     <View style={[styles.wrapper, backgroundStyle]}>
       {/* 高斯模糊背景层 */}
-      {bgType === 'blur' && mi.pic && (
+      {bgType === 'blur' && mi.pic && !wallpaperEnabled && (
         <View style={StyleSheet.absoluteFill} pointerEvents="none">
           <Animated.Image
             source={{ uri: mi.pic }}
@@ -93,18 +141,24 @@ export default memo(({ componentId }: { componentId: string }) => {
           <View style={[StyleSheet.absoluteFill, { backgroundColor: 'rgba(0,0,0,0.3)' }]} />
         </View>
       )}
+      {/* 粒子星空背景 */}
+      <StarfieldBackground active={true} />
+      {/* 星云壁纸 - 在模糊层之上,全屏沉浸 */}
+      <WallpaperView />
+      {/* 幻灯片背景 */}
+      <SlideshowBg />
       {spectrumEnabled && <SpectrumBars primaryColor={theme['c-primary']} />}
-      <Header />
+      <Header backgroundColor={contrastBgColor} />
       <View style={styles.container}>
         <Animated.View style={[styles.picArea, cinematicEnabled ? { opacity: opacityAnim, transform: [{ scale: scaleAnim }] } : {}]}>
-          <Pic componentId={componentId} />
+          {coverStyle !== 'hidden' && <Pic componentId={componentId} />}
         </Animated.View>
         <View style={styles.lyricArea}>
-          <Lyric />
+          <Lyric backgroundColor={contrastBgColor} />
         </View>
       </View>
       <AudioEchoWallpaper />
-      <Player />
+      <Player backgroundColor={contrastBgColor} />
     </View>
   )
 })
@@ -120,7 +174,7 @@ const styles = createStyle({
   },
   picArea: {
     flex: 0,
-    height: '40%',
+    height: '55%',
   },
   lyricArea: {
     flex: 1,

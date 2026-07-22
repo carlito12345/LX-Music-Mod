@@ -5,13 +5,17 @@ import MusicAddBtn from './MusicAddBtn'
 import DesktopLyricBtn from './DesktopLyricBtn'
 import CommentBtn from './CommentBtn'
 
-export default () => {
+interface MoreBtnProps {
+  backgroundColor: string
+}
+
+export default ({ backgroundColor }: MoreBtnProps) => {
   return (
     <View style={styles.container}>
-      <DesktopLyricBtn />
-      <MusicAddBtn />
-      <PlayModeBtn />
-      <CommentBtn />
+      <DesktopLyricBtn backgroundColor={backgroundColor} />
+      <MusicAddBtn backgroundColor={backgroundColor} />
+      <PlayModeBtn backgroundColor={backgroundColor} />
+      <CommentBtn backgroundColor={backgroundColor} />
     </View>
   )
 }
@@ -19,12 +23,9 @@ export default () => {
 
 const styles = createStyle({
   container: {
-    // flexShrink: 0,
-    // flexGrow: 0,
     width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-around',
-    // backgroundColor: 'rgba(0,0,0,0.1)',
   },
 })

@@ -13,13 +13,28 @@ export {
 let cleared = false
 const picCachePath = temporaryDirectoryPath + '/local-media-metadata'
 
-export const scanAudioFiles = async(dirPath: string) => {
-  const files = await readDir(dirPath)
-  return files.filter(file => {
-    if (file.mimeType?.startsWith('audio/')) return true
-    if (extname(file?.name ?? '') === 'ogg') return true
-    return false
-  }).map(file => file)
+export const scanAudioFiles = async(dirPath: string, recursive = true): Promise<{name: string; path: string}[]> => {
+  const allFiles: {name: string; path: string}[] = []
+  const AUDIO_EXTS = ['.mp3', '.flac', '.ogg', '.wav', '.aac', '.m4a', '.wma', '.ape']
+
+  const scanDir = async(currentPath: string) => {
+    try {
+      const entries = await readDir(currentPath) // FileType[]
+      for (const entry of entries) {
+        if (entry.isDirectory && recursive) {
+          await scanDir(entry.path)
+        } else if (entry.isFile) {
+          const ext = extname(entry.name).toLowerCase()
+          if (AUDIO_EXTS.includes(`.${ext}`)) {
+            allFiles.push({ name: entry.name, path: entry.path })
+          }
+        }
+      }
+    } catch { }
+  }
+
+  await scanDir(dirPath)
+  return allFiles
 }
 
 const clearPicCache = async() => {

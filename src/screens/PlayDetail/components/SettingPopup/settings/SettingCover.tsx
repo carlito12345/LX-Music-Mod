@@ -11,6 +11,7 @@ const COVER_STYLES = [
   { id: 'square', label: '方形' },
   { id: 'rounded', label: '圆角' },
   { id: 'vinyl', label: '黑胶' },
+  { id: 'hidden', label: '隐藏' },
 ] as const
 
 const EFFECTS = [

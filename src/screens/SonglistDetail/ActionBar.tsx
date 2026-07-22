@@ -11,6 +11,9 @@ import { handleCollect, handlePlay } from './listAction'
 import songlistState from '@/store/songlist/state'
 import { useI18n } from '@/lang'
 import { useListInfo } from './state'
+import { addDownload } from '@/core/download'
+import { useRef, useState } from 'react'
+import DownloadQualityModal, { type DownloadQualityModalType } from '@/components/DownloadQualityModal'
 // import { NAV_SHEAR_NATIVE_IDS } from '@/config/constant'
 
 export default memo(() => {
@@ -32,6 +35,24 @@ export default memo(() => {
     void handleCollect(info.id, info.source, songlistState.listDetailInfo.info.name || info.name)
   }
 
+  const downloadModalRef = useRef<DownloadQualityModalType>(null)
+  const [downloadAllQuality, setDownloadAllQuality] = useState('320k')
+
+  const handleShowDownloadAll = () => {
+    downloadModalRef.current?.show({} as any)
+  }
+
+  const handleDownloadAll = async (quality: string) => {
+    const musicList = songlistState.listDetailInfo.list
+    for (const music of musicList) {
+      try {
+        await addDownload(music as any, quality)
+      } catch (e) {
+        console.warn('[Download] Failed:', e)
+      }
+    }
+  }
+
   return (
     <View style={styles.container}>
       <Button onPress={handleCollection} style={styles.controlBtn}>
@@ -40,9 +61,13 @@ export default memo(() => {
       <Button onPress={handlePlayAll} style={styles.controlBtn}>
         <Text style={{ ...styles.controlBtnText, color: theme['c-button-font'] }}>{t('play_all')}</Text>
       </Button>
+      <Button onPress={handleShowDownloadAll} style={styles.controlBtn}>
+        <Text style={{ ...styles.controlBtnText, color: theme['c-button-font'] }}>下载全部</Text>
+      </Button>
       <Button onPress={back} style={styles.controlBtn}>
         <Text style={{ ...styles.controlBtnText, color: theme['c-button-font'] }}>{t('back')}</Text>
       </Button>
+      <DownloadQualityModal ref={downloadModalRef} onDownload={(_, quality) => handleDownloadAll(quality)} />
     </View>
   )
 })

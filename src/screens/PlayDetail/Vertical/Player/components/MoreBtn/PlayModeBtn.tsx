@@ -5,11 +5,16 @@ import { useSettingValue } from '@/store/setting/hook'
 import { useI18n } from '@/lang'
 import { updateSetting } from '@/core/common'
 import Btn from './Btn'
+import { getContrastTextColor } from '@/utils/colorContrast'
 
+interface PlayModeBtnProps {
+  backgroundColor: string
+}
 
-export default memo(() => {
+export default memo(({ backgroundColor }: PlayModeBtnProps) => {
   const togglePlayMethod = useSettingValue('player.togglePlayMethod')
   const t = useI18n()
+  const iconColor = getContrastTextColor(backgroundColor)
 
   const toggleNextPlayMode = () => {
     let index = MUSIC_TOGGLE_MODE_LIST.indexOf(togglePlayMethod)
@@ -59,5 +64,5 @@ export default memo(() => {
     return playModeIcon
   }, [togglePlayMethod])
 
-  return <Btn icon={playModeIcon} onPress={toggleNextPlayMode} />
+  return <Btn icon={playModeIcon} onPress={toggleNextPlayMode} color={iconColor} />
 })

@@ -4,43 +4,41 @@ import { View } from 'react-native'
 import Progress from '@/components/player/ProgressBar'
 import Status from './Status'
 import { useProgress } from '@/store/player/hook'
-import { useTheme } from '@/store/theme/hook'
 import { createStyle } from '@/utils/tools'
 import Text from '@/components/common/Text'
 import { useBufferProgress } from '@/plugins/player'
+import { getContrastTextColor } from '@/utils/colorContrast'
 
-// const FONT_SIZE = 13
-
-const PlayTimeCurrent = ({ timeStr }: { timeStr: string }) => {
-  const theme = useTheme()
-  // console.log(timeStr)
-  return <Text color={theme['c-500']}>{timeStr}</Text>
+interface PlayInfoProps {
+  backgroundColor: string
 }
 
-const PlayTimeMax = memo(({ timeStr }: { timeStr: string }) => {
-  const theme = useTheme()
-  return <Text color={theme['c-500']}>{timeStr}</Text>
+const PlayTimeCurrent = ({ timeStr, color }: { timeStr: string; color: string }) => {
+  return <Text color={color}>{timeStr}</Text>
+}
+
+const PlayTimeMax = memo(({ timeStr, color }: { timeStr: string; color: string }) => {
+  return <Text color={color}>{timeStr}</Text>
 })
 
-export default () => {
+export default memo(({ backgroundColor }: PlayInfoProps) => {
   const { maxPlayTimeStr, nowPlayTimeStr, progress, maxPlayTime } = useProgress()
   const buffered = useBufferProgress()
-
-  // console.log('render playInfo')
+  const textColor = getContrastTextColor(backgroundColor)
 
   return (
     <>
-      <View style={styles.progress}><Progress progress={progress} duration={maxPlayTime} buffered={buffered} /></View>
+      <View style={styles.progress}><Progress progress={progress} duration={maxPlayTime} buffered={buffered} backgroundColor={backgroundColor} /></View>
       <View style={styles.info}>
-        <PlayTimeCurrent timeStr={nowPlayTimeStr} />
+        <PlayTimeCurrent timeStr={nowPlayTimeStr} color={textColor} />
         <View style={styles.status} >
-          <Status />
+          <Status backgroundColor={backgroundColor} />
         </View>
-        <PlayTimeMax timeStr={maxPlayTimeStr} />
+        <PlayTimeMax timeStr={maxPlayTimeStr} color={textColor} />
       </View>
     </>
   )
-}
+})
 
 
 const styles = createStyle({
@@ -53,8 +51,6 @@ const styles = createStyle({
   info: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    // alignItems: 'center',
-    // backgroundColor: '#ccc',
   },
   status: {
     flexGrow: 1,

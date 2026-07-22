@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+  html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#000}
+  .slide{
+    position:absolute;inset:0;
+    background-size:cover;background-position:center;
+    opacity:0;transition:opacity 2s ease;
+    filter:blur(1px) brightness(0.4);
+  }
+  .slide.active{opacity:1}
+  .slide.prev{opacity:0}
+</style>
+</head>
+<body>
+<div class="slide" id="current"></div>
+<div class="slide" id="next"></div>
+<script>
+  var currentEl = document.getElementById('current');
+  var nextEl = document.getElementById('next');
+  var activeIsCurrent = true;
+
+  function switchTo(url) {
+    if (activeIsCurrent) {
+      nextEl.style.backgroundImage = "url('" + url + "')";
+      currentEl.classList.add('prev');
+      nextEl.classList.add('active');
+      activeIsCurrent = false;
+      setTimeout(function() {
+        currentEl.style.backgroundImage = nextEl.style.backgroundImage;
+        currentEl.classList.remove('prev');
+        currentEl.classList.add('active');
+        nextEl.classList.remove('active');
+      }, 2200);
+    } else {
+      currentEl.style.backgroundImage = "url('" + url + "')";
+      nextEl.classList.add('prev');
+      currentEl.classList.add('active');
+      activeIsCurrent = true;
+      setTimeout(function() {
+        nextEl.style.backgroundImage = currentEl.style.backgroundImage;
+        nextEl.classList.remove('prev');
+        nextEl.classList.add('active');
+        currentEl.classList.remove('active');
+      }, 2200);
+    }
+  }
+
+  window.addEventListener('message', function(e) {
+    try { var d = JSON.parse(e.data); if (d.url) switchTo(d.url); } catch(err) {}
+  });
+</script>
+</body>
+</html>

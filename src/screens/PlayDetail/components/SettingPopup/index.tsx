@@ -12,6 +12,7 @@ import SettingVolume from './settings/SettingVolume'
 import SettingPlaybackRate from './settings/SettingPlaybackRate'
 import SettingLrcFontSize from './settings/SettingLrcFontSize'
 import SettingLrcAlign from './settings/SettingLrcAlign'
+import SettingLrcLineCount from './settings/SettingLrcLineCount'
 import SettingEffects from './settings/SettingEffects'
 
 export interface SettingPopupProps extends Omit<PopupProps, 'children'> {
@@ -52,6 +53,7 @@ export default forwardRef<SettingPopupType, SettingPopupProps>(({ direction, ...
             <SettingPlaybackRate />
             <SettingLrcFontSize direction={direction} />
             <SettingLrcAlign />
+            <SettingLrcLineCount />
           </View>
         </ScrollView>
       </Popup>

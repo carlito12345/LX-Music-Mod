@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <style>
+    html,body{margin:0;width:100%;height:100%;overflow:hidden;background:transparent}
+    canvas{position:absolute;inset:0;width:100%;height:100%}
+  </style>
+</head>
+<body>
+  <canvas id="wall"></canvas>
+  <script>
+    'use strict';
+    var canvas = document.getElementById('wall');
+    var ctx = canvas.getContext('2d', { alpha:true });
+    var W = 1, H = 1, dpr = 1;
+    var state = {
+      enabled:true, title:'', artist:'', cover:'', playing:false, preset:0, opacity:1,
+      colors:{primary:'#d6f8ff',secondary:'#9cffdf',highlight:'#fff0b8',glow:'#9cffdf'}
+    };
+    var coverImg = null, coverSrc = '';
+    var particles = [];
+    var touch = { active:false, x:0, y:0, dx:0, dy:0, rotX:0, rotY:0, velX:0, velY:0 };
+    function hexToRgb(hex, fallback){
+      hex = String(hex || fallback || '#9cffdf').trim();
+      if (/^#[0-9a-f]{3}$/i.test(hex)) hex = '#' + hex[1] + hex[1] + hex[2] + hex[2] + hex[3] + hex[3];
+      if (!/^#[0-9a-f]{6}$/i.test(hex)) hex = fallback || '#9cffdf';
+      return { r:parseInt(hex.slice(1,3),16), g:parseInt(hex.slice(3,5),16), b:parseInt(hex.slice(5,7),16) };
+    }
+    function rgba(hex, a){
+      var c = hexToRgb(hex);
+      return 'rgba(' + c.r + ',' + c.g + ',' + c.b + ',' + a + ')';
+    }
+    function rand(seed){ return Math.abs(Math.sin(seed * 3187.917) * 43758.5453) % 1; }
+    function ensureParticles(){
+      var target = Math.min(380, Math.max(180, Math.round((innerWidth * innerHeight) / 9000)));
+      while (particles.length < target) {
+        var i = particles.length + 1;
+        particles.push({ seed:i * 11.37, x:rand(i), y:rand(i * 2.7), lane:rand(i * 5.9), z:rand(i * 8.1), size:.6 + rand(i * 4.2) * 2.4 });
+      }
+      if (particles.length > target + 80) particles.length = target;
+    }
+    function resize(){
+      dpr = Math.min(1.35, Math.max(1, window.devicePixelRatio || 1));
+      W = Math.max(1, Math.floor(innerWidth * dpr));
+      H = Math.max(1, Math.floor(innerHeight * dpr));
+      canvas.width = W; canvas.height = H;
+      canvas.style.width = innerWidth + 'px';
+      canvas.style.height = innerHeight + 'px';
+      ctx.setTransform(dpr,0,0,dpr,0,0);
+      ensureParticles();
+    }
+    function setCover(src){
+      src = String(src || '');
+      if (src === coverSrc) return;
+      coverSrc = src;
+      coverImg = null;
+      if (!src) return;
+      var img = new Image();
+      img.onload = function(){ if (coverSrc === src) coverImg = img; };
+      img.onerror = function(){ if (coverSrc === src) coverImg = null; };
+      img.src = src;
+    }
+    function applyState(next){
+      state = Object.assign({}, state, next || {});
+      state.colors = Object.assign({}, state.colors, next && next.colors || {});
+      setCover(state.cover || '');
+    }
+    function drawCover(now){
+      if (!coverImg) return;
+      // 竖向封面:高 > 宽
+      var imgW = coverImg.width || 300;
+      var imgH = coverImg.height || 300;
+      var isPortrait = imgH > imgW;
+
+      var maxW = innerWidth * .35;
+      var maxH = innerHeight * .28;
+      var w, h;
+      if (isPortrait) {
+        h = maxH;
+        w = h * (imgW / imgH);
+      } else {
+        w = maxW;
+        h = w * (imgH / imgW);
+      }
+
+      // 悬浮动画
+      var floatY = Math.sin(now * .5) * 8;
+      var sway = Math.sin(now * .3) * 6;
+      var pulse = 1 + Math.sin(now * .8) * .015;
+      w *= pulse; h *= pulse;
+
+      var cx = innerWidth * .5 + sway + Math.sin(touch.rotX) * 30;
+      var cy = innerHeight * .40 + floatY + Math.sin(touch.rotY) * 20;
+      var glowColor = state.colors.glow || state.colors.secondary || '#9cffdf';
+
+      ctx.save();
+
+      // 椭圆阴影
+      ctx.globalAlpha = .35 * (state.opacity || 1);
+      ctx.filter = 'blur(16px)';
+      ctx.fillStyle = 'rgba(0,0,0,0.6)';
+      ctx.beginPath();
+      ctx.ellipse(innerWidth * .5, cy + h * .55, w * .4, h * .05, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.filter = 'none';
+
+      // 背后光晕
+      var glowR = Math.max(w, h) * .65;
+      var glowGrad = ctx.createRadialGradient(cx, cy, 0, cx, cy, glowR);
+      glowGrad.addColorStop(0, rgba(glowColor, .3 * (state.opacity || 1)));
+      glowGrad.addColorStop(.5, rgba(glowColor, .10 * (state.opacity || 1)));
+      glowGrad.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.globalAlpha = 1;
+      ctx.fillStyle = glowGrad;
+      ctx.fillRect(cx - glowR, cy - glowR, glowR * 2, glowR * 2);
+
+      // 360度跟随手指旋转
+      ctx.translate(cx, cy);
+      var rotationAngle = touch.rotX * 0.01; // 将旋转值转换为弧度
+      ctx.rotate(rotationAngle);
+
+      // 发光边框
+      ctx.shadowColor = rgba(glowColor, .8);
+      ctx.shadowBlur = 25;
+      ctx.shadowOffsetX = 0;
+      ctx.shadowOffsetY = 6;
+
+      // 高清封面绘制
+      ctx.globalAlpha = .95 * (state.opacity || 1);
+      var halfW = w * .5;
+      var halfH = h * .5;
+      var radius = Math.min(w, h) * .06;
+
+      // 圆角裁剪
+      ctx.beginPath();
+      ctx.moveTo(-halfW + radius, -halfH);
+      ctx.lineTo(halfW - radius, -halfH);
+      ctx.quadraticCurveTo(halfW, -halfH, halfW, -halfH + radius);
+      ctx.lineTo(halfW, halfH - radius);
+      ctx.quadraticCurveTo(halfW, halfH, halfW - radius, halfH);
+      ctx.lineTo(-halfW + radius, halfH);
+      ctx.quadraticCurveTo(-halfW, halfH, -halfW, halfH - radius);
+      ctx.lineTo(-halfW, -halfH + radius);
+      ctx.quadraticCurveTo(-halfW, -halfH, -halfW + radius, -halfH);
+      ctx.closePath();
+      ctx.clip();
+      ctx.drawImage(coverImg, -halfW, -halfH, w, h);
+
+      ctx.restore();
+
+      // 高光反射层
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.rotate(Math.sin(now * .25) * 0.03 + Math.sin(touch.rotX) * 0.15);
+      ctx.globalAlpha = .12 * (state.opacity || 1);
+      var hlGrad = ctx.createLinearGradient(-halfW, -halfH, halfW, halfH);
+      hlGrad.addColorStop(0, 'rgba(255,255,255,0.5)');
+      hlGrad.addColorStop(.4, 'rgba(255,255,255,0)');
+      hlGrad.addColorStop(1, 'rgba(255,255,255,0)');
+      ctx.fillStyle = hlGrad;
+      ctx.fillRect(-halfW, -halfH, w, h);
+      ctx.restore();
+    }
+    function draw(nowMs){
+      var now = nowMs * .001;
+      // 触摸惯性衰减
+      if (!touch.active) {
+        touch.velX *= 0.95;
+        touch.velY *= 0.95;
+      }
+      touch.rotX += touch.velX;
+      touch.rotY += touch.velY;
+      // 无限旋转:用 2π 取模,拖动永不停止
+      touch.rotX = touch.rotX % (Math.PI * 2);
+      touch.rotY = touch.rotY % (Math.PI * 2);
+      ensureParticles();
+      var opacity = Math.max(.35, Math.min(1, state.opacity || 1));
+      var primary = state.colors.primary || '#d6f8ff';
+      var secondary = state.colors.secondary || '#9cffdf';
+      var highlight = state.colors.highlight || '#fff0b8';
+      var glow = state.colors.glow || secondary;
+      ctx.clearRect(0,0,innerWidth,innerHeight);
+      // 整体背景:均匀同色化,边缘更深
+      var bg = ctx.createRadialGradient(
+        innerWidth * .5, innerHeight * .45, 0,
+        innerWidth * .5, innerHeight * .45, Math.max(innerWidth, innerHeight) * .7
+      );
+      bg.addColorStop(0, rgba(primary, .15 * opacity));
+      bg.addColorStop(.4, rgba(primary, .08 * opacity));
+      bg.addColorStop(1, 'rgba(5,6,8,0.9)');
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.globalAlpha = 1;
+      ctx.fillStyle = bg;
+      ctx.fillRect(0,0,innerWidth,innerHeight);
+      drawCover(now);
+      ctx.save();
+      ctx.globalCompositeOperation = 'lighter';
+      var cx = innerWidth * .5;
+      var cy = innerHeight * .48 + Math.sin(now * .28) * innerHeight * .018;
+      var rx = innerWidth * .48;
+      var ry = innerHeight * .48;
+      // 3D 视角偏移
+      var viewOffsetX = Math.sin(touch.rotX) * 80;
+      var viewOffsetY = Math.sin(touch.rotY) * 60;
+      var depthFactor = Math.cos(touch.rotY);
+      for (var i=0;i<particles.length;i++) {
+        var p = particles[i];
+        var speed = .009 + rand(p.seed) * .021 + (state.playing ? .010 : 0);
+        var a = (p.x * Math.PI * 2 + now * speed + Math.sin(now * .07 + p.seed) * .14) % (Math.PI * 2);
+        var ring = .18 + p.z * .82;
+        var wobble = Math.sin(now * (.22 + rand(p.seed) * .18) + p.seed) * 12;
+        var baseX = cx + Math.cos(a) * rx * ring + Math.sin(now * .11 + p.seed) * 24;
+        var baseY = cy + Math.sin(a * (1.0 + rand(p.seed * 2) * .16)) * ry * ring + wobble;
+        var depthZ = Math.sin(a) * ring;
+        var x = baseX + viewOffsetX * depthZ;
+        var y = baseY + viewOffsetY * depthZ;
+        var tw = Math.pow(.5 + .5 * Math.sin(now * (.50 + rand(p.seed)*.42) + p.seed), 4);
+        var r = Math.max(.7, p.size * (.8 + tw * 1.2));
+        var col = tw > .74 ? '#ffffff' : (p.lane > .55 ? '#e0e0e0' : '#c0c0c0');
+        ctx.globalAlpha = (0.12 + tw * .35 + (state.playing ? .08 : 0)) * opacity;
+        ctx.fillStyle = col;
+        ctx.beginPath();
+        ctx.arc(x,y,r,0,Math.PI*2);
+        ctx.fill();
+      }
+      var aura = ctx.createRadialGradient(cx,cy,0,cx,cy,Math.max(innerWidth,innerHeight)*.54);
+      aura.addColorStop(0, rgba(highlight, .25 * opacity));
+      aura.addColorStop(.34, rgba(secondary, .18 * opacity));
+      aura.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.globalAlpha = .9;
+      ctx.fillStyle = aura;
+      ctx.fillRect(0,0,innerWidth,innerHeight);
+      ctx.restore();
+      requestAnimationFrame(draw);
+    }
+    // 触摸交互:拖动旋转3D视角
+    canvas.addEventListener('touchstart', function(e){
+      e.preventDefault();
+      var t = e.touches[0];
+      touch.active = true;
+      touch.x = t.clientX;
+      touch.y = t.clientY;
+      touch.dx = 0; touch.dy = 0;
+    }, { passive:false });
+    canvas.addEventListener('touchmove', function(e){
+      e.preventDefault();
+      if (!touch.active) return;
+      var t = e.touches[0];
+      touch.dx = t.clientX - touch.x;
+      touch.dy = t.clientY - touch.y;
+      touch.velX = touch.dx * 0.005;
+      touch.velY = touch.dy * 0.005;
+      touch.x = t.clientX;
+      touch.y = t.clientY;
+    }, { passive:false });
+    canvas.addEventListener('touchend', function(e){
+      touch.active = false;
+    });
+    // 鼠标交互(桌面调试)
+    canvas.addEventListener('mousedown', function(e){
+      touch.active = true;
+      touch.x = e.clientX; touch.y = e.clientY;
+    });
+    canvas.addEventListener('mousemove', function(e){
+      if (!touch.active) return;
+      touch.dx = e.clientX - touch.x;
+      touch.dy = e.clientY - touch.y;
+      touch.velX = touch.dx * 0.005;
+      touch.velY = touch.dy * 0.005;
+      touch.x = e.clientX; touch.y = e.clientY;
+    });
+    canvas.addEventListener('mouseup', function(){ touch.active = false; });
+    canvas.addEventListener('mouseleave', function(){ touch.active = false; });
+
+    window.addEventListener('resize', resize);
+    resize();
+    // React Native postMessage bridge
+    window.addEventListener('message', function(e){
+      try { applyState(JSON.parse(e.data)); } catch(err) {}
+    });
+    if (window.ReactNativeWebView) {
+      window.ReactNativeWebView.postMessage(JSON.stringify({type:'ready'}));
+    }
+    requestAnimationFrame(draw);
+  </script>
+</body>
+</html>

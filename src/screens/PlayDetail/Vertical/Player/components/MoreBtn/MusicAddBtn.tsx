@@ -2,10 +2,15 @@ import { useRef } from 'react'
 import MusicAddModal, { type MusicAddModalType } from '@/components/MusicAddModal'
 import playerState from '@/store/player/state'
 import Btn from './Btn'
+import { getContrastTextColor } from '@/utils/colorContrast'
 
+interface MusicAddBtnProps {
+  backgroundColor: string
+}
 
-export default () => {
+export default ({ backgroundColor }: MusicAddBtnProps) => {
   const musicAddModalRef = useRef<MusicAddModalType>(null)
+  const iconColor = getContrastTextColor(backgroundColor)
 
   const handleShowMusicAddModal = () => {
     const musicInfo = playerState.playMusicInfo.musicInfo
@@ -19,7 +24,7 @@ export default () => {
 
   return (
     <>
-      <Btn icon="add-music" onPress={handleShowMusicAddModal} />
+      <Btn icon="add-music" onPress={handleShowMusicAddModal} color={iconColor} />
       <MusicAddModal ref={musicAddModalRef} />
     </>
   )

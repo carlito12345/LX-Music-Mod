@@ -14,6 +14,7 @@ import cn.toside.music.mobile.crypto.CryptoPackage;
 import cn.toside.music.mobile.lyric.LyricPackage;
 import cn.toside.music.mobile.userApi.UserApiPackage;
 import cn.toside.music.mobile.palette.PalettePackage;
+import cn.toside.music.mobile.carkey.CarKeyPackage;
 import cn.toside.music.mobile.utils.UtilsPackage;
 
 public class MainApplication extends NavigationApplication {
@@ -33,6 +34,7 @@ public class MainApplication extends NavigationApplication {
           // packages.add(new MyReactNativePackage());
           packages.add(new CachePackage());
           packages.add(new LyricPackage());
+          packages.add(new CarKeyPackage());
           packages.add(new UtilsPackage());
           packages.add(new CryptoPackage());
           packages.add(new UserApiPackage());

@@ -61,11 +61,27 @@ export const SpectrumBars = memo(({ primaryColor }: { primaryColor: string }) =>
 })
 
 const styles = StyleSheet.create({
+  wrapper: {
+    position: 'absolute',
+    bottom: 50,
+    left: 15,
+    right: 15,
+    height: 70,
+  },
+  darkBg: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
+    height: 65,
+    backgroundColor: 'rgba(30, 25, 40, 0.6)',
+    borderRadius: 12,
+  },
   container: {
     position: 'absolute',
-    bottom: 55,
-    left: 20,
-    right: 20,
+    bottom: 5,
+    left: 5,
+    right: 5,
     flexDirection: 'row',
     alignItems: 'flex-end',
     justifyContent: 'space-around',

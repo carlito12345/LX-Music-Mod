@@ -8,13 +8,16 @@ import ControlBtn from './components/ControlBtn'
 import { createStyle } from '@/utils/tools'
 import { NAV_SHEAR_NATIVE_IDS } from '@/config/constant'
 
+interface PlayerProps {
+  backgroundColor: string
+}
 
-export default memo(() => {
+export default memo(({ backgroundColor }: PlayerProps) => {
   return (
     <View style={styles.container} nativeID={NAV_SHEAR_NATIVE_IDS.playDetail_player}>
-      <PlayInfo />
-      <ControlBtn />
-      <MoreBtn />
+      <PlayInfo backgroundColor={backgroundColor} />
+      <ControlBtn backgroundColor={backgroundColor} />
+      <MoreBtn backgroundColor={backgroundColor} />
     </View>
   )
 })
@@ -23,14 +26,9 @@ const styles = createStyle({
   container: {
     flex: 0,
     width: '100%',
-    // paddingTop: progressContentPadding,
-    // marginTop: -progressContentPadding,
-    // backgroundColor: 'rgba(0, 0, 0, .1)',
     paddingHorizontal: 15,
     paddingBottom: 15,
     paddingTop: 5,
-    // backgroundColor: AppColors.primary,
-    // backgroundColor: 'red',
     flexDirection: 'column',
   },
   status: {
@@ -39,6 +37,5 @@ const styles = createStyle({
     flex: 0,
     paddingLeft: 5,
     justifyContent: 'space-evenly',
-    // backgroundColor: 'rgba(0, 0, 0, .1)',
   },
 })

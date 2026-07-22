@@ -391,7 +391,7 @@ declare global {
   /**
    * 播放详情封面样式
    */
-  'playDetail.cover.style': 'circle' | 'square' | 'rounded' | 'vinyl'
+  'playDetail.cover.style': 'circle' | 'square' | 'rounded' | 'vinyl' | 'hidden'
   /**
    * 播放详情封面特效:发光
    */
@@ -449,7 +449,16 @@ declare global {
    */
   'playDetail.effect.controlBtn.enabled': boolean
   'playDetail.effect.echo.enabled': boolean
+  'playDetail.effect.wallpaper.enabled': boolean
+  'playDetail.effect.lyric3d.enabled': boolean
+  'playDetail.effect.slideshow.enabled': boolean
+  'playDetail.effect.lyricGlow.enabled': boolean
+  'playDetail.effect.cinemaShake.enabled': boolean
+  'playDetail.effect.wallpaper.color': string
+  'playDetail.vertical.style.lrcLineCount': number
   'playDetail.effect.echo.color': string
+  'playDetail.effect.whiteParticles.enabled': boolean
+  'playDetail.effect.blurMask.enabled': boolean
   'playDetail.effect.echo.speed': number
   'playDetail.effect.echo.amplitude': number
   'playDetail.effect.spectrum.enabled': boolean

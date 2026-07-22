@@ -8,7 +8,7 @@ import { useIsPlay } from '@/store/player/hook'
 import { useTheme } from '@/store/theme/hook'
 import { useSettingValue } from '@/store/setting/hook'
 
-const STAR_COUNT = 40
+const STAR_COUNT = 80
 const { width: SCREEN_W, height: SCREEN_H } = Dimensions.get('window')
 
 interface StarConfig {
@@ -18,6 +18,9 @@ interface StarConfig {
   opacity: number
   duration: number
   delay: number
+  driftX: number
+  driftY: number
+  driftDuration: number
 }
 
 const createStars = (): StarConfig[] => {
@@ -26,19 +29,24 @@ const createStars = (): StarConfig[] => {
     stars.push({
       x: Math.random() * SCREEN_W,
       y: Math.random() * SCREEN_H,
-      size: 1.5 + Math.random() * 2.5,
+      size: 1.5 + Math.random() * 6.5,
       opacity: 0.3 + Math.random() * 0.6,
       duration: 3000 + Math.random() * 4000,
       delay: Math.random() * 2000,
+      driftX: (Math.random() - 0.5) * SCREEN_W * 0.8,
+      driftY: (Math.random() - 0.5) * SCREEN_H * 0.8,
+      driftDuration: 8000 + Math.random() * 12000,
     })
   }
   return stars
 }
 
-const StarItem = memo(({ star, primaryColor }: { star: StarConfig; primaryColor: string }) => {
+const StarItem = memo(({ star }: { star: StarConfig }) => {
   const twinkle = useRef(new Animated.Value(0)).current
+  const drift = useRef(new Animated.Value(0)).current
 
   useEffect(() => {
+    // 闪烁动画
     Animated.loop(
       Animated.sequence([
         Animated.delay(star.delay),
@@ -56,23 +64,42 @@ const StarItem = memo(({ star, primaryColor }: { star: StarConfig; primaryColor:
         }),
       ])
     ).start()
-  }, [twinkle, star])
+
+    // 全局飘散动画
+    Animated.loop(
+      Animated.timing(drift, {
+        toValue: 1,
+        duration: star.driftDuration,
+        easing: Easing.inOut(Easing.sin),
+        useNativeDriver: false,
+      })
+    ).start()
+  }, [twinkle, drift, star])
 
   const opacity = twinkle.interpolate({
     inputRange: [0, 1],
-    outputRange: [star.opacity * 0.3, star.opacity],
+    outputRange: [star.opacity * 0.2, star.opacity],
+  })
+
+  const posX = drift.interpolate({
+    inputRange: [0, 1],
+    outputRange: [star.x, star.x + star.driftX],
+  })
+  const posY = drift.interpolate({
+    inputRange: [0, 1],
+    outputRange: [star.y, star.y + star.driftY],
   })
 
   return (
     <Animated.View
       style={{
         position: 'absolute',
-        left: star.x,
-        top: star.y,
+        left: posX,
+        top: posY,
         width: star.size,
         height: star.size,
         borderRadius: star.size / 2,
-        backgroundColor: primaryColor,
+        backgroundColor: '#FFFFFF',
         opacity,
       }}
     />
@@ -100,7 +127,7 @@ export const StarfieldBackground = memo<StarfieldProps>(({ active = true }) => {
   return (
     <View style={StyleSheet.absoluteFill} pointerEvents="none">
       {stars.map((star, index) => (
-        <StarItem key={index} star={star} primaryColor={theme['c-primary']} />
+        <StarItem key={index} star={star} />
       ))}
     </View>
   )

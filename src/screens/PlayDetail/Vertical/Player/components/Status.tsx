@@ -1,17 +1,17 @@
-// import { useLrcPlay } from '@/plugins/lyric'
 import { useStatusText } from '@/store/player/hook'
 import { createStyle } from '@/utils/tools'
 import Text from '@/components/common/Text'
+import { getSecondaryTextColor } from '@/utils/colorContrast'
 
+interface StatusProps {
+  backgroundColor: string
+}
 
-export default () => {
-  // const { text } = useLrcPlay()
+export default ({ backgroundColor }: StatusProps) => {
   const statusText = useStatusText()
-  // console.log('render status')
+  const textColor = getSecondaryTextColor(backgroundColor)
 
-  // const status = playerStatus.isPlay ? text : playerStatus.statusText
-
-  return <Text style={styles.text} numberOfLines={1} size={13}>{statusText}</Text>
+  return <Text style={styles.text} numberOfLines={1} size={13} color={textColor}>{statusText}</Text>
 }
 
 const styles = createStyle({

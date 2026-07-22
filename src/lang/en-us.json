@@ -161,6 +161,7 @@
   "music_toggle__duplicate_tip": "The same song already exists in the list, should I remove it and continue?",
   "name": "Title: {name}",
   "nav_exit": "Exit App",
+  "nav_local": "Local Music",
   "nav_love": "Your Library",
   "nav_search": "Search",
   "nav_setting": "Settings",

@@ -14,6 +14,7 @@ const MAIN_EFFECTS = [
   { key: 'controlBtn', label: '🎮 控件动效', setting: 'playDetail.effect.controlBtn.enabled' },
   { key: 'spectrum', label: '📊 频谱', setting: 'playDetail.effect.spectrum.enabled' },
   { key: 'echo', label: '🔊 音域回响', setting: 'playDetail.effect.echo.enabled' },
+  { key: 'slideshow', label: '🖼️ 幻灯片', setting: 'playDetail.effect.slideshow.enabled' },
 ] as const
 
 // 粒子控制选项
@@ -39,6 +40,8 @@ export default memo(() => {
   const controlBtn = useSettingValue('playDetail.effect.controlBtn.enabled')
   const spectrum = useSettingValue('playDetail.effect.spectrum.enabled')
   const echo = useSettingValue('playDetail.effect.echo.enabled')
+  const slideshow = useSettingValue('playDetail.effect.slideshow.enabled')
+
   const echoColor = useSettingValue('playDetail.effect.echo.color')
   const echoSpeed = useSettingValue('playDetail.effect.echo.speed')
   const echoAmplitude = useSettingValue('playDetail.effect.echo.amplitude')
@@ -49,7 +52,7 @@ export default memo(() => {
   const speed = useSettingValue('playDetail.effect.starfield.speed')
   const pattern = useSettingValue('playDetail.effect.starfield.pattern')
 
-  const effectMap: Record<string, boolean> = { starfield, lyricStage, cinematic, controlBtn, spectrum, echo }
+  const effectMap: Record<string, boolean> = { starfield, lyricStage, cinematic, controlBtn, spectrum, echo, slideshow }
 
   const getSettingKey = (key: string) => {
     const found = MAIN_EFFECTS.find(e => e.key === key)

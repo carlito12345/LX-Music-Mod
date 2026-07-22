@@ -5,6 +5,7 @@ import { type Line, useLrcPlay, useLrcSet } from '@/plugins/lyric'
 import { createStyle } from '@/utils/tools'
 // import { useComponentIds } from '@/store/common/hook'
 import { useTheme } from '@/store/theme/hook'
+import { getContrastTextColor, getSecondaryTextColor } from '@/utils/colorContrast'
 import { useSettingValue } from '@/store/setting/hook'
 import { AnimatedColorText } from '@/components/common/Text'
 import { setSpText } from '@/utils/pixelRatio'
@@ -62,12 +63,14 @@ interface LineProps {
   activeLine: number
   onLayout: (lineNum: number, height: number, width: number) => void
 }
-const LrcLine = memo(({ line, lineNum, activeLine, onLayout }: LineProps) => {
+const LrcLine = memo(({ line, lineNum, activeLine, onLayout, backgroundColor }: LineProps & { backgroundColor: string }) => {
   const theme = useTheme()
   const lrcFontSize = useSettingValue('playDetail.vertical.style.lrcFontSize')
+  const lrcLineCount = useSettingValue('playDetail.vertical.style.lrcLineCount')
   const textAlign = useSettingValue('playDetail.style.align')
   const size = lrcFontSize / 10
-  const lineHeight = setSpText(size) * 1.3
+  const lineSpacing = Math.max(1, (7 / (lrcLineCount || 7)) * 1.3)
+  const lineHeight = setSpText(size) * lineSpacing
 
   const stageEnabled = useSettingValue('playDetail.effect.lyricStage.enabled')
   const stageStyle = useMemo(() => {
@@ -81,16 +84,18 @@ const LrcLine = memo(({ line, lineNum, activeLine, onLayout }: LineProps) => {
 
   const colors = useMemo(() => {
     const active = activeLine == lineNum
+    const activeColor = getContrastTextColor(backgroundColor)
+    const inactiveColor = getSecondaryTextColor(backgroundColor)
     return active ? [
-      theme['c-primary'],
-      theme['c-primary-alpha-200'],
+      activeColor,
+      activeColor,
       1,
     ] as const : [
-      theme['c-350'],
-      theme['c-300'],
+      inactiveColor,
+      inactiveColor,
       0.6,
     ] as const
-  }, [activeLine, lineNum, theme])
+  }, [activeLine, lineNum, backgroundColor])
 
   const handleLayout = ({ nativeEvent }: LayoutChangeEvent) => {
     onLayout(lineNum, nativeEvent.layout.height, nativeEvent.layout.width)
@@ -106,6 +111,9 @@ const LrcLine = memo(({ line, lineNum, activeLine, onLayout }: LineProps) => {
         textAlign,
         lineHeight,
         ...stageStyle,
+        textShadowColor: 'rgba(0,0,0,0.5)',
+        textShadowOffset: { width: 0, height: 1 },
+        textShadowRadius: 3,
       }} textBreakStrategy="simple" color={colors[0]} opacity={colors[2]} size={size}>{line.text}</AnimatedColorText>
       {
         line.extendedLyrics.map((lrc, index) => {
@@ -113,6 +121,9 @@ const LrcLine = memo(({ line, lineNum, activeLine, onLayout }: LineProps) => {
             ...styles.lineTranslationText,
             textAlign,
             lineHeight: lineHeight * 0.8,
+            textShadowColor: 'rgba(0,0,0,0.4)',
+            textShadowOffset: { width: 0, height: 1 },
+            textShadowRadius: 2,
           }} textBreakStrategy="simple" key={index} color={colors[1]} opacity={colors[2]} size={size * 0.8}>{lrc}</AnimatedColorText>)
         })
       }
@@ -125,7 +136,7 @@ const LrcLine = memo(({ line, lineNum, activeLine, onLayout }: LineProps) => {
 })
 const wait = async() => new Promise(resolve => setTimeout(resolve, 100))
 
-export default () => {
+export default ({ backgroundColor = '#1a1a2e' }: { backgroundColor?: string } = {}) => {
   const lyricLines = useLrcSet()
   const { line } = useLrcPlay()
   const flatListRef = useRef<FlatList>(null)
