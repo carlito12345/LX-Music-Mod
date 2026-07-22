@@ -159756,6 +159756,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     COMPONENT_IDS["playDetail"] = "playDetail";
     COMPONENT_IDS["songlistDetail"] = "songlistDetail";
     COMPONENT_IDS["comment"] = "comment";
+    COMPONENT_IDS["playQueue"] = "playQueue";
     return COMPONENT_IDS;
   }({});
   var NAV_SHEAR_NATIVE_IDS = exports.NAV_SHEAR_NATIVE_IDS = /*#__PURE__*/function (NAV_SHEAR_NATIVE_IDS) {
@@ -166992,6 +166993,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   exports.pushCommentScreen = pushCommentScreen;
   exports.pushHomeScreen = pushHomeScreen;
   exports.pushPlayDetailScreen = pushPlayDetailScreen;
+  exports.pushPlayQueueScreen = pushPlayQueueScreen;
   exports.pushSonglistDetailScreen = pushSonglistDetailScreen;
   var _asyncToGenerator2 = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[1], "@babel/runtime/helpers/asyncToGenerator"));
   var _state = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[2], "../store/theme/state"));
@@ -167070,6 +167072,50 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       });
     });
     return _pushHomeScreen.apply(this, arguments);
+  }
+  function pushPlayQueueScreen(componentId) {
+    _$$_REQUIRE(_dependencyMap[3], "react-native-navigation").Navigation.push(componentId, {
+      component: {
+        name: 'PLAY_QUEUE',
+        options: {
+          topBar: {
+            visible: false,
+            drawBehind: true,
+            animate: true
+          },
+          animations: {
+            push: {
+              content: {
+                x: {
+                  translation: -300,
+                  from: 300,
+                  to: 0
+                },
+                alpha: {
+                  from: 0.5,
+                  to: 1
+                },
+                duration: 250
+              }
+            },
+            pop: {
+              content: {
+                x: {
+                  translation: 300,
+                  from: 0,
+                  to: 300
+                },
+                alpha: {
+                  from: 1,
+                  to: 0.5
+                },
+                duration: 250
+              }
+            }
+          }
+        }
+      }
+    });
   }
   function pushPlayDetailScreen(componentId) {
     var skipAnimation = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
@@ -176853,7 +176899,9 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       return WrappedComponent(_SyncModeModal.default);
     });
     // Navigation.registerComponent(SETTING_SCREEN, () => WrappedComponent(Setting))
-
+    _$$_REQUIRE(_dependencyMap[6], "react-native-navigation").Navigation.registerComponent('PLAY_QUEUE', function () {
+      return WrappedComponent(PlayQueue);
+    });
     console.info('All screens have been registered...');
   };
 },962,[6,963,975,1027,106,1056,720,717,1058],"src/navigation/registerScreens.tsx");
@@ -218905,10 +218953,10 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
           // 右滑 → 返回主页
           void (0, _$$_REQUIRE(_dependencyMap[15], "../../../navigation").pop)(_state.default.componentIds.playDetail);
         } else if (gestureState.dx < -SWIPE_THRESHOLD) {
-          // 左滑 → 返回主页后聚焦当前播放列表
+          // 左滑 → 展开播放队列
           var playDetailId = _state.default.componentIds.playDetail;
           if (playDetailId) {
-            void (0, _$$_REQUIRE(_dependencyMap[15], "../../../navigation").pop)(playDetailId);
+            _$$_REQUIRE(_dependencyMap[15], "../../../navigation").navigations.pushPlayQueueScreen(playDetailId);
           }
         }
       }

@@ -48,6 +48,7 @@ export default () => {
   Navigation.registerComponent(PACT_MODAL, () => WrappedComponent(PactModal))
   Navigation.registerComponent(SYNC_MODE_MODAL, () => WrappedComponent(SyncModeModal))
   // Navigation.registerComponent(SETTING_SCREEN, () => WrappedComponent(Setting))
+  Navigation.registerComponent('PLAY_QUEUE', () => WrappedComponent(PlayQueue))
 
   console.info('All screens have been registered...')
 }

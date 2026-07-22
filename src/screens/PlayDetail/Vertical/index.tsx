@@ -4,7 +4,7 @@ import { BlurView } from '@react-native-community/blur'
 import { useTheme } from '@/store/theme/hook'
 import { useSettingValue } from '@/store/setting/hook'
 
-import { pop } from '@/navigation'
+import { pop, navigations } from '@/navigation'
 import Header from './components/Header'
 import Player from './Player'
 import Pic from './Pic'
@@ -140,10 +140,10 @@ export default memo(({ componentId }: { componentId: string }) => {
           // 右滑 → 返回主页
           void pop(commonState.componentIds.playDetail!)
         } else if (gestureState.dx < -SWIPE_THRESHOLD) {
-          // 左滑 → 返回主页后聚焦当前播放列表
+          // 左滑 → 展开播放队列
           const playDetailId = commonState.componentIds.playDetail
           if (playDetailId) {
-            void pop(playDetailId)
+            navigations.pushPlayQueueScreen(playDetailId)
           }
         }
       },
