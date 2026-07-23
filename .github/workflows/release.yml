@@ -33,9 +33,6 @@ jobs:
           else
             echo "No signing key found, building Debug APK..."
             ./gradlew assembleDebug
-            # 将 debug APK 复制到 release 路径,方便后续步骤引用
-            mkdir -p app/build/outputs/apk/release
-            cp app/build/outputs/apk/debug/*.apk app/build/outputs/apk/release/ 2>/dev/null || true
           fi
 
       # Push tag to GitHub if package.json version's tag is not tagged
@@ -55,11 +52,7 @@ jobs:
 
       - name: Generate file MD5
         run: |
-          if [ -d "android/app/build/outputs/apk/release" ]; then
-            cd android/app/build/outputs/apk/release
-          elif [ -d "android/app/build/outputs/apk/debug" ]; then
-            cd android/app/build/outputs/apk/debug
-          fi
+          cd android/app/build/outputs/apk/release 2>/dev/null || cd android/app/build/outputs/apk/debug 2>/dev/null
           md5sum *.apk
 
       - name: Upload Artifact
