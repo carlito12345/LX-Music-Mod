@@ -5,8 +5,6 @@ import SongList from '../Views/SongList'
 import Mylist from '../Views/Mylist'
 import Leaderboard from '../Views/Leaderboard'
 import Setting from '../Views/Setting'
-import LocalMusic from '../Views/LocalMusic'
-import Download from '../Views/Download'
 import commonState, { type InitState as CommonState } from '@/store/common/state'
 import { createStyle } from '@/utils/tools'
 import PagerView, { type PageScrollStateChangedNativeEvent, type PagerViewOnPageSelectedEvent } from 'react-native-pager-view'
@@ -160,34 +158,6 @@ const MylistPage = () => {
 
   return visible ? component : null
 }
-const LocalMusicPage = () => {
-  const [visible, setVisible] = useState(commonState.navActiveId == 'nav_local')
-  const component = useMemo(() => <LocalMusic />, [])
-  useEffect(() => {
-    const handleNavIdUpdate = (id: CommonState['navActiveId']) => {
-      if (id == 'nav_local') {
-        requestAnimationFrame(() => { setVisible(true) })
-      }
-    }
-    global.state_event.on('navActiveIdUpdated', handleNavIdUpdate)
-    return () => { global.state_event.off('navActiveIdUpdated', handleNavIdUpdate) }
-  }, [])
-  return visible ? component : null
-}
-const DownloadPage = () => {
-  const [visible, setVisible] = useState(commonState.navActiveId == 'nav_download')
-  const component = useMemo(() => <Download />, [])
-  useEffect(() => {
-    const handleNavIdUpdate = (id: CommonState['navActiveId']) => {
-      if (id == 'nav_download') {
-        requestAnimationFrame(() => { setVisible(true) })
-      }
-    }
-    global.state_event.on('navActiveIdUpdated', handleNavIdUpdate)
-    return () => { global.state_event.off('navActiveIdUpdated', handleNavIdUpdate) }
-  }, [])
-  return visible ? component : null
-}
 const SettingPage = () => {
   const [visible, setVisible] = useState(commonState.navActiveId == 'nav_setting')
   const component = useMemo(() => <Setting />, [])
@@ -213,17 +183,13 @@ const viewMap = {
   nav_songlist: 1,
   nav_top: 2,
   nav_love: 3,
-  nav_local: 4,
-  nav_download: 5,
-  nav_setting: 6,
+  nav_setting: 4,
 }
 const indexMap = [
   'nav_search',
   'nav_songlist',
   'nav_top',
   'nav_love',
-  'nav_local',
-  'nav_download',
   'nav_setting',
 ] as const
 
@@ -319,12 +285,6 @@ const Main = () => {
       </View>
       <View collapsable={false} key="nav_love" style={styles.pageStyle}>
         <MylistPage />
-      </View>
-      <View collapsable={false} key="nav_local" style={styles.pageStyle}>
-        <LocalMusicPage />
-      </View>
-      <View collapsable={false} key="nav_download" style={styles.pageStyle}>
-        <DownloadPage />
       </View>
       <View collapsable={false} key="nav_setting" style={styles.pageStyle}>
         <SettingPage />

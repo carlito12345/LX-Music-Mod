@@ -3044,7 +3044,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       (0, _$$_REQUIRE(_dependencyMap[17], "./utils/nativeModules/utils").exitApp)();
     });
   });
-},5,[6,7,13,14,684,1452,695,682,1456,679,1457,962,1475,1476,618,718,543,666,716],"src/app.ts");
+},5,[6,7,13,14,684,1449,695,682,1453,679,1454,962,1472,1473,618,718,543,666,716],"src/app.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   function _interopRequireDefault(e) {
     return e && e.__esModule ? e : {
@@ -160258,7 +160258,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   global.list_event = (0, _$$_REQUIRE(_dependencyMap[2], "../event/listEvent").createListEventHub)();
   global.dislike_event = (0, _$$_REQUIRE(_dependencyMap[3], "../event/dislikeEvent").createDislikeEventHub)();
   global.state_event = (0, _$$_REQUIRE(_dependencyMap[4], "../event/stateEvent").createStateEventHub)();
-},684,[685,686,1453,1454,1455],"src/config/globalData.ts");
+},684,[685,686,1450,1451,1452],"src/config/globalData.ts");
 __d(function(global, require, _importDefaultUnused, _importAllUnused, module, exports, _dependencyMapUnused) {
   module.exports = {
   "name": "lx-music-mobile",
@@ -167062,7 +167062,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       void callback();
     });
   };
-},716,[6,717,718,963,961,1450,1451,720,689,1452],"src/navigation/index.ts");
+},716,[6,717,718,963,961,1447,1448,720,689,1449],"src/navigation/index.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
     value: true
@@ -186357,7 +186357,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   var _SonglistDetail = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[3], "./SonglistDetail"));
   var _Comment = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[4], "./Comment"));
   var _PlayQueue = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[5], "./PlayQueue"));
-},1059,[6,1060,1365,1432,1439,1449],"src/screens/index.ts");
+},1059,[6,1060,1361,1428,1436,1446],"src/screens/index.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -186388,7 +186388,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       children: isHorizontalMode ? /*#__PURE__*/(0, _jsxRuntime.jsx)(_Horizontal.default, {}) : /*#__PURE__*/(0, _jsxRuntime.jsx)(_Vertical.default, {})
     });
   };
-},1060,[6,65,1061,1086,1361,618,106,1064,689,680,716],"src/screens/Home/index.tsx");
+},1060,[6,65,1061,1086,1357,618,106,1064,689,680,716],"src/screens/Home/index.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -186448,7 +186448,8 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
         }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.View, {
           style: {
             flex: 1,
-            flexDirection: 'column'
+            flexDirection: 'column',
+            backgroundColor: theme['c-main-background']
           },
           children: children
         })]
@@ -186467,7 +186468,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
             top: 0,
             height: windowSize.height,
             width: windowSize.width,
-            backgroundColor: 'rgba(0,0,0,0.3)'
+            backgroundColor: theme['c-content-background']
           },
           source: {
             uri: pic,
@@ -186478,7 +186479,9 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
           children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.View, {
             style: {
               flex: 1,
-              flexDirection: 'column'
+              flexDirection: 'column',
+              backgroundColor: theme['c-content-background'],
+              opacity: 0.76
             }
           })
         }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.View, {
@@ -191697,18 +191700,17 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   exports.default = void 0;
   var _Content = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[1], "./Content"));
   var _PlayerBar = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[2], "../../../components/player/PlayerBar"));
-  var _BottomTabBar = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[3], "../components/BottomTabBar"));
-  var _jsxRuntime = _$$_REQUIRE(_dependencyMap[4], "react/jsx-runtime");
+  var _jsxRuntime = _$$_REQUIRE(_dependencyMap[3], "react/jsx-runtime");
   var _this = this,
     _jsxFileName = "/data/data/com.termux/files/home/lx-music-mobile/src/screens/Home/Vertical/index.tsx";
   var _default = exports.default = function _default() {
     return /*#__PURE__*/(0, _jsxRuntime.jsxs)(_jsxRuntime.Fragment, {
       children: [/*#__PURE__*/(0, _jsxRuntime.jsx)(_Content.default, {}), /*#__PURE__*/(0, _jsxRuntime.jsx)(_PlayerBar.default, {
         isHome: true
-      }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_BottomTabBar.default, {})]
+      })]
     });
   };
-},1086,[6,1087,1353,1360,106],"src/screens/Home/Vertical/index.tsx");
+},1086,[6,1087,1350,106],"src/screens/Home/Vertical/index.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -192215,12 +192217,10 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   var _Mylist = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[6], "../Views/Mylist"));
   var _Leaderboard = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[7], "../Views/Leaderboard"));
   var _Setting = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[8], "../Views/Setting"));
-  var _LocalMusic = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[9], "../Views/LocalMusic"));
-  var _Download = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[10], "../Views/Download"));
-  var _state = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[11], "../../../store/common/state"));
-  var _reactNativePagerView = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[12], "react-native-pager-view"));
-  var _state2 = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[13], "../../../store/setting/state"));
-  var _jsxRuntime = _$$_REQUIRE(_dependencyMap[14], "react/jsx-runtime");
+  var _state = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[9], "../../../store/common/state"));
+  var _reactNativePagerView = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[10], "react-native-pager-view"));
+  var _state2 = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[11], "../../../store/setting/state"));
+  var _jsxRuntime = _$$_REQUIRE(_dependencyMap[12], "react/jsx-runtime");
   var _this = this,
     _jsxFileName = "/data/data/com.termux/files/home/lx-music-mobile/src/screens/Home/Vertical/Main.tsx";
   var hideKeys = ['list.isShowAlbumName', 'list.isShowInterval', 'theme.fontShadow'];
@@ -192385,57 +192385,11 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     }, []);
     return visible ? component : null;
   };
-  var LocalMusicPage = function LocalMusicPage() {
-    var _useState9 = (0, _react.useState)(_state.default.navActiveId == 'nav_local'),
+  var SettingPage = function SettingPage() {
+    var _useState9 = (0, _react.useState)(_state.default.navActiveId == 'nav_setting'),
       _useState0 = (0, _slicedToArray2.default)(_useState9, 2),
       visible = _useState0[0],
       setVisible = _useState0[1];
-    var component = (0, _react.useMemo)(function () {
-      return /*#__PURE__*/(0, _jsxRuntime.jsx)(_LocalMusic.default, {});
-    }, []);
-    (0, _react.useEffect)(function () {
-      var handleNavIdUpdate = function handleNavIdUpdate(id) {
-        if (id == 'nav_local') {
-          requestAnimationFrame(function () {
-            setVisible(true);
-          });
-        }
-      };
-      global.state_event.on('navActiveIdUpdated', handleNavIdUpdate);
-      return function () {
-        global.state_event.off('navActiveIdUpdated', handleNavIdUpdate);
-      };
-    }, []);
-    return visible ? component : null;
-  };
-  var DownloadPage = function DownloadPage() {
-    var _useState1 = (0, _react.useState)(_state.default.navActiveId == 'nav_download'),
-      _useState10 = (0, _slicedToArray2.default)(_useState1, 2),
-      visible = _useState10[0],
-      setVisible = _useState10[1];
-    var component = (0, _react.useMemo)(function () {
-      return /*#__PURE__*/(0, _jsxRuntime.jsx)(_Download.default, {});
-    }, []);
-    (0, _react.useEffect)(function () {
-      var handleNavIdUpdate = function handleNavIdUpdate(id) {
-        if (id == 'nav_download') {
-          requestAnimationFrame(function () {
-            setVisible(true);
-          });
-        }
-      };
-      global.state_event.on('navActiveIdUpdated', handleNavIdUpdate);
-      return function () {
-        global.state_event.off('navActiveIdUpdated', handleNavIdUpdate);
-      };
-    }, []);
-    return visible ? component : null;
-  };
-  var SettingPage = function SettingPage() {
-    var _useState11 = (0, _react.useState)(_state.default.navActiveId == 'nav_setting'),
-      _useState12 = (0, _slicedToArray2.default)(_useState11, 2),
-      visible = _useState12[0],
-      setVisible = _useState12[1];
     var component = (0, _react.useMemo)(function () {
       return /*#__PURE__*/(0, _jsxRuntime.jsx)(_Setting.default, {});
     }, []);
@@ -192459,11 +192413,9 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     nav_songlist: 1,
     nav_top: 2,
     nav_love: 3,
-    nav_local: 4,
-    nav_download: 5,
-    nav_setting: 6
+    nav_setting: 4
   };
-  var indexMap = ['nav_search', 'nav_songlist', 'nav_top', 'nav_love', 'nav_local', 'nav_download', 'nav_setting'];
+  var indexMap = ['nav_search', 'nav_songlist', 'nav_top', 'nav_love', 'nav_setting'];
   var Main = function Main() {
     var pagerViewRef = (0, _react.useRef)(null);
     var activeIndexRef = (0, _react.useRef)(viewMap[_state.default.navActiveId]);
@@ -192490,7 +192442,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       // console.log(nativeEvent)
       activeIndexRef.current = nativeEvent.position;
       if (activeIndexRef.current != viewMap[_state.default.navActiveId]) {
-        (0, _$$_REQUIRE(_dependencyMap[15], "../../../core/common").setNavActiveId)(indexMap[activeIndexRef.current]);
+        (0, _$$_REQUIRE(_dependencyMap[13], "../../../core/common").setNavActiveId)(indexMap[activeIndexRef.current]);
       }
     }, []);
     var onPageScrollStateChanged = (0, _react.useCallback)(function (_ref2) {
@@ -192565,21 +192517,13 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
         }, "nav_love"), /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.View, {
           collapsable: false,
           style: styles.pageStyle,
-          children: /*#__PURE__*/(0, _jsxRuntime.jsx)(LocalMusicPage, {})
-        }, "nav_local"), /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.View, {
-          collapsable: false,
-          style: styles.pageStyle,
-          children: /*#__PURE__*/(0, _jsxRuntime.jsx)(DownloadPage, {})
-        }, "nav_download"), /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.View, {
-          collapsable: false,
-          style: styles.pageStyle,
           children: /*#__PURE__*/(0, _jsxRuntime.jsx)(SettingPage, {})
         }, "nav_setting")]
       });
     }, [onPageScrollStateChanged, onPageSelected]);
     return component;
   };
-  var styles = (0, _$$_REQUIRE(_dependencyMap[16], "../../../utils/tools").createStyle)({
+  var styles = (0, _$$_REQUIRE(_dependencyMap[14], "../../../utils/tools").createStyle)({
     pagerView: {
       flex: 1,
       overflow: 'hidden'
@@ -192590,7 +192534,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     }
   });
   var _default = exports.default = Main;
-},1092,[6,7,65,15,1093,1145,1160,1200,1213,1345,1346,688,1348,618,106,689,543],"src/screens/Home/Vertical/Main.tsx");
+},1092,[6,7,65,15,1093,1145,1160,1200,1213,688,1345,618,106,689,543],"src/screens/Home/Vertical/Main.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -216480,1022 +216424,6 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   }
 },1344,[65,15],"src/utils/hooks/useBackHandler.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
-  var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
-  Object.defineProperty(exports, "__esModule", {
-    value: true
-  });
-  exports.default = void 0;
-  var _asyncToGenerator2 = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[1], "@babel/runtime/helpers/asyncToGenerator"));
-  var _slicedToArray2 = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[2], "@babel/runtime/helpers/slicedToArray"));
-  var _react = _$$_REQUIRE(_dependencyMap[3], "react");
-  var _reactNative = _$$_REQUIRE(_dependencyMap[4], "react-native");
-  var _Text = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[5], "../../../../components/common/Text"));
-  var _reactNativeFs = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[6], "react-native-fs"));
-  var _ChoosePath = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[7], "../../../../components/common/ChoosePath"));
-  var _jsxRuntime = _$$_REQUIRE(_dependencyMap[8], "react/jsx-runtime");
-  var _this = this,
-    _jsxFileName = "/data/data/com.termux/files/home/lx-music-mobile/src/screens/Home/Views/LocalMusic/index.tsx";
-  /**
-   * LocalMusic - 本地音乐播放器
-   * 递归扫描音频文件,点击立即播放并切换播放列表
-   */
-  var _default = exports.default = (0, _react.memo)(function () {
-    var theme = (0, _$$_REQUIRE(_dependencyMap[9], "../../../../store/theme/hook").useTheme)();
-    var t = (0, _$$_REQUIRE(_dependencyMap[10], "../../../../lang").useI18n)();
-    var _useState = (0, _react.useState)([]),
-      _useState2 = (0, _slicedToArray2.default)(_useState, 2),
-      files = _useState2[0],
-      setFiles = _useState2[1];
-    var _useState3 = (0, _react.useState)(false),
-      _useState4 = (0, _slicedToArray2.default)(_useState3, 2),
-      scanning = _useState4[0],
-      setScanning = _useState4[1];
-    var choosePathRef = (0, _react.useRef)(null);
-    var SCAN_CACHE_FILE = `${_reactNativeFs.default.DocumentDirectoryPath}/lx_local_music_cache.json`;
-
-    // 启动时加载缓存
-    (0, _react.useEffect)(function () {
-      (0, _asyncToGenerator2.default)(function* () {
-        try {
-          var exists = yield _reactNativeFs.default.exists(SCAN_CACHE_FILE);
-          if (exists) {
-            var data = yield _reactNativeFs.default.readFile(SCAN_CACHE_FILE, 'utf8');
-            setFiles(JSON.parse(data));
-          }
-        } catch (_unused) {}
-      })();
-    }, []);
-    var saveFilesToCache = (0, _react.useCallback)(/*#__PURE__*/function () {
-      var _ref2 = (0, _asyncToGenerator2.default)(function* (fileList) {
-        try {
-          yield _reactNativeFs.default.writeFile(SCAN_CACHE_FILE, JSON.stringify(fileList), 'utf8');
-        } catch (_unused2) {}
-      });
-      return function (_x) {
-        return _ref2.apply(this, arguments);
-      };
-    }(), []);
-    var scanDirectory = (0, _react.useCallback)(/*#__PURE__*/function () {
-      var _ref3 = (0, _asyncToGenerator2.default)(function* (dirPath) {
-        if (scanning) return;
-        setScanning(true);
-        try {
-          var audioFiles = yield (0, _$$_REQUIRE(_dependencyMap[11], "../../../../utils/localMediaMetadata").scanAudioFiles)(dirPath, true);
-          setFiles(audioFiles);
-          yield saveFilesToCache(audioFiles);
-          (0, _$$_REQUIRE(_dependencyMap[12], "../../../../utils/tools").toast)(`找到 ${audioFiles.length} 个音频文件`);
-        } catch (err) {
-          (0, _$$_REQUIRE(_dependencyMap[12], "../../../../utils/tools").toast)(`扫描失败: ${err.message}`);
-        }
-        setScanning(false);
-      });
-      return function (_x2) {
-        return _ref3.apply(this, arguments);
-      };
-    }(), [scanning, saveFilesToCache]);
-    var handlePlayFromIndex = (0, _react.useCallback)(/*#__PURE__*/function () {
-      var _ref4 = (0, _asyncToGenerator2.default)(function* (index) {
-        if (files.length === 0) return;
-        try {
-          var musicList = files.map(function (f, i) {
-            var ext = f.name.includes('.') ? f.name.split('.').pop() || '' : '';
-            return {
-              id: f.path,
-              name: f.name.replace(/\.[^/.]+$/, ''),
-              singer: '本地文件',
-              source: 'local',
-              quality: 'unknown',
-              interval: null,
-              meta: {
-                filePath: f.path,
-                ext: ext
-              }
-            };
-          });
-          yield (0, _$$_REQUIRE(_dependencyMap[13], "../../../../core/list").setTempList)('local_temp', musicList);
-          yield (0, _$$_REQUIRE(_dependencyMap[14], "../../../../core/player/player").playList)(_$$_REQUIRE(_dependencyMap[15], "../../../../config/constant").LIST_IDS.TEMP, index);
-        } catch (err) {
-          (0, _$$_REQUIRE(_dependencyMap[12], "../../../../utils/tools").toast)(`播放失败: ${err.message}`);
-        }
-      });
-      return function (_x3) {
-        return _ref4.apply(this, arguments);
-      };
-    }(), [files]);
-    var handleScanMusicDir = (0, _react.useCallback)(function () {
-      void scanDirectory('/storage/emulated/0/Music');
-    }, [scanDirectory]);
-    var handleScanDownload = (0, _react.useCallback)(function () {
-      void scanDirectory('/storage/emulated/0/Download');
-    }, [scanDirectory]);
-    var handleCustomDir = (0, _react.useCallback)(function () {
-      var _choosePathRef$curren;
-      (_choosePathRef$curren = choosePathRef.current) == null ? void 0 : _choosePathRef$curren.show({
-        title: '选择音频目录',
-        dirOnly: true
-      });
-    }, []);
-    var handleConfirmPath = (0, _react.useCallback)(function (path) {
-      void scanDirectory(path);
-    }, [scanDirectory]);
-    var renderItem = function renderItem(_ref5) {
-      var item = _ref5.item,
-        index = _ref5.index;
-      var title = item.name.replace(/\.[^/.]+$/, '');
-      return /*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.TouchableOpacity, {
-        style: styles.item,
-        onPress: function onPress() {
-          return handlePlayFromIndex(index);
-        },
-        activeOpacity: 0.7,
-        children: [/*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.View, {
-          style: styles.itemIcon,
-          children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
-            size: 20,
-            color: theme['c-primary'],
-            children: "\uD83C\uDFB5"
-          })
-        }), /*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.View, {
-          style: styles.itemContent,
-          children: [/*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
-            size: 14,
-            color: theme['c-primary-font'],
-            numberOfLines: 1,
-            children: title
-          }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
-            size: 12,
-            color: theme['c-font-label'],
-            numberOfLines: 1,
-            children: item.path
-          })]
-        })]
-      });
-    };
-    return /*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.View, {
-      style: styles.container,
-      children: [/*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.View, {
-        style: styles.header,
-        children: [/*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
-          size: 16,
-          color: theme['c-primary-font'],
-          children: "\u672C\u5730\u97F3\u4E50"
-        }), files.length > 0 && /*#__PURE__*/(0, _jsxRuntime.jsxs)(_Text.default, {
-          size: 12,
-          color: theme['c-font-label'],
-          children: [files.length, " \u4E2A\u6587\u4EF6"]
-        })]
-      }), /*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.View, {
-        style: styles.scanBtns,
-        children: [/*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.TouchableOpacity, {
-          style: [styles.scanBtn, scanning && {
-            opacity: 0.5
-          }],
-          onPress: handleScanMusicDir,
-          disabled: scanning,
-          children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
-            size: 13,
-            color: theme['c-primary'],
-            children: scanning ? '扫描中...' : 'Music 目录'
-          })
-        }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.TouchableOpacity, {
-          style: [styles.scanBtn, scanning && {
-            opacity: 0.5
-          }],
-          onPress: handleScanDownload,
-          disabled: scanning,
-          children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
-            size: 13,
-            color: theme['c-primary'],
-            children: scanning ? '扫描中...' : 'Download 目录'
-          })
-        }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.TouchableOpacity, {
-          style: [styles.scanBtn, scanning && {
-            opacity: 0.5
-          }],
-          onPress: handleCustomDir,
-          disabled: scanning,
-          children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
-            size: 13,
-            color: theme['c-primary'],
-            children: "\u9009\u62E9\u76EE\u5F55"
-          })
-        })]
-      }), files.length === 0 ? /*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.View, {
-        style: styles.empty,
-        children: [/*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
-          size: 20,
-          color: theme['c-font-label'],
-          children: "\uD83D\uDCC1"
-        }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
-          size: 14,
-          color: theme['c-font-label'],
-          style: {
-            marginTop: 8
-          },
-          children: "\u626B\u63CF\u672C\u5730\u97F3\u4E50\u6587\u4EF6\u540E,\u70B9\u51FB\u6B4C\u66F2\u5373\u53EF\u64AD\u653E"
-        })]
-      }) : /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.FlatList, {
-        data: files,
-        keyExtractor: function keyExtractor(item) {
-          return item.path;
-        },
-        renderItem: renderItem,
-        style: styles.list
-      }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_ChoosePath.default, {
-        ref: choosePathRef,
-        onConfirm: handleConfirmPath
-      })]
-    });
-  });
-  var styles = (0, _$$_REQUIRE(_dependencyMap[12], "../../../../utils/tools").createStyle)({
-    container: {
-      flex: 1,
-      padding: 15
-    },
-    header: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      marginBottom: 10
-    },
-    scanBtns: {
-      flexDirection: 'row',
-      marginBottom: 12,
-      gap: 8
-    },
-    scanBtn: {
-      flex: 1,
-      paddingVertical: 10,
-      alignItems: 'center',
-      backgroundColor: 'rgba(128,128,128,0.08)',
-      borderRadius: 8
-    },
-    empty: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center'
-    },
-    list: {
-      flex: 1
-    },
-    item: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      padding: 12,
-      marginBottom: 6,
-      backgroundColor: 'rgba(128,128,128,0.06)',
-      borderRadius: 8
-    },
-    itemIcon: {
-      width: 40,
-      height: 40,
-      justifyContent: 'center',
-      alignItems: 'center'
-    },
-    itemContent: {
-      flex: 1,
-      marginLeft: 10
-    }
-  });
-},1345,[6,13,7,65,15,967,668,1179,106,966,698,994,543,989,983,680],"src/screens/Home/Views/LocalMusic/index.tsx");
-__d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
-  var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
-  Object.defineProperty(exports, "__esModule", {
-    value: true
-  });
-  exports.default = void 0;
-  var _slicedToArray2 = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[1], "@babel/runtime/helpers/slicedToArray"));
-  var _asyncToGenerator2 = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[2], "@babel/runtime/helpers/asyncToGenerator"));
-  var _react = _$$_REQUIRE(_dependencyMap[3], "react");
-  var _reactNative = _$$_REQUIRE(_dependencyMap[4], "react-native");
-  var _Text = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[5], "../../../../components/common/Text"));
-  var _reactNativeFs = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[6], "react-native-fs"));
-  var _jsxRuntime = _$$_REQUIRE(_dependencyMap[7], "react/jsx-runtime");
-  var _this = this,
-    _jsxFileName = "/data/data/com.termux/files/home/lx-music-mobile/src/screens/Home/Views/Download/index.tsx";
-  var handlePlayLocalFile = /*#__PURE__*/function () {
-    var _ref = (0, _asyncToGenerator2.default)(function* (filePath, allTasks) {
-      try {
-        var completedTasks = allTasks.filter(function (t) {
-          return t.status === 'completed' && t.filePath;
-        });
-        var musicList = completedTasks.map(function (t) {
-          var _fp$split$pop;
-          var fp = t.filePath || '';
-          var name = ((_fp$split$pop = fp.split('/').pop()) == null ? void 0 : _fp$split$pop.replace(/\.[^/.]+$/, '')) || t.musicInfo.name || '未知';
-          var ext = fp.includes('.') ? fp.split('.').pop() || '' : '';
-          return {
-            id: fp,
-            name: name,
-            singer: t.musicInfo.singer || '本地文件',
-            source: 'local',
-            quality: 'unknown',
-            interval: null,
-            meta: {
-              filePath: fp,
-              ext: ext
-            }
-          };
-        });
-        var playIndex = musicList.findIndex(function (m) {
-          return m.id === filePath;
-        });
-        yield (0, _$$_REQUIRE(_dependencyMap[8], "../../../../core/list").setTempList)('from_download', musicList);
-        yield (0, _$$_REQUIRE(_dependencyMap[9], "../../../../core/player/player").playList)(_$$_REQUIRE(_dependencyMap[10], "../../../../config/constant").LIST_IDS.TEMP, Math.max(0, playIndex));
-      } catch (err) {
-        (0, _$$_REQUIRE(_dependencyMap[11], "../../../../utils/tools").toast)(`播放失败: ${err.message}`);
-      }
-    });
-    return function handlePlayLocalFile(_x, _x2) {
-      return _ref.apply(this, arguments);
-    };
-  }();
-  var DownloadItem = (0, _react.memo)(function (_ref2) {
-    var task = _ref2.task,
-      theme = _ref2.theme,
-      allTasks = _ref2.allTasks;
-    var statusText = {
-      waiting: '等待中',
-      downloading: `下载中 ${Math.round(task.progress * 100)}%`,
-      completed: '已完成',
-      failed: `失败: ${task.error || '未知错误'}`
-    };
-    var handleClick = function handleClick() {
-      if (task.status === 'completed' && task.filePath) {
-        void handlePlayLocalFile(task.filePath, allTasks);
-      } else {
-        (0, _$$_REQUIRE(_dependencyMap[11], "../../../../utils/tools").toast)('文件未下载完成');
-      }
-    };
-    var handleLongPress = /*#__PURE__*/function () {
-      var _ref3 = (0, _asyncToGenerator2.default)(function* () {
-        if (task.status !== 'completed' || !task.filePath) {
-          (0, _$$_REQUIRE(_dependencyMap[11], "../../../../utils/tools").toast)('文件未下载完成');
-          return;
-        }
-        try {
-          yield _reactNative.Share.share({
-            url: 'file://' + task.filePath,
-            title: task.musicInfo.name || 'unknown'
-          });
-        } catch (err) {
-          (0, _$$_REQUIRE(_dependencyMap[11], "../../../../utils/tools").toast)(`分享失败: ${err.message}`);
-        }
-      });
-      return function handleLongPress() {
-        return _ref3.apply(this, arguments);
-      };
-    }();
-    return /*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.TouchableOpacity, {
-      style: styles.item,
-      onPress: handleClick,
-      onLongPress: handleLongPress,
-      activeOpacity: 0.7,
-      children: [/*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.View, {
-        style: styles.itemContent,
-        children: [/*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
-          size: 14,
-          color: theme['c-primary-font'],
-          numberOfLines: 1,
-          children: task.musicInfo.name
-        }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
-          size: 12,
-          color: theme['c-font-label'],
-          numberOfLines: 1,
-          children: task.musicInfo.singer
-        })]
-      }), /*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.View, {
-        style: styles.itemStatus,
-        children: [/*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
-          size: 12,
-          color: task.status === 'completed' ? theme['c-primary'] : task.status === 'failed' ? '#ff6b6b' : theme['c-font-label'],
-          children: statusText[task.status]
-        }), task.status === 'downloading' && /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.View, {
-          style: [styles.progressBar, {
-            width: 60
-          }],
-          children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.View, {
-            style: [styles.progressFill, {
-              width: `${task.progress * 100}%`,
-              backgroundColor: theme['c-primary']
-            }]
-          })
-        })]
-      })]
-    });
-  });
-  var _default = exports.default = (0, _react.memo)(function () {
-    var theme = (0, _$$_REQUIRE(_dependencyMap[12], "../../../../store/theme/hook").useTheme)();
-    var _useState = (0, _react.useState)([]),
-      _useState2 = (0, _slicedToArray2.default)(_useState, 2),
-      tasks = _useState2[0],
-      setTasks = _useState2[1];
-    (0, _react.useEffect)(function () {
-      setTasks((0, _$$_REQUIRE(_dependencyMap[13], "../../../../core/download").getDownloadList)());
-      var unsubscribe = (0, _$$_REQUIRE(_dependencyMap[13], "../../../../core/download").subscribeDownloads)(setTasks);
-      return unsubscribe;
-    }, []);
-    var handleShowAddDownload = function handleShowAddDownload() {
-      (0, _$$_REQUIRE(_dependencyMap[11], "../../../../utils/tools").toast)('请在歌单或歌曲菜单中使用"下载"功能', 'long');
-    };
-    var handleClearCompleted = function handleClearCompleted() {
-      (0, _$$_REQUIRE(_dependencyMap[13], "../../../../core/download").clearCompleted)();
-      (0, _$$_REQUIRE(_dependencyMap[11], "../../../../utils/tools").toast)('已清除完成的任务');
-    };
-
-    // 读取设置
-    var conflictActionSetting = (0, _$$_REQUIRE(_dependencyMap[14], "../../../../store/setting/hook").useSettingValue)('download.conflictAction');
-    var conflictAction = conflictActionSetting || 'overwrite';
-    var handleChangeDownloadDir = function handleChangeDownloadDir() {
-      (0, _$$_REQUIRE(_dependencyMap[11], "../../../../utils/tools").toast)('下载目录可在 设置 → 下载设置 中修改');
-    };
-    var handleToggleConflictAction = function handleToggleConflictAction() {
-      var newAction = conflictAction === 'overwrite' ? 'skip' : 'overwrite';
-      (0, _$$_REQUIRE(_dependencyMap[15], "../../../../core/common").updateSetting)({
-        'download.conflictAction': newAction
-      });
-      (0, _$$_REQUIRE(_dependencyMap[11], "../../../../utils/tools").toast)(newAction === 'overwrite' ? '已切换为覆盖模式' : '已切换为跳过模式');
-    };
-    return /*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.View, {
-      style: styles.container,
-      children: [/*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.View, {
-        style: styles.header,
-        children: [/*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
-          size: 16,
-          color: theme['c-primary-font'],
-          children: "\u4E0B\u8F7D\u7BA1\u7406"
-        }), /*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.View, {
-          style: styles.headerBtns,
-          children: [/*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.TouchableOpacity, {
-            onPress: handleShowAddDownload,
-            style: styles.addBtn,
-            children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
-              size: 12,
-              color: theme['c-primary'],
-              children: "+ \u6DFB\u52A0\u4E0B\u8F7D"
-            })
-          }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.TouchableOpacity, {
-            onPress: handleClearCompleted,
-            style: styles.clearBtn,
-            children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
-              size: 12,
-              color: theme['c-primary'],
-              children: "\u6E05\u9664\u5DF2\u5B8C\u6210"
-            })
-          })]
-        })]
-      }), /*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.View, {
-        style: styles.settings,
-        children: [/*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.View, {
-          style: styles.settingRow,
-          children: [/*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
-            size: 12,
-            color: theme['c-font-label'],
-            children: "\u4E0B\u8F7D\u76EE\u5F55"
-          }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.TouchableOpacity, {
-            onPress: handleChangeDownloadDir,
-            style: styles.settingValue,
-            children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
-              size: 11,
-              color: theme['c-primary'],
-              numberOfLines: 1,
-              children: `${_reactNativeFs.default.ExternalStorageDirectoryPath}/Music/LXMusic`
-            })
-          })]
-        }), /*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.View, {
-          style: styles.settingRow,
-          children: [/*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
-            size: 12,
-            color: theme['c-font-label'],
-            children: "\u6587\u4EF6\u51B2\u7A81"
-          }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.TouchableOpacity, {
-            onPress: handleToggleConflictAction,
-            style: styles.settingValue,
-            children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
-              size: 11,
-              color: theme['c-primary'],
-              children: conflictAction === 'overwrite' ? '覆盖旧文件' : '跳过'
-            })
-          })]
-        })]
-      }), tasks.length === 0 ? /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.View, {
-        style: styles.empty,
-        children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
-          size: 14,
-          color: theme['c-font-label'],
-          children: "\u6682\u65E0\u4E0B\u8F7D\u4EFB\u52A1"
-        })
-      }) : /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.FlatList, {
-        data: tasks,
-        keyExtractor: function keyExtractor(item) {
-          return item.id;
-        },
-        renderItem: function renderItem(_ref4) {
-          var item = _ref4.item;
-          return /*#__PURE__*/(0, _jsxRuntime.jsx)(DownloadItem, {
-            task: item,
-            theme: theme,
-            allTasks: tasks
-          });
-        },
-        style: styles.list
-      })]
-    });
-  });
-  var styles = (0, _$$_REQUIRE(_dependencyMap[11], "../../../../utils/tools").createStyle)({
-    settings: {
-      padding: 10,
-      backgroundColor: 'rgba(128,128,128,0.06)',
-      borderRadius: 8,
-      marginBottom: 12
-    },
-    settingRow: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      paddingVertical: 8,
-      paddingHorizontal: 4
-    },
-    settingValue: {
-      maxWidth: '60%',
-      padding: 4
-    },
-    container: {
-      flex: 1,
-      padding: 15
-    },
-    header: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      marginBottom: 10
-    },
-    headerBtns: {
-      flexDirection: 'row',
-      alignItems: 'center'
-    },
-    addBtn: {
-      paddingVertical: 5,
-      paddingHorizontal: 10,
-      marginRight: 8
-    },
-    clearBtn: {
-      paddingVertical: 5,
-      paddingHorizontal: 10
-    },
-    pathInfo: {
-      marginBottom: 15,
-      padding: 8,
-      backgroundColor: 'rgba(128,128,128,0.1)',
-      borderRadius: 6
-    },
-    empty: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center'
-    },
-    list: {
-      flex: 1
-    },
-    item: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      padding: 12,
-      marginBottom: 8,
-      backgroundColor: 'rgba(128,128,128,0.08)',
-      borderRadius: 8
-    },
-    itemContent: {
-      flex: 1,
-      marginRight: 10
-    },
-    itemStatus: {
-      alignItems: 'flex-end'
-    },
-    progressBar: {
-      height: 4,
-      backgroundColor: 'rgba(128,128,128,0.3)',
-      borderRadius: 2,
-      marginTop: 4,
-      overflow: 'hidden'
-    },
-    progressFill: {
-      height: '100%',
-      borderRadius: 2
-    }
-  });
-},1346,[6,7,13,65,15,967,668,106,989,983,680,543,966,1347,977,689],"src/screens/Home/Views/Download/index.tsx");
-__d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
-  var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
-  Object.defineProperty(exports, "__esModule", {
-    value: true
-  });
-  exports.subscribeDownloads = exports.requestStoragePermission = exports.removeTask = exports.getDownloadList = exports.clearCompleted = exports.addDownload = exports.DOWNLOAD_QUALITIES = void 0;
-  var _slicedToArray2 = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[1], "@babel/runtime/helpers/slicedToArray"));
-  var _asyncToGenerator2 = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[2], "@babel/runtime/helpers/asyncToGenerator"));
-  var _reactNativeFs = _interopRequireWildcard(_$$_REQUIRE(_dependencyMap[3], "react-native-fs"));
-  var _reactNative = _$$_REQUIRE(_dependencyMap[4], "react-native");
-  var _state = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[5], "../store/setting/state"));
-  function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function _interopRequireWildcard(e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, default: e }; if (null === e || "object" != typeof e && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (var _t in e) "default" !== _t && {}.hasOwnProperty.call(e, _t) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, _t)) && (i.get || i.set) ? o(f, _t, i) : f[_t] = e[_t]); return f; })(e, t); }
-  /**
-   * download.ts - 歌曲下载核心模块
-   * 下载到公共 Music/LXMusic 目录
-   */
-
-  var DOWNLOAD_QUALITIES = exports.DOWNLOAD_QUALITIES = [{
-    id: '128k',
-    label: '标准 (128k)',
-    ext: 'mp3'
-  }, {
-    id: '192k',
-    label: '高品 (192k)',
-    ext: 'mp3'
-  }, {
-    id: '320k',
-    label: '超高品 (320k)',
-    ext: 'mp3'
-  }, {
-    id: 'ape',
-    label: '无损 APE',
-    ext: 'ape'
-  }, {
-    id: 'flac',
-    label: '无损 FLAC',
-    ext: 'flac'
-  }];
-  var downloadQueue = new Map();
-  var listeners = new Set();
-  var notify = function notify() {
-    var list = Array.from(downloadQueue.values());
-    for (var fn of listeners) fn(list);
-    // 持久化保存
-    saveQueueToFile().catch(function () {});
-  };
-  var QUEUE_FILE = `${_reactNativeFs.default.DocumentDirectoryPath}/lxmusic_download_queue.json`;
-  var saveQueueToFile = /*#__PURE__*/function () {
-    var _ref = (0, _asyncToGenerator2.default)(function* () {
-      var list = Array.from(downloadQueue.values());
-      var data = list.map(function (t) {
-        return {
-          id: t.id,
-          musicInfo: t.musicInfo,
-          quality: t.quality,
-          progress: t.progress,
-          status: t.status,
-          url: t.url,
-          error: t.error,
-          filePath: t.filePath
-        };
-      });
-      yield _reactNativeFs.default.writeFile(QUEUE_FILE, JSON.stringify(data), 'utf8');
-    });
-    return function saveQueueToFile() {
-      return _ref.apply(this, arguments);
-    };
-  }();
-  var loadQueueFromFile = /*#__PURE__*/function () {
-    var _ref2 = (0, _asyncToGenerator2.default)(function* () {
-      try {
-        var exists = yield _reactNativeFs.default.exists(QUEUE_FILE);
-        if (!exists) return;
-        var data = yield _reactNativeFs.default.readFile(QUEUE_FILE, 'utf8');
-        var tasks = JSON.parse(data);
-        downloadQueue.clear();
-        for (var t of tasks) {
-          if (t.status === 'downloading') t.status = 'waiting'; // 重置下载中的任务
-          downloadQueue.set(t.id, t);
-        }
-        notify();
-      } catch (_unused) {}
-    });
-    return function loadQueueFromFile() {
-      return _ref2.apply(this, arguments);
-    };
-  }();
-
-  // 启动时加载
-  loadQueueFromFile().catch(function () {});
-  var getDownloadDir = function getDownloadDir() {
-    var customDir = _state.default.setting['download.dir'];
-    if (customDir && customDir.trim()) {
-      return customDir.trim();
-    }
-    if (_reactNative.Platform.OS === 'android') {
-      return `${_reactNativeFs.default.ExternalStorageDirectoryPath}/Music/LXMusic`;
-    }
-    return `${_reactNativeFs.default.DocumentDirectoryPath}/lxmusic_downloads`;
-  };
-
-  // 打开系统存储管理设置(Android 11+)
-  var openManageStorageSettings = /*#__PURE__*/function () {
-    var _ref3 = (0, _asyncToGenerator2.default)(function* () {
-      try {
-        yield _reactNative.Linking.openURL('package:cn.toside.music.mobile');
-      } catch (_unused2) {
-        yield _reactNative.Linking.openSettings();
-      }
-    });
-    return function openManageStorageSettings() {
-      return _ref3.apply(this, arguments);
-    };
-  }();
-  var requestStoragePermission = exports.requestStoragePermission = /*#__PURE__*/function () {
-    var _ref4 = (0, _asyncToGenerator2.default)(function* () {
-      if (_reactNative.Platform.OS !== 'android') return true;
-      try {
-        if (_reactNative.Platform.Version >= 30) {
-          // 使用 PermissionsAndroid.check 验证 MANAGE_EXTERNAL_STORAGE
-          try {
-            // 尝试使用 RNFS 的 ExternalStorageDirectoryPath
-            var testDir = `${_reactNativeFs.default.ExternalStorageDirectoryPath}/Music/LXMusic`;
-            yield _reactNativeFs.default.mkdir(testDir);
-            var testFile = `${testDir}/.permission_test`;
-            yield _reactNativeFs.default.writeFile(testFile, 'test', 'utf8');
-            yield _reactNativeFs.default.unlink(testFile);
-            return true;
-          } catch (err) {
-            // 写入失败,需要引导用户授权
-            return new Promise(function (resolve) {
-              _reactNative.Alert.alert('需要存储权限', '下载音乐文件需要"所有文件管理"权限,请在系统设置中开启', [{
-                text: '取消',
-                onPress: function onPress() {
-                  return resolve(false);
-                },
-                style: 'cancel'
-              }, {
-                text: '去设置',
-                onPress: function () {
-                  var _onPress = (0, _asyncToGenerator2.default)(function* () {
-                    try {
-                      yield openManageStorageSettings();
-                      setTimeout(function () {
-                        // 再次检查权限
-                        try {
-                          _reactNative.PermissionsAndroid.check(_reactNative.PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE).then(function (granted) {
-                            resolve(granted);
-                          }).catch(function () {
-                            return resolve(false);
-                          });
-                        } catch (_unused3) {
-                          resolve(false);
-                        }
-                      }, 2000);
-                    } catch (_unused4) {
-                      resolve(false);
-                    }
-                  });
-                  function onPress() {
-                    return _onPress.apply(this, arguments);
-                  }
-                  return onPress;
-                }()
-              }]);
-            });
-          }
-        }
-        var granted = yield _reactNative.PermissionsAndroid.request(_reactNative.PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE, {
-          title: '存储权限',
-          message: '下载音乐文件需要存储权限,请允许访问',
-          buttonPositive: '允许',
-          buttonNegative: '拒绝'
-        });
-        if (granted === _reactNative.PermissionsAndroid.RESULTS.GRANTED) return true;
-        return new Promise(function (resolve) {
-          _reactNative.Alert.alert('需要存储权限', '下载音乐文件需要存储权限,请在系统设置中手动开启', [{
-            text: '取消',
-            onPress: function onPress() {
-              return resolve(false);
-            },
-            style: 'cancel'
-          }, {
-            text: '去设置',
-            onPress: function () {
-              var _onPress2 = (0, _asyncToGenerator2.default)(function* () {
-                try {
-                  yield _reactNative.Linking.openSettings();
-                  setTimeout(/*#__PURE__*/(0, _asyncToGenerator2.default)(function* () {
-                    var granted = yield _reactNative.PermissionsAndroid.check(_reactNative.PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE);
-                    resolve(granted);
-                  }), 500);
-                } catch (_unused5) {
-                  resolve(false);
-                }
-              });
-              function onPress() {
-                return _onPress2.apply(this, arguments);
-              }
-              return onPress;
-            }()
-          }]);
-        });
-      } catch (_unused6) {
-        return false;
-      }
-    });
-    return function requestStoragePermission() {
-      return _ref4.apply(this, arguments);
-    };
-  }();
-  var addDownload = exports.addDownload = /*#__PURE__*/function () {
-    var _ref6 = (0, _asyncToGenerator2.default)(function* (musicInfo) {
-      var quality = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '320k';
-      var queueKey = `${musicInfo.id}_${quality}`;
-      if (downloadQueue.has(queueKey)) {
-        (0, _$$_REQUIRE(_dependencyMap[6], "../utils/tools").toast)('已在下载队列中');
-        return;
-      }
-      var task = {
-        id: queueKey,
-        musicInfo: musicInfo,
-        quality: quality,
-        progress: 0,
-        status: 'waiting'
-      };
-      downloadQueue.set(queueKey, task);
-      notify();
-      var qualityInfo = DOWNLOAD_QUALITIES.find(function (q) {
-        return q.id === quality;
-      });
-      (0, _$$_REQUIRE(_dependencyMap[6], "../utils/tools").toast)(`开始下载: ${musicInfo.name} (${(qualityInfo == null ? void 0 : qualityInfo.label) || quality})`);
-      startDownload(task).catch(function (err) {
-        console.error('Download error:', err);
-        (0, _$$_REQUIRE(_dependencyMap[6], "../utils/tools").toast)(`下载失败: ${musicInfo.name}`);
-      });
-    });
-    return function addDownload(_x) {
-      return _ref6.apply(this, arguments);
-    };
-  }();
-  var startDownload = /*#__PURE__*/function () {
-    var _ref7 = (0, _asyncToGenerator2.default)(function* (task) {
-      try {
-        task.status = 'downloading';
-        task.progress = 0;
-        notify();
-        var hasPermission = yield requestStoragePermission();
-        if (!hasPermission) {
-          throw new Error('未获得存储权限,请在设置中开启');
-        }
-        var url = yield (0, _$$_REQUIRE(_dependencyMap[7], "./music").getMusicUrl)({
-          musicInfo: task.musicInfo,
-          quality: task.quality
-        });
-        if (!url) {
-          throw new Error('无法获取下载链接');
-        }
-        task.url = url;
-        notify();
-        var qualityInfo = DOWNLOAD_QUALITIES.find(function (q) {
-          return q.id === task.quality;
-        });
-        var ext = (qualityInfo == null ? void 0 : qualityInfo.ext) || 'mp3';
-        var safeName = (task.musicInfo.name || 'unknown').replace(/[\\/:*?"<>|]/g, '_');
-        var safeSinger = (task.musicInfo.singer || 'unknown').replace(/[\\/:*?"<>|]/g, '_');
-        var fileName = `${safeName} - ${safeSinger}.${ext}`;
-        var downloadDir = getDownloadDir();
-        yield _reactNativeFs.default.mkdir(downloadDir);
-        var filePath = `${downloadDir}/${fileName}`;
-        task.filePath = filePath;
-
-        // 文件存在冲突检测
-        if (yield _reactNativeFs.default.exists(filePath)) {
-          var conflictAction = _state.default.setting['download.conflictAction'] || 'overwrite';
-          if (conflictAction === 'skip') {
-            task.status = 'completed';
-            task.progress = 1;
-            task.filePath = filePath;
-            notify();
-            (0, _$$_REQUIRE(_dependencyMap[6], "../utils/tools").toast)(`已跳过: ${task.musicInfo.name} (文件已存在)`);
-            return;
-          } else {
-            // overwrite - 删除旧文件重新下载
-            yield _reactNativeFs.default.unlink(filePath);
-          }
-        }
-        var result = _reactNativeFs.default.downloadFile({
-          fromUrl: url,
-          toFile: filePath,
-          progress: function progress(res) {
-            // 处理 contentLength 为 -1 或 0 的情况
-            if (res.contentLength > 0) {
-              task.progress = res.bytesWritten / res.contentLength;
-            } else {
-              // 如果无法获取总长度,至少显示已下载字节数
-              task.progress = Math.min(0.99, res.bytesWritten / (1024 * 1024 * 10)); // 假设 10MB
-            }
-            notify();
-          },
-          progressInterval: 200 // 每 200ms 更新一次进度
-        });
-        yield result.promise;
-
-        // 下载完成后验证文件存在
-        var exists = yield _reactNativeFs.default.exists(filePath);
-        if (!exists) {
-          throw new Error('下载文件不存在');
-        }
-        task.status = 'completed';
-        task.progress = 1;
-        notify();
-        // 写入 ID3 标签(封面、歌词、元数据)
-        writeId3Tags(task).catch(function (err) {
-          console.warn('[Download] ID3 write warning:', err);
-        });
-        (0, _$$_REQUIRE(_dependencyMap[6], "../utils/tools").toast)(`下载完成: ${task.musicInfo.name}`);
-      } catch (err) {
-        task.status = 'failed';
-        task.error = err.message || String(err);
-        task.progress = 0;
-        notify();
-        (0, _$$_REQUIRE(_dependencyMap[6], "../utils/tools").toast)(`下载失败: ${task.musicInfo.name} - ${err.message || '未知错误'}`);
-      }
-    });
-    return function startDownload(_x2) {
-      return _ref7.apply(this, arguments);
-    };
-  }();
-  var writeId3Tags = /*#__PURE__*/function () {
-    var _ref8 = (0, _asyncToGenerator2.default)(function* (task) {
-      try {
-        if (!task.filePath) return;
-        var musicInfo = task.musicInfo;
-        var filePath = task.filePath;
-
-        // 1. 写入元数据(标题、艺术家)
-        try {
-          yield (0, _$$_REQUIRE(_dependencyMap[8], "react-native-local-media-metadata").writeMetadata)(filePath, {
-            name: musicInfo.name || 'Unknown',
-            singer: musicInfo.singer || 'Unknown',
-            albumName: musicInfo.album || ''
-          }, true);
-        } catch (_unused7) {}
-
-        // 2. 写入封面图片
-        try {
-          var picUrl = yield (0, _$$_REQUIRE(_dependencyMap[9], "./music/online").getPicUrl)({
-            musicInfo: musicInfo,
-            isRefresh: false,
-            allowToggleSource: false
-          }).catch(function () {
-            return null;
-          });
-          if (picUrl) {
-            var picPath = `${_reactNativeFs.temporaryDirectoryPath}/lx_dl_cover_${Date.now()}.jpg`;
-            yield _reactNativeFs.default.downloadFile({
-              fromUrl: picUrl,
-              toFile: picPath
-            }).promise;
-            yield (0, _$$_REQUIRE(_dependencyMap[8], "react-native-local-media-metadata").writePic)(filePath, picPath);
-            // 清理临时文件
-            _reactNativeFs.default.unlink(picPath).catch(function () {});
-          }
-        } catch (_unused8) {}
-
-        // 3. 写入歌词
-        try {
-          var lyricInfo = yield (0, _$$_REQUIRE(_dependencyMap[9], "./music/online").getLyricInfo)({
-            musicInfo: musicInfo,
-            isRefresh: false,
-            allowToggleSource: false
-          }).catch(function () {
-            return null;
-          });
-          if (lyricInfo && lyricInfo.lyric) {
-            yield (0, _$$_REQUIRE(_dependencyMap[8], "react-native-local-media-metadata").writeLyric)(filePath, lyricInfo.lyric);
-          }
-        } catch (_unused9) {}
-      } catch (err) {
-        console.warn('[Download] ID3 write error:', err);
-      }
-    });
-    return function writeId3Tags(_x3) {
-      return _ref8.apply(this, arguments);
-    };
-  }();
-  var subscribeDownloads = exports.subscribeDownloads = function subscribeDownloads(fn) {
-    listeners.add(fn);
-    return function () {
-      return listeners.delete(fn);
-    };
-  };
-  var getDownloadList = exports.getDownloadList = function getDownloadList() {
-    return Array.from(downloadQueue.values());
-  };
-  var clearCompleted = exports.clearCompleted = function clearCompleted() {
-    for (var _ref9 of downloadQueue) {
-      var _ref0 = (0, _slicedToArray2.default)(_ref9, 2);
-      var k = _ref0[0];
-      var v = _ref0[1];
-      if (v.status === 'completed') downloadQueue.delete(k);
-    }
-    notify();
-  };
-  var removeTask = exports.removeTask = function removeTask(id) {
-    downloadQueue.delete(id);
-    notify();
-  };
-},1347,[6,7,13,668,15,618,543,985,995,987],"src/core/download.ts");
-__d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
@@ -217513,7 +216441,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     });
   });
   var _default = exports.default = _$$_REQUIRE(_dependencyMap[1], "./PagerView").PagerView;
-},1348,[1349,1350],"node_modules/react-native-pager-view/src/index.tsx");
+},1345,[1346,1347],"node_modules/react-native-pager-view/src/index.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -217661,7 +216589,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       PagerView: _$$_REQUIRE(_dependencyMap[5], "./PagerView").PagerView
     };
   }
-},1349,[6,41,7,15,65,1350],"node_modules/react-native-pager-view/src/usePagerView.ts");
+},1346,[6,41,7,15,65,1347],"node_modules/react-native-pager-view/src/usePagerView.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -217818,7 +216746,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       }
     }]);
   }(_react.default.Component);
-},1350,[6,18,19,23,25,28,65,15,1351,106,1352],"node_modules/react-native-pager-view/src/PagerView.tsx");
+},1347,[6,18,19,23,25,28,65,15,1348,106,1349],"node_modules/react-native-pager-view/src/PagerView.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -217871,7 +216799,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       _$$_REQUIRE(_dependencyMap[5], "react-native/Libraries/ReactNative/RendererProxy").dispatchCommand(ref, "setScrollEnabledImperatively", [scrollEnabled]);
     }
   };
-},1351,[6,265,276,262,244,61],"node_modules/react-native-pager-view/src/PagerViewNativeComponent.ts");
+},1348,[6,265,276,262,244,61],"node_modules/react-native-pager-view/src/PagerViewNativeComponent.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
     value: true
@@ -217900,7 +216828,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       );
     });
   };
-},1352,[65,15,106],"node_modules/react-native-pager-view/src/utils.tsx");
+},1349,[65,15,106],"node_modules/react-native-pager-view/src/utils.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -217924,13 +216852,10 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       keyboardShown = _useKeyboard.keyboardShown;
     var theme = (0, _$$_REQUIRE(_dependencyMap[9], "../../../store/theme/hook").useTheme)();
     var autoHidePlayBar = (0, _$$_REQUIRE(_dependencyMap[10], "../../../store/setting/hook").useSettingValue)('common.autoHidePlayBar');
-    var bgPic = (0, _$$_REQUIRE(_dependencyMap[11], "../../../store/common/hook").useBgPic)();
     var playerComponent = (0, _react.useMemo)(function () {
       return /*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.View, {
         style: Object.assign({}, styles.container, {
-          backgroundColor: bgPic ? 'rgba(0,0,0,0.3)' : theme['c-content-background'],
-          borderColor: theme['c-border-background'],
-          shadowColor: theme['c-primary-dark-1000-alpha-300']
+          backgroundColor: theme['c-content-background']
         }),
         children: [/*#__PURE__*/(0, _jsxRuntime.jsx)(_Pic.default, {
           isHome: isHome
@@ -217952,25 +216877,23 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
 
     return autoHidePlayBar && keyboardShown ? null : playerComponent;
   });
-  var styles = (0, _$$_REQUIRE(_dependencyMap[12], "../../../utils/tools").createStyle)({
+  var styles = (0, _$$_REQUIRE(_dependencyMap[11], "../../../utils/tools").createStyle)({
     container: {
-      width: 'auto',
-      marginHorizontal: 6,
-      marginTop: 4,
-      marginBottom: 4,
-      paddingVertical: 6,
-      paddingLeft: 8,
-      borderRadius: 14,
-      borderWidth: 0.5,
+      width: '100%',
+      // height: 100,
+      // paddingTop: progressContentPadding,
+      // marginTop: -progressContentPadding,
+      // backgroundColor: 'rgba(0, 0, 0, .1)',
+      // borderTopWidth: BorderWidths.normal2,
+      paddingVertical: 5,
+      paddingLeft: 5,
+      // backgroundColor: AppColors.primary,
+      // backgroundColor: 'red',
+      borderTopLeftRadius: 6,
+      borderTopRightRadius: 6,
       flexDirection: 'row',
       alignItems: 'center',
-      shadowOffset: {
-        width: 0,
-        height: 4
-      },
-      shadowOpacity: 0.15,
-      shadowRadius: 8,
-      elevation: 3
+      elevation: 10
     },
     left: {
       // borderRadius: 3,
@@ -217981,7 +216904,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       flexDirection: 'column',
       flexGrow: 1,
       flexShrink: 1,
-      paddingLeft: 8,
+      paddingLeft: 5,
       height: '100%'
       // justifyContent: 'space-evenly',
       // height: 48,
@@ -217992,8 +216915,8 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       alignItems: 'center',
       flexGrow: 0,
       flexShrink: 0,
-      paddingLeft: 6,
-      paddingRight: 8
+      paddingLeft: 5,
+      paddingRight: 5
     }
     // row: {
     //   flexDirection: 'row',
@@ -218001,7 +216924,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     //   flexShrink: 0,
     // },
   });
-},1353,[6,65,15,1354,1355,1356,1359,106,1064,966,977,1074,543],"src/components/player/PlayerBar/index.tsx");
+},1350,[6,65,15,1351,1352,1353,1356,106,1064,966,977,543],"src/components/player/PlayerBar/index.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -218062,7 +216985,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   //   playInfoImg: {
   //   },
   // })
-},1354,[6,15,688,704,1075,65,106,681,1165,716,680,996],"src/components/player/PlayerBar/components/Pic.tsx");
+},1351,[6,15,688,704,1075,65,106,681,1165,716,680,996],"src/components/player/PlayerBar/components/Pic.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -218082,22 +217005,21 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     var musicInfo = (0, _$$_REQUIRE(_dependencyMap[6], "../../../../store/player/hook").usePlayerMusicInfo)();
     var downloadFileName = (0, _$$_REQUIRE(_dependencyMap[7], "../../../../store/setting/hook").useSettingValue)('download.fileName');
     var theme = (0, _$$_REQUIRE(_dependencyMap[8], "../../../../store/theme/hook").useTheme)();
-    var bgPic = (0, _$$_REQUIRE(_dependencyMap[9], "../../../../store/common/hook").useBgPic)();
     var handlePress = function handlePress() {
       // console.log('')
       // console.log(playMusicInfo)
       if (!musicInfo.id) return;
-      _$$_REQUIRE(_dependencyMap[10], "../../../../navigation").navigations.pushPlayDetailScreen(_state.default.componentIds.home);
+      _$$_REQUIRE(_dependencyMap[9], "../../../../navigation").navigations.pushPlayDetailScreen(_state.default.componentIds.home);
       // toast(global.i18n.t('play_detail_todo_tip'), 'long')
     };
     var handleLongPress = function handleLongPress() {
       var listId = _state2.default.playMusicInfo.listId;
-      if (!listId || listId == _$$_REQUIRE(_dependencyMap[11], "../../../../config/constant").LIST_IDS.DOWNLOAD) return;
+      if (!listId || listId == _$$_REQUIRE(_dependencyMap[10], "../../../../config/constant").LIST_IDS.DOWNLOAD) return;
       global.app_event.jumpListPosition();
     };
     // console.log('render title')
 
-    var title = musicInfo.id ? musicInfo.singer ? (0, _$$_REQUIRE(_dependencyMap[12], "../../../../utils/tools").formatMusicName)(downloadFileName, musicInfo.name, musicInfo.singer) : musicInfo.name : '';
+    var title = musicInfo.id ? musicInfo.singer ? (0, _$$_REQUIRE(_dependencyMap[11], "../../../../utils/tools").formatMusicName)(downloadFileName, musicInfo.name, musicInfo.singer) : musicInfo.name : '';
     // console.log(playMusicInfo)
     return /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.TouchableOpacity, {
       style: styles.container,
@@ -218105,7 +217027,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       onPress: handlePress,
       activeOpacity: 0.7,
       children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
-        color: bgPic ? '#fff' : theme['c-font-label'],
+        color: theme['c-font-label'],
         numberOfLines: 1,
         children: title
       })
@@ -218130,7 +217052,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   //     </View>
   //   )
   // }
-  var styles = (0, _$$_REQUIRE(_dependencyMap[12], "../../../../utils/tools").createStyle)({
+  var styles = (0, _$$_REQUIRE(_dependencyMap[11], "../../../../utils/tools").createStyle)({
     container: {
       width: '100%',
       paddingHorizontal: 2
@@ -218139,7 +217061,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       // backgroundColor: 'rgba(0, 0, 0, .1)',
     }
   });
-},1355,[6,15,688,704,967,106,1165,977,966,1074,716,680,543],"src/components/player/PlayerBar/components/Title.tsx");
+},1352,[6,15,688,704,967,106,1165,977,966,716,680,543],"src/components/player/PlayerBar/components/Title.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -218164,39 +217086,37 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   var PlayTimeCurrent = function PlayTimeCurrent(_ref) {
     var timeStr = _ref.timeStr;
     var theme = (0, _$$_REQUIRE(_dependencyMap[9], "../../../../store/theme/hook").useTheme)();
-    var bgPic = (0, _$$_REQUIRE(_dependencyMap[10], "../../../../store/common/hook").useBgPic)();
+    // console.log(timeStr)
     return /*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
       size: FONT_SIZE,
-      color: bgPic ? '#fff' : theme['c-500'],
+      color: theme['c-500'],
       children: timeStr
     });
   };
   var PlayTimeMax = (0, _react.memo)(function (_ref2) {
     var timeStr = _ref2.timeStr;
     var theme = (0, _$$_REQUIRE(_dependencyMap[9], "../../../../store/theme/hook").useTheme)();
-    var bgPic = (0, _$$_REQUIRE(_dependencyMap[10], "../../../../store/common/hook").useBgPic)();
     return /*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
       size: FONT_SIZE,
-      color: bgPic ? '#fff' : theme['c-500'],
+      color: theme['c-500'],
       children: timeStr
     });
   });
   var _default = exports.default = function _default(_ref3) {
     var isHome = _ref3.isHome;
     var theme = (0, _$$_REQUIRE(_dependencyMap[9], "../../../../store/theme/hook").useTheme)();
-    var bgPic = (0, _$$_REQUIRE(_dependencyMap[10], "../../../../store/common/hook").useBgPic)();
     var _useState = (0, _react.useState)(true),
       _useState2 = (0, _slicedToArray2.default)(_useState, 2),
       autoUpdate = _useState2[0],
       setAutoUpdate = _useState2[1];
-    var _useProgress = (0, _$$_REQUIRE(_dependencyMap[11], "../../../../store/player/hook").useProgress)(autoUpdate),
+    var _useProgress = (0, _$$_REQUIRE(_dependencyMap[10], "../../../../store/player/hook").useProgress)(autoUpdate),
       maxPlayTimeStr = _useProgress.maxPlayTimeStr,
       nowPlayTimeStr = _useProgress.nowPlayTimeStr,
       progress = _useProgress.progress,
       maxPlayTime = _useProgress.maxPlayTime;
-    var buffered = (0, _$$_REQUIRE(_dependencyMap[12], "../../../../plugins/player").useBufferProgress)();
-    var allowProgressBarSeek = (0, _$$_REQUIRE(_dependencyMap[13], "../../../../store/setting/hook").useSettingValue)('common.allowProgressBarSeek');
-    (0, _$$_REQUIRE(_dependencyMap[10], "../../../../store/common/hook").usePageVisible)([_$$_REQUIRE(_dependencyMap[14], "../../../../config/constant").COMPONENT_IDS.home], (0, _react.useCallback)(function (visible) {
+    var buffered = (0, _$$_REQUIRE(_dependencyMap[11], "../../../../plugins/player").useBufferProgress)();
+    var allowProgressBarSeek = (0, _$$_REQUIRE(_dependencyMap[12], "../../../../store/setting/hook").useSettingValue)('common.allowProgressBarSeek');
+    (0, _$$_REQUIRE(_dependencyMap[13], "../../../../store/common/hook").usePageVisible)([_$$_REQUIRE(_dependencyMap[14], "../../../../config/constant").COMPONENT_IDS.home], (0, _react.useCallback)(function (visible) {
       if (isHome) setAutoUpdate(visible);
     }, [isHome]));
     return /*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.View, {
@@ -218217,7 +217137,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
           timeStr: nowPlayTimeStr
         }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
           size: FONT_SIZE,
-          color: bgPic ? '#fff' : theme['c-500'],
+          color: theme['c-500'],
           children: " / "
         }), /*#__PURE__*/(0, _jsxRuntime.jsx)(PlayTimeMax, {
           timeStr: maxPlayTimeStr
@@ -218285,7 +217205,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       zIndex: 100
     }
   });
-},1356,[6,7,65,15,1357,1358,967,106,681,966,1074,1165,705,977,680,543],"src/components/player/PlayerBar/components/PlayInfo.tsx");
+},1353,[6,7,65,15,1354,1355,967,106,681,966,1165,705,977,1074,680,543],"src/components/player/PlayerBar/components/PlayInfo.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -218495,7 +217415,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     }
   });
   var _default = exports.default = Progress;
-},1357,[6,7,65,15,106,966,1064,543],"src/components/player/Progress.tsx");
+},1354,[6,7,65,15,106,966,1064,543],"src/components/player/Progress.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -218515,11 +217435,9 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     // console.log('render status')
 
     var status = isPlay ? text : statusText;
-    var bgPic = (0, _$$_REQUIRE(_dependencyMap[5], "../../../../store/common/hook").useBgPic)();
     return /*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
       numberOfLines: 1,
       size: 12,
-      color: bgPic ? '#fff' : undefined,
       children: status
     });
   }; // const styles = createStyle({
@@ -218531,7 +217449,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   //     // backgroundColor: 'rgba(0,0,0,0.2)',
   //   },
   // })
-},1358,[6,967,106,1262,1165,1074],"src/components/player/PlayerBar/components/Status.tsx");
+},1355,[6,967,106,1262,1165],"src/components/player/PlayerBar/components/Status.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
     value: true
@@ -218550,54 +217468,51 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   };
   var PlayPrevBtn = function PlayPrevBtn() {
     var theme = (0, _$$_REQUIRE(_dependencyMap[3], "../../../../store/theme/hook").useTheme)();
-    var bgPic = (0, _$$_REQUIRE(_dependencyMap[4], "../../../../store/common/hook").useBgPic)();
     return /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.TouchableOpacity, {
       style: styles.cotrolBtn,
       activeOpacity: 0.5,
       onPress: handlePlayPrev,
-      children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_$$_REQUIRE(_dependencyMap[5], "../../../common/Icon").Icon, {
+      children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_$$_REQUIRE(_dependencyMap[4], "../../../common/Icon").Icon, {
         name: "prevMusic",
-        color: bgPic ? '#fff' : theme['c-button-font'],
+        color: theme['c-button-font'],
         size: BTN_SIZE
       })
     });
   };
   var PlayNextBtn = function PlayNextBtn() {
     var theme = (0, _$$_REQUIRE(_dependencyMap[3], "../../../../store/theme/hook").useTheme)();
-    var bgPic = (0, _$$_REQUIRE(_dependencyMap[4], "../../../../store/common/hook").useBgPic)();
     return /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.TouchableOpacity, {
       style: styles.cotrolBtn,
       activeOpacity: 0.5,
       onPress: handlePlayNext,
-      children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_$$_REQUIRE(_dependencyMap[5], "../../../common/Icon").Icon, {
+      children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_$$_REQUIRE(_dependencyMap[4], "../../../common/Icon").Icon, {
         name: "nextMusic",
-        color: bgPic ? '#fff' : theme['c-button-font'],
+        color: theme['c-button-font'],
         size: BTN_SIZE
       })
     });
   };
   var TogglePlayBtn = function TogglePlayBtn() {
-    var isPlay = (0, _$$_REQUIRE(_dependencyMap[6], "../../../../store/player/hook").useIsPlay)();
+    var isPlay = (0, _$$_REQUIRE(_dependencyMap[5], "../../../../store/player/hook").useIsPlay)();
     var theme = (0, _$$_REQUIRE(_dependencyMap[3], "../../../../store/theme/hook").useTheme)();
-    var bgPic = (0, _$$_REQUIRE(_dependencyMap[4], "../../../../store/common/hook").useBgPic)();
     return /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.TouchableOpacity, {
       style: styles.cotrolBtn,
       activeOpacity: 0.5,
       onPress: _$$_REQUIRE(_dependencyMap[2], "../../../../core/player/player").togglePlay,
-      children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_$$_REQUIRE(_dependencyMap[5], "../../../common/Icon").Icon, {
+      children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_$$_REQUIRE(_dependencyMap[4], "../../../common/Icon").Icon, {
         name: isPlay ? 'pause' : 'play',
-        color: bgPic ? '#fff' : theme['c-button-font'],
+        color: theme['c-button-font'],
         size: BTN_SIZE
       })
     });
   };
   var _default = exports.default = function _default() {
-    var isHorizontalMode = (0, _$$_REQUIRE(_dependencyMap[7], "../../../../utils/hooks").useHorizontalMode)();
+    var isHorizontalMode = (0, _$$_REQUIRE(_dependencyMap[6], "../../../../utils/hooks").useHorizontalMode)();
     return /*#__PURE__*/(0, _jsxRuntime.jsxs)(_jsxRuntime.Fragment, {
       children: [isHorizontalMode ? /*#__PURE__*/(0, _jsxRuntime.jsx)(PlayPrevBtn, {}) : null, /*#__PURE__*/(0, _jsxRuntime.jsx)(TogglePlayBtn, {}), /*#__PURE__*/(0, _jsxRuntime.jsx)(PlayNextBtn, {})]
     });
   };
-  var styles = (0, _$$_REQUIRE(_dependencyMap[8], "../../../../utils/tools").createStyle)({
+  var styles = (0, _$$_REQUIRE(_dependencyMap[7], "../../../../utils/tools").createStyle)({
     cotrolBtn: {
       width: 46,
       height: 46,
@@ -218608,95 +217523,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       textShadowRadius: 1
     }
   });
-},1359,[15,106,983,966,1074,1032,1165,1064,543],"src/components/player/PlayerBar/components/ControlBtn.tsx");
-__d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
-  var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
-  Object.defineProperty(exports, "__esModule", {
-    value: true
-  });
-  exports.default = void 0;
-  var _react = _$$_REQUIRE(_dependencyMap[1], "react");
-  var _reactNative = _$$_REQUIRE(_dependencyMap[2], "react-native");
-  var _Text = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[3], "../../../components/common/Text"));
-  var _jsxRuntime = _$$_REQUIRE(_dependencyMap[4], "react/jsx-runtime");
-  var _this = this,
-    _jsxFileName = "/data/data/com.termux/files/home/lx-music-mobile/src/screens/Home/components/BottomTabBar.tsx";
-  var TabItem = function TabItem(_ref) {
-    var id = _ref.id,
-      icon = _ref.icon;
-    var theme = (0, _$$_REQUIRE(_dependencyMap[5], "../../../store/theme/hook").useTheme)();
-    var bgPic = (0, _$$_REQUIRE(_dependencyMap[6], "../../../store/common/hook").useBgPic)();
-    var t = (0, _$$_REQUIRE(_dependencyMap[7], "../../../lang").useI18n)();
-    var activeId = (0, _$$_REQUIRE(_dependencyMap[6], "../../../store/common/hook").useNavActiveId)();
-    var isActive = activeId == id;
-    var textColor = bgPic ? '#fff' : theme['c-font-label'];
-    var activeColor = bgPic ? '#fff' : theme['c-primary-font-active'] || theme['c-primary'];
-
-    /**
-     * 切换底部导航页签。
-     */
-    var handlePress = function handlePress() {
-      if (isActive) return;
-      (0, _$$_REQUIRE(_dependencyMap[8], "../../../core/common").setNavActiveId)(id);
-    };
-    return /*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.TouchableOpacity, {
-      style: [styles.item, isActive ? {
-        backgroundColor: theme['c-primary-light-700-alpha-500']
-      } : null],
-      onPress: handlePress,
-      activeOpacity: 0.75,
-      children: [/*#__PURE__*/(0, _jsxRuntime.jsx)(_$$_REQUIRE(_dependencyMap[9], "../../../components/common/Icon").Icon, {
-        name: icon,
-        size: 18,
-        color: isActive ? activeColor : textColor
-      }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
-        style: styles.label,
-        size: 11,
-        color: isActive ? activeColor : textColor,
-        numberOfLines: 1,
-        children: t(id)
-      })]
-    });
-  };
-  var _default = exports.default = (0, _react.memo)(function () {
-    var theme = (0, _$$_REQUIRE(_dependencyMap[5], "../../../store/theme/hook").useTheme)();
-    var bgPic = (0, _$$_REQUIRE(_dependencyMap[6], "../../../store/common/hook").useBgPic)();
-    return /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.View, {
-      style: [styles.container, {
-        borderTopColor: theme['c-border-background'],
-        backgroundColor: bgPic ? 'rgba(0,0,0,0.3)' : theme['c-content-background']
-      }],
-      children: _$$_REQUIRE(_dependencyMap[10], "../../../config/constant").NAV_MENUS.map(function (item) {
-        return /*#__PURE__*/(0, _jsxRuntime.jsx)(TabItem, {
-          id: item.id,
-          icon: item.icon
-        }, item.id);
-      })
-    });
-  });
-  var styles = (0, _$$_REQUIRE(_dependencyMap[11], "../../../utils/tools").createStyle)({
-    container: {
-      borderTopWidth: _$$_REQUIRE(_dependencyMap[12], "../../../theme").BorderWidths.normal,
-      flexDirection: 'row',
-      paddingHorizontal: 6,
-      paddingTop: 6,
-      paddingBottom: 6,
-      justifyContent: 'space-between',
-      alignItems: 'center'
-    },
-    item: {
-      flex: 1,
-      minHeight: 42,
-      marginHorizontal: 2,
-      borderRadius: 10,
-      alignItems: 'center',
-      justifyContent: 'center'
-    },
-    label: {
-      marginTop: 2
-    }
-  });
-},1360,[6,65,15,967,106,966,1074,698,689,1032,680,543,1076],"src/screens/Home/components/BottomTabBar.tsx");
+},1356,[15,106,983,966,1032,1165,1064,543],"src/components/player/PlayerBar/components/ControlBtn.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -218709,11 +217536,10 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   var _StatusBar = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[4], "../../../components/common/StatusBar"));
   var _Header = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[5], "./Header"));
   var _Main = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[6], "./Main"));
-  var _BottomTabBar = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[7], "../components/BottomTabBar"));
-  var _jsxRuntime = _$$_REQUIRE(_dependencyMap[8], "react/jsx-runtime");
+  var _jsxRuntime = _$$_REQUIRE(_dependencyMap[7], "react/jsx-runtime");
   var _this = this,
     _jsxFileName = "/data/data/com.termux/files/home/lx-music-mobile/src/screens/Home/Horizontal/index.tsx";
-  var styles = (0, _$$_REQUIRE(_dependencyMap[9], "../../../utils/tools").createStyle)({
+  var styles = (0, _$$_REQUIRE(_dependencyMap[8], "../../../utils/tools").createStyle)({
     container: {
       flex: 1,
       flexDirection: 'row'
@@ -218731,12 +217557,12 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
           style: styles.content,
           children: [/*#__PURE__*/(0, _jsxRuntime.jsx)(_Header.default, {}), /*#__PURE__*/(0, _jsxRuntime.jsx)(_Main.default, {}), /*#__PURE__*/(0, _jsxRuntime.jsx)(_PlayerBar.default, {
             isHome: true
-          }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_BottomTabBar.default, {})]
+          })]
         })]
       })]
     });
   };
-},1361,[6,15,1362,1353,1090,1363,1364,1360,106,543],"src/screens/Home/Horizontal/index.tsx");
+},1357,[6,15,1358,1350,1090,1359,1360,106,543],"src/screens/Home/Horizontal/index.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
     value: true
@@ -218896,7 +217722,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       }) : null]
     });
   });
-},1362,[65,15,106,543,1076,966,1074,1032,977,689,680],"src/screens/Home/Horizontal/Aside.tsx");
+},1358,[65,15,106,543,1076,966,1074,1032,977,689,680],"src/screens/Home/Horizontal/Aside.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -219018,7 +217844,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     }
   });
   var _default = exports.default = Header;
-},1363,[6,15,967,1090,1091,106,680,1074,698,681,977,543],"src/screens/Home/Horizontal/Header.tsx");
+},1359,[6,15,967,1090,1091,106,680,1074,698,681,977,543],"src/screens/Home/Horizontal/Header.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -219070,7 +217896,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     return component;
   };
   var _default = exports.default = Main;
-},1364,[6,7,65,1093,1145,1160,1200,1213,688,106],"src/screens/Home/Horizontal/Main.tsx");
+},1360,[6,7,65,1093,1145,1160,1200,1213,688,106],"src/screens/Home/Horizontal/Main.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -219100,7 +217926,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       })]
     });
   };
-},1365,[6,65,1366,1415,1061,1090,106,1064,689,680],"src/screens/PlayDetail/index.tsx");
+},1361,[6,65,1362,1411,1061,1090,106,1064,689,680],"src/screens/PlayDetail/index.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -219318,7 +218144,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       flex: 1
     }
   });
-},1366,[6,7,65,15,1367,1386,1398,1399,688,106,1165,966,977,1402,666,716,1403,1404,1412,1413,1414,543],"src/screens/PlayDetail/Vertical/index.tsx");
+},1362,[6,7,65,15,1363,1382,1394,1395,688,106,1165,966,977,1398,666,716,1399,1400,1408,1409,1410,543],"src/screens/PlayDetail/Vertical/index.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -219407,7 +218233,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     },
     title: {}
   });
-},1367,[6,65,15,1090,967,688,1368,1384,106,681,680,1165,1385,1074,716],"src/screens/PlayDetail/Vertical/components/Header.tsx");
+},1363,[6,65,15,1090,967,688,1364,1380,106,681,680,1165,1381,1074,716],"src/screens/PlayDetail/Vertical/components/Header.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -219473,7 +218299,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       })
     })) : null;
   });
-},1368,[6,7,166,65,15,1328,1369,1372,1373,1374,1375,1377,1379,1380,1381,1382,1383,106,698],"src/screens/PlayDetail/components/SettingPopup/index.tsx");
+},1364,[6,7,166,65,15,1328,1365,1368,1369,1370,1371,1373,1375,1376,1377,1378,1379,106,698],"src/screens/PlayDetail/components/SettingPopup/index.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -219554,7 +218380,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     },
     hint: {}
   });
-},1369,[6,7,65,15,1370,967,106,966,1032,543],"src/screens/PlayDetail/components/SettingPopup/settings/SettingTimer.tsx");
+},1365,[6,7,65,15,1366,967,106,966,1032,543],"src/screens/PlayDetail/components/SettingPopup/settings/SettingTimer.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -219813,7 +218639,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       marginLeft: 8
     }
   });
-},1370,[6,7,65,1154,967,15,1100,1030,618,106,966,698,1371,977,689,543],"src/components/TimeoutExitEditModal.tsx");
+},1366,[6,7,65,1154,967,15,1100,1030,618,106,966,698,1367,977,689,543],"src/components/TimeoutExitEditModal.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -219919,7 +218745,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     global.lx.isPlayedStop = false;
     timeoutTools.callHooks();
   };
-},1371,[6,7,65,552,704,618,689],"src/core/player/timeoutExit.ts");
+},1367,[6,7,65,552,704,618,689],"src/core/player/timeoutExit.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -220095,7 +218921,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       borderWidth: 3
     }
   });
-},1372,[6,65,15,967,106,966,977,689,543],"src/screens/PlayDetail/components/SettingPopup/settings/SettingBackground.tsx");
+},1368,[6,65,15,967,106,966,977,689,543],"src/screens/PlayDetail/components/SettingPopup/settings/SettingBackground.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -220230,7 +219056,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       backgroundColor: 'rgba(128,128,128,0.15)'
     }
   });
-},1373,[6,217,65,15,967,106,966,977,689,543],"src/screens/PlayDetail/components/SettingPopup/settings/SettingCover.tsx");
+},1369,[6,217,65,15,967,106,966,977,689,543],"src/screens/PlayDetail/components/SettingPopup/settings/SettingCover.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -220309,7 +219135,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       left: 2
     }
   });
-},1374,[6,65,15,967,106,966,977,689,543],"src/screens/PlayDetail/components/SettingPopup/settings/SettingProgressShimmer.tsx");
+},1370,[6,65,15,967,106,966,977,689,543],"src/screens/PlayDetail/components/SettingPopup/settings/SettingProgressShimmer.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -220346,7 +219172,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       })
     });
   };
-},1375,[6,15,1030,1376,106,698,977,689],"src/screens/PlayDetail/components/SettingPopup/settings/SettingLyricProgress.tsx");
+},1371,[6,15,1030,1372,106,698,977,689],"src/screens/PlayDetail/components/SettingPopup/settings/SettingLyricProgress.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
     value: true
@@ -220382,7 +219208,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       paddingTop: 5
     }
   });
-},1376,[543],"src/screens/PlayDetail/components/SettingPopup/settings/style.ts");
+},1372,[543],"src/screens/PlayDetail/components/SettingPopup/settings/style.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -220449,7 +219275,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     });
   };
   var _default = exports.default = Volume;
-},1377,[6,7,65,15,967,1378,1376,106,966,977,698,705,689],"src/screens/PlayDetail/components/SettingPopup/settings/SettingVolume.tsx");
+},1373,[6,7,65,15,967,1374,1372,106,966,977,698,705,689],"src/screens/PlayDetail/components/SettingPopup/settings/SettingVolume.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -220498,7 +219324,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       // backgroundColor: '#eee',
     }
   });
-},1378,[6,65,1278,106,966,543],"src/components/common/Slider.tsx");
+},1374,[6,65,1278,106,966,543],"src/components/common/Slider.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -220586,7 +219412,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       })]
     });
   };
-},1379,[6,7,65,15,967,1378,1376,1184,704,618,106,966,977,698,705,1261,689],"src/screens/PlayDetail/components/SettingPopup/settings/SettingPlaybackRate.tsx");
+},1375,[6,7,65,15,967,1374,1372,1184,704,618,106,966,977,698,705,1261,689],"src/screens/PlayDetail/components/SettingPopup/settings/SettingPlaybackRate.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -220651,7 +219477,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     });
   };
   var _default = exports.default = LrcFontSize;
-},1380,[6,217,7,65,15,967,1378,1376,106,966,977,698,689],"src/screens/PlayDetail/components/SettingPopup/settings/SettingLrcFontSize.tsx");
+},1376,[6,217,7,65,15,967,1374,1372,106,966,977,698,689],"src/screens/PlayDetail/components/SettingPopup/settings/SettingLrcFontSize.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -220726,7 +219552,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       })]
     });
   };
-},1381,[6,65,15,967,1376,1030,106,977,698,689],"src/screens/PlayDetail/components/SettingPopup/settings/SettingLrcAlign.tsx");
+},1377,[6,65,15,967,1372,1030,106,977,698,689],"src/screens/PlayDetail/components/SettingPopup/settings/SettingLrcAlign.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -220806,7 +219632,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       textAlign: 'center'
     }
   });
-},1382,[6,7,65,15,967,106,966,977,689,543],"src/screens/PlayDetail/components/SettingPopup/settings/SettingLrcLineCount.tsx");
+},1378,[6,7,65,15,967,106,966,977,689,543],"src/screens/PlayDetail/components/SettingPopup/settings/SettingLrcLineCount.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -221176,7 +220002,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       borderWidth: 3
     }
   });
-},1383,[6,217,65,15,967,106,966,977,689,543],"src/screens/PlayDetail/components/SettingPopup/settings/SettingEffects.tsx");
+},1379,[6,217,65,15,967,106,966,977,689,543],"src/screens/PlayDetail/components/SettingPopup/settings/SettingEffects.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
     value: true
@@ -221212,7 +220038,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       flex: 0
     }
   });
-},1384,[15,106,681,680,966,1032,543],"src/screens/PlayDetail/Vertical/components/Btn.tsx");
+},1380,[15,106,681,680,966,1032,543],"src/screens/PlayDetail/Vertical/components/Btn.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
     value: true
@@ -221282,7 +220108,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     var luminance = getLuminance(backgroundColor);
     return luminance > 0.5 ? 'rgba(255,255,255,0.3)' : 'rgba(255,255,255,0.1)';
   }
-},1385,[],"src/utils/colorContrast.ts");
+},1381,[],"src/utils/colorContrast.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -221328,7 +220154,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       justifyContent: 'space-evenly'
     }
   });
-},1386,[6,65,15,1387,1394,1397,106,680,543],"src/screens/PlayDetail/Vertical/Player/index.tsx");
+},1382,[6,65,15,1383,1390,1393,106,680,543],"src/screens/PlayDetail/Vertical/Player/index.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -221370,7 +220196,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       paddingHorizontal: 4
     }
   });
-},1387,[6,15,1388,1390,1391,1392,1393,106,543],"src/screens/PlayDetail/Vertical/Player/components/MoreBtn/index.tsx");
+},1383,[6,15,1384,1386,1387,1388,1389,106,543],"src/screens/PlayDetail/Vertical/Player/components/MoreBtn/index.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -221441,7 +220267,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       color: iconColor
     });
   });
-},1388,[6,65,1389,106,977,698,1385,680,689,543],"src/screens/PlayDetail/Vertical/Player/components/MoreBtn/PlayModeBtn.tsx");
+},1384,[6,65,1385,106,977,698,1381,680,689,543],"src/screens/PlayDetail/Vertical/Player/components/MoreBtn/PlayModeBtn.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
     value: true
@@ -221484,7 +220310,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       textShadowRadius: 1
     }
   });
-},1389,[15,106,681,966,1032,543],"src/screens/PlayDetail/Vertical/Player/components/MoreBtn/Btn.tsx");
+},1385,[15,106,681,966,1032,543],"src/screens/PlayDetail/Vertical/Player/components/MoreBtn/Btn.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -221522,7 +220348,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       })]
     });
   };
-},1390,[6,65,1126,704,1389,106,1385],"src/screens/PlayDetail/Vertical/Player/components/MoreBtn/MusicAddBtn.tsx");
+},1386,[6,65,1126,704,1385,106,1381],"src/screens/PlayDetail/Vertical/Player/components/MoreBtn/MusicAddBtn.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -221558,7 +220384,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       })]
     });
   });
-},1391,[6,1389,1272,65,106,977,1385,702],"src/screens/PlayDetail/Vertical/Player/components/MoreBtn/DesktopLyricBtn.tsx");
+},1387,[6,1385,1272,65,106,977,1381,702],"src/screens/PlayDetail/Vertical/Player/components/MoreBtn/DesktopLyricBtn.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -221584,7 +220410,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       color: iconColor
     });
   };
-},1392,[6,1389,688,106,1385,716],"src/screens/PlayDetail/Vertical/Player/components/MoreBtn/CommentBtn.tsx");
+},1388,[6,1385,688,106,1381,716],"src/screens/PlayDetail/Vertical/Player/components/MoreBtn/CommentBtn.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -221611,7 +220437,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       color: iconColor
     });
   };
-},1393,[6,1389,688,106,1385,716],"src/screens/PlayDetail/Vertical/Player/components/MoreBtn/PlaylistBtn.tsx");
+},1389,[6,1385,688,106,1381,716],"src/screens/PlayDetail/Vertical/Player/components/MoreBtn/PlaylistBtn.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -221695,7 +220521,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       paddingRight: 10
     }
   });
-},1394,[6,65,15,1395,1396,967,106,1165,705,1385,543],"src/screens/PlayDetail/Vertical/Player/components/PlayInfo.tsx");
+},1390,[6,65,15,1391,1392,967,106,1165,705,1381,543],"src/screens/PlayDetail/Vertical/Player/components/PlayInfo.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -222102,7 +220928,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     }
   });
   var _default = exports.default = Progress;
-},1395,[6,7,65,15,106,977,1064,966,543],"src/components/player/ProgressBar.tsx");
+},1391,[6,7,65,15,106,977,1064,966,543],"src/components/player/ProgressBar.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -222130,7 +220956,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       textAlign: 'center'
     }
   });
-},1396,[6,967,106,1165,1385,543],"src/screens/PlayDetail/Vertical/Player/components/Status.tsx");
+},1392,[6,967,106,1165,1381,543],"src/screens/PlayDetail/Vertical/Player/components/Status.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
     value: true
@@ -222343,7 +221169,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       elevation: 5
     }
   });
-},1397,[65,15,106,977,1032,1165,1385,983,1389,1064,543],"src/screens/PlayDetail/Vertical/Player/components/ControlBtn.tsx");
+},1393,[65,15,106,977,1032,1165,1381,983,1385,1064,543],"src/screens/PlayDetail/Vertical/Player/components/ControlBtn.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -222668,7 +221494,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       alignItems: 'center'
     }
   });
-},1398,[6,65,15,1075,106,1165,1064,1074,966,977,1367,983,680,543],"src/screens/PlayDetail/Vertical/Pic.tsx");
+},1394,[6,65,15,1075,106,1165,1064,1074,966,977,1363,983,680,543],"src/screens/PlayDetail/Vertical/Pic.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -223081,7 +221907,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       // paddingBottom: 5,
     }
   });
-},1399,[6,13,65,15,704,1400,106,966,977,681,1385,967,1262,1401,543],"src/screens/PlayDetail/Vertical/Lyric.tsx");
+},1395,[6,13,65,15,704,1396,106,966,977,681,1381,967,1262,1397,543],"src/screens/PlayDetail/Vertical/Lyric.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -223235,7 +222061,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       paddingRight: 15
     }
   });
-},1400,[6,7,65,15,967,106,966,572,1032,543,1076],"src/screens/PlayDetail/components/PlayLine.tsx");
+},1396,[6,7,65,15,967,106,966,572,1032,543,1076],"src/screens/PlayDetail/components/PlayLine.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -223389,7 +222215,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     }
     return cancelFn;
   };
-},1401,[6,7],"src/utils/scroll.ts");
+},1397,[6,7],"src/utils/scroll.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
     value: true
@@ -223495,7 +222321,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       };
     }, [scaleAnim, opacityAnim]);
   };
-},1402,[65,15],"src/components/cinematic/CinematicTransition.tsx");
+},1398,[65,15],"src/components/cinematic/CinematicTransition.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
     value: true
@@ -223604,7 +222430,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       })
     });
   });
-},1403,[65,15,106,966,977],"src/components/starfield/StarfieldBackground.tsx");
+},1399,[65,15,106,966,977],"src/components/starfield/StarfieldBackground.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
     value: true
@@ -223713,7 +222539,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       })
     });
   });
-},1404,[65,15,106,1165,966,977,1405],"src/components/wallpaper/WallpaperView.tsx");
+},1400,[65,15,106,1165,966,977,1401],"src/components/wallpaper/WallpaperView.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -223728,7 +222554,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   exports.default = void 0;
   var _WebView = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[1], "./WebView"));
   var _default = exports.default = _WebView.default;
-},1405,[6,1406],"node_modules/react-native-webview/src/index.ts");
+},1401,[6,1402],"node_modules/react-native-webview/src/index.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -224001,7 +222827,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     isFileUploadSupported: isFileUploadSupported
   });
   var _default = exports.default = WebView;
-},1406,[6,217,7,166,65,15,39,30,37,1407,1408,1409,106,1410],"node_modules/react-native-webview/src/WebView.android.tsx");
+},1402,[6,217,7,166,65,15,39,30,37,1403,1404,1405,106,1406],"node_modules/react-native-webview/src/WebView.android.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -224188,7 +223014,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       _$$_REQUIRE(_dependencyMap[5], "react-native/Libraries/ReactNative/RendererProxy").dispatchCommand(ref, "clearHistory", []);
     }
   };
-},1407,[6,276,265,262,244,61],"node_modules/react-native-webview/src/RNCWebViewNativeComponent.ts");
+},1403,[6,276,265,262,244,61],"node_modules/react-native-webview/src/RNCWebViewNativeComponent.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
     value: true
@@ -224196,7 +223022,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   exports.default = void 0;
   var _reactNative = _$$_REQUIRE(_dependencyMap[0], "react-native");
   var _default = exports.default = _reactNative.TurboModuleRegistry.getEnforcing('RNCWebViewModule');
-},1408,[15],"node_modules/react-native-webview/src/NativeRNCWebViewModule.ts");
+},1404,[15],"node_modules/react-native-webview/src/NativeRNCWebViewModule.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
     value: true
@@ -224241,7 +223067,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     }
   });
   var _default = exports.default = styles;
-},1409,[15],"node_modules/react-native-webview/src/WebView.styles.ts");
+},1405,[15],"node_modules/react-native-webview/src/WebView.styles.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -224435,7 +223261,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       lastErrorEvent: lastErrorEvent
     };
   };
-},1410,[6,7,41,1411,65,15,1409,106],"node_modules/react-native-webview/src/WebViewShared.tsx");
+},1406,[6,7,41,1407,65,15,1405,106],"node_modules/react-native-webview/src/WebViewShared.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   'use strict';
 
@@ -224446,7 +223272,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     }
     return string.replace(matchOperatorsRegex, '\\$&');
   };
-},1411,[],"node_modules/react-native-webview/node_modules/escape-string-regexp/index.js");
+},1407,[],"node_modules/react-native-webview/node_modules/escape-string-regexp/index.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
     value: true
@@ -224510,7 +223336,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       })
     });
   });
-},1412,[65,15,106,977,1405],"src/components/slideshow/SlideshowBg.tsx");
+},1408,[65,15,106,977,1401],"src/components/slideshow/SlideshowBg.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
     value: true
@@ -224618,7 +223444,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       minHeight: 2
     }
   });
-},1413,[65,15,106,1165],"src/components/echo/SpectrumBars.tsx");
+},1409,[65,15,106,1165],"src/components/echo/SpectrumBars.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
     value: true
@@ -224899,7 +223725,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       }), /*#__PURE__*/(0, _jsxRuntime.jsx)(MeteorShower, {})]
     });
   });
-},1414,[65,15,106,1165,977],"src/components/echo/AudioEchoWallpaper.tsx");
+},1410,[65,15,106,1165,977],"src/components/echo/AudioEchoWallpaper.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -224999,7 +223825,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       // backgroundColor: '#eee',
     }
   });
-},1415,[6,65,15,1090,1416,1421,1061,688,1425,1427,1428,106,1074,689,680,666,543,1426],"src/screens/PlayDetail/Horizontal/index.tsx");
+},1411,[6,65,15,1090,1412,1417,1061,688,1421,1423,1424,106,1074,689,680,666,543,1422],"src/screens/PlayDetail/Horizontal/index.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -225034,7 +223860,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       zIndex: 1
     }
   });
-},1416,[6,15,1417,1419,1420,106,543],"src/screens/PlayDetail/Horizontal/MoreBtn/index.tsx");
+},1412,[6,15,1413,1415,1416,106,543],"src/screens/PlayDetail/Horizontal/MoreBtn/index.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -225102,7 +223928,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       onPress: toggleNextPlayMode
     });
   });
-},1417,[6,65,1418,106,977,698,680,689,543],"src/screens/PlayDetail/Horizontal/MoreBtn/PlayModeBtn.tsx");
+},1413,[6,65,1414,106,977,698,680,689,543],"src/screens/PlayDetail/Horizontal/MoreBtn/PlayModeBtn.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
     value: true
@@ -225143,7 +223969,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       textShadowRadius: 1
     }
   });
-},1418,[15,106,681,966,1032,543],"src/screens/PlayDetail/Horizontal/MoreBtn/Btn.tsx");
+},1414,[15,106,681,966,1032,543],"src/screens/PlayDetail/Horizontal/MoreBtn/Btn.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -225178,7 +224004,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       })]
     });
   };
-},1419,[6,65,1126,704,1418,106],"src/screens/PlayDetail/Horizontal/MoreBtn/MusicAddBtn.tsx");
+},1415,[6,65,1126,704,1414,106],"src/screens/PlayDetail/Horizontal/MoreBtn/MusicAddBtn.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -225211,7 +224037,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       })]
     });
   });
-},1420,[6,65,1370,1418,106,966],"src/screens/PlayDetail/Horizontal/MoreBtn/TimeoutExitBtn.tsx");
+},1416,[6,65,1366,1414,106,966],"src/screens/PlayDetail/Horizontal/MoreBtn/TimeoutExitBtn.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -225313,7 +224139,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       paddingRight: 4
     }
   });
-},1421,[6,65,15,967,688,1422,1423,1368,1424,106,681,680,966,1165,716,1032],"src/screens/PlayDetail/Horizontal/components/Header.tsx");
+},1417,[6,65,15,967,688,1418,1419,1364,1420,106,681,680,966,1165,716,1032],"src/screens/PlayDetail/Horizontal/components/Header.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -225334,7 +224160,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       onPress: handleShowCommentScreen
     });
   };
-},1422,[6,1423,688,106,716],"src/screens/PlayDetail/Horizontal/components/CommentBtn.tsx");
+},1418,[6,1419,688,106,716],"src/screens/PlayDetail/Horizontal/components/CommentBtn.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
     value: true
@@ -225378,7 +224204,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       textShadowRadius: 1
     }
   });
-},1423,[15,106,681,680,966,1032,543],"src/screens/PlayDetail/Horizontal/components/Btn.tsx");
+},1419,[15,106,681,680,966,1032,543],"src/screens/PlayDetail/Horizontal/components/Btn.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -225417,7 +224243,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       })]
     });
   });
-},1424,[6,1423,1272,65,618,106,977,702,689],"src/screens/PlayDetail/Horizontal/components/DesktopLyricBtn.tsx");
+},1420,[6,1419,1272,65,618,106,977,702,689],"src/screens/PlayDetail/Horizontal/components/DesktopLyricBtn.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -225492,7 +224318,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       borderRadius: 4
     }
   });
-},1425,[6,7,65,15,1075,688,106,1165,1064,1074,716,1426,1418,1421,680,543],"src/screens/PlayDetail/Horizontal/Pic.tsx");
+},1421,[6,7,65,15,1075,688,106,1165,1064,1074,716,1422,1414,1417,680,543],"src/screens/PlayDetail/Horizontal/Pic.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
     value: true
@@ -225500,7 +224326,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   exports.marginLeftRaw = exports.marginLeft = void 0;
   var marginLeftRaw = exports.marginLeftRaw = 15;
   var marginLeft = exports.marginLeft = (0, _$$_REQUIRE(_dependencyMap[0], "../../../utils/pixelRatio").scaleSizeW)(marginLeftRaw);
-},1426,[681],"src/screens/PlayDetail/Horizontal/constant.ts");
+},1422,[681],"src/screens/PlayDetail/Horizontal/constant.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -225840,7 +224666,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       // paddingBottom: 5,
     }
   });
-},1427,[6,13,65,15,704,1400,106,966,977,681,967,1262,1401,543],"src/screens/PlayDetail/Horizontal/Lyric.tsx");
+},1423,[6,13,65,15,704,1396,106,966,977,681,967,1262,1397,543],"src/screens/PlayDetail/Horizontal/Lyric.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -225870,7 +224696,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       // backgroundColor: 'rgba(0,0,0,0.1)',
     }
   });
-},1428,[6,65,15,1429,1431,106,680,543,1426],"src/screens/PlayDetail/Horizontal/Player/index.tsx");
+},1424,[6,65,15,1425,1427,106,680,543,1422],"src/screens/PlayDetail/Horizontal/Player/index.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -226003,7 +224829,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   //     paddingRight: 5,
   //   },
   // })
-},1429,[6,65,15,1357,1430,967,106,966,1165,705,543],"src/screens/PlayDetail/Horizontal/Player/PlayInfo.tsx");
+},1425,[6,65,15,1354,1426,967,106,966,1165,705,543],"src/screens/PlayDetail/Horizontal/Player/PlayInfo.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -226032,7 +224858,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   //     fontSize: 10,
   //   },
   // })
-},1430,[6,967,106,1165],"src/screens/PlayDetail/Horizontal/Player/Status.tsx");
+},1426,[6,967,106,1165],"src/screens/PlayDetail/Horizontal/Player/Status.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
     value: true
@@ -226143,7 +224969,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       // marginLeft: 10,
     }
   });
-},1431,[15,106,966,983,1032,1165,1418,1064,1426],"src/screens/PlayDetail/Horizontal/Player/ControlBtn.tsx");
+},1427,[15,106,966,983,1032,1165,1414,1064,1422],"src/screens/PlayDetail/Horizontal/Player/ControlBtn.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -226193,7 +225019,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   //     flex: 1,
   //   },
   // })
-},1432,[6,65,1433,1061,1090,1353,106,689,680,1437],"src/screens/SonglistDetail/index.tsx");
+},1428,[6,65,1429,1061,1090,1350,106,689,680,1434],"src/screens/SonglistDetail/index.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -226335,7 +225161,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       // progressViewOffset={}
     });
   });
-},1433,[6,13,65,1111,1010,1434,106,1437,1009,1438],"src/screens/SonglistDetail/MusicList.tsx");
+},1429,[6,13,65,1111,1010,1430,106,1434,1009,1435],"src/screens/SonglistDetail/MusicList.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -226517,7 +225343,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       borderBottomRightRadius: 4
     }
   });
-},1434,[6,7,65,15,1435,967,1075,106,681,969,1437,716,680,1074,966,543,1076],"src/screens/SonglistDetail/Header.tsx");
+},1430,[6,7,65,15,1431,967,1075,106,681,969,1434,716,680,1074,966,543,1076],"src/screens/SonglistDetail/Header.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -226628,7 +225454,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       textAlign: 'center'
     }
   });
-},1435,[6,65,15,965,688,967,1010,1436,106,966,698,1437,716,1438,1347,543],"src/screens/SonglistDetail/ActionBar.tsx");
+},1431,[6,65,15,965,688,967,1010,1432,106,966,698,1434,716,1435,1433,543],"src/screens/SonglistDetail/ActionBar.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -226760,7 +225586,417 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       borderRadius: 8
     }
   });
-},1436,[6,7,65,15,1120,967,106,966,1347,543],"src/components/DownloadQualityModal.tsx");
+},1432,[6,7,65,15,1120,967,106,966,1433,543],"src/components/DownloadQualityModal.tsx");
+__d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
+  var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.subscribeDownloads = exports.requestStoragePermission = exports.removeTask = exports.getDownloadList = exports.clearCompleted = exports.addDownload = exports.DOWNLOAD_QUALITIES = void 0;
+  var _slicedToArray2 = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[1], "@babel/runtime/helpers/slicedToArray"));
+  var _asyncToGenerator2 = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[2], "@babel/runtime/helpers/asyncToGenerator"));
+  var _reactNativeFs = _interopRequireWildcard(_$$_REQUIRE(_dependencyMap[3], "react-native-fs"));
+  var _reactNative = _$$_REQUIRE(_dependencyMap[4], "react-native");
+  var _state = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[5], "../store/setting/state"));
+  function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function _interopRequireWildcard(e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, default: e }; if (null === e || "object" != typeof e && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (var _t in e) "default" !== _t && {}.hasOwnProperty.call(e, _t) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, _t)) && (i.get || i.set) ? o(f, _t, i) : f[_t] = e[_t]); return f; })(e, t); }
+  /**
+   * download.ts - 歌曲下载核心模块
+   * 下载到公共 Music/LXMusic 目录
+   */
+
+  var DOWNLOAD_QUALITIES = exports.DOWNLOAD_QUALITIES = [{
+    id: '128k',
+    label: '标准 (128k)',
+    ext: 'mp3'
+  }, {
+    id: '192k',
+    label: '高品 (192k)',
+    ext: 'mp3'
+  }, {
+    id: '320k',
+    label: '超高品 (320k)',
+    ext: 'mp3'
+  }, {
+    id: 'ape',
+    label: '无损 APE',
+    ext: 'ape'
+  }, {
+    id: 'flac',
+    label: '无损 FLAC',
+    ext: 'flac'
+  }];
+  var downloadQueue = new Map();
+  var listeners = new Set();
+  var notify = function notify() {
+    var list = Array.from(downloadQueue.values());
+    for (var fn of listeners) fn(list);
+    // 持久化保存
+    saveQueueToFile().catch(function () {});
+  };
+  var QUEUE_FILE = `${_reactNativeFs.default.DocumentDirectoryPath}/lxmusic_download_queue.json`;
+  var saveQueueToFile = /*#__PURE__*/function () {
+    var _ref = (0, _asyncToGenerator2.default)(function* () {
+      var list = Array.from(downloadQueue.values());
+      var data = list.map(function (t) {
+        return {
+          id: t.id,
+          musicInfo: t.musicInfo,
+          quality: t.quality,
+          progress: t.progress,
+          status: t.status,
+          url: t.url,
+          error: t.error,
+          filePath: t.filePath
+        };
+      });
+      yield _reactNativeFs.default.writeFile(QUEUE_FILE, JSON.stringify(data), 'utf8');
+    });
+    return function saveQueueToFile() {
+      return _ref.apply(this, arguments);
+    };
+  }();
+  var loadQueueFromFile = /*#__PURE__*/function () {
+    var _ref2 = (0, _asyncToGenerator2.default)(function* () {
+      try {
+        var exists = yield _reactNativeFs.default.exists(QUEUE_FILE);
+        if (!exists) return;
+        var data = yield _reactNativeFs.default.readFile(QUEUE_FILE, 'utf8');
+        var tasks = JSON.parse(data);
+        downloadQueue.clear();
+        for (var t of tasks) {
+          if (t.status === 'downloading') t.status = 'waiting'; // 重置下载中的任务
+          downloadQueue.set(t.id, t);
+        }
+        notify();
+      } catch (_unused) {}
+    });
+    return function loadQueueFromFile() {
+      return _ref2.apply(this, arguments);
+    };
+  }();
+
+  // 启动时加载
+  loadQueueFromFile().catch(function () {});
+  var getDownloadDir = function getDownloadDir() {
+    var customDir = _state.default.setting['download.dir'];
+    if (customDir && customDir.trim()) {
+      return customDir.trim();
+    }
+    if (_reactNative.Platform.OS === 'android') {
+      return `${_reactNativeFs.default.ExternalStorageDirectoryPath}/Music/LXMusic`;
+    }
+    return `${_reactNativeFs.default.DocumentDirectoryPath}/lxmusic_downloads`;
+  };
+
+  // 打开系统存储管理设置(Android 11+)
+  var openManageStorageSettings = /*#__PURE__*/function () {
+    var _ref3 = (0, _asyncToGenerator2.default)(function* () {
+      try {
+        yield _reactNative.Linking.openURL('package:cn.toside.music.mobile');
+      } catch (_unused2) {
+        yield _reactNative.Linking.openSettings();
+      }
+    });
+    return function openManageStorageSettings() {
+      return _ref3.apply(this, arguments);
+    };
+  }();
+  var requestStoragePermission = exports.requestStoragePermission = /*#__PURE__*/function () {
+    var _ref4 = (0, _asyncToGenerator2.default)(function* () {
+      if (_reactNative.Platform.OS !== 'android') return true;
+      try {
+        if (_reactNative.Platform.Version >= 30) {
+          // 使用 PermissionsAndroid.check 验证 MANAGE_EXTERNAL_STORAGE
+          try {
+            // 尝试使用 RNFS 的 ExternalStorageDirectoryPath
+            var testDir = `${_reactNativeFs.default.ExternalStorageDirectoryPath}/Music/LXMusic`;
+            yield _reactNativeFs.default.mkdir(testDir);
+            var testFile = `${testDir}/.permission_test`;
+            yield _reactNativeFs.default.writeFile(testFile, 'test', 'utf8');
+            yield _reactNativeFs.default.unlink(testFile);
+            return true;
+          } catch (err) {
+            // 写入失败,需要引导用户授权
+            return new Promise(function (resolve) {
+              _reactNative.Alert.alert('需要存储权限', '下载音乐文件需要"所有文件管理"权限,请在系统设置中开启', [{
+                text: '取消',
+                onPress: function onPress() {
+                  return resolve(false);
+                },
+                style: 'cancel'
+              }, {
+                text: '去设置',
+                onPress: function () {
+                  var _onPress = (0, _asyncToGenerator2.default)(function* () {
+                    try {
+                      yield openManageStorageSettings();
+                      setTimeout(function () {
+                        // 再次检查权限
+                        try {
+                          _reactNative.PermissionsAndroid.check(_reactNative.PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE).then(function (granted) {
+                            resolve(granted);
+                          }).catch(function () {
+                            return resolve(false);
+                          });
+                        } catch (_unused3) {
+                          resolve(false);
+                        }
+                      }, 2000);
+                    } catch (_unused4) {
+                      resolve(false);
+                    }
+                  });
+                  function onPress() {
+                    return _onPress.apply(this, arguments);
+                  }
+                  return onPress;
+                }()
+              }]);
+            });
+          }
+        }
+        var granted = yield _reactNative.PermissionsAndroid.request(_reactNative.PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE, {
+          title: '存储权限',
+          message: '下载音乐文件需要存储权限,请允许访问',
+          buttonPositive: '允许',
+          buttonNegative: '拒绝'
+        });
+        if (granted === _reactNative.PermissionsAndroid.RESULTS.GRANTED) return true;
+        return new Promise(function (resolve) {
+          _reactNative.Alert.alert('需要存储权限', '下载音乐文件需要存储权限,请在系统设置中手动开启', [{
+            text: '取消',
+            onPress: function onPress() {
+              return resolve(false);
+            },
+            style: 'cancel'
+          }, {
+            text: '去设置',
+            onPress: function () {
+              var _onPress2 = (0, _asyncToGenerator2.default)(function* () {
+                try {
+                  yield _reactNative.Linking.openSettings();
+                  setTimeout(/*#__PURE__*/(0, _asyncToGenerator2.default)(function* () {
+                    var granted = yield _reactNative.PermissionsAndroid.check(_reactNative.PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE);
+                    resolve(granted);
+                  }), 500);
+                } catch (_unused5) {
+                  resolve(false);
+                }
+              });
+              function onPress() {
+                return _onPress2.apply(this, arguments);
+              }
+              return onPress;
+            }()
+          }]);
+        });
+      } catch (_unused6) {
+        return false;
+      }
+    });
+    return function requestStoragePermission() {
+      return _ref4.apply(this, arguments);
+    };
+  }();
+  var addDownload = exports.addDownload = /*#__PURE__*/function () {
+    var _ref6 = (0, _asyncToGenerator2.default)(function* (musicInfo) {
+      var quality = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '320k';
+      var queueKey = `${musicInfo.id}_${quality}`;
+      if (downloadQueue.has(queueKey)) {
+        (0, _$$_REQUIRE(_dependencyMap[6], "../utils/tools").toast)('已在下载队列中');
+        return;
+      }
+      var task = {
+        id: queueKey,
+        musicInfo: musicInfo,
+        quality: quality,
+        progress: 0,
+        status: 'waiting'
+      };
+      downloadQueue.set(queueKey, task);
+      notify();
+      var qualityInfo = DOWNLOAD_QUALITIES.find(function (q) {
+        return q.id === quality;
+      });
+      (0, _$$_REQUIRE(_dependencyMap[6], "../utils/tools").toast)(`开始下载: ${musicInfo.name} (${(qualityInfo == null ? void 0 : qualityInfo.label) || quality})`);
+      startDownload(task).catch(function (err) {
+        console.error('Download error:', err);
+        (0, _$$_REQUIRE(_dependencyMap[6], "../utils/tools").toast)(`下载失败: ${musicInfo.name}`);
+      });
+    });
+    return function addDownload(_x) {
+      return _ref6.apply(this, arguments);
+    };
+  }();
+  var startDownload = /*#__PURE__*/function () {
+    var _ref7 = (0, _asyncToGenerator2.default)(function* (task) {
+      try {
+        task.status = 'downloading';
+        task.progress = 0;
+        notify();
+        var hasPermission = yield requestStoragePermission();
+        if (!hasPermission) {
+          throw new Error('未获得存储权限,请在设置中开启');
+        }
+        var url = yield (0, _$$_REQUIRE(_dependencyMap[7], "./music").getMusicUrl)({
+          musicInfo: task.musicInfo,
+          quality: task.quality
+        });
+        if (!url) {
+          throw new Error('无法获取下载链接');
+        }
+        task.url = url;
+        notify();
+        var qualityInfo = DOWNLOAD_QUALITIES.find(function (q) {
+          return q.id === task.quality;
+        });
+        var ext = (qualityInfo == null ? void 0 : qualityInfo.ext) || 'mp3';
+        var safeName = (task.musicInfo.name || 'unknown').replace(/[\\/:*?"<>|]/g, '_');
+        var safeSinger = (task.musicInfo.singer || 'unknown').replace(/[\\/:*?"<>|]/g, '_');
+        var fileName = `${safeName} - ${safeSinger}.${ext}`;
+        var downloadDir = getDownloadDir();
+        yield _reactNativeFs.default.mkdir(downloadDir);
+        var filePath = `${downloadDir}/${fileName}`;
+        task.filePath = filePath;
+
+        // 文件存在冲突检测
+        if (yield _reactNativeFs.default.exists(filePath)) {
+          var conflictAction = _state.default.setting['download.conflictAction'] || 'overwrite';
+          if (conflictAction === 'skip') {
+            task.status = 'completed';
+            task.progress = 1;
+            task.filePath = filePath;
+            notify();
+            (0, _$$_REQUIRE(_dependencyMap[6], "../utils/tools").toast)(`已跳过: ${task.musicInfo.name} (文件已存在)`);
+            return;
+          } else {
+            // overwrite - 删除旧文件重新下载
+            yield _reactNativeFs.default.unlink(filePath);
+          }
+        }
+        var result = _reactNativeFs.default.downloadFile({
+          fromUrl: url,
+          toFile: filePath,
+          progress: function progress(res) {
+            // 处理 contentLength 为 -1 或 0 的情况
+            if (res.contentLength > 0) {
+              task.progress = res.bytesWritten / res.contentLength;
+            } else {
+              // 如果无法获取总长度,至少显示已下载字节数
+              task.progress = Math.min(0.99, res.bytesWritten / (1024 * 1024 * 10)); // 假设 10MB
+            }
+            notify();
+          },
+          progressInterval: 200 // 每 200ms 更新一次进度
+        });
+        yield result.promise;
+
+        // 下载完成后验证文件存在
+        var exists = yield _reactNativeFs.default.exists(filePath);
+        if (!exists) {
+          throw new Error('下载文件不存在');
+        }
+        task.status = 'completed';
+        task.progress = 1;
+        notify();
+        // 写入 ID3 标签(封面、歌词、元数据)
+        writeId3Tags(task).catch(function (err) {
+          console.warn('[Download] ID3 write warning:', err);
+        });
+        (0, _$$_REQUIRE(_dependencyMap[6], "../utils/tools").toast)(`下载完成: ${task.musicInfo.name}`);
+      } catch (err) {
+        task.status = 'failed';
+        task.error = err.message || String(err);
+        task.progress = 0;
+        notify();
+        (0, _$$_REQUIRE(_dependencyMap[6], "../utils/tools").toast)(`下载失败: ${task.musicInfo.name} - ${err.message || '未知错误'}`);
+      }
+    });
+    return function startDownload(_x2) {
+      return _ref7.apply(this, arguments);
+    };
+  }();
+  var writeId3Tags = /*#__PURE__*/function () {
+    var _ref8 = (0, _asyncToGenerator2.default)(function* (task) {
+      try {
+        if (!task.filePath) return;
+        var musicInfo = task.musicInfo;
+        var filePath = task.filePath;
+
+        // 1. 写入元数据(标题、艺术家)
+        try {
+          yield (0, _$$_REQUIRE(_dependencyMap[8], "react-native-local-media-metadata").writeMetadata)(filePath, {
+            name: musicInfo.name || 'Unknown',
+            singer: musicInfo.singer || 'Unknown',
+            albumName: musicInfo.album || ''
+          }, true);
+        } catch (_unused7) {}
+
+        // 2. 写入封面图片
+        try {
+          var picUrl = yield (0, _$$_REQUIRE(_dependencyMap[9], "./music/online").getPicUrl)({
+            musicInfo: musicInfo,
+            isRefresh: false,
+            allowToggleSource: false
+          }).catch(function () {
+            return null;
+          });
+          if (picUrl) {
+            var picPath = `${_reactNativeFs.temporaryDirectoryPath}/lx_dl_cover_${Date.now()}.jpg`;
+            yield _reactNativeFs.default.downloadFile({
+              fromUrl: picUrl,
+              toFile: picPath
+            }).promise;
+            yield (0, _$$_REQUIRE(_dependencyMap[8], "react-native-local-media-metadata").writePic)(filePath, picPath);
+            // 清理临时文件
+            _reactNativeFs.default.unlink(picPath).catch(function () {});
+          }
+        } catch (_unused8) {}
+
+        // 3. 写入歌词
+        try {
+          var lyricInfo = yield (0, _$$_REQUIRE(_dependencyMap[9], "./music/online").getLyricInfo)({
+            musicInfo: musicInfo,
+            isRefresh: false,
+            allowToggleSource: false
+          }).catch(function () {
+            return null;
+          });
+          if (lyricInfo && lyricInfo.lyric) {
+            yield (0, _$$_REQUIRE(_dependencyMap[8], "react-native-local-media-metadata").writeLyric)(filePath, lyricInfo.lyric);
+          }
+        } catch (_unused9) {}
+      } catch (err) {
+        console.warn('[Download] ID3 write error:', err);
+      }
+    });
+    return function writeId3Tags(_x3) {
+      return _ref8.apply(this, arguments);
+    };
+  }();
+  var subscribeDownloads = exports.subscribeDownloads = function subscribeDownloads(fn) {
+    listeners.add(fn);
+    return function () {
+      return listeners.delete(fn);
+    };
+  };
+  var getDownloadList = exports.getDownloadList = function getDownloadList() {
+    return Array.from(downloadQueue.values());
+  };
+  var clearCompleted = exports.clearCompleted = function clearCompleted() {
+    for (var _ref9 of downloadQueue) {
+      var _ref0 = (0, _slicedToArray2.default)(_ref9, 2);
+      var k = _ref0[0];
+      var v = _ref0[1];
+      if (v.status === 'completed') downloadQueue.delete(k);
+    }
+    notify();
+  };
+  var removeTask = exports.removeTask = function removeTask(id) {
+    downloadQueue.delete(id);
+    notify();
+  };
+},1433,[6,7,13,668,15,618,543,985,995,987],"src/core/download.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
     value: true
@@ -226776,7 +226012,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   var useListInfo = exports.useListInfo = function useListInfo() {
     return (0, _react.useContext)(ListInfoContext);
   };
-},1437,[65],"src/screens/SonglistDetail/state.ts");
+},1434,[65],"src/screens/SonglistDetail/state.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -226850,7 +226086,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       return _ref2.apply(this, arguments);
     };
   }();
-},1438,[6,41,13,991,1016,1009,989,983,680,543],"src/screens/SonglistDetail/listAction.ts");
+},1435,[6,41,13,991,1016,1009,989,983,680,543],"src/screens/SonglistDetail/listAction.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -227121,7 +226357,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       overflow: 'hidden'
     }
   });
-},1439,[6,7,65,15,1348,1440,1441,1448,967,1061,704,106,681,966,698,689,680,543,1032,1076],"src/screens/Comment/index.tsx");
+},1436,[6,7,65,15,1345,1437,1438,1445,967,1061,704,106,681,966,698,689,680,543,1032,1076],"src/screens/Comment/index.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -227196,7 +226432,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       paddingRight: 4
     }
   });
-},1440,[6,65,15,1090,967,688,106,681,680,698,1074,716,1032,543],"src/screens/Comment/components/Header.tsx");
+},1437,[6,65,15,1090,967,688,106,681,680,698,1074,716,1032,543],"src/screens/Comment/components/Header.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -227335,7 +226571,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       onRefresh: handleListRefresh
     });
   };
-},1441,[6,41,13,65,548,1442,106,1447],"src/screens/Comment/CommentHot.tsx");
+},1438,[6,41,13,65,548,1439,106,1444],"src/screens/Comment/CommentHot.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -227481,7 +226717,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     }
   });
   var _default = exports.default = List;
-},1442,[6,7,65,15,1443,967,106,966,698,543],"src/screens/Comment/components/List.tsx");
+},1439,[6,7,65,15,1440,967,106,966,698,543],"src/screens/Comment/components/List.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -227671,7 +226907,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     }
   });
   var _default = exports.default = CommentFloor;
-},1443,[6,7,65,15,967,1075,1444,1445,106,681,966,1064,698,1032,1076,1446,543],"src/screens/Comment/components/CommentFloor.tsx");
+},1440,[6,7,65,15,967,1075,1441,1442,106,681,966,1064,698,1032,1076,1443,543],"src/screens/Comment/components/CommentFloor.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -227769,7 +227005,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       borderStyle: 'dashed'
     }
   });
-},1444,[6,7,65,15,1075,967,106,681,966,1076,543],"src/screens/Comment/components/CommentImage.tsx");
+},1441,[6,7,65,15,1075,967,106,681,966,1076,543],"src/screens/Comment/components/CommentImage.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -227850,7 +227086,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       alignSelf: 'flex-end'
     }
   });
-},1445,[6,7,65,15,967,106,966,543],"src/screens/Comment/components/CommentText.tsx");
+},1442,[6,7,65,15,967,106,966,543],"src/screens/Comment/components/CommentText.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   module.exports = _$$_REQUIRE(_dependencyMap[0], "react-native/Libraries/Image/AssetRegistry").registerAsset({
     "__packager_asset": true,
@@ -227862,7 +227098,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     "name": "defaultUser",
     "type": "jpg"
   });
-},1446,[463],"src/resources/images/defaultUser.jpg");
+},1443,[463],"src/resources/images/defaultUser.jpg");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -227914,7 +227150,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       return true;
     });
   };
-},1447,[6,13,548,572],"src/screens/Comment/utils.ts");
+},1444,[6,13,548,572],"src/screens/Comment/utils.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -228054,7 +227290,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       onRefresh: handleListRefresh
     });
   };
-},1448,[6,41,13,65,548,1442,106,1447],"src/screens/Comment/CommentNew.tsx");
+},1445,[6,41,13,65,548,1439,106,1444],"src/screens/Comment/CommentNew.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -228435,7 +227671,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       alignItems: 'center'
     }
   });
-},1449,[6,13,41,7,65,15,967,1090,704,106,966,1165,977,680,1385,716,543,983,981,994,989,1032],"src/screens/PlayQueue/index.tsx");
+},1446,[6,13,41,7,65,15,967,1090,704,106,966,1165,977,680,1381,716,543,983,981,994,989,1032],"src/screens/PlayQueue/index.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
     value: true
@@ -228456,7 +227692,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       modalDismissedListener = null;
     };
   };
-},1450,[720],"src/navigation/event.ts");
+},1447,[720],"src/navigation/event.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
     value: true
@@ -228518,7 +227754,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       };
     }, [callback, componentId]);
   };
-},1451,[65,720],"src/navigation/hooks.ts");
+},1448,[65,720],"src/navigation/hooks.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
     value: true
@@ -228543,7 +227779,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       });
     }
   };
-},1452,[720],"src/navigation/regLaunchedEvent.ts");
+},1449,[720],"src/navigation/regLaunchedEvent.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -228915,7 +228151,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   var createListEventHub = exports.createListEventHub = function createListEventHub() {
     return new ListEvent();
   };
-},1453,[6,41,18,19,23,25,28,13,687,991,695,989,680,694],"src/event/listEvent.ts");
+},1450,[6,41,18,19,23,25,28,13,687,991,695,989,680,694],"src/event/listEvent.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -229021,7 +228257,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   var createDislikeEventHub = exports.createDislikeEventHub = function createDislikeEventHub() {
     return new DislikeEvent();
   };
-},1454,[6,18,19,23,25,28,13,687,695,1005,1006],"src/event/dislikeEvent.ts");
+},1451,[6,18,19,23,25,28,13,687,695,1005,1006],"src/event/dislikeEvent.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -229188,7 +228424,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   var createStateEventHub = exports.createStateEventHub = function createStateEventHub() {
     return new StateEvent();
   };
-},1455,[6,18,19,23,25,28,687],"src/event/stateEvent.ts");
+},1452,[6,18,19,23,25,28,687],"src/event/stateEvent.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
     value: true
@@ -229206,7 +228442,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   var getBootLog = exports.getBootLog = function getBootLog() {
     return logs.join('\n');
   };
-},1456,[],"src/utils/bootLog.ts");
+},1453,[],"src/utils/bootLog.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -229277,7 +228513,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     isInited || (isInited = true);
     return handlePushedHomeScreen;
   });
-},1457,[6,13,1458,1459,1460,1461,1463,1472,1473,1474,696,618,543,973,978,689,1456,1232],"src/core/init/index.ts");
+},1454,[6,13,1455,1456,1457,1458,1460,1469,1470,1471,696,618,543,973,978,689,1453,1232],"src/core/init/index.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -229520,7 +228756,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     });
     global.lx.playerStatus.isRegisteredService = true;
   };
-},1458,[6,13,708,689,983,706,707],"src/plugins/player/service.ts");
+},1455,[6,13,708,689,983,706,707],"src/plugins/player/service.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -229563,7 +228799,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       return _ref.apply(this, arguments);
     };
   }();
-},1459,[6,13,618,1090,543,1220,1079],"src/core/init/theme.ts");
+},1456,[6,13,618,1090,543,1220,1079],"src/core/init/theme.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -229592,7 +228828,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       return _ref.apply(this, arguments);
     };
   }();
-},1460,[6,13,697,543,689],"src/core/init/i18n.ts");
+},1457,[6,13,697,543,689],"src/core/init/i18n.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -229894,7 +229130,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       return _ref.apply(this, arguments);
     };
   }();
-},1461,[6,7,13,618,552,1462,1027,1021,543,695],"src/core/init/userApi/index.ts");
+},1458,[6,7,13,618,552,1459,1027,1021,543,695],"src/core/init/userApi/index.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -230043,7 +229279,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       }
     };
   };
-},1462,[6,7,166,13,552],"src/core/init/userApi/request.js");
+},1459,[6,7,166,13,552],"src/core/init/userApi/request.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -230074,7 +229310,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       return _ref.apply(this, arguments);
     };
   }();
-},1463,[6,13,1464,1465,1466,1467,1468,1469,1470,1471],"src/core/init/player/index.ts");
+},1460,[6,13,1461,1462,1463,1464,1465,1466,1467,1468],"src/core/init/player/index.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -230138,7 +229374,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       return _ref.apply(this, arguments);
     };
   }();
-},1464,[6,13,704,618,984,983,705,707,998],"src/core/init/player/player.ts");
+},1461,[6,13,704,618,984,983,705,707,998],"src/core/init/player/player.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -230187,7 +229423,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       return _ref.apply(this, arguments);
     };
   }();
-},1465,[6,13,695,989,983],"src/core/init/player/playInfo.ts");
+},1462,[6,13,695,989,983],"src/core/init/player/playInfo.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -230274,7 +229510,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       setButtons();
     });
   };
-},1466,[6,13,704,705],"src/core/init/player/playStatus.ts");
+},1463,[6,13,704,705],"src/core/init/player/playStatus.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -230404,7 +229640,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     global.app_event.on('playerError', handleError);
     global.app_event.on('musicToggled', handleSetPlayInfo);
   };
-},1467,[6,552,704,983,984,705,997,543],"src/core/init/player/playerEvent.ts");
+},1464,[6,552,704,983,984,705,997,543],"src/core/init/player/playerEvent.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -230446,7 +229682,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     global.app_event.on('myListMusicUpdate', handleListChange);
     global.app_event.on('downloadListUpdate', handleDownloadListChange);
   };
-},1468,[6,704,543,996,983],"src/core/init/player/watchList.ts");
+},1465,[6,704,543,996,983],"src/core/init/player/watchList.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -230614,7 +229850,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     global.state_event.on('configUpdated', handleConfigUpdated);
     (0, _$$_REQUIRE(_dependencyMap[12], "../../../utils/nativeModules/utils").onScreenStateChange)(handleScreenStateChanged);
   };
-},1469,[6,13,552,704,618,15,543,695,705,997,989,575,666],"src/core/init/player/playProgress.ts");
+},1466,[6,13,552,704,618,15,543,695,705,997,989,575,666],"src/core/init/player/playProgress.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -230700,7 +229936,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     global.state_event.on('configUpdated', handleConfigUpdated);
     global.state_event.on('playProgressChanged', handlePlayProgressChanged);
   };
-},1470,[6,7,13,704,983,985,706,551],"src/core/init/player/preloadNextMusic.ts");
+},1467,[6,7,13,704,983,985,706,551],"src/core/init/player/preloadNextMusic.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -230776,7 +230012,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       return _ref2.apply(this, arguments);
     };
   }();
-},1471,[6,13,704,996,706,1261,702,689],"src/core/init/player/lyric.ts");
+},1468,[6,13,704,996,706,1261,702,689],"src/core/init/player/lyric.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -230815,7 +230051,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       return _ref.apply(this, arguments);
     };
   }();
-},1472,[6,13,548,1456,989,1005,689,695,667,543],"src/core/init/dataInit.ts");
+},1469,[6,13,548,1453,989,1005,689,695,667,543],"src/core/init/dataInit.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -230840,7 +230076,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       return _ref.apply(this, arguments);
     };
   }();
-},1473,[6,13,1326,689,1307],"src/core/init/sync.ts");
+},1470,[6,13,1326,689,1307],"src/core/init/sync.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -230920,7 +230156,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       return _ref.apply(this, arguments);
     };
   }();
-},1474,[6,13,704,1062,689],"src/core/init/common.ts");
+},1471,[6,13,704,1062,689],"src/core/init/common.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -231025,7 +230261,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     isCarKeyListening: isCarKeyListening,
     isAvailable: isAvailable
   };
-},1475,[6,13,15,983],"src/plugins/carkey/index.ts");
+},1472,[6,13,15,983],"src/plugins/carkey/index.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -231145,6 +230381,6 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     isAvailable: isAvailable,
     getExternalPaths: getExternalPaths
   };
-},1476,[6,13,15,543,994,989],"src/plugins/usb/index.ts");
+},1473,[6,13,15,543,994,989],"src/plugins/usb/index.ts");
 __r(69);
 __r(0);

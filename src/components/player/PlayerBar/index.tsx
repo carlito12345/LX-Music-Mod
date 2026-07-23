@@ -4,7 +4,6 @@ import { useKeyboard } from '@/utils/hooks'
 
 import Pic from './components/Pic'
 import Title from './components/Title'
-import { useBgPic } from '@/store/common/hook'
 import PlayInfo from './components/PlayInfo'
 import ControlBtn from './components/ControlBtn'
 import { createStyle } from '@/utils/tools'
@@ -18,15 +17,9 @@ export default memo(({ isHome = false }: { isHome?: boolean }) => {
   const { keyboardShown } = useKeyboard()
   const theme = useTheme()
   const autoHidePlayBar = useSettingValue('common.autoHidePlayBar')
-  const bgPic = useBgPic()
 
   const playerComponent = useMemo(() => (
-    <View style={{
-      ...styles.container,
-      backgroundColor: bgPic ? 'rgba(0,0,0,0.3)' : theme['c-content-background'],
-      borderColor: theme['c-border-background'],
-      shadowColor: theme['c-primary-dark-1000-alpha-300'],
-    }}>
+    <View style={{ ...styles.container, backgroundColor: theme['c-content-background'] }}>
       <Pic isHome={isHome} />
       <View style={styles.center}>
         <Title isHome={isHome} />
@@ -49,23 +42,21 @@ export default memo(({ isHome = false }: { isHome?: boolean }) => {
 
 const styles = createStyle({
   container: {
-    width: 'auto',
-    marginHorizontal: 6,
-    marginTop: 4,
-    marginBottom: 4,
-    paddingVertical: 6,
-    paddingLeft: 8,
-    borderRadius: 14,
-    borderWidth: 0.5,
+    width: '100%',
+    // height: 100,
+    // paddingTop: progressContentPadding,
+    // marginTop: -progressContentPadding,
+    // backgroundColor: 'rgba(0, 0, 0, .1)',
+    // borderTopWidth: BorderWidths.normal2,
+    paddingVertical: 5,
+    paddingLeft: 5,
+    // backgroundColor: AppColors.primary,
+    // backgroundColor: 'red',
+    borderTopLeftRadius: 6,
+    borderTopRightRadius: 6,
     flexDirection: 'row',
     alignItems: 'center',
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowOpacity: 0.15,
-    shadowRadius: 8,
-    elevation: 3,
+    elevation: 10,
   },
   left: {
     // borderRadius: 3,
@@ -76,7 +67,7 @@ const styles = createStyle({
     flexDirection: 'column',
     flexGrow: 1,
     flexShrink: 1,
-    paddingLeft: 8,
+    paddingLeft: 5,
     height: '100%',
     // justifyContent: 'space-evenly',
     // height: 48,
@@ -87,8 +78,8 @@ const styles = createStyle({
     alignItems: 'center',
     flexGrow: 0,
     flexShrink: 0,
-    paddingLeft: 6,
-    paddingRight: 8,
+    paddingLeft: 5,
+    paddingRight: 5,
   },
   // row: {
   //   flexDirection: 'row',
