@@ -4,6 +4,7 @@ import { useKeyboard } from '@/utils/hooks'
 
 import Pic from './components/Pic'
 import Title from './components/Title'
+import { useBgPic } from '@/store/common/hook'
 import PlayInfo from './components/PlayInfo'
 import ControlBtn from './components/ControlBtn'
 import { createStyle } from '@/utils/tools'
@@ -17,11 +18,12 @@ export default memo(({ isHome = false }: { isHome?: boolean }) => {
   const { keyboardShown } = useKeyboard()
   const theme = useTheme()
   const autoHidePlayBar = useSettingValue('common.autoHidePlayBar')
+  const bgPic = useBgPic()
 
   const playerComponent = useMemo(() => (
     <View style={{
       ...styles.container,
-      backgroundColor: theme['c-content-background'],
+      backgroundColor: bgPic ? 'rgba(0,0,0,0.3)' : theme['c-content-background'],
       borderColor: theme['c-border-background'],
       shadowColor: theme['c-primary-dark-1000-alpha-300'],
     }}>

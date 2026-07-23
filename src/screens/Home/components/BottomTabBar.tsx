@@ -1,8 +1,9 @@
-import { memo } from 'react'
+import { memo, useMemo } from 'react'
 import { TouchableOpacity, View } from 'react-native'
 import { NAV_MENUS } from '@/config/constant'
 import { setNavActiveId } from '@/core/common'
 import { useI18n } from '@/lang'
+import { useBgPic } from '@/store/common/hook'
 import { useNavActiveId } from '@/store/common/hook'
 import { useTheme } from '@/store/theme/hook'
 import { Icon } from '@/components/common/Icon'
@@ -57,12 +58,13 @@ const TabItem = ({ id, icon }: TabItemProps) => {
 
 export default memo(() => {
   const theme = useTheme()
+  const bgPic = useBgPic()
   return (
     <View style={[
       styles.container,
       {
         borderTopColor: theme['c-border-background'],
-        backgroundColor: theme['c-content-background'],
+        backgroundColor: bgPic ? 'rgba(0,0,0,0.3)' : theme['c-content-background'],
       },
     ]}>
       {NAV_MENUS.map(item => <TabItem key={item.id} id={item.id} icon={item.icon} />)}

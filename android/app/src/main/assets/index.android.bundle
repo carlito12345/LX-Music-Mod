@@ -218073,10 +218073,11 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       keyboardShown = _useKeyboard.keyboardShown;
     var theme = (0, _$$_REQUIRE(_dependencyMap[9], "../../../store/theme/hook").useTheme)();
     var autoHidePlayBar = (0, _$$_REQUIRE(_dependencyMap[10], "../../../store/setting/hook").useSettingValue)('common.autoHidePlayBar');
+    var bgPic = (0, _$$_REQUIRE(_dependencyMap[11], "../../../store/common/hook").useBgPic)();
     var playerComponent = (0, _react.useMemo)(function () {
       return /*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.View, {
         style: Object.assign({}, styles.container, {
-          backgroundColor: theme['c-content-background'],
+          backgroundColor: bgPic ? 'rgba(0,0,0,0.3)' : theme['c-content-background'],
           borderColor: theme['c-border-background'],
           shadowColor: theme['c-primary-dark-1000-alpha-300']
         }),
@@ -218100,7 +218101,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
 
     return autoHidePlayBar && keyboardShown ? null : playerComponent;
   });
-  var styles = (0, _$$_REQUIRE(_dependencyMap[11], "../../../utils/tools").createStyle)({
+  var styles = (0, _$$_REQUIRE(_dependencyMap[12], "../../../utils/tools").createStyle)({
     container: {
       width: 'auto',
       marginHorizontal: 6,
@@ -218149,7 +218150,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     //   flexShrink: 0,
     // },
   });
-},1354,[6,65,15,1355,1356,1357,1360,106,1064,966,977,543],"src/components/player/PlayerBar/index.tsx");
+},1354,[6,65,15,1355,1356,1357,1360,106,1064,966,977,1074,543],"src/components/player/PlayerBar/index.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -218797,10 +218798,11 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   };
   var _default = exports.default = (0, _react.memo)(function () {
     var theme = (0, _$$_REQUIRE(_dependencyMap[5], "../../../store/theme/hook").useTheme)();
+    var bgPic = (0, _$$_REQUIRE(_dependencyMap[7], "../../../store/common/hook").useBgPic)();
     return /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.View, {
       style: [styles.container, {
         borderTopColor: theme['c-border-background'],
-        backgroundColor: theme['c-content-background']
+        backgroundColor: bgPic ? 'rgba(0,0,0,0.3)' : theme['c-content-background']
       }],
       children: _$$_REQUIRE(_dependencyMap[10], "../../../config/constant").NAV_MENUS.map(function (item) {
         return /*#__PURE__*/(0, _jsxRuntime.jsx)(TabItem, {
@@ -226214,7 +226216,16 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
     return /*#__PURE__*/(0, _jsxRuntime.jsxs)(_PageContent.default, {
-      children: [/*#__PURE__*/(0, _jsxRuntime.jsx)(_StatusBar.default, {}), /*#__PURE__*/(0, _jsxRuntime.jsx)(_$$_REQUIRE(_dependencyMap[9], "./state").ListInfoContext.Provider, {
+      children: [bgPic ? /*#__PURE__*/(0, _jsxRuntime.jsx)(View, {
+        style: {
+          position: 'absolute',
+          left: 0,
+          right: 0,
+          top: 0,
+          bottom: 0,
+          backgroundColor: 'rgba(0,0,0,0.3)'
+        }
+      }) : null, /*#__PURE__*/(0, _jsxRuntime.jsx)(_StatusBar.default, {}), /*#__PURE__*/(0, _jsxRuntime.jsx)(_$$_REQUIRE(_dependencyMap[9], "./state").ListInfoContext.Provider, {
         value: info,
         children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_MusicList.default, {
           ref: musicListRef,
