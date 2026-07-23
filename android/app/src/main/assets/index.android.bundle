@@ -226205,10 +226205,9 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   exports.default = void 0;
   var _react = _$$_REQUIRE(_dependencyMap[1], "react");
   var _MusicList = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[2], "./MusicList"));
-  var _PageContent = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[3], "../../components/PageContent"));
-  var _StatusBar = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[4], "../../components/common/StatusBar"));
-  var _PlayerBar = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[5], "../../components/player/PlayerBar"));
-  var _jsxRuntime = _$$_REQUIRE(_dependencyMap[6], "react/jsx-runtime");
+  var _StatusBar = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[3], "../../components/common/StatusBar"));
+  var _PlayerBar = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[4], "../../components/player/PlayerBar"));
+  var _jsxRuntime = _$$_REQUIRE(_dependencyMap[5], "react/jsx-runtime");
   var _this = this,
     _jsxFileName = "/data/data/com.termux/files/home/lx-music-mobile/src/screens/SonglistDetail/index.tsx";
   var _default = exports.default = function _default(_ref) {
@@ -226216,10 +226215,10 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       info = _ref.info;
     var musicListRef = (0, _react.useRef)(null);
     var isUnmountedRef = (0, _react.useRef)(false);
-    var bgPic = (0, _$$_REQUIRE(_dependencyMap[7], "../../store/common/hook").useBgPic)();
+    var bgPic = useBgPic();
     (0, _react.useEffect)(function () {
       var _musicListRef$current;
-      (0, _$$_REQUIRE(_dependencyMap[8], "../../core/common").setComponentId)(_$$_REQUIRE(_dependencyMap[9], "../../config/constant").COMPONENT_IDS.songlistDetail, componentId);
+      (0, _$$_REQUIRE(_dependencyMap[6], "../../core/common").setComponentId)(_$$_REQUIRE(_dependencyMap[7], "../../config/constant").COMPONENT_IDS.songlistDetail, componentId);
       isUnmountedRef.current = false;
       (_musicListRef$current = musicListRef.current) == null ? void 0 : _musicListRef$current.loadList(info.source, info.id);
       return function () {
@@ -226227,17 +226226,12 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       };
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-    return /*#__PURE__*/(0, _jsxRuntime.jsxs)(_PageContent.default, {
-      children: [bgPic ? /*#__PURE__*/(0, _jsxRuntime.jsx)(View, {
-        style: {
-          position: 'absolute',
-          left: 0,
-          right: 0,
-          top: 0,
-          bottom: 0,
-          backgroundColor: 'rgba(0,0,0,0.3)'
-        }
-      }) : null, /*#__PURE__*/(0, _jsxRuntime.jsx)(_StatusBar.default, {}), /*#__PURE__*/(0, _jsxRuntime.jsx)(_$$_REQUIRE(_dependencyMap[10], "./state").ListInfoContext.Provider, {
+    return /*#__PURE__*/(0, _jsxRuntime.jsxs)(View, {
+      style: {
+        flex: 1,
+        backgroundColor: theme['c-content-background']
+      },
+      children: [/*#__PURE__*/(0, _jsxRuntime.jsx)(_StatusBar.default, {}), /*#__PURE__*/(0, _jsxRuntime.jsx)(_$$_REQUIRE(_dependencyMap[8], "./state").ListInfoContext.Provider, {
         value: info,
         children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_MusicList.default, {
           ref: musicListRef,
@@ -226256,7 +226250,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   //     flex: 1,
   //   },
   // })
-},1433,[6,65,1434,1061,1090,1354,106,1074,689,680,1437],"src/screens/SonglistDetail/index.tsx");
+},1433,[6,65,1434,1090,1354,106,689,680,1437],"src/screens/SonglistDetail/index.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
