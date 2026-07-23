@@ -2981,9 +2981,8 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
             var settingState = _$$_REQUIRE(_dependencyMap[14], "./store/setting/state").default;
             if (!settingState.setting['common.guideDone']) {
               setTimeout(function () {
-                var _require = _$$_REQUIRE(_dependencyMap[15], "./navigation/navigation"),
-                  navigations = _require.navigations;
-                navigations.pushGuideScreen('');
+                var nav = _$$_REQUIRE(_dependencyMap[15], "./navigation/navigation");
+                if (nav.pushGuideScreen) nav.pushGuideScreen('');
               }, 1000);
             }
           } catch (_unused) {}

@@ -37,8 +37,8 @@ void Promise.all([getFontSize(), windowSizeTools.init()]).then(async([fontSize])
       const settingState = require('@/store/setting/state').default
       if (!settingState.setting['common.guideDone']) {
         setTimeout(() => {
-          const { navigations } = require('@/navigation/navigation')
-          navigations.pushGuideScreen('')
+          const nav = require('@/navigation/navigation')
+          if (nav.pushGuideScreen) nav.pushGuideScreen('')
         }, 1000)
       }
     } catch {}
