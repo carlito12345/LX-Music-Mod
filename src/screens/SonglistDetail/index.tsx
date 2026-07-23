@@ -1,10 +1,12 @@
 import { useEffect, useRef } from 'react'
 
 import MusicList, { type MusicListType } from './MusicList'
+import PageContent from '@/components/PageContent'
 import StatusBar from '@/components/common/StatusBar'
 import { setComponentId } from '@/core/common'
 import { COMPONENT_IDS } from '@/config/constant'
 import { type ListInfoItem } from '@/store/songlist/state'
+import { useBgPic } from '@/store/common/hook'
 import PlayerBar from '@/components/player/PlayerBar'
 import { ListInfoContext } from './state'
 
@@ -29,13 +31,14 @@ export default ({ componentId, info }: { componentId: string, info: ListInfoItem
 
 
   return (
-    <View style={{ flex: 1, backgroundColor: theme['c-content-background'] }}>
+    <PageContent>
+      {bgPic ? <View style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.3)' }} /> : null}
       <StatusBar />
       <ListInfoContext.Provider value={info}>
         <MusicList ref={musicListRef} componentId={componentId} />
       </ListInfoContext.Provider>
       <PlayerBar />
-    </View>
+    </PageContent>
   )
 }
 

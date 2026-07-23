@@ -56,12 +56,12 @@ export default ({ children }: Props) => {
     return (
       <View style={{ flex: 1, overflow: 'hidden' }}>
         <ImageBackground
-          style={{ position: 'absolute', left: 0, top: 0, height: windowSize.height, width: windowSize.width, backgroundColor: theme['c-content-background'] }}
+          style={{ position: 'absolute', left: 0, top: 0, height: windowSize.height, width: windowSize.width, backgroundColor: 'rgba(0,0,0,0.3)' }}
           source={{ uri: pic!, headers: defaultHeaders }}
           resizeMode="cover"
           blurRadius={BLUR_RADIUS}
         >
-          <View style={{ flex: 1, flexDirection: 'column', backgroundColor: 'rgba(0,0,0,0.3)', opacity: 1 }}></View>
+          <View style={{ flex: 1, flexDirection: 'column' }}></View>
         </ImageBackground>
         <View style={{ flex: 1, flexDirection: 'column' }}>
           {children}
