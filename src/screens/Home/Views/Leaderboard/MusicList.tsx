@@ -1,7 +1,6 @@
 import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react'
 import OnlineList, { type OnlineListType, type OnlineListProps } from '@/components/OnlineList'
 import { clearListDetail, getListDetail, setListDetail, setListDetailInfo } from '@/core/leaderboard'
-import { setTempList } from '@/core/list'
 import boardState from '@/store/leaderboard/state'
 import { handlePlay } from './listAction'
 

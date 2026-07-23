@@ -1,11 +1,12 @@
 import { getSongListSetting, saveSongListSetting } from '@/utils/data'
 import { useEffect, useRef } from 'react'
 import { StyleSheet, View } from 'react-native'
-import { useTheme } from '@/store/theme/hook'
 
+// import List from './List/List'
 import HeaderBar, { type HeaderBarProps, type HeaderBarType } from './HeaderBar'
 import songlistState, { type InitState, type SortInfo } from '@/store/songlist/state'
 import List, { type ListType } from './List'
+
 
 interface SonglistInfo {
   source: InitState['sources'][number]
@@ -17,7 +18,6 @@ export default () => {
   const headerBarRef = useRef<HeaderBarType>(null)
   const listRef = useRef<ListType>(null)
   const songlistInfo = useRef<SonglistInfo>({ source: 'kw', sortId: '5', tagId: '' })
-  const theme = useTheme()
 
   useEffect(() => {
     void getSongListSetting().then(info => {
@@ -69,3 +69,4 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 })
+
