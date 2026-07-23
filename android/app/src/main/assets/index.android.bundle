@@ -218794,20 +218794,15 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   var _jsxRuntime = _$$_REQUIRE(_dependencyMap[4], "react/jsx-runtime");
   var _this = this,
     _jsxFileName = "/data/data/com.termux/files/home/lx-music-mobile/src/screens/Home/components/BottomTabBar.tsx";
-  var TabItem = function TabItem(_ref) {
+  var TabItem = (0, _react.memo)(function (_ref) {
     var id = _ref.id,
-      icon = _ref.icon;
+      icon = _ref.icon,
+      textColor = _ref.textColor,
+      activeColor = _ref.activeColor;
     var theme = (0, _$$_REQUIRE(_dependencyMap[5], "../../../store/theme/hook").useTheme)();
-    var bgPic = (0, _$$_REQUIRE(_dependencyMap[6], "../../../store/common/hook").useBgPic)();
-    var t = (0, _$$_REQUIRE(_dependencyMap[7], "../../../lang").useI18n)();
-    var activeId = (0, _$$_REQUIRE(_dependencyMap[6], "../../../store/common/hook").useNavActiveId)();
+    var t = (0, _$$_REQUIRE(_dependencyMap[6], "../../../lang").useI18n)();
+    var activeId = (0, _$$_REQUIRE(_dependencyMap[7], "../../../store/common/hook").useNavActiveId)();
     var isActive = activeId == id;
-    var textColor = bgPic ? '#fff' : theme['c-font-label'];
-    var activeColor = bgPic ? '#fff' : theme['c-primary-font-active'] || theme['c-primary'];
-
-    /**
-     * 切换底部导航页签。
-     */
     var handlePress = function handlePress() {
       if (isActive) return;
       (0, _$$_REQUIRE(_dependencyMap[8], "../../../core/common").setNavActiveId)(id);
@@ -218830,10 +218825,12 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
         children: t(id)
       })]
     });
-  };
+  });
   var _default = exports.default = (0, _react.memo)(function () {
     var theme = (0, _$$_REQUIRE(_dependencyMap[5], "../../../store/theme/hook").useTheme)();
-    var bgPic = (0, _$$_REQUIRE(_dependencyMap[6], "../../../store/common/hook").useBgPic)();
+    var bgPic = (0, _$$_REQUIRE(_dependencyMap[7], "../../../store/common/hook").useBgPic)();
+    var textColor = bgPic ? '#fff' : theme['c-font-label'];
+    var activeColor = bgPic ? '#fff' : theme['c-primary-font-active'] || theme['c-primary'];
     return /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.View, {
       style: [styles.container, {
         borderTopColor: theme['c-border-background'],
@@ -218842,7 +218839,9 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       children: _$$_REQUIRE(_dependencyMap[10], "../../../config/constant").NAV_MENUS.map(function (item) {
         return /*#__PURE__*/(0, _jsxRuntime.jsx)(TabItem, {
           id: item.id,
-          icon: item.icon
+          icon: item.icon,
+          textColor: textColor,
+          activeColor: activeColor
         }, item.id);
       })
     });
@@ -218869,7 +218868,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       marginTop: 2
     }
   });
-},1361,[6,65,15,967,106,966,1074,698,689,1032,680,543,1076],"src/screens/Home/components/BottomTabBar.tsx");
+},1361,[6,65,15,967,106,966,698,1074,689,1032,680,543,1076],"src/screens/Home/components/BottomTabBar.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {

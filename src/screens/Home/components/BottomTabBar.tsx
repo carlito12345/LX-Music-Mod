@@ -1,10 +1,9 @@
-import { memo, useMemo } from 'react'
+import { memo } from 'react'
 import { TouchableOpacity, View } from 'react-native'
 import { NAV_MENUS } from '@/config/constant'
 import { setNavActiveId } from '@/core/common'
 import { useI18n } from '@/lang'
-import { useBgPic } from '@/store/common/hook'
-import { useNavActiveId } from '@/store/common/hook'
+import { useBgPic, useNavActiveId } from '@/store/common/hook'
 import { useTheme } from '@/store/theme/hook'
 import { Icon } from '@/components/common/Icon'
 import Text from '@/components/common/Text'
@@ -14,20 +13,16 @@ import { BorderWidths } from '@/theme'
 interface TabItemProps {
   id: typeof NAV_MENUS[number]['id']
   icon: typeof NAV_MENUS[number]['icon']
+  textColor: string
+  activeColor: string
 }
 
-const TabItem = ({ id, icon }: TabItemProps) => {
+const TabItem = memo(({ id, icon, textColor, activeColor }: TabItemProps) => {
   const theme = useTheme()
-  const bgPic = useBgPic()
   const t = useI18n()
   const activeId = useNavActiveId()
   const isActive = activeId == id
-  const textColor = bgPic ? '#fff' : theme['c-font-label']
-  const activeColor = bgPic ? '#fff' : (theme['c-primary-font-active'] || theme['c-primary'])
 
-  /**
-   * 切换底部导航页签。
-   */
   const handlePress = () => {
     if (isActive) return
     setNavActiveId(id)
@@ -57,11 +52,14 @@ const TabItem = ({ id, icon }: TabItemProps) => {
       </Text>
     </TouchableOpacity>
   )
-}
+})
 
 export default memo(() => {
   const theme = useTheme()
   const bgPic = useBgPic()
+  const textColor = bgPic ? '#fff' : theme['c-font-label']
+  const activeColor = bgPic ? '#fff' : (theme['c-primary-font-active'] || theme['c-primary'])
+
   return (
     <View style={[
       styles.container,
@@ -70,7 +68,15 @@ export default memo(() => {
         backgroundColor: bgPic ? 'rgba(0,0,0,0.3)' : theme['c-content-background'],
       },
     ]}>
-      {NAV_MENUS.map(item => <TabItem key={item.id} id={item.id} icon={item.icon} />)}
+      {NAV_MENUS.map(item => (
+        <TabItem
+          key={item.id}
+          id={item.id}
+          icon={item.icon}
+          textColor={textColor}
+          activeColor={activeColor}
+        />
+      ))}
     </View>
   )
 })
