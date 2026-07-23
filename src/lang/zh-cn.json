@@ -518,4 +518,14 @@
   "version_title_new": "🌟 发现新版本 🌟",
   "version_title_unknown": "❓ 获取最新版本信息失败 ❓",
   "version_title_update": "🚀 软件更新 🚀"
+  "setting_localMusic": "本地音乐",
+  "setting_localMusic_folder_label": "音乐文件夹",
+  "setting_localMusic_no_folder": "未选择文件夹",
+  "setting_localMusic_select_folder": "选择文件夹",
+  "setting_localMusic_scan": "开始扫描",
+  "setting_localMusic_scan_tip": "将扫描文件夹内所有音频文件并导入「本地音乐」列表",
+  "setting_localMusic_overwrite_tip": "重新扫描将覆盖现有的「本地音乐」列表",
+  "setting_localMusic_scanning": "正在扫描...",
+  "setting_localMusic_reading": "正在读取",
+  "setting_localMusic_scan_complete": "扫描完成,共导入 {total} 首歌曲",
 }
