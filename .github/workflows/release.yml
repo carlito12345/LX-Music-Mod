@@ -30,6 +30,9 @@ jobs:
           else
             echo "No signing key found, building Debug APK..."
             ./gradlew assembleDebug
+            # 将 debug APK 复制到 release 路径,方便后续步骤引用
+            mkdir -p app/build/outputs/apk/release
+            cp app/build/outputs/apk/debug/*.apk app/build/outputs/apk/release/ 2>/dev/null || true
           fi
 
       # Push tag to GitHub if package.json version's tag is not tagged
@@ -49,13 +52,20 @@ jobs:
 
       - name: Generate file MD5
         run: |
-          cd android/app/build/outputs/apk/release
+          if [ -d "android/app/build/outputs/apk/release" ]; then
+            cd android/app/build/outputs/apk/release
+          elif [ -d "android/app/build/outputs/apk/debug" ]; then
+            cd android/app/build/outputs/apk/debug
+          fi
           md5sum *.apk
 
       - name: Upload Artifact
-        uses: ./.github/actions/upload-artifact
-        env:
-          PACKAGE_VERSION: ${{ env.PACKAGE_VERSION }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: lx-music-mobile-${{ env.PACKAGE_VERSION }}
+          path: |
+            android/app/build/outputs/apk/*/*.apk
+          if-no-files-found: warn
 
   # Android_SL:
   #   name: Android_SL
