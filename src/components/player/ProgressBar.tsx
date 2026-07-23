@@ -125,20 +125,41 @@ const ShimmerEffect = memo(({ enabled }: { enabled: boolean }) => {
 
   return (
     <Animated.View
+      pointerEvents="none"
       style={{
         position: 'absolute',
         top: 0, bottom: 0,
-        width: 50,
-        transform: [{ translateX }, { skewX: '-25deg' }],
+        left: 0, right: 0,
+        overflow: 'hidden',
       }}
-      pointerEvents="none"
     >
-      {/* 左柔边 */}
-      <View style={{ position: 'absolute', top: 0, bottom: 0, left: 5, width: 16, backgroundColor: 'rgba(255,255,255,0.15)' }} />
-      {/* 高光核心 */}
-      <View style={{ position: 'absolute', top: 0, bottom: 0, left: 19, width: 5, backgroundColor: 'rgba(255,255,255,0.6)' }} />
-      {/* 右柔边 */}
-      <View style={{ position: 'absolute', top: 0, bottom: 0, left: 24, width: 14, backgroundColor: 'rgba(255,255,255,0.1)' }} />
+      <Animated.View
+        style={{
+          position: 'absolute',
+          top: 0, bottom: 0,
+          width: 80,
+          transform: [{ translateX }],
+        }}
+      >
+        {/* 左尾 - 极细渐淡 */}
+        <View style={{ position: 'absolute', top: 0, bottom: 0, left: 0, width: 20,
+          backgroundColor: 'transparent',
+          borderRightWidth: 0,
+          // 用多层模拟渐变
+        }} />
+        <View style={{ position: 'absolute', top: 0, bottom: 0, left: 0, width: 8, backgroundColor: 'rgba(255,255,255,0.03)' }} />
+        <View style={{ position: 'absolute', top: 0, bottom: 0, left: 5, width: 10, backgroundColor: 'rgba(255,255,255,0.06)' }} />
+        <View style={{ position: 'absolute', top: 0, bottom: 0, left: 10, width: 12, backgroundColor: 'rgba(255,255,255,0.10)' }} />
+        <View style={{ position: 'absolute', top: 0, bottom: 0, left: 18, width: 8, backgroundColor: 'rgba(255,255,255,0.18)' }} />
+        {/* 中心高光核心 */}
+        <View style={{ position: 'absolute', top: 0, bottom: 0, left: 23, width: 6, backgroundColor: 'rgba(255,255,255,0.55)' }} />
+        <View style={{ position: 'absolute', top: '15%', bottom: '15%', left: 25, width: 3, backgroundColor: 'rgba(255,255,255,0.90)' }} />
+        {/* 右尾 - 极细渐淡 */}
+        <View style={{ position: 'absolute', top: 0, bottom: 0, left: 29, width: 8, backgroundColor: 'rgba(255,255,255,0.18)' }} />
+        <View style={{ position: 'absolute', top: 0, bottom: 0, left: 35, width: 10, backgroundColor: 'rgba(255,255,255,0.10)' }} />
+        <View style={{ position: 'absolute', top: 0, bottom: 0, left: 42, width: 12, backgroundColor: 'rgba(255,255,255,0.06)' }} />
+        <View style={{ position: 'absolute', top: 0, bottom: 0, left: 52, width: 14, backgroundColor: 'rgba(255,255,255,0.03)' }} />
+      </Animated.View>
     </Animated.View>
   )
 })
