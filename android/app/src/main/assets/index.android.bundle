@@ -198117,9 +198117,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       (_listRef$current4 = listRef.current) == null ? void 0 : _listRef$current4.loadList(source, songlistInfo.current.sortId, songlistInfo.current.tagId);
     };
     return /*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.View, {
-      style: [styles.container, {
-        backgroundColor: theme['c-content-background']
-      }],
+      style: styles.container,
       children: [/*#__PURE__*/(0, _jsxRuntime.jsx)(_HeaderBar.default, {
         ref: headerBarRef,
         onSortChange: handleSortChange,

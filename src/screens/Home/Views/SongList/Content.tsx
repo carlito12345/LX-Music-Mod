@@ -51,7 +51,7 @@ export default () => {
   }
 
   return (
-    <View style={[styles.container, { backgroundColor: theme['c-content-background'] }]}>
+    <View style={styles.container}>
       <HeaderBar
         ref={headerBarRef}
         onSortChange={handleSortChange}
