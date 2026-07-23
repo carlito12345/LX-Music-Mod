@@ -106,20 +106,7 @@ export const requestStoragePermission = async (): Promise<boolean> => {
         await RNFS.unlink(testFile)
         return true
       } catch (err) {
-        // 如果直接写入失败,可能是权限未授予
-        // 先检查是否已有 MANAGE_EXTERNAL_STORAGE 权限
-        try {
-          const hasManageStorage = await PermissionsAndroid.check(
-            PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE
-          )
-          if (hasManageStorage) {
-            // 有权限但写入失败,尝试使用 DocumentDirectoryPath
-            const docDir = `${RNFS.DocumentDirectoryPath}/lxmusic_downloads`
-            await RNFS.mkdir(docDir)
-            return true
-          }
-        } catch {}
-        
+        // 写入失败,需要引导用户授权
         return new Promise<boolean>((resolve) => {
           Alert.alert(
             '需要存储权限',

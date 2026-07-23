@@ -194936,17 +194936,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
             yield _reactNativeFs.default.unlink(testFile);
             return true;
           } catch (err) {
-            // 如果直接写入失败,可能是权限未授予
-            // 先检查是否已有 MANAGE_EXTERNAL_STORAGE 权限
-            try {
-              var hasManageStorage = yield _reactNative.PermissionsAndroid.check(_reactNative.PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE);
-              if (hasManageStorage) {
-                // 有权限但写入失败,尝试使用 DocumentDirectoryPath
-                var docDir = `${_reactNativeFs.default.DocumentDirectoryPath}/lxmusic_downloads`;
-                yield _reactNativeFs.default.mkdir(docDir);
-                return true;
-              }
-            } catch (_unused3) {}
+            // 写入失败,需要引导用户授权
             return new Promise(function (resolve) {
               _reactNative.Alert.alert('需要存储权限', '下载音乐文件需要"所有文件管理"权限,请在系统设置中开启', [{
                 text: '取消',
@@ -194968,11 +194958,11 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
                           }).catch(function () {
                             return resolve(false);
                           });
-                        } catch (_unused4) {
+                        } catch (_unused3) {
                           resolve(false);
                         }
                       }, 2000);
-                    } catch (_unused5) {
+                    } catch (_unused4) {
                       resolve(false);
                     }
                   });
@@ -195009,7 +194999,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
                     var granted = yield _reactNative.PermissionsAndroid.check(_reactNative.PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE);
                     resolve(granted);
                   }), 500);
-                } catch (_unused6) {
+                } catch (_unused5) {
                   resolve(false);
                 }
               });
@@ -195020,7 +195010,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
             }()
           }]);
         });
-      } catch (_unused7) {
+      } catch (_unused6) {
         return false;
       }
     });
@@ -195160,7 +195150,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
             singer: musicInfo.singer || 'Unknown',
             albumName: musicInfo.album || ''
           }, true);
-        } catch (_unused8) {}
+        } catch (_unused7) {}
 
         // 2. 写入封面图片
         try {
@@ -195181,7 +195171,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
             // 清理临时文件
             _reactNativeFs.default.unlink(picPath).catch(function () {});
           }
-        } catch (_unused9) {}
+        } catch (_unused8) {}
 
         // 3. 写入歌词
         try {
@@ -195195,7 +195185,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
           if (lyricInfo && lyricInfo.lyric) {
             yield (0, _$$_REQUIRE(_dependencyMap[8], "react-native-local-media-metadata").writeLyric)(filePath, lyricInfo.lyric);
           }
-        } catch (_unused0) {}
+        } catch (_unused9) {}
       } catch (err) {
         console.warn('[Download] ID3 write error:', err);
       }
