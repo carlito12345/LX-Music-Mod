@@ -227931,7 +227931,9 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     };
     var handlePlayAll = function handlePlayAll() {
       if (!_state2.default.listDetailInfo.info.name) return;
-      void (0, _$$_REQUIRE(_dependencyMap[13], "./listAction").handlePlay)(info.id, info.source, _state2.default.listDetailInfo.list);
+      requestAnimationFrame(function () {
+        void (0, _$$_REQUIRE(_dependencyMap[13], "./listAction").handlePlay)(info.id, info.source, _state2.default.listDetailInfo.list);
+      });
     };
     var handleCollection = function handleCollection() {
       if (!_state2.default.listDetailInfo.info.name) return;
