@@ -557,5 +557,13 @@
   "download_tab_tasks": "当前任务",
   "download_tab_history": "历史记录",
   "download_empty_tasks": "暂无下载任务",
-  "download_empty_history": "暂无下载历史"
+  "download_empty_history": "暂无下载历史",
+
+  "download_settings": "下载设置",
+  "download_path": "下载路径",
+  "download_clear_completed": "清除已完成",
+  "download_clear_history": "清除历史记录",
+  "download_clear_completed_success": "已清除已完成任务",
+  "download_clear_history_success": "已清除历史记录",
+  "close": "关闭"
 }

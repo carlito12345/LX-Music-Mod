@@ -1,5 +1,5 @@
 import { memo, useState, useCallback } from 'react'
-import { View, TouchableOpacity, StyleSheet } from 'react-native'
+import { View, TouchableOpacity } from 'react-native'
 
 import { useTheme } from '@/store/theme/hook'
 import { useI18n } from '@/lang'
@@ -8,6 +8,7 @@ import Text from '@/components/common/Text'
 import { useDownloadTasks, useDownloadHistory } from '@/store/download/hook'
 import DownloadList from './DownloadList'
 import HistoryList from './HistoryList'
+import DownloadSettings from './DownloadSettings'
 
 const Tab = memo(({ label, active, onPress }: {
   label: string
@@ -33,6 +34,7 @@ export default memo(() => {
   const t = useI18n()
   const theme = useTheme()
   const [activeTab, setActiveTab] = useState<'tasks' | 'history'>('tasks')
+  const [showSettings, setShowSettings] = useState(false)
   const tasks = useDownloadTasks()
   const history = useDownloadHistory()
 
@@ -40,10 +42,19 @@ export default memo(() => {
     setActiveTab(tab)
   }, [])
 
+  const handleSettingsClose = useCallback(() => {
+    setShowSettings(false)
+  }, [])
+
   return (
     <View style={styles.container}>
       <View style={{ ...styles.header, borderBottomColor: theme['c-border-background'] }}>
-        <Text style={styles.title} size={18} color={theme['c-font']}>{t('download_title')}</Text>
+        <View style={styles.headerTop}>
+          <Text style={styles.title} size={18} color={theme['c-font']}>{t('download_title')}</Text>
+          <TouchableOpacity onPress={() => setShowSettings(true)} style={styles.settingsBtn}>
+            <Text size={14} color={theme['c-primary-font']}>⚙</Text>
+          </TouchableOpacity>
+        </View>
         <View style={styles.tabs}>
           <Tab
             label={`${t('download_tab_tasks')} (${tasks.length})`}
@@ -62,6 +73,7 @@ export default memo(() => {
           ? <DownloadList />
           : <HistoryList />
       }
+      {showSettings && <DownloadSettings onClose={handleSettingsClose} />}
     </View>
   )
 })
@@ -76,8 +88,17 @@ const styles = createStyle({
     paddingBottom: 0,
     borderBottomWidth: 1,
   },
-  title: {
+  headerTop: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     marginBottom: 10,
+  },
+  title: {
+    marginBottom: 0,
+  },
+  settingsBtn: {
+    padding: 8,
   },
   tabs: {
     flexDirection: 'row',
