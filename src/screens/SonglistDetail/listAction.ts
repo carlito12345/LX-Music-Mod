@@ -11,45 +11,23 @@ const getListId = (id: string, source: LX.OnlineSource) => `${source}__${id}`
 
 export const handlePlay = async(id: string, source: Source, list?: LX.Music.MusicInfoOnline[], index = 0) => {
   const listId = getListId(id, source)
-  
-  // 如果传入的列表有数据,立即播放
-  if (list && list.length > 0) {
+  let isPlayingList = false
+  // console.log(list)
+  if (!list?.length) list = (await getListDetail(id, source, 1)).list
+  if (list?.length) {
     await setTempList(listId, [...list])
     void playList(LIST_IDS.TEMP, index)
-    // 后台加载完整列表
-    try {
-      const fullList = await getListDetailAll(source, id)
-      if (fullList.length > list.length && listState.tempListMeta.id == listId) {
-        await setTempList(listId, [...fullList])
-      }
-    } catch (e) {
-      console.warn('[Songlist] Failed to load full list:', e)
-    }
-    return
+    isPlayingList = true
   }
-  
-  // 传入列表为空,先加载完整列表再播放
-  try {
-    const fullList = await getListDetailAll(source, id)
-    if (fullList.length > 0) {
+  const fullList = await getListDetailAll(source, id)
+  if (!fullList.length) return
+  if (isPlayingList) {
+    if (listState.tempListMeta.id == listId) {
       await setTempList(listId, [...fullList])
-      void playList(LIST_IDS.TEMP, index)
-      return
     }
-  } catch (e) {
-    console.warn('[Songlist] Failed to load full list, trying page 1:', e)
-  }
-  
-  // 最后尝试加载第一页
-  try {
-    const detail = await getListDetail(id, source, 1)
-    const pageList = detail.list || []
-    if (pageList.length > 0) {
-      await setTempList(listId, [...pageList])
-      void playList(LIST_IDS.TEMP, index)
-    }
-  } catch (e) {
-    console.error('[Songlist] Failed to load any songs:', e)
+  } else {
+    await setTempList(listId, [...fullList])
+    void playList(LIST_IDS.TEMP, index)
   }
 }
 
