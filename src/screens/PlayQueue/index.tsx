@@ -17,6 +17,7 @@ import { removeTempPlayList, clearTempPlayeList } from '@/core/player/tempPlayLi
 import { getListMusics } from '@/core/list'
 import { LIST_IDS } from '@/config/constant'
 import StatusBar from '@/components/common/StatusBar'
+import playerState from '@/store/player/state'
 import { toast } from '@/utils/tools'
 
 
@@ -28,8 +29,6 @@ export default memo(({ componentId, initialQueue = [] }: PlayQueueProps) => {
   
   // 调试:查看歌单数据状态
   setTimeout(() => {
-    const sq = songlistState.listDetailInfo.list.length
-    const bq = boardState.listDetailInfo.list.length
     const pq = initialQueue.length
     toast(`队列:${initialQueue.length} 播放器:${em} 歌单:${sq} 排行:${bq}`)
   }, 500)
