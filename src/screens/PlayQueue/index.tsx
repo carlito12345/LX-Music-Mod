@@ -11,19 +11,19 @@ import { usePlayerMusicInfo } from '@/store/player/hook'
 import { getContrastTextColor, getSecondaryTextColor } from '@/utils/colorContrast'
 import Text from '@/components/common/Text'
 import { Icon } from '@/components/common/Icon'
-import playerState from '@/store/player/state'
+
 import { playList } from '@/core/player/player'
 import { removeTempPlayList, clearTempPlayeList } from '@/core/player/tempPlayList'
-import { getListMusics, getListMusicSync } from '@/core/list'
+import { getListMusics } from '@/core/list'
 import { LIST_IDS } from '@/config/constant'
 import StatusBar from '@/components/common/StatusBar'
 import { toast } from '@/utils/tools'
-import songlistState from '@/store/songlist/state'
-import boardState from '@/store/leaderboard/state'
+
+
 
 export interface PlayQueueProps { componentId: string; initialQueue?: any[]; listId?: string }
 
-export default memo(({ componentId, initialQueue = [], listId: propListId }: PlayQueueProps) => {
+export default memo(({ componentId, initialQueue = [] }: PlayQueueProps) => {
   const t = (global.i18n?.t) || ((s: string) => s)
   
   // 调试:查看歌单数据状态
@@ -31,7 +31,6 @@ export default memo(({ componentId, initialQueue = [], listId: propListId }: Pla
     const sq = songlistState.listDetailInfo.list.length
     const bq = boardState.listDetailInfo.list.length
     const pq = initialQueue.length
-    const em = getListMusicSync(playerState.playInfo.playerListId || '').length
     toast(`队列:${initialQueue.length} 播放器:${em} 歌单:${sq} 排行:${bq}`)
   }, 500)
   const theme = useTheme()
@@ -58,52 +57,18 @@ export default memo(({ componentId, initialQueue = [], listId: propListId }: Pla
     }
   }, [])
 
-  // 加载当前播放列表全部歌曲(播放器队列 → 歌单 → 排行榜)
+  // 加载当前播放列表全部歌曲
   useEffect(() => {
-    const targetId = playerListId || propListId || LIST_IDS.TEMP
-    
-    // 优先使用 initialQueue
+    const targetId = playerListId || LIST_IDS.TEMP
     if (initialQueue && initialQueue.length > 0 && currentListSongs.length === 0) {
       setCurrentListSongs(initialQueue)
-      toast('读取队列: ' + initialQueue.length + ' 首')
       return
     }
-    
-    // 1. 从播放器队列读取
     getListMusics(targetId).then(list => {
       if (list && list.length > 0) {
         setCurrentListSongs(list)
-        return
-      }
-      
-      // 2. 从当前歌单详情读取 (listDetailInfo.list)
-      const songDetail = songlistState.listDetailInfo
-      if (songDetail.list && songDetail.list.length > 0) {
-        setCurrentListSongs([...songDetail.list])
-        return
-      }
-      
-      // 3. 从当前排行榜读取
-      const boardDetail = boardState.listDetailInfo
-      if (boardDetail.list && boardDetail.list.length > 0) {
-        setCurrentListSongs([...boardDetail.list])
-        return
       }
     }).catch(() => {})
-    
-    // 同步回退:当异步 getListMusics 为空时立即检查歌单
-    if (currentListSongs.length === 0) {
-      const sd = songlistState.listDetailInfo
-      if (sd.list && sd.list.length > 0) {
-        setCurrentListSongs([...sd.list])
-        return
-      }
-      const bd = boardState.listDetailInfo
-      if (bd.list && bd.list.length > 0) {
-        setCurrentListSongs([...bd.list])
-        return
-      }
-    }
   }, [playMusicInfo, playerListId])
 
   // 背景 & 文字颜色(同步播放器设置)

@@ -227411,11 +227411,8 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   var _react = _$$_REQUIRE(_dependencyMap[3], "react");
   var _reactNative = _$$_REQUIRE(_dependencyMap[4], "react-native");
   var _Text = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[5], "../../components/common/Text"));
-  var _state = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[6], "../../store/player/state"));
-  var _StatusBar = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[7], "../../components/common/StatusBar"));
-  var _state2 = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[8], "../../store/songlist/state"));
-  var _state3 = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[9], "../../store/leaderboard/state"));
-  var _jsxRuntime = _$$_REQUIRE(_dependencyMap[10], "react/jsx-runtime");
+  var _StatusBar = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[6], "../../components/common/StatusBar"));
+  var _jsxRuntime = _$$_REQUIRE(_dependencyMap[7], "react/jsx-runtime");
   var _this = this,
     _jsxFileName = "/data/data/com.termux/files/home/lx-music-mobile/src/screens/PlayQueue/index.tsx";
   /**
@@ -227426,46 +227423,44 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     var _global$i18n, _playMusicInfo$musicI;
     var componentId = _ref.componentId,
       _ref$initialQueue = _ref.initialQueue,
-      initialQueue = _ref$initialQueue === void 0 ? [] : _ref$initialQueue,
-      propListId = _ref.listId;
+      initialQueue = _ref$initialQueue === void 0 ? [] : _ref$initialQueue;
     var t = ((_global$i18n = global.i18n) == null ? void 0 : _global$i18n.t) || function (s) {
       return s;
     };
 
     // 调试:查看歌单数据状态
     setTimeout(function () {
-      var sq = _state2.default.listDetailInfo.list.length;
-      var bq = _state3.default.listDetailInfo.list.length;
+      var sq = songlistState.listDetailInfo.list.length;
+      var bq = boardState.listDetailInfo.list.length;
       var pq = initialQueue.length;
-      var em = (0, _$$_REQUIRE(_dependencyMap[11], "../../core/list").getListMusicSync)(_state.default.playInfo.playerListId || '').length;
-      (0, _$$_REQUIRE(_dependencyMap[12], "../../utils/tools").toast)(`队列:${initialQueue.length} 播放器:${em} 歌单:${sq} 排行:${bq}`);
+      (0, _$$_REQUIRE(_dependencyMap[8], "../../utils/tools").toast)(`队列:${initialQueue.length} 播放器:${em} 歌单:${sq} 排行:${bq}`);
     }, 500);
-    var theme = (0, _$$_REQUIRE(_dependencyMap[13], "../../store/theme/hook").useTheme)();
-    var mi = (0, _$$_REQUIRE(_dependencyMap[14], "../../store/player/hook").usePlayerMusicInfo)();
-    var followCover = (0, _$$_REQUIRE(_dependencyMap[15], "../../store/setting/hook").useSettingValue)('playDetail.background.followCover');
-    var solidColor = (0, _$$_REQUIRE(_dependencyMap[15], "../../store/setting/hook").useSettingValue)('playDetail.background.solidColor');
+    var theme = (0, _$$_REQUIRE(_dependencyMap[9], "../../store/theme/hook").useTheme)();
+    var mi = (0, _$$_REQUIRE(_dependencyMap[10], "../../store/player/hook").usePlayerMusicInfo)();
+    var followCover = (0, _$$_REQUIRE(_dependencyMap[11], "../../store/setting/hook").useSettingValue)('playDetail.background.followCover');
+    var solidColor = (0, _$$_REQUIRE(_dependencyMap[11], "../../store/setting/hook").useSettingValue)('playDetail.background.solidColor');
     var _useState = (0, _react.useState)([]),
       _useState2 = (0, _slicedToArray2.default)(_useState, 2),
       currentListSongs = _useState2[0],
       setCurrentListSongs = _useState2[1];
-    var _useState3 = (0, _react.useState)(_state.default.tempPlayList),
+    var _useState3 = (0, _react.useState)(playerState.tempPlayList),
       _useState4 = (0, _slicedToArray2.default)(_useState3, 2),
       tempPlayList = _useState4[0],
       setTempPlayList = _useState4[1];
-    var _useState5 = (0, _react.useState)(_state.default.playMusicInfo),
+    var _useState5 = (0, _react.useState)(playerState.playMusicInfo),
       _useState6 = (0, _slicedToArray2.default)(_useState5, 2),
       playMusicInfo = _useState6[0],
       setPlayMusicInfo = _useState6[1];
-    var _useState7 = (0, _react.useState)(_state.default.playInfo.playerListId),
+    var _useState7 = (0, _react.useState)(playerState.playInfo.playerListId),
       _useState8 = (0, _slicedToArray2.default)(_useState7, 2),
       playerListId = _useState8[0],
       setPlayerListId = _useState8[1];
     (0, _react.useEffect)(function () {
       var _global$state_event, _global$state_event2;
       var handleChange = function handleChange() {
-        setTempPlayList((0, _toConsumableArray2.default)(_state.default.tempPlayList));
-        setPlayMusicInfo(Object.assign({}, _state.default.playMusicInfo));
-        setPlayerListId(_state.default.playInfo.playerListId);
+        setTempPlayList((0, _toConsumableArray2.default)(playerState.tempPlayList));
+        setPlayMusicInfo(Object.assign({}, playerState.playMusicInfo));
+        setPlayerListId(playerState.playInfo.playerListId);
       };
       (_global$state_event = global.state_event) == null ? void 0 : _global$state_event.on('playTempPlayListChanged', handleChange);
       (_global$state_event2 = global.state_event) == null ? void 0 : _global$state_event2.on('playMusicInfoUpdated', handleChange);
@@ -227476,52 +227471,18 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       };
     }, []);
 
-    // 加载当前播放列表全部歌曲(播放器队列 → 歌单 → 排行榜)
+    // 加载当前播放列表全部歌曲
     (0, _react.useEffect)(function () {
-      var targetId = playerListId || propListId || _$$_REQUIRE(_dependencyMap[16], "../../config/constant").LIST_IDS.TEMP;
-
-      // 优先使用 initialQueue
+      var targetId = playerListId || _$$_REQUIRE(_dependencyMap[12], "../../config/constant").LIST_IDS.TEMP;
       if (initialQueue && initialQueue.length > 0 && currentListSongs.length === 0) {
         setCurrentListSongs(initialQueue);
-        (0, _$$_REQUIRE(_dependencyMap[12], "../../utils/tools").toast)('读取队列: ' + initialQueue.length + ' 首');
         return;
       }
-
-      // 1. 从播放器队列读取
-      (0, _$$_REQUIRE(_dependencyMap[11], "../../core/list").getListMusics)(targetId).then(function (list) {
+      (0, _$$_REQUIRE(_dependencyMap[13], "../../core/list").getListMusics)(targetId).then(function (list) {
         if (list && list.length > 0) {
           setCurrentListSongs(list);
-          return;
-        }
-
-        // 2. 从当前歌单详情读取 (listDetailInfo.list)
-        var songDetail = _state2.default.listDetailInfo;
-        if (songDetail.list && songDetail.list.length > 0) {
-          setCurrentListSongs((0, _toConsumableArray2.default)(songDetail.list));
-          return;
-        }
-
-        // 3. 从当前排行榜读取
-        var boardDetail = _state3.default.listDetailInfo;
-        if (boardDetail.list && boardDetail.list.length > 0) {
-          setCurrentListSongs((0, _toConsumableArray2.default)(boardDetail.list));
-          return;
         }
       }).catch(function () {});
-
-      // 同步回退:当异步 getListMusics 为空时立即检查歌单
-      if (currentListSongs.length === 0) {
-        var sd = _state2.default.listDetailInfo;
-        if (sd.list && sd.list.length > 0) {
-          setCurrentListSongs((0, _toConsumableArray2.default)(sd.list));
-          return;
-        }
-        var bd = _state3.default.listDetailInfo;
-        if (bd.list && bd.list.length > 0) {
-          setCurrentListSongs((0, _toConsumableArray2.default)(bd.list));
-          return;
-        }
-      }
     }, [playMusicInfo, playerListId]);
 
     // 背景 & 文字颜色(同步播放器设置)
@@ -227530,8 +227491,8 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       return solidColor || theme['c-content-background'];
     }();
     var bgColor = (rawBg || '#1a1a2e').startsWith('#') ? rawBg || '#1a1a2e' : '#1a1a2e';
-    var textColor = (0, _$$_REQUIRE(_dependencyMap[17], "../../utils/colorContrast").getContrastTextColor)(bgColor);
-    var secondaryColor = (0, _$$_REQUIRE(_dependencyMap[17], "../../utils/colorContrast").getSecondaryTextColor)(bgColor);
+    var textColor = (0, _$$_REQUIRE(_dependencyMap[14], "../../utils/colorContrast").getContrastTextColor)(bgColor);
+    var secondaryColor = (0, _$$_REQUIRE(_dependencyMap[14], "../../utils/colorContrast").getSecondaryTextColor)(bgColor);
 
     // 半透明背景
     var c = bgColor.replace('#', '');
@@ -227548,60 +227509,60 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       return t.musicInfo;
     }).filter(Boolean)));
     var handleBack = function handleBack() {
-      void (0, _$$_REQUIRE(_dependencyMap[18], "../../navigation").pop)(componentId);
+      void (0, _$$_REQUIRE(_dependencyMap[15], "../../navigation").pop)(componentId);
     };
     var handlePlay = (0, _react.useCallback)(function (index) {
       var _item$musicInfo, _fullList$findIndex;
       var item = allQueue[index];
       if (!item) {
-        (0, _$$_REQUIRE(_dependencyMap[12], "../../utils/tools").toast)('无法播放');
+        (0, _$$_REQUIRE(_dependencyMap[8], "../../utils/tools").toast)('无法播放');
         return;
       }
       if (item.id === currentItemId) {
-        void (0, _$$_REQUIRE(_dependencyMap[18], "../../navigation").pop)(componentId);
+        void (0, _$$_REQUIRE(_dependencyMap[15], "../../navigation").pop)(componentId);
         return;
       }
       var songId = ((_item$musicInfo = item.musicInfo) == null ? void 0 : _item$musicInfo.id) || item.id || '';
-      var listId = _state.default.playInfo.playerListId;
+      var listId = playerState.playInfo.playerListId;
 
       // 在 playerListId 对应的完整歌曲列表中查找
-      var targetListId = listId || _$$_REQUIRE(_dependencyMap[16], "../../config/constant").LIST_IDS.TEMP;
+      var targetListId = listId || _$$_REQUIRE(_dependencyMap[12], "../../config/constant").LIST_IDS.TEMP;
       var fullList = getList(targetListId);
       var realIdx = (_fullList$findIndex = fullList == null ? void 0 : fullList.findIndex(function (s) {
         return (s.id || '') === songId;
       })) != null ? _fullList$findIndex : -1;
       if (realIdx >= 0) {
-        void (0, _$$_REQUIRE(_dependencyMap[19], "../../core/player/player").playList)(targetListId, realIdx).catch(function () {
-          return (0, _$$_REQUIRE(_dependencyMap[12], "../../utils/tools").toast)('播放失败');
+        void (0, _$$_REQUIRE(_dependencyMap[16], "../../core/player/player").playList)(targetListId, realIdx).catch(function () {
+          return (0, _$$_REQUIRE(_dependencyMap[8], "../../utils/tools").toast)('播放失败');
         });
       } else {
         // 尝试在稍后播放中查找
-        var tidx = _state.default.tempPlayList.findIndex(function (t) {
+        var tidx = playerState.tempPlayList.findIndex(function (t) {
           var _t$musicInfo;
           return (((_t$musicInfo = t.musicInfo) == null ? void 0 : _t$musicInfo.id) || t.id || '') === songId;
         });
         if (tidx >= 0) {
-          void (0, _$$_REQUIRE(_dependencyMap[19], "../../core/player/player").playList)(_$$_REQUIRE(_dependencyMap[16], "../../config/constant").LIST_IDS.TEMP, tidx).catch(function () {
-            return (0, _$$_REQUIRE(_dependencyMap[12], "../../utils/tools").toast)('播放失败');
+          void (0, _$$_REQUIRE(_dependencyMap[16], "../../core/player/player").playList)(_$$_REQUIRE(_dependencyMap[12], "../../config/constant").LIST_IDS.TEMP, tidx).catch(function () {
+            return (0, _$$_REQUIRE(_dependencyMap[8], "../../utils/tools").toast)('播放失败');
           });
         } else {
-          (0, _$$_REQUIRE(_dependencyMap[12], "../../utils/tools").toast)('歌曲不在队列中');
+          (0, _$$_REQUIRE(_dependencyMap[8], "../../utils/tools").toast)('歌曲不在队列中');
         }
       }
-      void (0, _$$_REQUIRE(_dependencyMap[18], "../../navigation").pop)(componentId);
+      void (0, _$$_REQUIRE(_dependencyMap[15], "../../navigation").pop)(componentId);
     }, [allQueue, currentItemId]);
     var handleRemove = (0, _react.useCallback)(function (index) {
       var item = allQueue[index];
       if (!item || item.id === currentItemId) return;
-      var tidx = _state.default.tempPlayList.findIndex(function (t) {
+      var tidx = playerState.tempPlayList.findIndex(function (t) {
         var _t$musicInfo2;
         return ((_t$musicInfo2 = t.musicInfo) == null ? void 0 : _t$musicInfo2.id) === item.id;
       });
-      if (tidx >= 0) (0, _$$_REQUIRE(_dependencyMap[20], "../../core/player/tempPlayList").removeTempPlayList)(tidx);
+      if (tidx >= 0) (0, _$$_REQUIRE(_dependencyMap[17], "../../core/player/tempPlayList").removeTempPlayList)(tidx);
     }, [allQueue, currentItemId]);
     var handleClear = function handleClear() {
-      (0, _$$_REQUIRE(_dependencyMap[20], "../../core/player/tempPlayList").clearTempPlayeList)();
-      (0, _$$_REQUIRE(_dependencyMap[12], "../../utils/tools").toast)('已清空');
+      (0, _$$_REQUIRE(_dependencyMap[17], "../../core/player/tempPlayList").clearTempPlayeList)();
+      (0, _$$_REQUIRE(_dependencyMap[8], "../../utils/tools").toast)('已清空');
     };
     var renderItem = function renderItem(_ref2) {
       var _item$musicInfo2, _item$musicInfo3;
@@ -227613,7 +227574,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       var primaryColor = theme['c-primary'] || '#07c556';
       // 当前歌曲: 主题色背景 + 自动黑白对比文字
       var currentBg = primaryColor + '30'; // 约 19% 透明度
-      var currentText = (0, _$$_REQUIRE(_dependencyMap[17], "../../utils/colorContrast").getContrastTextColor)(primaryColor);
+      var currentText = (0, _$$_REQUIRE(_dependencyMap[14], "../../utils/colorContrast").getContrastTextColor)(primaryColor);
       return /*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.TouchableOpacity, {
         style: [styles.item, isCurrent && {
           backgroundColor: currentBg,
@@ -227682,7 +227643,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
         children: [/*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.TouchableOpacity, {
           onPress: handleBack,
           style: styles.backBtn,
-          children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_$$_REQUIRE(_dependencyMap[21], "../../components/common/Icon").Icon, {
+          children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_$$_REQUIRE(_dependencyMap[18], "../../components/common/Icon").Icon, {
             name: "chevron-left",
             size: 22,
             color: textColor
@@ -227789,7 +227750,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       alignItems: 'center'
     }
   });
-},1446,[6,41,7,65,15,967,704,1090,1010,1018,106,989,543,966,1167,977,680,1383,716,983,981,1032],"src/screens/PlayQueue/index.tsx");
+},1446,[6,41,7,65,15,967,1090,106,543,966,1167,977,680,989,1383,716,983,981,1032],"src/screens/PlayQueue/index.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
     value: true
