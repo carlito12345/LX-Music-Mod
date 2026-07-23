@@ -206692,13 +206692,13 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       renderItem: renderItem,
       keyExtractor: getkey,
       contentContainerStyle: styles.content,
-      maxToRenderPerBatch: 2
+      maxToRenderPerBatch: 5
       // updateCellsBatchingPeriod={80}
       ,
-      windowSize: 2
+      windowSize: 7
       // removeClippedSubviews={true}
       ,
-      initialNumToRender: 1
+      initialNumToRender: 3
     });
   };
 },1217,[6,65,15,1218,1252,1272,1295,1298,1303,1329,1332,1339,1340,106,543,1341],"src/screens/Home/Views/Setting/Vertical/Main.tsx");
