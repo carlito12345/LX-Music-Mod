@@ -159882,7 +159882,10 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     cheatTip: '@cheat_tip',
     remoteLyricTip: '@remote_lyric_tip',
     dislikeList: '@dislike_list',
-    userApi: '@user_api__'
+    userApi: '@user_api__',
+    downloadTask: '@download_task__',
+    downloadHistory: '@download_history',
+    downloadSavePath: '@download_save_path'
   };
 
   // v0.x.x 版本的 data keys
@@ -161602,7 +161605,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
-  exports.setUserApiAllowShowUpdateAlert = exports.setSyncHost = exports.setSyncAuthKey = exports.setSelectedManagedFolder = exports.setListUpdateTime = exports.setListAutoUpdate = exports.saveViewPrevState = exports.saveUserTheme = exports.saveUserList = exports.saveSongListSetting = exports.saveSearchSetting = exports.saveSearchHistory = exports.savePlayInfo = exports.saveOtherSource = exports.saveOpenStoragePath = exports.saveMusicUrl = exports.saveLyric = exports.saveListUpdateInfo = exports.saveListPrevSelectId = exports.saveListPosition = exports.saveListMusics = exports.saveLeaderboardSetting = exports.saveIgnoreVersionFailTipTime = exports.saveIgnoreVersion = exports.saveFontSize = exports.saveEditedLyric = exports.saveDislikeListRules = exports.removeUserApi = exports.removeSyncHostHistory = exports.removeListUpdateInfo = exports.removeListPosition = exports.removeListMusics = exports.overwriteListUpdateInfo = exports.overwriteListPosition = exports.getViewPrevState = exports.getUserTheme = exports.getUserLists = exports.getUserApiScript = exports.getUserApiList = exports.getSyncHostHistory = exports.getSyncHost = exports.getSyncAuthKey = exports.getSongListSetting = exports.getSelectedManagedFolder = exports.getSearchSetting = exports.getSearchHistory = exports.getPlayerLyric = exports.getPlayInfo = exports.getOtherSource = exports.getOpenStoragePath = exports.getMusicUrl = exports.getMetaCache = exports.getLyric = exports.getListUpdateInfo = exports.getListPrevSelectId = exports.getListPosition = exports.getListMusics = exports.getLeaderboardSetting = exports.getIgnoreVersionFailTipTime = exports.getIgnoreVersion = exports.getFontSize = exports.getDislikeListRules = exports.clearOtherSource = exports.clearMusicUrl = exports.clearLyric = exports.clearEditedLyric = exports.addUserApi = exports.addSyncHostHistory = void 0;
+  exports.setUserApiAllowShowUpdateAlert = exports.setSyncHost = exports.setSyncAuthKey = exports.setSelectedManagedFolder = exports.setListUpdateTime = exports.setListAutoUpdate = exports.setDownloadSavePath = exports.saveViewPrevState = exports.saveUserTheme = exports.saveUserList = exports.saveSongListSetting = exports.saveSearchSetting = exports.saveSearchHistory = exports.savePlayInfo = exports.saveOtherSource = exports.saveOpenStoragePath = exports.saveMusicUrl = exports.saveLyric = exports.saveListUpdateInfo = exports.saveListPrevSelectId = exports.saveListPosition = exports.saveListMusics = exports.saveLeaderboardSetting = exports.saveIgnoreVersionFailTipTime = exports.saveIgnoreVersion = exports.saveFontSize = exports.saveEditedLyric = exports.saveDownloadTasks = exports.saveDownloadHistory = exports.saveDislikeListRules = exports.removeUserApi = exports.removeSyncHostHistory = exports.removeListUpdateInfo = exports.removeListPosition = exports.removeListMusics = exports.overwriteListUpdateInfo = exports.overwriteListPosition = exports.getViewPrevState = exports.getUserTheme = exports.getUserLists = exports.getUserApiScript = exports.getUserApiList = exports.getSyncHostHistory = exports.getSyncHost = exports.getSyncAuthKey = exports.getSongListSetting = exports.getSelectedManagedFolder = exports.getSearchSetting = exports.getSearchHistory = exports.getPlayerLyric = exports.getPlayInfo = exports.getOtherSource = exports.getOpenStoragePath = exports.getMusicUrl = exports.getMetaCache = exports.getLyric = exports.getListUpdateInfo = exports.getListPrevSelectId = exports.getListPosition = exports.getListMusics = exports.getLeaderboardSetting = exports.getIgnoreVersionFailTipTime = exports.getIgnoreVersion = exports.getFontSize = exports.getDownloadTasks = exports.getDownloadSavePath = exports.getDownloadHistory = exports.getDislikeListRules = exports.clearOtherSource = exports.clearMusicUrl = exports.clearLyric = exports.clearEditedLyric = exports.addUserApi = exports.addSyncHostHistory = void 0;
   var _slicedToArray2 = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[1], "@babel/runtime/helpers/slicedToArray"));
   var _toConsumableArray2 = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[2], "@babel/runtime/helpers/toConsumableArray"));
   var _asyncToGenerator2 = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[3], "@babel/runtime/helpers/asyncToGenerator"));
@@ -162545,6 +162548,66 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     });
     return function setUserApiAllowShowUpdateAlert(_x51, _x52) {
       return _ref70.apply(this, arguments);
+    };
+  }();
+
+  // Download functions
+  var downloadTaskKey = _$$_REQUIRE(_dependencyMap[4], "../config/constant").storageDataPrefix.downloadTask;
+  var downloadHistoryKey = _$$_REQUIRE(_dependencyMap[4], "../config/constant").storageDataPrefix.downloadHistory;
+  var downloadSavePathKey = _$$_REQUIRE(_dependencyMap[4], "../config/constant").storageDataPrefix.downloadSavePath;
+  var getDownloadTasks = exports.getDownloadTasks = /*#__PURE__*/function () {
+    var _ref71 = (0, _asyncToGenerator2.default)(function* () {
+      var _yield$getData17;
+      return (_yield$getData17 = yield (0, _$$_REQUIRE(_dependencyMap[6], "../plugins/storage").getData)(downloadTaskKey)) != null ? _yield$getData17 : [];
+    });
+    return function getDownloadTasks() {
+      return _ref71.apply(this, arguments);
+    };
+  }();
+  var saveDownloadTasks = exports.saveDownloadTasks = /*#__PURE__*/function () {
+    var _ref72 = (0, _asyncToGenerator2.default)(function* (tasks) {
+      yield (0, _$$_REQUIRE(_dependencyMap[6], "../plugins/storage").saveData)(downloadTaskKey, tasks);
+    });
+    return function saveDownloadTasks(_x53) {
+      return _ref72.apply(this, arguments);
+    };
+  }();
+  var getDownloadHistory = exports.getDownloadHistory = /*#__PURE__*/function () {
+    var _ref73 = (0, _asyncToGenerator2.default)(function* () {
+      var _yield$getData18;
+      return (_yield$getData18 = yield (0, _$$_REQUIRE(_dependencyMap[6], "../plugins/storage").getData)(downloadHistoryKey)) != null ? _yield$getData18 : [];
+    });
+    return function getDownloadHistory() {
+      return _ref73.apply(this, arguments);
+    };
+  }();
+  var saveDownloadHistory = exports.saveDownloadHistory = /*#__PURE__*/function () {
+    var _ref74 = (0, _asyncToGenerator2.default)(function* (history) {
+      yield (0, _$$_REQUIRE(_dependencyMap[6], "../plugins/storage").saveData)(downloadHistoryKey, history);
+    });
+    return function saveDownloadHistory(_x54) {
+      return _ref74.apply(this, arguments);
+    };
+  }();
+  var getDownloadSavePath = exports.getDownloadSavePath = /*#__PURE__*/function () {
+    var _ref75 = (0, _asyncToGenerator2.default)(function* () {
+      var _yield$getData19;
+      return (_yield$getData19 = yield (0, _$$_REQUIRE(_dependencyMap[6], "../plugins/storage").getData)(downloadSavePathKey)) != null ? _yield$getData19 : null;
+    });
+    return function getDownloadSavePath() {
+      return _ref75.apply(this, arguments);
+    };
+  }();
+  var setDownloadSavePath = exports.setDownloadSavePath = /*#__PURE__*/function () {
+    var _ref76 = (0, _asyncToGenerator2.default)(function* (path) {
+      if (path == null) {
+        yield (0, _$$_REQUIRE(_dependencyMap[6], "../plugins/storage").removeData)(downloadSavePathKey);
+      } else {
+        yield (0, _$$_REQUIRE(_dependencyMap[6], "../plugins/storage").saveData)(downloadSavePathKey, path);
+      }
+    });
+    return function setDownloadSavePath(_x55) {
+      return _ref76.apply(this, arguments);
     };
   }();
 },695,[6,7,41,13,680,575,672],"src/utils/data.ts");
