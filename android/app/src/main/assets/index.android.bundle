@@ -149517,7 +149517,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     'common.showExitBtn': true,
     'common.useSystemFileSelector': true,
     'common.alwaysKeepStatusbarHeight': true,
-    'player.startupAutoPlay': false,
+    'player.startupAutoPlay': true,
     'player.startupPushPlayDetailScreen': true,
     'player.togglePlayMethod': 'listLoop',
     'player.playQuality': '128k',
