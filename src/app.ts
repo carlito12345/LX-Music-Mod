@@ -32,6 +32,16 @@ void Promise.all([getFontSize(), windowSizeTools.init()]).then(async([fontSize])
     const { default: init } = await import('@/core/init')
     void import('@/plugins/carkey').then(mod => mod.startCarKeyListening().catch(() => {}))
     void import('@/plugins/usb').then(mod => mod.startUSBListening().catch(() => {}))
+    // 首次安装显示权限引导页
+    try {
+      const settingState = require('@/store/setting/state').default
+      if (!settingState.setting['common.guideDone']) {
+        setTimeout(() => {
+          const { navigations } = require('@/navigation/navigation')
+          navigations.pushGuideScreen('')
+        }, 1000)
+      }
+    } catch {}
     try {
       handlePushedHomeScreen = await init()
     } catch (err: any) {

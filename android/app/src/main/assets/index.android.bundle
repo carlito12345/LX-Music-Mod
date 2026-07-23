@@ -2976,17 +2976,28 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
           void _$$_REQUIRE(_dependencyMap[11], "/data/data/com.termux/files/home/lx-music-mobile/node_modules/metro-runtime/src/modules/asyncRequire.js")(_dependencyMap[13], _dependencyMap.paths, "./plugins/usb").then(function (mod) {
             return mod.startUSBListening().catch(function () {});
           });
+          // 首次安装显示权限引导页
+          try {
+            var settingState = _$$_REQUIRE(_dependencyMap[14], "./store/setting/state").default;
+            if (!settingState.setting['common.guideDone']) {
+              setTimeout(function () {
+                var _require = _$$_REQUIRE(_dependencyMap[15], "./navigation/navigation"),
+                  navigations = _require.navigations;
+                navigations.pushGuideScreen('');
+              }, 1000);
+            }
+          } catch (_unused) {}
           try {
             handlePushedHomeScreen = yield init();
           } catch (err) {
             var _err$stack;
-            void (0, _$$_REQUIRE(_dependencyMap[14], "./utils/tools").tipDialog)({
+            void (0, _$$_REQUIRE(_dependencyMap[16], "./utils/tools").tipDialog)({
               title: '初始化失败 (Init Failed)',
               message: `Boot Log:\n${tryGetBootLog()}\n\n${(_err$stack = err.stack) != null ? _err$stack : err.message}`,
               btnText: 'Exit',
               bgClose: false
             }).then(function () {
-              (0, _$$_REQUIRE(_dependencyMap[15], "./utils/nativeModules/utils").exitApp)();
+              (0, _$$_REQUIRE(_dependencyMap[17], "./utils/nativeModules/utils").exitApp)();
             });
             return;
           }
@@ -2996,7 +3007,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
           return _ref4.apply(this, arguments);
         };
       }();
-      var _yield$import2 = yield _$$_REQUIRE(_dependencyMap[11], "/data/data/com.termux/files/home/lx-music-mobile/node_modules/metro-runtime/src/modules/asyncRequire.js")(_dependencyMap[16], _dependencyMap.paths, "./navigation"),
+      var _yield$import2 = yield _$$_REQUIRE(_dependencyMap[11], "/data/data/com.termux/files/home/lx-music-mobile/node_modules/metro-runtime/src/modules/asyncRequire.js")(_dependencyMap[18], _dependencyMap.paths, "./navigation"),
         initNavigation = _yield$import2.init,
         navigations = _yield$import2.navigations;
       initNavigation(/*#__PURE__*/(0, _asyncToGenerator2.default)(function* () {
@@ -3007,13 +3018,13 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
         yield navigations.pushHomeScreen().then(function () {
           void handlePushedHomeScreen();
         }).catch(function (err) {
-          void (0, _$$_REQUIRE(_dependencyMap[14], "./utils/tools").tipDialog)({
+          void (0, _$$_REQUIRE(_dependencyMap[16], "./utils/tools").tipDialog)({
             title: 'Error',
             message: err.message,
             btnText: 'Exit',
             bgClose: false
           }).then(function () {
-            (0, _$$_REQUIRE(_dependencyMap[15], "./utils/nativeModules/utils").exitApp)();
+            (0, _$$_REQUIRE(_dependencyMap[17], "./utils/nativeModules/utils").exitApp)();
           });
         });
       }));
@@ -3023,16 +3034,16 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     };
   }()).catch(function (err) {
     var _err$stack2;
-    void (0, _$$_REQUIRE(_dependencyMap[14], "./utils/tools").tipDialog)({
+    void (0, _$$_REQUIRE(_dependencyMap[16], "./utils/tools").tipDialog)({
       title: '初始化失败 (Init Failed)',
       message: `Boot Log:\n\n${(_err$stack2 = err.stack) != null ? _err$stack2 : err.message}`,
       btnText: 'Exit',
       bgClose: false
     }).then(function () {
-      (0, _$$_REQUIRE(_dependencyMap[15], "./utils/nativeModules/utils").exitApp)();
+      (0, _$$_REQUIRE(_dependencyMap[17], "./utils/nativeModules/utils").exitApp)();
     });
   });
-},5,[6,7,13,14,684,1449,695,682,1453,679,1454,962,1472,1473,543,666,716],"src/app.ts");
+},5,[6,7,13,14,684,1449,695,682,1453,679,1454,962,1472,1473,618,718,543,666,716],"src/app.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   function _interopRequireDefault(e) {
     return e && e.__esModule ? e : {
