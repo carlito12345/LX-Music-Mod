@@ -565,5 +565,13 @@
   "download_clear_history": "清除历史记录",
   "download_clear_completed_success": "已清除已完成任务",
   "download_clear_history_success": "已清除历史记录",
-  "close": "关闭"
+  "close": "关闭",
+
+  "download_file_not_found": "文件不存在",
+  "download_play_failed": "播放失败",
+  "download_delete_file_confirm": "确认删除本地文件?",
+  "download_file_deleted": "文件已删除",
+  "download_delete_file_failed": "删除文件失败",
+  "download_delete_file": "删除本地文件",
+  "share": "分享"
 }
