@@ -25,6 +25,8 @@ jobs:
         shell: bash
         run: |
           cd android
+          # CI环境使用默认aapt2,移除本地覆盖
+          sed -i '/android\.aapt2FromMavenOverride/d' gradle.properties 2>/dev/null || true
           # 如果配置了签名密钥则构建 Release,否则构建 Debug
           if [ -n "${{ secrets.KEYSTORE_STORE_FILE }}" ]; then
             echo "${{ secrets.KEYSTORE_STORE_FILE_BASE64 }}" | base64 --decode > "app/${{ secrets.KEYSTORE_STORE_FILE }}"
