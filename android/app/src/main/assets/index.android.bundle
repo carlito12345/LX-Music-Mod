@@ -227428,16 +227428,10 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     var t = ((_global$i18n = global.i18n) == null ? void 0 : _global$i18n.t) || function (s) {
       return s;
     };
-
-    // 调试:查看歌单数据状态
-    setTimeout(function () {
-      var pq = initialQueue.length;
-      (0, _$$_REQUIRE(_dependencyMap[9], "../../utils/tools").toast)(`队列:${initialQueue.length} 播放器:${em} 歌单:${sq} 排行:${bq}`);
-    }, 500);
-    var theme = (0, _$$_REQUIRE(_dependencyMap[10], "../../store/theme/hook").useTheme)();
-    var mi = (0, _$$_REQUIRE(_dependencyMap[11], "../../store/player/hook").usePlayerMusicInfo)();
-    var followCover = (0, _$$_REQUIRE(_dependencyMap[12], "../../store/setting/hook").useSettingValue)('playDetail.background.followCover');
-    var solidColor = (0, _$$_REQUIRE(_dependencyMap[12], "../../store/setting/hook").useSettingValue)('playDetail.background.solidColor');
+    var theme = (0, _$$_REQUIRE(_dependencyMap[9], "../../store/theme/hook").useTheme)();
+    var mi = (0, _$$_REQUIRE(_dependencyMap[10], "../../store/player/hook").usePlayerMusicInfo)();
+    var followCover = (0, _$$_REQUIRE(_dependencyMap[11], "../../store/setting/hook").useSettingValue)('playDetail.background.followCover');
+    var solidColor = (0, _$$_REQUIRE(_dependencyMap[11], "../../store/setting/hook").useSettingValue)('playDetail.background.solidColor');
     var _useState = (0, _react.useState)([]),
       _useState2 = (0, _slicedToArray2.default)(_useState, 2),
       currentListSongs = _useState2[0],
@@ -227472,12 +227466,12 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
 
     // 加载当前播放列表全部歌曲
     (0, _react.useEffect)(function () {
-      var targetId = playerListId || _$$_REQUIRE(_dependencyMap[13], "../../config/constant").LIST_IDS.TEMP;
+      var targetId = playerListId || _$$_REQUIRE(_dependencyMap[12], "../../config/constant").LIST_IDS.TEMP;
       if (initialQueue && initialQueue.length > 0 && currentListSongs.length === 0) {
         setCurrentListSongs(initialQueue);
         return;
       }
-      (0, _$$_REQUIRE(_dependencyMap[14], "../../core/list").getListMusics)(targetId).then(function (list) {
+      (0, _$$_REQUIRE(_dependencyMap[13], "../../core/list").getListMusics)(targetId).then(function (list) {
         if (list && list.length > 0) {
           setCurrentListSongs(list);
         }
@@ -227490,8 +227484,8 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       return solidColor || theme['c-content-background'];
     }();
     var bgColor = (rawBg || '#1a1a2e').startsWith('#') ? rawBg || '#1a1a2e' : '#1a1a2e';
-    var textColor = (0, _$$_REQUIRE(_dependencyMap[15], "../../utils/colorContrast").getContrastTextColor)(bgColor);
-    var secondaryColor = (0, _$$_REQUIRE(_dependencyMap[15], "../../utils/colorContrast").getSecondaryTextColor)(bgColor);
+    var textColor = (0, _$$_REQUIRE(_dependencyMap[14], "../../utils/colorContrast").getContrastTextColor)(bgColor);
+    var secondaryColor = (0, _$$_REQUIRE(_dependencyMap[14], "../../utils/colorContrast").getSecondaryTextColor)(bgColor);
 
     // 半透明背景
     var c = bgColor.replace('#', '');
@@ -227508,31 +227502,31 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       return t.musicInfo;
     }).filter(Boolean)));
     var handleBack = function handleBack() {
-      void (0, _$$_REQUIRE(_dependencyMap[16], "../../navigation").pop)(componentId);
+      void (0, _$$_REQUIRE(_dependencyMap[15], "../../navigation").pop)(componentId);
     };
     var handlePlay = (0, _react.useCallback)(function (index) {
       var _item$musicInfo, _fullList$findIndex;
       var item = allQueue[index];
       if (!item) {
-        (0, _$$_REQUIRE(_dependencyMap[9], "../../utils/tools").toast)('无法播放');
+        (0, _$$_REQUIRE(_dependencyMap[16], "../../utils/tools").toast)('无法播放');
         return;
       }
       if (item.id === currentItemId) {
-        void (0, _$$_REQUIRE(_dependencyMap[16], "../../navigation").pop)(componentId);
+        void (0, _$$_REQUIRE(_dependencyMap[15], "../../navigation").pop)(componentId);
         return;
       }
       var songId = ((_item$musicInfo = item.musicInfo) == null ? void 0 : _item$musicInfo.id) || item.id || '';
       var listId = _state.default.playInfo.playerListId;
 
       // 在 playerListId 对应的完整歌曲列表中查找
-      var targetListId = listId || _$$_REQUIRE(_dependencyMap[13], "../../config/constant").LIST_IDS.TEMP;
+      var targetListId = listId || _$$_REQUIRE(_dependencyMap[12], "../../config/constant").LIST_IDS.TEMP;
       var fullList = getList(targetListId);
       var realIdx = (_fullList$findIndex = fullList == null ? void 0 : fullList.findIndex(function (s) {
         return (s.id || '') === songId;
       })) != null ? _fullList$findIndex : -1;
       if (realIdx >= 0) {
         void (0, _$$_REQUIRE(_dependencyMap[17], "../../core/player/player").playList)(targetListId, realIdx).catch(function () {
-          return (0, _$$_REQUIRE(_dependencyMap[9], "../../utils/tools").toast)('播放失败');
+          return (0, _$$_REQUIRE(_dependencyMap[16], "../../utils/tools").toast)('播放失败');
         });
       } else {
         // 尝试在稍后播放中查找
@@ -227541,14 +227535,14 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
           return (((_t$musicInfo = t.musicInfo) == null ? void 0 : _t$musicInfo.id) || t.id || '') === songId;
         });
         if (tidx >= 0) {
-          void (0, _$$_REQUIRE(_dependencyMap[17], "../../core/player/player").playList)(_$$_REQUIRE(_dependencyMap[13], "../../config/constant").LIST_IDS.TEMP, tidx).catch(function () {
-            return (0, _$$_REQUIRE(_dependencyMap[9], "../../utils/tools").toast)('播放失败');
+          void (0, _$$_REQUIRE(_dependencyMap[17], "../../core/player/player").playList)(_$$_REQUIRE(_dependencyMap[12], "../../config/constant").LIST_IDS.TEMP, tidx).catch(function () {
+            return (0, _$$_REQUIRE(_dependencyMap[16], "../../utils/tools").toast)('播放失败');
           });
         } else {
-          (0, _$$_REQUIRE(_dependencyMap[9], "../../utils/tools").toast)('歌曲不在队列中');
+          (0, _$$_REQUIRE(_dependencyMap[16], "../../utils/tools").toast)('歌曲不在队列中');
         }
       }
-      void (0, _$$_REQUIRE(_dependencyMap[16], "../../navigation").pop)(componentId);
+      void (0, _$$_REQUIRE(_dependencyMap[15], "../../navigation").pop)(componentId);
     }, [allQueue, currentItemId]);
     var handleRemove = (0, _react.useCallback)(function (index) {
       var item = allQueue[index];
@@ -227561,7 +227555,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     }, [allQueue, currentItemId]);
     var handleClear = function handleClear() {
       (0, _$$_REQUIRE(_dependencyMap[18], "../../core/player/tempPlayList").clearTempPlayeList)();
-      (0, _$$_REQUIRE(_dependencyMap[9], "../../utils/tools").toast)('已清空');
+      (0, _$$_REQUIRE(_dependencyMap[16], "../../utils/tools").toast)('已清空');
     };
     var renderItem = function renderItem(_ref2) {
       var _item$musicInfo2, _item$musicInfo3;
@@ -227573,7 +227567,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       var primaryColor = theme['c-primary'] || '#07c556';
       // 当前歌曲: 主题色背景 + 自动黑白对比文字
       var currentBg = primaryColor + '30'; // 约 19% 透明度
-      var currentText = (0, _$$_REQUIRE(_dependencyMap[15], "../../utils/colorContrast").getContrastTextColor)(primaryColor);
+      var currentText = (0, _$$_REQUIRE(_dependencyMap[14], "../../utils/colorContrast").getContrastTextColor)(primaryColor);
       return /*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.TouchableOpacity, {
         style: [styles.item, isCurrent && {
           backgroundColor: currentBg,
@@ -227749,7 +227743,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       alignItems: 'center'
     }
   });
-},1446,[6,41,7,65,15,967,1090,704,106,543,966,1167,977,680,989,1383,716,983,981,1032],"src/screens/PlayQueue/index.tsx");
+},1446,[6,41,7,65,15,967,1090,704,106,966,1167,977,680,989,1383,716,543,983,981,1032],"src/screens/PlayQueue/index.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
     value: true

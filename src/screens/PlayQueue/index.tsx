@@ -27,11 +27,6 @@ export interface PlayQueueProps { componentId: string; initialQueue?: any[]; lis
 export default memo(({ componentId, initialQueue = [] }: PlayQueueProps) => {
   const t = (global.i18n?.t) || ((s: string) => s)
   
-  // 调试:查看歌单数据状态
-  setTimeout(() => {
-    const pq = initialQueue.length
-    toast(`队列:${initialQueue.length} 播放器:${em} 歌单:${sq} 排行:${bq}`)
-  }, 500)
   const theme = useTheme()
   const mi = usePlayerMusicInfo()
   const followCover = useSettingValue('playDetail.background.followCover')
