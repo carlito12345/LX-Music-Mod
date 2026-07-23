@@ -205867,35 +205867,26 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   };
   var handlePlay = exports.handlePlay = /*#__PURE__*/function () {
     var _ref = (0, _asyncToGenerator2.default)(function* (id, list) {
+      var _list, _list2;
       var index = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
+      var isPlayingList = false;
+      // console.log(list)
       var listId = getListId(id);
-
-      // 直接使用传入的列表(UI已经加载的歌曲)
-      if (list && list.length > 0) {
-        yield (0, _$$_REQUIRE(_dependencyMap[5], "../../../../core/list").setTempList)(listId, (0, _toConsumableArray2.default)(list));
-        void (0, _$$_REQUIRE(_dependencyMap[6], "../../../../core/player/player").playList)(_$$_REQUIRE(_dependencyMap[7], "../../../../config/constant").LIST_IDS.TEMP, index);
-
-        // 后台尝试加载完整列表并更新
-        try {
-          var fullList = yield (0, _$$_REQUIRE(_dependencyMap[8], "../../../../core/leaderboard").getListDetailAll)(id);
-          if (fullList.length > list.length) {
-            yield (0, _$$_REQUIRE(_dependencyMap[5], "../../../../core/list").setTempList)(listId, (0, _toConsumableArray2.default)(fullList));
-          }
-        } catch (e) {
-          console.warn('[Leaderboard] Failed to load full list in background:', e);
+      if (!((_list = list) != null && _list.length)) list = (yield (0, _$$_REQUIRE(_dependencyMap[5], "../../../../core/leaderboard").getListDetail)(id, 1)).list;
+      if ((_list2 = list) != null && _list2.length) {
+        yield (0, _$$_REQUIRE(_dependencyMap[6], "../../../../core/list").setTempList)(listId, (0, _toConsumableArray2.default)(list));
+        void (0, _$$_REQUIRE(_dependencyMap[7], "../../../../core/player/player").playList)(_$$_REQUIRE(_dependencyMap[8], "../../../../config/constant").LIST_IDS.TEMP, index);
+        isPlayingList = true;
+      }
+      var fullList = yield (0, _$$_REQUIRE(_dependencyMap[5], "../../../../core/leaderboard").getListDetailAll)(id);
+      if (!fullList.length) return;
+      if (isPlayingList) {
+        if (_state.default.tempListMeta.id == listId) {
+          yield (0, _$$_REQUIRE(_dependencyMap[6], "../../../../core/list").setTempList)(listId, (0, _toConsumableArray2.default)(fullList));
         }
       } else {
-        // 如果传入的列表为空,尝试加载第一页
-        try {
-          var detail = yield (0, _$$_REQUIRE(_dependencyMap[8], "../../../../core/leaderboard").getListDetail)(id, 1);
-          var playList_data = detail.list || [];
-          if (playList_data.length > 0) {
-            yield (0, _$$_REQUIRE(_dependencyMap[5], "../../../../core/list").setTempList)(listId, (0, _toConsumableArray2.default)(playList_data));
-            void (0, _$$_REQUIRE(_dependencyMap[6], "../../../../core/player/player").playList)(_$$_REQUIRE(_dependencyMap[7], "../../../../config/constant").LIST_IDS.TEMP, index);
-          }
-        } catch (e) {
-          console.error('[Leaderboard] Failed to load any songs:', e);
-        }
+        yield (0, _$$_REQUIRE(_dependencyMap[6], "../../../../core/list").setTempList)(listId, (0, _toConsumableArray2.default)(fullList));
+        void (0, _$$_REQUIRE(_dependencyMap[7], "../../../../core/player/player").playList)(_$$_REQUIRE(_dependencyMap[8], "../../../../config/constant").LIST_IDS.TEMP, index);
       }
     });
     return function handlePlay(_x, _x2) {
@@ -205920,8 +205911,8 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
         void (0, _syncSourceList.default)(targetList);
         return;
       }
-      var list = yield (0, _$$_REQUIRE(_dependencyMap[8], "../../../../core/leaderboard").getListDetailAll)(id);
-      yield (0, _$$_REQUIRE(_dependencyMap[5], "../../../../core/list").createList)({
+      var list = yield (0, _$$_REQUIRE(_dependencyMap[5], "../../../../core/leaderboard").getListDetailAll)(id);
+      yield (0, _$$_REQUIRE(_dependencyMap[6], "../../../../core/list").createList)({
         name: name,
         id: `${source}_${(0, _$$_REQUIRE(_dependencyMap[9], "../../../../utils/tools").toMD5)(listId)}`,
         list: list,
@@ -205934,7 +205925,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       return _ref2.apply(this, arguments);
     };
   }();
-},1204,[6,41,13,990,1015,988,982,680,1016,543],"src/screens/Home/Views/Leaderboard/listAction.ts");
+},1204,[6,41,13,990,1015,1016,988,982,680,543],"src/screens/Home/Views/Leaderboard/listAction.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -226302,32 +226293,44 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       var index = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
       var listId = getListId(id, source);
 
-      // 直接使用传入的列表(UI已经加载的歌曲)
+      // 如果传入的列表有数据,立即播放
       if (list && list.length > 0) {
         yield (0, _$$_REQUIRE(_dependencyMap[5], "../../core/list").setTempList)(listId, (0, _toConsumableArray2.default)(list));
         void (0, _$$_REQUIRE(_dependencyMap[6], "../../core/player/player").playList)(_$$_REQUIRE(_dependencyMap[7], "../../config/constant").LIST_IDS.TEMP, index);
-
-        // 后台尝试加载完整列表并更新
+        // 后台加载完整列表
         try {
           var fullList = yield (0, _$$_REQUIRE(_dependencyMap[8], "../../core/songlist").getListDetailAll)(source, id);
-          if (fullList.length > list.length) {
+          if (fullList.length > list.length && _state.default.tempListMeta.id == listId) {
             yield (0, _$$_REQUIRE(_dependencyMap[5], "../../core/list").setTempList)(listId, (0, _toConsumableArray2.default)(fullList));
           }
         } catch (e) {
-          console.warn('[Songlist] Failed to load full list in background:', e);
+          console.warn('[Songlist] Failed to load full list:', e);
         }
-      } else {
-        // 如果传入的列表为空,尝试加载第一页
-        try {
-          var detail = yield (0, _$$_REQUIRE(_dependencyMap[8], "../../core/songlist").getListDetail)(id, source, 1);
-          var playList_data = detail.list || [];
-          if (playList_data.length > 0) {
-            yield (0, _$$_REQUIRE(_dependencyMap[5], "../../core/list").setTempList)(listId, (0, _toConsumableArray2.default)(playList_data));
-            void (0, _$$_REQUIRE(_dependencyMap[6], "../../core/player/player").playList)(_$$_REQUIRE(_dependencyMap[7], "../../config/constant").LIST_IDS.TEMP, index);
-          }
-        } catch (e) {
-          console.error('[Songlist] Failed to load any songs:', e);
+        return;
+      }
+
+      // 传入列表为空,先加载完整列表再播放
+      try {
+        var _fullList = yield (0, _$$_REQUIRE(_dependencyMap[8], "../../core/songlist").getListDetailAll)(source, id);
+        if (_fullList.length > 0) {
+          yield (0, _$$_REQUIRE(_dependencyMap[5], "../../core/list").setTempList)(listId, (0, _toConsumableArray2.default)(_fullList));
+          void (0, _$$_REQUIRE(_dependencyMap[6], "../../core/player/player").playList)(_$$_REQUIRE(_dependencyMap[7], "../../config/constant").LIST_IDS.TEMP, index);
+          return;
         }
+      } catch (e) {
+        console.warn('[Songlist] Failed to load full list, trying page 1:', e);
+      }
+
+      // 最后尝试加载第一页
+      try {
+        var detail = yield (0, _$$_REQUIRE(_dependencyMap[8], "../../core/songlist").getListDetail)(id, source, 1);
+        var pageList = detail.list || [];
+        if (pageList.length > 0) {
+          yield (0, _$$_REQUIRE(_dependencyMap[5], "../../core/list").setTempList)(listId, (0, _toConsumableArray2.default)(pageList));
+          void (0, _$$_REQUIRE(_dependencyMap[6], "../../core/player/player").playList)(_$$_REQUIRE(_dependencyMap[7], "../../config/constant").LIST_IDS.TEMP, index);
+        }
+      } catch (e) {
+        console.error('[Songlist] Failed to load any songs:', e);
       }
     });
     return function handlePlay(_x, _x2, _x3) {

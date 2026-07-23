@@ -10,37 +10,26 @@ import { confirmDialog, toMD5, toast } from '@/utils/tools'
 const getListId = (id: string) => `board__${id}`
 
 export const handlePlay = async(id: string, list?: LX.Music.MusicInfoOnline[], index = 0) => {
+  let isPlayingList = false
+  // console.log(list)
   const listId = getListId(id)
-  
-  // 直接使用传入的列表(UI已经加载的歌曲)
-  if (list && list.length > 0) {
+  if (!list?.length) list = (await getListDetail(id, 1)).list
+  if (list?.length) {
     await setTempList(listId, [...list])
     void playList(LIST_IDS.TEMP, index)
-    
-    // 后台尝试加载完整列表并更新
-    try {
-      const fullList = await getListDetailAll(id)
-      if (fullList.length > list.length) {
-        await setTempList(listId, [...fullList])
-      }
-    } catch (e) {
-      console.warn('[Leaderboard] Failed to load full list in background:', e)
+    isPlayingList = true
+  }
+  const fullList = await getListDetailAll(id)
+  if (!fullList.length) return
+  if (isPlayingList) {
+    if (listState.tempListMeta.id == listId) {
+      await setTempList(listId, [...fullList])
     }
   } else {
-    // 如果传入的列表为空,尝试加载第一页
-    try {
-      const detail = await getListDetail(id, 1)
-      const playList_data = detail.list || []
-      if (playList_data.length > 0) {
-        await setTempList(listId, [...playList_data])
-        void playList(LIST_IDS.TEMP, index)
-      }
-    } catch (e) {
-      console.error('[Leaderboard] Failed to load any songs:', e)
-    }
+    await setTempList(listId, [...fullList])
+    void playList(LIST_IDS.TEMP, index)
   }
 }
-
 
 export const handleCollect = async(id: string, name: string, source: LX.OnlineSource) => {
   const listId = getListId(id)
