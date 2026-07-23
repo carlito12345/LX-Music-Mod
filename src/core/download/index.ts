@@ -346,4 +346,11 @@ export const addDownload = (musicInfo: LX.Music.MusicInfoOnline, quality: LX.Qua
   return downloadManager.addTask(musicInfo, quality)
 }
 
-export const DOWNLOAD_QUALITIES = ['128k', '192k', '320k', 'ape', 'flac', 'wav'] as const
+export const DOWNLOAD_QUALITIES = [
+  { id: '128k', label: '128k - 标准品质' },
+  { id: '192k', label: '192k - 高品质' },
+  { id: '320k', label: '320k - 超高品质' },
+  { id: 'ape', label: 'APE - 无损' },
+  { id: 'flac', label: 'FLAC - 无损' },
+  { id: 'wav', label: 'WAV - 无损' },
+] as const
