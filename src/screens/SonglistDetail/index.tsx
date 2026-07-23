@@ -14,6 +14,7 @@ import { ListInfoContext } from './state'
 export default ({ componentId, info }: { componentId: string, info: ListInfoItem }) => {
   const musicListRef = useRef<MusicListType>(null)
   const isUnmountedRef = useRef(false)
+  const bgPic = useBgPic()
 
   useEffect(() => {
     setComponentId(COMPONENT_IDS.songlistDetail, componentId)

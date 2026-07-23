@@ -218314,10 +218314,9 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     var timeStr = _ref.timeStr;
     var theme = (0, _$$_REQUIRE(_dependencyMap[9], "../../../../store/theme/hook").useTheme)();
     var bgPic = (0, _$$_REQUIRE(_dependencyMap[10], "../../../../store/common/hook").useBgPic)();
-    // console.log(timeStr)
     return /*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
       size: FONT_SIZE,
-      color: theme['c-500'],
+      color: bgPic ? '#fff' : theme['c-500'],
       children: timeStr
     });
   };
@@ -218327,7 +218326,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     var bgPic = (0, _$$_REQUIRE(_dependencyMap[10], "../../../../store/common/hook").useBgPic)();
     return /*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
       size: FONT_SIZE,
-      color: theme['c-500'],
+      color: bgPic ? '#fff' : theme['c-500'],
       children: timeStr
     });
   });
@@ -218367,7 +218366,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
           timeStr: nowPlayTimeStr
         }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
           size: FONT_SIZE,
-          color: theme['c-500'],
+          color: bgPic ? '#fff' : theme['c-500'],
           children: " / "
         }), /*#__PURE__*/(0, _jsxRuntime.jsx)(PlayTimeMax, {
           timeStr: maxPlayTimeStr
@@ -218665,9 +218664,11 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     // console.log('render status')
 
     var status = isPlay ? text : statusText;
+    var bgPic = (0, _$$_REQUIRE(_dependencyMap[5], "../../../../store/common/hook").useBgPic)();
     return /*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
       numberOfLines: 1,
       size: 12,
+      color: bgPic ? '#fff' : undefined,
       children: status
     });
   }; // const styles = createStyle({
@@ -218679,7 +218680,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   //     // backgroundColor: 'rgba(0,0,0,0.2)',
   //   },
   // })
-},1359,[6,967,106,1264,1167],"src/components/player/PlayerBar/components/Status.tsx");
+},1359,[6,967,106,1264,1167,1074],"src/components/player/PlayerBar/components/Status.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
     value: true
@@ -226215,9 +226216,10 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       info = _ref.info;
     var musicListRef = (0, _react.useRef)(null);
     var isUnmountedRef = (0, _react.useRef)(false);
+    var bgPic = (0, _$$_REQUIRE(_dependencyMap[7], "../../store/common/hook").useBgPic)();
     (0, _react.useEffect)(function () {
       var _musicListRef$current;
-      (0, _$$_REQUIRE(_dependencyMap[7], "../../core/common").setComponentId)(_$$_REQUIRE(_dependencyMap[8], "../../config/constant").COMPONENT_IDS.songlistDetail, componentId);
+      (0, _$$_REQUIRE(_dependencyMap[8], "../../core/common").setComponentId)(_$$_REQUIRE(_dependencyMap[9], "../../config/constant").COMPONENT_IDS.songlistDetail, componentId);
       isUnmountedRef.current = false;
       (_musicListRef$current = musicListRef.current) == null ? void 0 : _musicListRef$current.loadList(info.source, info.id);
       return function () {
@@ -226235,7 +226237,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
           bottom: 0,
           backgroundColor: 'rgba(0,0,0,0.3)'
         }
-      }) : null, /*#__PURE__*/(0, _jsxRuntime.jsx)(_StatusBar.default, {}), /*#__PURE__*/(0, _jsxRuntime.jsx)(_$$_REQUIRE(_dependencyMap[9], "./state").ListInfoContext.Provider, {
+      }) : null, /*#__PURE__*/(0, _jsxRuntime.jsx)(_StatusBar.default, {}), /*#__PURE__*/(0, _jsxRuntime.jsx)(_$$_REQUIRE(_dependencyMap[10], "./state").ListInfoContext.Provider, {
         value: info,
         children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_MusicList.default, {
           ref: musicListRef,
@@ -226254,7 +226256,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   //     flex: 1,
   //   },
   // })
-},1433,[6,65,1434,1061,1090,1354,106,689,680,1437],"src/screens/SonglistDetail/index.tsx");
+},1433,[6,65,1434,1061,1090,1354,106,1074,689,680,1437],"src/screens/SonglistDetail/index.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
