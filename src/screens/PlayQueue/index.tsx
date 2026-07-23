@@ -47,16 +47,34 @@ export default memo(({ componentId, initialQueue = [], listId: propListId }: Pla
     }
   }, [])
 
-  // 加载当前播放列表全部歌曲
+  // 加载当前播放列表全部歌曲(多来源:播放器队列 → 歌单 → 排行榜)
   useEffect(() => {
     const targetId = playerListId || propListId || LIST_IDS.TEMP
     if (initialQueue && initialQueue.length > 0 && currentListSongs.length === 0) {
       setCurrentListSongs(initialQueue)
+      return
     }
     getListMusics(targetId).then(list => {
       if (list && list.length > 0) {
         setCurrentListSongs(list)
+        return
       }
+      // 播放器队列为空,尝试从歌单详情读取
+      try {
+        const s = require('@/store/songlist/state').default.listDetailInfo
+        if (s.list && s.list.length > 0) {
+          setCurrentListSongs([...s.list])
+          return
+        }
+      } catch {}
+      // 尝试从排行榜读取
+      try {
+        const b = require('@/store/leaderboard/state').default.listDetailInfo
+        if (b.list && b.list.length > 0) {
+          setCurrentListSongs([...b.list])
+          return
+        }
+      } catch {}
     }).catch(() => {})
   }, [playMusicInfo, playerListId])
 
