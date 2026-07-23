@@ -1,7 +1,6 @@
 import { memo, type ComponentProps } from 'react'
 import { Text, type TextProps as _TextProps, StyleSheet, Animated, type ColorValue, type TextStyle } from 'react-native'
 import { useTextShadow, useTheme } from '@/store/theme/hook'
-import { useBgPic } from '@/store/common/hook'
 import { setSpText } from '@/utils/pixelRatio'
 import { useAnimateColor } from '@/utils/hooks/useAnimateColor'
 import { DEFAULT_DURATION, useAnimateNumber } from '@/utils/hooks/useAnimateNumber'
@@ -33,19 +32,17 @@ export interface TextProps extends _TextProps {
 export default memo(({ style, size = 15, color, children, ...props }: TextProps) => {
   const theme = useTheme()
   const textShadow = useTextShadow()
-  const bgPic = useBgPic()
-  const defaultColor = color ?? (bgPic ? 'rgba(255,255,255,0.95)' : theme['c-font'])
   style = StyleSheet.compose(textShadow ? {
     // fontFamily: 'System',
     textShadowColor: theme['c-primary-dark-300-alpha-800'],
     textShadowOffset: { width: 0.2, height: 0.2 },
     textShadowRadius: 2,
     fontSize: setSpText(size),
-    color: defaultColor,
+    color: color ?? theme['c-font'],
   } : {
     // fontFamily: 'System',
     fontSize: setSpText(size),
-    color: defaultColor,
+    color: color ?? theme['c-font'],
   }, style)
 
   return (
@@ -69,19 +66,17 @@ export interface AnimatedTextProps extends _AnimatedTextProps {
 export const AnimatedText = ({ style, size = 15, color, children, ...props }: AnimatedTextProps) => {
   const theme = useTheme()
   const textShadow = useTextShadow()
-  const bgPic = useBgPic()
-  const defaultColor = color ?? (bgPic ? 'rgba(255,255,255,0.95)' : theme['c-font'])
   style = StyleSheet.compose(textShadow ? {
     // fontFamily: 'System',
     textShadowColor: theme['c-primary-dark-300-alpha-800'],
     textShadowOffset: { width: 0.2, height: 0.2 },
     textShadowRadius: 2,
     fontSize: setSpText(size),
-    color: defaultColor,
+    color: color ?? theme['c-font'],
   } : {
     // fontFamily: 'System',
     fontSize: setSpText(size),
-    color: defaultColor,
+    color: color ?? theme['c-font'],
   }, style as TextStyle)
 
   return <Animated.Text style={style} {...props}>{children}</Animated.Text>
