@@ -31,6 +31,7 @@ void Promise.all([getFontSize(), windowSizeTools.init()]).then(async([fontSize])
     void initLog()
     const { default: init } = await import('@/core/init')
     void import('@/plugins/carkey').then(mod => mod.startCarKeyListening().catch(() => {}))
+    void import('@/plugins/usb').then(mod => mod.startUSBListening().catch(() => {}))
     try {
       handlePushedHomeScreen = await init()
     } catch (err: any) {

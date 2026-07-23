@@ -13,10 +13,10 @@ const defaultSetting: LX.AppSetting = {
   'common.showBackBtn': false,
   'common.showExitBtn': true,
   'common.useSystemFileSelector': true,
-  'common.alwaysKeepStatusbarHeight': false,
+  'common.alwaysKeepStatusbarHeight': true,
 
   'player.startupAutoPlay': false,
-  'player.startupPushPlayDetailScreen': false,
+  'player.startupPushPlayDetailScreen': true,
   'player.togglePlayMethod': 'listLoop',
   'player.playQuality': '128k',
   'player.isSavePlayTime': false,

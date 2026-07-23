@@ -2973,17 +2973,20 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
           void _$$_REQUIRE(_dependencyMap[11], "/data/data/com.termux/files/home/lx-music-mobile/node_modules/metro-runtime/src/modules/asyncRequire.js")(_dependencyMap[12], _dependencyMap.paths, "./plugins/carkey").then(function (mod) {
             return mod.startCarKeyListening().catch(function () {});
           });
+          void _$$_REQUIRE(_dependencyMap[11], "/data/data/com.termux/files/home/lx-music-mobile/node_modules/metro-runtime/src/modules/asyncRequire.js")(_dependencyMap[13], _dependencyMap.paths, "./plugins/usb").then(function (mod) {
+            return mod.startUSBListening().catch(function () {});
+          });
           try {
             handlePushedHomeScreen = yield init();
           } catch (err) {
             var _err$stack;
-            void (0, _$$_REQUIRE(_dependencyMap[13], "./utils/tools").tipDialog)({
+            void (0, _$$_REQUIRE(_dependencyMap[14], "./utils/tools").tipDialog)({
               title: '初始化失败 (Init Failed)',
               message: `Boot Log:\n${tryGetBootLog()}\n\n${(_err$stack = err.stack) != null ? _err$stack : err.message}`,
               btnText: 'Exit',
               bgClose: false
             }).then(function () {
-              (0, _$$_REQUIRE(_dependencyMap[14], "./utils/nativeModules/utils").exitApp)();
+              (0, _$$_REQUIRE(_dependencyMap[15], "./utils/nativeModules/utils").exitApp)();
             });
             return;
           }
@@ -2993,7 +2996,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
           return _ref4.apply(this, arguments);
         };
       }();
-      var _yield$import2 = yield _$$_REQUIRE(_dependencyMap[11], "/data/data/com.termux/files/home/lx-music-mobile/node_modules/metro-runtime/src/modules/asyncRequire.js")(_dependencyMap[15], _dependencyMap.paths, "./navigation"),
+      var _yield$import2 = yield _$$_REQUIRE(_dependencyMap[11], "/data/data/com.termux/files/home/lx-music-mobile/node_modules/metro-runtime/src/modules/asyncRequire.js")(_dependencyMap[16], _dependencyMap.paths, "./navigation"),
         initNavigation = _yield$import2.init,
         navigations = _yield$import2.navigations;
       initNavigation(/*#__PURE__*/(0, _asyncToGenerator2.default)(function* () {
@@ -3004,13 +3007,13 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
         yield navigations.pushHomeScreen().then(function () {
           void handlePushedHomeScreen();
         }).catch(function (err) {
-          void (0, _$$_REQUIRE(_dependencyMap[13], "./utils/tools").tipDialog)({
+          void (0, _$$_REQUIRE(_dependencyMap[14], "./utils/tools").tipDialog)({
             title: 'Error',
             message: err.message,
             btnText: 'Exit',
             bgClose: false
           }).then(function () {
-            (0, _$$_REQUIRE(_dependencyMap[14], "./utils/nativeModules/utils").exitApp)();
+            (0, _$$_REQUIRE(_dependencyMap[15], "./utils/nativeModules/utils").exitApp)();
           });
         });
       }));
@@ -3020,16 +3023,16 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     };
   }()).catch(function (err) {
     var _err$stack2;
-    void (0, _$$_REQUIRE(_dependencyMap[13], "./utils/tools").tipDialog)({
+    void (0, _$$_REQUIRE(_dependencyMap[14], "./utils/tools").tipDialog)({
       title: '初始化失败 (Init Failed)',
       message: `Boot Log:\n\n${(_err$stack2 = err.stack) != null ? _err$stack2 : err.message}`,
       btnText: 'Exit',
       bgClose: false
     }).then(function () {
-      (0, _$$_REQUIRE(_dependencyMap[14], "./utils/nativeModules/utils").exitApp)();
+      (0, _$$_REQUIRE(_dependencyMap[15], "./utils/nativeModules/utils").exitApp)();
     });
   });
-},5,[6,7,13,14,684,1449,695,682,1453,679,1454,962,1472,543,666,716],"src/app.ts");
+},5,[6,7,13,14,684,1449,695,682,1453,679,1454,962,1472,1473,543,666,716],"src/app.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   function _interopRequireDefault(e) {
     return e && e.__esModule ? e : {
@@ -149513,9 +149516,9 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     'common.showBackBtn': false,
     'common.showExitBtn': true,
     'common.useSystemFileSelector': true,
-    'common.alwaysKeepStatusbarHeight': false,
+    'common.alwaysKeepStatusbarHeight': true,
     'player.startupAutoPlay': false,
-    'player.startupPushPlayDetailScreen': false,
+    'player.startupPushPlayDetailScreen': true,
     'player.togglePlayMethod': 'listLoop',
     'player.playQuality': '128k',
     'player.isSavePlayTime': false,
@@ -227406,14 +227409,15 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     value: true
   });
   exports.default = void 0;
-  var _toConsumableArray2 = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[1], "@babel/runtime/helpers/toConsumableArray"));
-  var _slicedToArray2 = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[2], "@babel/runtime/helpers/slicedToArray"));
-  var _react = _$$_REQUIRE(_dependencyMap[3], "react");
-  var _reactNative = _$$_REQUIRE(_dependencyMap[4], "react-native");
-  var _Text = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[5], "../../components/common/Text"));
-  var _StatusBar = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[6], "../../components/common/StatusBar"));
-  var _state = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[7], "../../store/player/state"));
-  var _jsxRuntime = _$$_REQUIRE(_dependencyMap[8], "react/jsx-runtime");
+  var _asyncToGenerator2 = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[1], "@babel/runtime/helpers/asyncToGenerator"));
+  var _toConsumableArray2 = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[2], "@babel/runtime/helpers/toConsumableArray"));
+  var _slicedToArray2 = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[3], "@babel/runtime/helpers/slicedToArray"));
+  var _react = _$$_REQUIRE(_dependencyMap[4], "react");
+  var _reactNative = _$$_REQUIRE(_dependencyMap[5], "react-native");
+  var _Text = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[6], "../../components/common/Text"));
+  var _StatusBar = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[7], "../../components/common/StatusBar"));
+  var _state = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[8], "../../store/player/state"));
+  var _jsxRuntime = _$$_REQUIRE(_dependencyMap[9], "react/jsx-runtime");
   var _this = this,
     _jsxFileName = "/data/data/com.termux/files/home/lx-music-mobile/src/screens/PlayQueue/index.tsx";
   /**
@@ -227428,10 +227432,10 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     var t = ((_global$i18n = global.i18n) == null ? void 0 : _global$i18n.t) || function (s) {
       return s;
     };
-    var theme = (0, _$$_REQUIRE(_dependencyMap[9], "../../store/theme/hook").useTheme)();
-    var mi = (0, _$$_REQUIRE(_dependencyMap[10], "../../store/player/hook").usePlayerMusicInfo)();
-    var followCover = (0, _$$_REQUIRE(_dependencyMap[11], "../../store/setting/hook").useSettingValue)('playDetail.background.followCover');
-    var solidColor = (0, _$$_REQUIRE(_dependencyMap[11], "../../store/setting/hook").useSettingValue)('playDetail.background.solidColor');
+    var theme = (0, _$$_REQUIRE(_dependencyMap[10], "../../store/theme/hook").useTheme)();
+    var mi = (0, _$$_REQUIRE(_dependencyMap[11], "../../store/player/hook").usePlayerMusicInfo)();
+    var followCover = (0, _$$_REQUIRE(_dependencyMap[12], "../../store/setting/hook").useSettingValue)('playDetail.background.followCover');
+    var solidColor = (0, _$$_REQUIRE(_dependencyMap[12], "../../store/setting/hook").useSettingValue)('playDetail.background.solidColor');
     var _useState = (0, _react.useState)([]),
       _useState2 = (0, _slicedToArray2.default)(_useState, 2),
       currentListSongs = _useState2[0],
@@ -227466,16 +227470,12 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
 
     // 加载当前播放列表全部歌曲
     (0, _react.useEffect)(function () {
-      var targetId = playerListId || _$$_REQUIRE(_dependencyMap[12], "../../config/constant").LIST_IDS.TEMP;
+      var targetId = playerListId || _$$_REQUIRE(_dependencyMap[13], "../../config/constant").LIST_IDS.TEMP;
       if (initialQueue && initialQueue.length > 0 && currentListSongs.length === 0) {
         setCurrentListSongs(initialQueue);
         return;
       }
-      (0, _$$_REQUIRE(_dependencyMap[13], "../../core/list").getListMusics)(targetId).then(function (list) {
-        if (list && list.length > 0) {
-          setCurrentListSongs(list);
-        }
-      }).catch(function () {});
+      // 播放器队列数据已由 pushPlayQueueScreen 通过 initialQueue 传递
     }, [playMusicInfo, playerListId]);
 
     // 背景 & 文字颜色(同步播放器设置)
@@ -227519,7 +227519,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       var listId = _state.default.playInfo.playerListId;
 
       // 在 playerListId 对应的完整歌曲列表中查找
-      var targetListId = listId || _$$_REQUIRE(_dependencyMap[12], "../../config/constant").LIST_IDS.TEMP;
+      var targetListId = listId || _$$_REQUIRE(_dependencyMap[13], "../../config/constant").LIST_IDS.TEMP;
       var fullList = getList(targetListId);
       var realIdx = (_fullList$findIndex = fullList == null ? void 0 : fullList.findIndex(function (s) {
         return (s.id || '') === songId;
@@ -227535,7 +227535,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
           return (((_t$musicInfo = t.musicInfo) == null ? void 0 : _t$musicInfo.id) || t.id || '') === songId;
         });
         if (tidx >= 0) {
-          void (0, _$$_REQUIRE(_dependencyMap[17], "../../core/player/player").playList)(_$$_REQUIRE(_dependencyMap[12], "../../config/constant").LIST_IDS.TEMP, tidx).catch(function () {
+          void (0, _$$_REQUIRE(_dependencyMap[17], "../../core/player/player").playList)(_$$_REQUIRE(_dependencyMap[13], "../../config/constant").LIST_IDS.TEMP, tidx).catch(function () {
             return (0, _$$_REQUIRE(_dependencyMap[16], "../../utils/tools").toast)('播放失败');
           });
         } else {
@@ -227557,10 +227557,50 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       (0, _$$_REQUIRE(_dependencyMap[18], "../../core/player/tempPlayList").clearTempPlayeList)();
       (0, _$$_REQUIRE(_dependencyMap[16], "../../utils/tools").toast)('已清空');
     };
-    var renderItem = function renderItem(_ref2) {
+    var handleLoadLocalMusic = /*#__PURE__*/function () {
+      var _ref2 = (0, _asyncToGenerator2.default)(function* () {
+        try {
+          var dirs = ['/storage/emulated/0/Music', '/storage/emulated/0/Download'];
+          var allFiles = [];
+          for (var dir of dirs) {
+            try {
+              var files = yield (0, _$$_REQUIRE(_dependencyMap[19], "../../utils/localMediaMetadata").scanAudioFiles)(dir, true);
+              allFiles = allFiles.concat(files);
+            } catch (_unused) {}
+          }
+          if (allFiles.length === 0) {
+            (0, _$$_REQUIRE(_dependencyMap[16], "../../utils/tools").toast)('未找到本地音频文件');
+            return;
+          }
+          var musicList = allFiles.map(function (f) {
+            return {
+              id: f.path,
+              name: f.name.replace(/\.[^/.]+$/, ''),
+              singer: '本地文件',
+              source: 'local',
+              quality: 'unknown',
+              interval: null,
+              meta: {
+                filePath: f.path,
+                ext: f.name.includes('.') ? f.name.split('.').pop() || '' : ''
+              }
+            };
+          });
+          yield (0, _$$_REQUIRE(_dependencyMap[20], "../../core/list").setTempList)('local_queue', musicList);
+          setCurrentListSongs(musicList);
+          (0, _$$_REQUIRE(_dependencyMap[16], "../../utils/tools").toast)(`已加载 ${musicList.length} 首本地歌曲`);
+        } catch (err) {
+          (0, _$$_REQUIRE(_dependencyMap[16], "../../utils/tools").toast)(`加载失败: ${err.message}`);
+        }
+      });
+      return function handleLoadLocalMusic() {
+        return _ref2.apply(this, arguments);
+      };
+    }();
+    var renderItem = function renderItem(_ref3) {
       var _item$musicInfo2, _item$musicInfo3;
-      var item = _ref2.item,
-        index = _ref2.index;
+      var item = _ref3.item,
+        index = _ref3.index;
       var isCurrent = item.id === currentItemId;
       var name = ((_item$musicInfo2 = item.musicInfo) == null ? void 0 : _item$musicInfo2.name) || item.name || '';
       var singer = ((_item$musicInfo3 = item.musicInfo) == null ? void 0 : _item$musicInfo3.singer) || item.singer || '';
@@ -227636,7 +227676,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
         children: [/*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.TouchableOpacity, {
           onPress: handleBack,
           style: styles.backBtn,
-          children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_$$_REQUIRE(_dependencyMap[19], "../../components/common/Icon").Icon, {
+          children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_$$_REQUIRE(_dependencyMap[21], "../../components/common/Icon").Icon, {
             name: "chevron-left",
             size: 22,
             color: textColor
@@ -227743,7 +227783,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       alignItems: 'center'
     }
   });
-},1446,[6,41,7,65,15,967,1090,704,106,966,1167,977,680,989,1383,716,543,983,981,1032],"src/screens/PlayQueue/index.tsx");
+},1446,[6,13,41,7,65,15,967,1090,704,106,966,1167,977,680,1383,716,543,983,981,994,989,1032],"src/screens/PlayQueue/index.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
     value: true
@@ -230334,5 +230374,125 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     isAvailable: isAvailable
   };
 },1472,[6,13,15,983],"src/plugins/carkey/index.ts");
+__d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
+  var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.default = void 0;
+  exports.getExternalPaths = getExternalPaths;
+  exports.startUSBListening = startUSBListening;
+  exports.stopUSBListening = stopUSBListening;
+  var _asyncToGenerator2 = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[1], "@babel/runtime/helpers/asyncToGenerator"));
+  var _reactNative = _$$_REQUIRE(_dependencyMap[2], "react-native");
+  /**
+   * USB - USB设备检测桥接层
+   * 检测USB存储设备插入,自动扫描音频文件
+   */
+
+  var USBModule = _reactNative.NativeModules.USBModule;
+  var eventEmitter = null;
+  var isListening = false;
+  var onFilesFound = null;
+  var isAvailable = !!USBModule;
+  if (isAvailable) {
+    eventEmitter = new _reactNative.NativeEventEmitter(USBModule);
+    eventEmitter.addListener('onUSBMounted', function (data) {
+      console.log('[USB] Mounted:', data.path);
+      (0, _$$_REQUIRE(_dependencyMap[3], "../../utils/tools").toast)(`检测到USB设备: ${data.path}`);
+      // 自动扫描USB设备中的音频文件
+      scanUSBFiles(data.path);
+    });
+    eventEmitter.addListener('onUSBUnmounted', function (data) {
+      console.log('[USB] Removed:', data.path);
+      (0, _$$_REQUIRE(_dependencyMap[3], "../../utils/tools").toast)('USB设备已移除');
+    });
+  }
+  var scanUSBFiles = /*#__PURE__*/function () {
+    var _ref = (0, _asyncToGenerator2.default)(function* (path) {
+      try {
+        var files = yield (0, _$$_REQUIRE(_dependencyMap[4], "../../utils/localMediaMetadata").scanAudioFiles)(path, true);
+        if (files.length === 0) return;
+        var musicList = files.map(function (f) {
+          return {
+            id: f.path,
+            name: f.name.replace(/\.[^/.]+$/, ''),
+            singer: 'USB设备',
+            source: 'local',
+            quality: 'unknown',
+            interval: null,
+            meta: {
+              filePath: f.path,
+              ext: f.name.includes('.') ? f.name.split('.').pop() || '' : ''
+            }
+          };
+        });
+        yield (0, _$$_REQUIRE(_dependencyMap[5], "../../core/list").setTempList)('usb_queue', musicList);
+        (0, _$$_REQUIRE(_dependencyMap[3], "../../utils/tools").toast)(`USB设备: 已加载 ${musicList.length} 首歌曲`);
+        if (onFilesFound) onFilesFound(files);
+      } catch (e) {
+        console.warn('[USB] Scan error:', e);
+      }
+    });
+    return function scanUSBFiles(_x) {
+      return _ref.apply(this, arguments);
+    };
+  }();
+  function startUSBListening(_x2) {
+    return _startUSBListening.apply(this, arguments);
+  }
+  function _startUSBListening() {
+    _startUSBListening = (0, _asyncToGenerator2.default)(function* (callback) {
+      if (!isAvailable || isListening) return false;
+      try {
+        yield USBModule.startListening();
+        isListening = true;
+        if (callback) onFilesFound = callback;
+        console.log('[USB] Started');
+        return true;
+      } catch (e) {
+        console.warn('[USB] Failed:', String(e).substring(0, 80));
+        return false;
+      }
+    });
+    return _startUSBListening.apply(this, arguments);
+  }
+  function stopUSBListening() {
+    return _stopUSBListening.apply(this, arguments);
+  }
+  function _stopUSBListening() {
+    _stopUSBListening = (0, _asyncToGenerator2.default)(function* () {
+      if (!isAvailable || !isListening) return;
+      try {
+        yield USBModule.stopListening();
+        isListening = false;
+        console.log('[USB] Stopped');
+      } catch (e) {
+        console.warn('[USB] Failed to stop:', String(e).substring(0, 80));
+      }
+    });
+    return _stopUSBListening.apply(this, arguments);
+  }
+  function getExternalPaths() {
+    return _getExternalPaths.apply(this, arguments);
+  }
+  function _getExternalPaths() {
+    _getExternalPaths = (0, _asyncToGenerator2.default)(function* () {
+      if (!isAvailable) return [];
+      try {
+        return yield USBModule.getExternalStoragePaths();
+      } catch (_unused) {
+        return [];
+      }
+    });
+    return _getExternalPaths.apply(this, arguments);
+  }
+  var _default = exports.default = {
+    startUSBListening: startUSBListening,
+    stopUSBListening: stopUSBListening,
+    isAvailable: isAvailable,
+    getExternalPaths: getExternalPaths
+  };
+},1473,[6,13,15,543,994,989],"src/plugins/usb/index.ts");
 __r(69);
 __r(0);

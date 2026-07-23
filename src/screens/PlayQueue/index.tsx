@@ -18,6 +18,9 @@ import { getListMusics } from '@/core/list'
 import { LIST_IDS } from '@/config/constant'
 import StatusBar from '@/components/common/StatusBar'
 import playerState from '@/store/player/state'
+import { scanAudioFiles } from '@/utils/localMediaMetadata'
+import { setTempList } from '@/core/list'
+import RNFS from 'react-native-fs'
 import { toast } from '@/utils/tools'
 
 
@@ -58,11 +61,7 @@ export default memo(({ componentId, initialQueue = [] }: PlayQueueProps) => {
       setCurrentListSongs(initialQueue)
       return
     }
-    getListMusics(targetId).then(list => {
-      if (list && list.length > 0) {
-        setCurrentListSongs(list)
-      }
-    }).catch(() => {})
+    // 播放器队列数据已由 pushPlayQueueScreen 通过 initialQueue 传递
   }, [playMusicInfo, playerListId])
 
   // 背景 & 文字颜色(同步播放器设置)
@@ -127,6 +126,34 @@ export default memo(({ componentId, initialQueue = [] }: PlayQueueProps) => {
   }, [allQueue, currentItemId])
 
   const handleClear = () => { clearTempPlayeList(); toast('已清空') }
+  
+  const handleLoadLocalMusic = async () => {
+    try {
+      const dirs = ['/storage/emulated/0/Music', '/storage/emulated/0/Download']
+      let allFiles: {name: string; path: string}[] = []
+      for (const dir of dirs) {
+        try {
+          const files = await scanAudioFiles(dir, true)
+          allFiles = allFiles.concat(files)
+        } catch {}
+      }
+      if (allFiles.length === 0) { toast('未找到本地音频文件'); return }
+      const musicList = allFiles.map(f => ({
+        id: f.path,
+        name: f.name.replace(/\.[^/.]+$/, ''),
+        singer: '本地文件',
+        source: 'local' as const,
+        quality: 'unknown',
+        interval: null,
+        meta: { filePath: f.path, ext: f.name.includes('.') ? f.name.split('.').pop() || '' : '' },
+      }))
+      await setTempList('local_queue', musicList as any)
+      setCurrentListSongs(musicList as any)
+      toast(`已加载 ${musicList.length} 首本地歌曲`)
+    } catch (err: any) {
+      toast(`加载失败: ${err.message}`)
+    }
+  }
 
   const renderItem = ({ item, index }: { item: any; index: number }) => {
     const isCurrent = item.id === currentItemId
