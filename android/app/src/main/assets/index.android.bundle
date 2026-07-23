@@ -163262,7 +163262,7 @@ __d(function(global, require, _importDefaultUnused, _importAllUnused, module, ex
   "setting_localMusic_overwrite_tip": "重新扫描将覆盖现有的「本地音乐」列表",
   "setting_localMusic_scanning": "正在扫描...",
   "setting_localMusic_reading": "正在读取",
-  "setting_localMusic_scan_complete": "扫描完成,共导入 {total} 首歌曲"
+  "setting_localMusic_scan_complete": "扫描完成,共导入 {total} 首歌曲",
   "download_title": "下载管理",
   "download_action": "下载",
   "download_add_tip": "已加入下载队列",
@@ -163292,7 +163292,7 @@ __d(function(global, require, _importDefaultUnused, _importAllUnused, module, ex
   "download_tab_tasks": "当前任务",
   "download_tab_history": "历史记录",
   "download_empty_tasks": "暂无下载任务",
-  "download_empty_history": "暂无下载历���",
+  "download_empty_history": "暂无下载历史"
 };
 },699,[],"src/lang/zh-cn.json");
 __d(function(global, require, _importDefaultUnused, _importAllUnused, module, exports, _dependencyMapUnused) {
