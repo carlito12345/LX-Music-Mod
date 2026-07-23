@@ -218326,7 +218326,6 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     var t = (0, _$$_REQUIRE(_dependencyMap[8], "../../../../lang").useI18n)();
     var theme = (0, _$$_REQUIRE(_dependencyMap[9], "../../../../store/theme/hook").useTheme)();
     var menuRef = (0, _react.useRef)(null);
-    var viewRef = (0, _react.useRef)(null);
     var handleDelete = /*#__PURE__*/function () {
       var _ref2 = (0, _asyncToGenerator2.default)(function* () {
         var confirm = yield (0, _$$_REQUIRE(_dependencyMap[10], "../../../../utils/tools").confirmDialog)({
@@ -218349,7 +218348,6 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
           (0, _$$_REQUIRE(_dependencyMap[10], "../../../../utils/tools").toast)(t('download_file_not_found'));
           return;
         }
-        // Add to temporary list and play
         var tempMusicInfo = Object.assign({}, item.metadata.musicInfo, {
           meta: Object.assign({}, item.metadata.musicInfo.meta, {
             filePath: item.metadata.filePath
@@ -218361,19 +218359,20 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
         (0, _$$_REQUIRE(_dependencyMap[10], "../../../../utils/tools").toast)(t('download_play_failed') + ': ' + err.message);
       }
     }), [item, t]);
-    var handleShowMenu = (0, _react.useCallback)(function () {
-      if (viewRef.current) {
-        viewRef.current.measure(function (x, y, width, height, pageX, pageY) {
-          var _menuRef$current;
-          var position = {
-            w: width,
-            h: height,
-            x: pageX,
-            y: pageY
-          };
-          (_menuRef$current = menuRef.current) == null ? void 0 : _menuRef$current.show(position);
-        });
-      }
+    var handleShowMenu = (0, _react.useCallback)(function (event) {
+      var _menuRef$current;
+      var _event$nativeEvent = event.nativeEvent,
+        pageX = _event$nativeEvent.pageX,
+        pageY = _event$nativeEvent.pageY;
+      var x = Number(pageX) || 100;
+      var y = Number(pageY) || 200;
+      var position = {
+        w: 200,
+        h: 60,
+        x: x,
+        y: y
+      };
+      (_menuRef$current = menuRef.current) == null ? void 0 : _menuRef$current.show(position);
     }, []);
     var handleMenuPress = (0, _react.useCallback)(/*#__PURE__*/function () {
       var _ref4 = (0, _asyncToGenerator2.default)(function* (menu) {
@@ -218431,61 +218430,60 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       });
     }
     return /*#__PURE__*/(0, _jsxRuntime.jsxs)(_jsxRuntime.Fragment, {
-      children: [/*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.View, {
-        ref: viewRef,
-        children: /*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.TouchableOpacity, {
-          style: Object.assign({}, styles.container, {
-            borderBottomColor: theme['c-border-background']
-          }),
-          onPress: handlePlay,
-          activeOpacity: 0.7,
-          onLongPress: handleShowMenu,
-          children: [/*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.View, {
-            style: styles.info,
-            children: [/*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
-              numberOfLines: 1,
-              size: 14,
-              color: theme['c-font'],
-              children: item.metadata.musicInfo.name
-            }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
-              numberOfLines: 1,
+      children: [/*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.TouchableOpacity, {
+        style: Object.assign({}, styles.container, {
+          borderBottomColor: theme['c-border-background']
+        }),
+        onPress: handlePlay,
+        activeOpacity: 0.7,
+        onLongPress: function onLongPress(e) {
+          return handleShowMenu(e);
+        },
+        children: [/*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.View, {
+          style: styles.info,
+          children: [/*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
+            numberOfLines: 1,
+            size: 14,
+            color: theme['c-font'],
+            children: item.metadata.musicInfo.name
+          }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
+            numberOfLines: 1,
+            size: 12,
+            color: theme['c-font-label'],
+            children: item.metadata.musicInfo.singer
+          }), /*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.View, {
+            style: styles.statusRow,
+            children: [/*#__PURE__*/(0, _jsxRuntime.jsxs)(_Text.default, {
+              size: 12,
+              color: isError ? theme['c-error'] : theme['c-font-label'],
+              children: [t(STATUS_TEXT_MAP[item.status]), isError && item.statusText ? `: ${item.statusText}` : '']
+            }), item.status === 'run' ? /*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
               size: 12,
               color: theme['c-font-label'],
-              children: item.metadata.musicInfo.singer
-            }), /*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.View, {
-              style: styles.statusRow,
-              children: [/*#__PURE__*/(0, _jsxRuntime.jsxs)(_Text.default, {
-                size: 12,
-                color: isError ? theme['c-error'] : theme['c-font-label'],
-                children: [t(STATUS_TEXT_MAP[item.status]), isError && item.statusText ? `: ${item.statusText}` : '']
-              }), item.status === 'run' ? /*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
-                size: 12,
-                color: theme['c-font-label'],
-                children: item.speed
-              }) : null, isCompleted ? /*#__PURE__*/(0, _jsxRuntime.jsxs)(_Text.default, {
-                size: 12,
-                color: theme['c-font-label'],
-                children: [(item.total / 1024 / 1024).toFixed(1), " MB"]
-              }) : null]
-            }), item.status === 'run' ? /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.View, {
-              style: styles.progressBar,
-              children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.View, {
-                style: Object.assign({}, styles.progressFill, {
-                  width: `${item.progress * 100}%`,
-                  backgroundColor: theme['c-primary']
-                })
-              })
+              children: item.speed
+            }) : null, isCompleted ? /*#__PURE__*/(0, _jsxRuntime.jsxs)(_Text.default, {
+              size: 12,
+              color: theme['c-font-label'],
+              children: [(item.total / 1024 / 1024).toFixed(1), " MB"]
             }) : null]
-          }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.View, {
-            style: styles.action,
-            children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
-              style: styles.deleteBtn,
-              onPress: handleDelete,
-              color: theme['c-error'],
-              children: t('download_delete')
+          }), item.status === 'run' ? /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.View, {
+            style: styles.progressBar,
+            children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.View, {
+              style: Object.assign({}, styles.progressFill, {
+                width: `${item.progress * 100}%`,
+                backgroundColor: theme['c-primary']
+              })
             })
-          })]
-        })
+          }) : null]
+        }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.View, {
+          style: styles.action,
+          children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
+            style: styles.deleteBtn,
+            onPress: handleDelete,
+            color: theme['c-error'],
+            children: t('download_delete')
+          })
+        })]
       }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_Menu.default, {
         ref: menuRef,
         menus: menus,

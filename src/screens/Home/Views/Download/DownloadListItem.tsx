@@ -1,5 +1,5 @@
 import { memo, useCallback, useRef } from 'react'
-import { View, TouchableOpacity } from 'react-native'
+import { View, TouchableOpacity, type GestureResponderEvent } from 'react-native'
 
 import { useTheme } from '@/store/theme/hook'
 import { useI18n } from '@/lang'
@@ -26,7 +26,6 @@ export default memo(({ item }: {
   const t = useI18n()
   const theme = useTheme()
   const menuRef = useRef<MenuType>(null)
-  const viewRef = useRef<View>(null)
 
   const handleDelete = async() => {
     const confirm = await confirmDialog({
@@ -46,7 +45,6 @@ export default memo(({ item }: {
         toast(t('download_file_not_found'))
         return
       }
-      // Add to temporary list and play
       const tempMusicInfo = {
         ...item.metadata.musicInfo,
         meta: {
@@ -61,13 +59,12 @@ export default memo(({ item }: {
     }
   }, [item, t])
 
-  const handleShowMenu = useCallback(() => {
-    if (viewRef.current) {
-      viewRef.current.measure((x, y, width, height, pageX, pageY) => {
-        const position: Position = { w: width, h: height, x: pageX, y: pageY }
-        menuRef.current?.show(position)
-      })
-    }
+  const handleShowMenu = useCallback((event: GestureResponderEvent) => {
+    const { pageX, pageY } = event.nativeEvent
+    const x = Number(pageX) || 100
+    const y = Number(pageY) || 200
+    const position: Position = { w: 200, h: 60, x, y }
+    menuRef.current?.show(position)
   }, [])
 
   const handleMenuPress = useCallback(async (menu: { action: string }) => {
@@ -119,12 +116,11 @@ export default memo(({ item }: {
 
   return (
     <>
-    <View ref={viewRef}>
       <TouchableOpacity 
         style={{ ...styles.container, borderBottomColor: theme['c-border-background'] }} 
         onPress={handlePlay} 
         activeOpacity={0.7} 
-        onLongPress={handleShowMenu}
+        onLongPress={(e) => handleShowMenu(e)}
       >
         <View style={styles.info}>
           <Text numberOfLines={1} size={14} color={theme['c-font']}>{item.metadata.musicInfo.name}</Text>
@@ -157,12 +153,11 @@ export default memo(({ item }: {
           <Text style={styles.deleteBtn} onPress={handleDelete} color={theme['c-error']}>{t('download_delete')}</Text>
         </View>
       </TouchableOpacity>
-    </View>
-    <Menu 
-      ref={menuRef} 
-      menus={menus} 
-      onPress={handleMenuPress} 
-    />
+      <Menu 
+        ref={menuRef} 
+        menus={menus} 
+        onPress={handleMenuPress} 
+      />
     </>
   )
 })
