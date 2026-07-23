@@ -7,7 +7,6 @@ import {
   PlayDetail,
   SonglistDetail,
   Comment,
-  PlayQueue,
   // Setting,
 } from '@/screens'
 import { Provider } from '@/store/Provider'
@@ -17,7 +16,6 @@ import {
   PLAY_DETAIL_SCREEN,
   SONGLIST_DETAIL_SCREEN,
   COMMENT_SCREEN,
-  PLAY_QUEUE_SCREEN,
   VERSION_MODAL,
   PACT_MODAL,
   SYNC_MODE_MODAL,
@@ -50,8 +48,6 @@ export default () => {
   Navigation.registerComponent(PACT_MODAL, () => WrappedComponent(PactModal))
   Navigation.registerComponent(SYNC_MODE_MODAL, () => WrappedComponent(SyncModeModal))
   // Navigation.registerComponent(SETTING_SCREEN, () => WrappedComponent(Setting))
-  Navigation.registerComponent(PLAY_QUEUE_SCREEN, () => WrappedComponent(PlayQueue))
-  Navigation.registerComponent('GUIDE', () => WrappedComponent(Guide))
 
   console.info('All screens have been registered...')
 }
