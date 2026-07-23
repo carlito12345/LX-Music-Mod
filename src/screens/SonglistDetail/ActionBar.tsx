@@ -1,4 +1,4 @@
-import { memo } from 'react'
+import { memo, useRef } from 'react'
 import { View } from 'react-native'
 import Button from '@/components/common/Button'
 
@@ -12,14 +12,13 @@ import songlistState from '@/store/songlist/state'
 import { useI18n } from '@/lang'
 import { useListInfo } from './state'
 import { addDownload } from '@/core/download'
-import { useRef, useState } from 'react'
 import DownloadQualityModal, { type DownloadQualityModalType } from '@/components/DownloadQualityModal'
-// import { NAV_SHEAR_NATIVE_IDS } from '@/config/constant'
 
 export default memo(() => {
   const theme = useTheme()
   const t = useI18n()
   const info = useListInfo()
+  const downloadModalRef = useRef<DownloadQualityModalType>(null)
 
   const back = () => {
     void pop(commonState.componentIds.songlistDetail!)
@@ -35,21 +34,10 @@ export default memo(() => {
     void handleCollect(info.id, info.source, songlistState.listDetailInfo.info.name || info.name)
   }
 
-  const downloadModalRef = useRef<DownloadQualityModalType>(null)
-  const [downloadAllQuality, setDownloadAllQuality] = useState('320k')
-
-  const handleShowDownloadAll = () => {
-    downloadModalRef.current?.show({} as any)
-  }
-
-  const handleDownloadAll = async (quality: string) => {
+  const handleDownloadAll = (quality: string) => {
     const musicList = songlistState.listDetailInfo.list
     for (const music of musicList) {
-      try {
-        await addDownload(music as any, quality)
-      } catch (e) {
-        console.warn('[Download] Failed:', e)
-      }
+      void addDownload(music as any, quality).catch(e => console.warn('[Download]', e))
     }
   }
 
@@ -61,7 +49,7 @@ export default memo(() => {
       <Button onPress={handlePlayAll} style={styles.controlBtn}>
         <Text style={{ ...styles.controlBtnText, color: theme['c-button-font'] }}>{t('play_all')}</Text>
       </Button>
-      <Button onPress={handleShowDownloadAll} style={styles.controlBtn}>
+      <Button onPress={() => downloadModalRef.current?.show({} as any)} style={styles.controlBtn}>
         <Text style={{ ...styles.controlBtnText, color: theme['c-button-font'] }}>下载全部</Text>
       </Button>
       <Button onPress={back} style={styles.controlBtn}>
@@ -93,4 +81,3 @@ const styles = createStyle({
     textAlign: 'center',
   },
 })
-

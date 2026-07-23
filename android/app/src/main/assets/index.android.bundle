@@ -226214,10 +226214,9 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       info = _ref.info;
     var musicListRef = (0, _react.useRef)(null);
     var isUnmountedRef = (0, _react.useRef)(false);
-    var bgPic = (0, _$$_REQUIRE(_dependencyMap[7], "../../store/common/hook").useBgPic)();
     (0, _react.useEffect)(function () {
       var _musicListRef$current;
-      (0, _$$_REQUIRE(_dependencyMap[8], "../../core/common").setComponentId)(_$$_REQUIRE(_dependencyMap[9], "../../config/constant").COMPONENT_IDS.songlistDetail, componentId);
+      (0, _$$_REQUIRE(_dependencyMap[7], "../../core/common").setComponentId)(_$$_REQUIRE(_dependencyMap[8], "../../config/constant").COMPONENT_IDS.songlistDetail, componentId);
       isUnmountedRef.current = false;
       (_musicListRef$current = musicListRef.current) == null ? void 0 : _musicListRef$current.loadList(info.source, info.id);
       return function () {
@@ -226226,16 +226225,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
     return /*#__PURE__*/(0, _jsxRuntime.jsxs)(_PageContent.default, {
-      children: [bgPic ? /*#__PURE__*/(0, _jsxRuntime.jsx)(View, {
-        style: {
-          position: 'absolute',
-          left: 0,
-          right: 0,
-          top: 0,
-          bottom: 0,
-          backgroundColor: 'rgba(0,0,0,0.3)'
-        }
-      }) : null, /*#__PURE__*/(0, _jsxRuntime.jsx)(_StatusBar.default, {}), /*#__PURE__*/(0, _jsxRuntime.jsx)(_$$_REQUIRE(_dependencyMap[10], "./state").ListInfoContext.Provider, {
+      children: [/*#__PURE__*/(0, _jsxRuntime.jsx)(_StatusBar.default, {}), /*#__PURE__*/(0, _jsxRuntime.jsx)(_$$_REQUIRE(_dependencyMap[9], "./state").ListInfoContext.Provider, {
         value: info,
         children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_MusicList.default, {
           ref: musicListRef,
@@ -226254,7 +226244,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   //     flex: 1,
   //   },
   // })
-},1433,[6,65,1434,1061,1090,1354,106,1074,689,680,1437],"src/screens/SonglistDetail/index.tsx");
+},1433,[6,65,1434,1061,1090,1354,106,689,680,1437],"src/screens/SonglistDetail/index.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -226585,57 +226575,40 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     value: true
   });
   exports.default = void 0;
-  var _asyncToGenerator2 = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[1], "@babel/runtime/helpers/asyncToGenerator"));
-  var _slicedToArray2 = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[2], "@babel/runtime/helpers/slicedToArray"));
-  var _react = _$$_REQUIRE(_dependencyMap[3], "react");
-  var _reactNative = _$$_REQUIRE(_dependencyMap[4], "react-native");
-  var _Button = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[5], "../../components/common/Button"));
-  var _state = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[6], "../../store/common/state"));
-  var _Text = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[7], "../../components/common/Text"));
-  var _state2 = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[8], "../../store/songlist/state"));
-  var _DownloadQualityModal = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[9], "../../components/DownloadQualityModal"));
-  var _jsxRuntime = _$$_REQUIRE(_dependencyMap[10], "react/jsx-runtime");
+  var _react = _$$_REQUIRE(_dependencyMap[1], "react");
+  var _reactNative = _$$_REQUIRE(_dependencyMap[2], "react-native");
+  var _Button = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[3], "../../components/common/Button"));
+  var _state = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[4], "../../store/common/state"));
+  var _Text = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[5], "../../components/common/Text"));
+  var _state2 = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[6], "../../store/songlist/state"));
+  var _DownloadQualityModal = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[7], "../../components/DownloadQualityModal"));
+  var _jsxRuntime = _$$_REQUIRE(_dependencyMap[8], "react/jsx-runtime");
   var _this = this,
-    _jsxFileName = "/data/data/com.termux/files/home/lx-music-mobile/src/screens/SonglistDetail/ActionBar.tsx"; // import { NAV_SHEAR_NATIVE_IDS } from '@/config/constant'
+    _jsxFileName = "/data/data/com.termux/files/home/lx-music-mobile/src/screens/SonglistDetail/ActionBar.tsx";
   var _default = exports.default = (0, _react.memo)(function () {
-    var theme = (0, _$$_REQUIRE(_dependencyMap[11], "../../store/theme/hook").useTheme)();
-    var t = (0, _$$_REQUIRE(_dependencyMap[12], "../../lang").useI18n)();
-    var info = (0, _$$_REQUIRE(_dependencyMap[13], "./state").useListInfo)();
+    var theme = (0, _$$_REQUIRE(_dependencyMap[9], "../../store/theme/hook").useTheme)();
+    var t = (0, _$$_REQUIRE(_dependencyMap[10], "../../lang").useI18n)();
+    var info = (0, _$$_REQUIRE(_dependencyMap[11], "./state").useListInfo)();
+    var downloadModalRef = (0, _react.useRef)(null);
     var back = function back() {
-      void (0, _$$_REQUIRE(_dependencyMap[14], "../../navigation").pop)(_state.default.componentIds.songlistDetail);
+      void (0, _$$_REQUIRE(_dependencyMap[12], "../../navigation").pop)(_state.default.componentIds.songlistDetail);
     };
     var handlePlayAll = function handlePlayAll() {
       if (!_state2.default.listDetailInfo.info.name) return;
-      void (0, _$$_REQUIRE(_dependencyMap[15], "./listAction").handlePlay)(info.id, info.source, _state2.default.listDetailInfo.list);
+      void (0, _$$_REQUIRE(_dependencyMap[13], "./listAction").handlePlay)(info.id, info.source, _state2.default.listDetailInfo.list);
     };
     var handleCollection = function handleCollection() {
       if (!_state2.default.listDetailInfo.info.name) return;
-      void (0, _$$_REQUIRE(_dependencyMap[15], "./listAction").handleCollect)(info.id, info.source, _state2.default.listDetailInfo.info.name || info.name);
+      void (0, _$$_REQUIRE(_dependencyMap[13], "./listAction").handleCollect)(info.id, info.source, _state2.default.listDetailInfo.info.name || info.name);
     };
-    var downloadModalRef = (0, _react.useRef)(null);
-    var _useState = (0, _react.useState)('320k'),
-      _useState2 = (0, _slicedToArray2.default)(_useState, 2),
-      downloadAllQuality = _useState2[0],
-      setDownloadAllQuality = _useState2[1];
-    var handleShowDownloadAll = function handleShowDownloadAll() {
-      var _downloadModalRef$cur;
-      (_downloadModalRef$cur = downloadModalRef.current) == null ? void 0 : _downloadModalRef$cur.show({});
+    var handleDownloadAll = function handleDownloadAll(quality) {
+      var musicList = _state2.default.listDetailInfo.list;
+      for (var music of musicList) {
+        void (0, _$$_REQUIRE(_dependencyMap[14], "../../core/download").addDownload)(music, quality).catch(function (e) {
+          return console.warn('[Download]', e);
+        });
+      }
     };
-    var handleDownloadAll = /*#__PURE__*/function () {
-      var _ref = (0, _asyncToGenerator2.default)(function* (quality) {
-        var musicList = _state2.default.listDetailInfo.list;
-        for (var music of musicList) {
-          try {
-            yield (0, _$$_REQUIRE(_dependencyMap[16], "../../core/download").addDownload)(music, quality);
-          } catch (e) {
-            console.warn('[Download] Failed:', e);
-          }
-        }
-      });
-      return function handleDownloadAll(_x) {
-        return _ref.apply(this, arguments);
-      };
-    }();
     return /*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.View, {
       style: styles.container,
       children: [/*#__PURE__*/(0, _jsxRuntime.jsx)(_Button.default, {
@@ -226657,7 +226630,10 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
           children: t('play_all')
         })
       }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_Button.default, {
-        onPress: handleShowDownloadAll,
+        onPress: function onPress() {
+          var _downloadModalRef$cur;
+          return (_downloadModalRef$cur = downloadModalRef.current) == null ? void 0 : _downloadModalRef$cur.show({});
+        },
         style: styles.controlBtn,
         children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
           style: Object.assign({}, styles.controlBtnText, {
@@ -226682,7 +226658,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       })]
     });
   });
-  var styles = (0, _$$_REQUIRE(_dependencyMap[17], "../../utils/tools").createStyle)({
+  var styles = (0, _$$_REQUIRE(_dependencyMap[15], "../../utils/tools").createStyle)({
     container: {
       flexDirection: 'row',
       width: '100%',
@@ -226703,7 +226679,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       textAlign: 'center'
     }
   });
-},1436,[6,13,7,65,15,965,688,967,1010,1132,106,966,698,1437,716,1438,1116,543],"src/screens/SonglistDetail/ActionBar.tsx");
+},1436,[6,65,15,965,688,967,1010,1132,106,966,698,1437,716,1438,1116,543],"src/screens/SonglistDetail/ActionBar.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
     value: true

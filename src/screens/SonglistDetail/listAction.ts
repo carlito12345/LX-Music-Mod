@@ -16,7 +16,7 @@ export const handlePlay = async(id: string, source: Source, list?: LX.Music.Musi
   if (!list?.length) list = (await getListDetail(id, source, 1)).list
   if (list?.length) {
     await setTempList(listId, [...list])
-void playList(LIST_IDS.TEMP, index)
+    void playList(LIST_IDS.TEMP, index)
     isPlayingList = true
   }
   const fullList = await getListDetailAll(source, id)
