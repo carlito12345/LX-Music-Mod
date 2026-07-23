@@ -218231,21 +218231,22 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     var musicInfo = (0, _$$_REQUIRE(_dependencyMap[6], "../../../../store/player/hook").usePlayerMusicInfo)();
     var downloadFileName = (0, _$$_REQUIRE(_dependencyMap[7], "../../../../store/setting/hook").useSettingValue)('download.fileName');
     var theme = (0, _$$_REQUIRE(_dependencyMap[8], "../../../../store/theme/hook").useTheme)();
+    var bgPic = (0, _$$_REQUIRE(_dependencyMap[9], "../../../../store/common/hook").useBgPic)();
     var handlePress = function handlePress() {
       // console.log('')
       // console.log(playMusicInfo)
       if (!musicInfo.id) return;
-      _$$_REQUIRE(_dependencyMap[9], "../../../../navigation").navigations.pushPlayDetailScreen(_state.default.componentIds.home);
+      _$$_REQUIRE(_dependencyMap[10], "../../../../navigation").navigations.pushPlayDetailScreen(_state.default.componentIds.home);
       // toast(global.i18n.t('play_detail_todo_tip'), 'long')
     };
     var handleLongPress = function handleLongPress() {
       var listId = _state2.default.playMusicInfo.listId;
-      if (!listId || listId == _$$_REQUIRE(_dependencyMap[10], "../../../../config/constant").LIST_IDS.DOWNLOAD) return;
+      if (!listId || listId == _$$_REQUIRE(_dependencyMap[11], "../../../../config/constant").LIST_IDS.DOWNLOAD) return;
       global.app_event.jumpListPosition();
     };
     // console.log('render title')
 
-    var title = musicInfo.id ? musicInfo.singer ? (0, _$$_REQUIRE(_dependencyMap[11], "../../../../utils/tools").formatMusicName)(downloadFileName, musicInfo.name, musicInfo.singer) : musicInfo.name : '';
+    var title = musicInfo.id ? musicInfo.singer ? (0, _$$_REQUIRE(_dependencyMap[12], "../../../../utils/tools").formatMusicName)(downloadFileName, musicInfo.name, musicInfo.singer) : musicInfo.name : '';
     // console.log(playMusicInfo)
     return /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.TouchableOpacity, {
       style: styles.container,
@@ -218253,7 +218254,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       onPress: handlePress,
       activeOpacity: 0.7,
       children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
-        color: theme['c-font-label'],
+        color: bgPic ? '#fff' : theme['c-font-label'],
         numberOfLines: 1,
         children: title
       })
@@ -218278,7 +218279,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   //     </View>
   //   )
   // }
-  var styles = (0, _$$_REQUIRE(_dependencyMap[11], "../../../../utils/tools").createStyle)({
+  var styles = (0, _$$_REQUIRE(_dependencyMap[12], "../../../../utils/tools").createStyle)({
     container: {
       width: '100%',
       paddingHorizontal: 2
@@ -218287,7 +218288,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       // backgroundColor: 'rgba(0, 0, 0, .1)',
     }
   });
-},1356,[6,15,688,704,967,106,1167,977,966,716,680,543],"src/components/player/PlayerBar/components/Title.tsx");
+},1356,[6,15,688,704,967,106,1167,977,966,1074,716,680,543],"src/components/player/PlayerBar/components/Title.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -218312,6 +218313,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   var PlayTimeCurrent = function PlayTimeCurrent(_ref) {
     var timeStr = _ref.timeStr;
     var theme = (0, _$$_REQUIRE(_dependencyMap[9], "../../../../store/theme/hook").useTheme)();
+    var bgPic = (0, _$$_REQUIRE(_dependencyMap[10], "../../../../store/common/hook").useBgPic)();
     // console.log(timeStr)
     return /*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
       size: FONT_SIZE,
@@ -218322,6 +218324,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   var PlayTimeMax = (0, _react.memo)(function (_ref2) {
     var timeStr = _ref2.timeStr;
     var theme = (0, _$$_REQUIRE(_dependencyMap[9], "../../../../store/theme/hook").useTheme)();
+    var bgPic = (0, _$$_REQUIRE(_dependencyMap[10], "../../../../store/common/hook").useBgPic)();
     return /*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
       size: FONT_SIZE,
       color: theme['c-500'],
@@ -218331,18 +218334,19 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   var _default = exports.default = function _default(_ref3) {
     var isHome = _ref3.isHome;
     var theme = (0, _$$_REQUIRE(_dependencyMap[9], "../../../../store/theme/hook").useTheme)();
+    var bgPic = (0, _$$_REQUIRE(_dependencyMap[10], "../../../../store/common/hook").useBgPic)();
     var _useState = (0, _react.useState)(true),
       _useState2 = (0, _slicedToArray2.default)(_useState, 2),
       autoUpdate = _useState2[0],
       setAutoUpdate = _useState2[1];
-    var _useProgress = (0, _$$_REQUIRE(_dependencyMap[10], "../../../../store/player/hook").useProgress)(autoUpdate),
+    var _useProgress = (0, _$$_REQUIRE(_dependencyMap[11], "../../../../store/player/hook").useProgress)(autoUpdate),
       maxPlayTimeStr = _useProgress.maxPlayTimeStr,
       nowPlayTimeStr = _useProgress.nowPlayTimeStr,
       progress = _useProgress.progress,
       maxPlayTime = _useProgress.maxPlayTime;
-    var buffered = (0, _$$_REQUIRE(_dependencyMap[11], "../../../../plugins/player").useBufferProgress)();
-    var allowProgressBarSeek = (0, _$$_REQUIRE(_dependencyMap[12], "../../../../store/setting/hook").useSettingValue)('common.allowProgressBarSeek');
-    (0, _$$_REQUIRE(_dependencyMap[13], "../../../../store/common/hook").usePageVisible)([_$$_REQUIRE(_dependencyMap[14], "../../../../config/constant").COMPONENT_IDS.home], (0, _react.useCallback)(function (visible) {
+    var buffered = (0, _$$_REQUIRE(_dependencyMap[12], "../../../../plugins/player").useBufferProgress)();
+    var allowProgressBarSeek = (0, _$$_REQUIRE(_dependencyMap[13], "../../../../store/setting/hook").useSettingValue)('common.allowProgressBarSeek');
+    (0, _$$_REQUIRE(_dependencyMap[10], "../../../../store/common/hook").usePageVisible)([_$$_REQUIRE(_dependencyMap[14], "../../../../config/constant").COMPONENT_IDS.home], (0, _react.useCallback)(function (visible) {
       if (isHome) setAutoUpdate(visible);
     }, [isHome]));
     return /*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.View, {
@@ -218431,7 +218435,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       zIndex: 100
     }
   });
-},1357,[6,7,65,15,1358,1359,967,106,681,966,1167,705,977,1074,680,543],"src/components/player/PlayerBar/components/PlayInfo.tsx");
+},1357,[6,7,65,15,1358,1359,967,106,681,966,1074,1167,705,977,680,543],"src/components/player/PlayerBar/components/PlayInfo.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -218694,51 +218698,54 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   };
   var PlayPrevBtn = function PlayPrevBtn() {
     var theme = (0, _$$_REQUIRE(_dependencyMap[3], "../../../../store/theme/hook").useTheme)();
+    var bgPic = (0, _$$_REQUIRE(_dependencyMap[4], "../../../../store/common/hook").useBgPic)();
     return /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.TouchableOpacity, {
       style: styles.cotrolBtn,
       activeOpacity: 0.5,
       onPress: handlePlayPrev,
-      children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_$$_REQUIRE(_dependencyMap[4], "../../../common/Icon").Icon, {
+      children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_$$_REQUIRE(_dependencyMap[5], "../../../common/Icon").Icon, {
         name: "prevMusic",
-        color: theme['c-button-font'],
+        color: bgPic ? '#fff' : theme['c-button-font'],
         size: BTN_SIZE
       })
     });
   };
   var PlayNextBtn = function PlayNextBtn() {
     var theme = (0, _$$_REQUIRE(_dependencyMap[3], "../../../../store/theme/hook").useTheme)();
+    var bgPic = (0, _$$_REQUIRE(_dependencyMap[4], "../../../../store/common/hook").useBgPic)();
     return /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.TouchableOpacity, {
       style: styles.cotrolBtn,
       activeOpacity: 0.5,
       onPress: handlePlayNext,
-      children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_$$_REQUIRE(_dependencyMap[4], "../../../common/Icon").Icon, {
+      children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_$$_REQUIRE(_dependencyMap[5], "../../../common/Icon").Icon, {
         name: "nextMusic",
-        color: theme['c-button-font'],
+        color: bgPic ? '#fff' : theme['c-button-font'],
         size: BTN_SIZE
       })
     });
   };
   var TogglePlayBtn = function TogglePlayBtn() {
-    var isPlay = (0, _$$_REQUIRE(_dependencyMap[5], "../../../../store/player/hook").useIsPlay)();
+    var isPlay = (0, _$$_REQUIRE(_dependencyMap[6], "../../../../store/player/hook").useIsPlay)();
     var theme = (0, _$$_REQUIRE(_dependencyMap[3], "../../../../store/theme/hook").useTheme)();
+    var bgPic = (0, _$$_REQUIRE(_dependencyMap[4], "../../../../store/common/hook").useBgPic)();
     return /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.TouchableOpacity, {
       style: styles.cotrolBtn,
       activeOpacity: 0.5,
       onPress: _$$_REQUIRE(_dependencyMap[2], "../../../../core/player/player").togglePlay,
-      children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_$$_REQUIRE(_dependencyMap[4], "../../../common/Icon").Icon, {
+      children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_$$_REQUIRE(_dependencyMap[5], "../../../common/Icon").Icon, {
         name: isPlay ? 'pause' : 'play',
-        color: theme['c-button-font'],
+        color: bgPic ? '#fff' : theme['c-button-font'],
         size: BTN_SIZE
       })
     });
   };
   var _default = exports.default = function _default() {
-    var isHorizontalMode = (0, _$$_REQUIRE(_dependencyMap[6], "../../../../utils/hooks").useHorizontalMode)();
+    var isHorizontalMode = (0, _$$_REQUIRE(_dependencyMap[7], "../../../../utils/hooks").useHorizontalMode)();
     return /*#__PURE__*/(0, _jsxRuntime.jsxs)(_jsxRuntime.Fragment, {
       children: [isHorizontalMode ? /*#__PURE__*/(0, _jsxRuntime.jsx)(PlayPrevBtn, {}) : null, /*#__PURE__*/(0, _jsxRuntime.jsx)(TogglePlayBtn, {}), /*#__PURE__*/(0, _jsxRuntime.jsx)(PlayNextBtn, {})]
     });
   };
-  var styles = (0, _$$_REQUIRE(_dependencyMap[7], "../../../../utils/tools").createStyle)({
+  var styles = (0, _$$_REQUIRE(_dependencyMap[8], "../../../../utils/tools").createStyle)({
     cotrolBtn: {
       width: 46,
       height: 46,
@@ -218749,7 +218756,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       textShadowRadius: 1
     }
   });
-},1360,[15,106,983,966,1032,1167,1064,543],"src/components/player/PlayerBar/components/ControlBtn.tsx");
+},1360,[15,106,983,966,1074,1032,1167,1064,543],"src/components/player/PlayerBar/components/ControlBtn.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -218766,9 +218773,12 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     var id = _ref.id,
       icon = _ref.icon;
     var theme = (0, _$$_REQUIRE(_dependencyMap[5], "../../../store/theme/hook").useTheme)();
-    var t = (0, _$$_REQUIRE(_dependencyMap[6], "../../../lang").useI18n)();
-    var activeId = (0, _$$_REQUIRE(_dependencyMap[7], "../../../store/common/hook").useNavActiveId)();
+    var bgPic = (0, _$$_REQUIRE(_dependencyMap[6], "../../../store/common/hook").useBgPic)();
+    var t = (0, _$$_REQUIRE(_dependencyMap[7], "../../../lang").useI18n)();
+    var activeId = (0, _$$_REQUIRE(_dependencyMap[6], "../../../store/common/hook").useNavActiveId)();
     var isActive = activeId == id;
+    var textColor = bgPic ? '#fff' : theme['c-font-label'];
+    var activeColor = bgPic ? '#fff' : theme['c-primary-font-active'] || theme['c-primary'];
 
     /**
      * 切换底部导航页签。
@@ -218786,11 +218796,11 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       children: [/*#__PURE__*/(0, _jsxRuntime.jsx)(_$$_REQUIRE(_dependencyMap[9], "../../../components/common/Icon").Icon, {
         name: icon,
         size: 18,
-        color: isActive ? theme['c-primary-font-active'] : theme['c-font-label']
+        color: isActive ? activeColor : textColor
       }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
         style: styles.label,
         size: 11,
-        color: isActive ? theme['c-primary-font-active'] : theme['c-font-label'],
+        color: isActive ? activeColor : textColor,
         numberOfLines: 1,
         children: t(id)
       })]
@@ -218798,7 +218808,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   };
   var _default = exports.default = (0, _react.memo)(function () {
     var theme = (0, _$$_REQUIRE(_dependencyMap[5], "../../../store/theme/hook").useTheme)();
-    var bgPic = (0, _$$_REQUIRE(_dependencyMap[7], "../../../store/common/hook").useBgPic)();
+    var bgPic = (0, _$$_REQUIRE(_dependencyMap[6], "../../../store/common/hook").useBgPic)();
     return /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.View, {
       style: [styles.container, {
         borderTopColor: theme['c-border-background'],
@@ -218834,7 +218844,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       marginTop: 2
     }
   });
-},1361,[6,65,15,967,106,966,698,1074,689,1032,680,543,1076],"src/screens/Home/components/BottomTabBar.tsx");
+},1361,[6,65,15,967,106,966,1074,698,689,1032,680,543,1076],"src/screens/Home/components/BottomTabBar.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {

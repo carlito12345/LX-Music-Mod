@@ -18,9 +18,12 @@ interface TabItemProps {
 
 const TabItem = ({ id, icon }: TabItemProps) => {
   const theme = useTheme()
+  const bgPic = useBgPic()
   const t = useI18n()
   const activeId = useNavActiveId()
   const isActive = activeId == id
+  const textColor = bgPic ? '#fff' : theme['c-font-label']
+  const activeColor = bgPic ? '#fff' : (theme['c-primary-font-active'] || theme['c-primary'])
 
   /**
    * 切换底部导航页签。
@@ -42,12 +45,12 @@ const TabItem = ({ id, icon }: TabItemProps) => {
       <Icon
         name={icon}
         size={18}
-        color={isActive ? theme['c-primary-font-active'] : theme['c-font-label']}
+        color={isActive ? activeColor : textColor}
       />
       <Text
         style={styles.label}
         size={11}
-        color={isActive ? theme['c-primary-font-active'] : theme['c-font-label']}
+        color={isActive ? activeColor : textColor}
         numberOfLines={1}
       >
         {t(id)}

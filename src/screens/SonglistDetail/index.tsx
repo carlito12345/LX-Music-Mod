@@ -30,9 +30,8 @@ export default ({ componentId, info }: { componentId: string, info: ListInfoItem
 
 
   return (
-    <PageContent>{
-      bgPic ? <View style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.3)' }} /> : null
-    }
+    <PageContent>
+      {bgPic ? <View style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.3)' }} /> : null}
       <StatusBar />
       <ListInfoContext.Provider value={info}>
         <MusicList ref={musicListRef} componentId={componentId} />
