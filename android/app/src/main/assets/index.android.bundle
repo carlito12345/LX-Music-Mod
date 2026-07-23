@@ -2980,12 +2980,14 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
           try {
             var settingState = _$$_REQUIRE(_dependencyMap[14], "./store/setting/state").default;
             if (!settingState.setting['common.guideDone']) {
-              setTimeout(function () {
-                var nav = _$$_REQUIRE(_dependencyMap[15], "./navigation/navigation");
-                if (nav.pushGuideScreen) nav.pushGuideScreen('');
-              }, 1000);
+              setTimeout(/*#__PURE__*/(0, _asyncToGenerator2.default)(function* () {
+                try {
+                  var nav = yield _$$_REQUIRE(_dependencyMap[11], "/data/data/com.termux/files/home/lx-music-mobile/node_modules/metro-runtime/src/modules/asyncRequire.js")(_dependencyMap[15], _dependencyMap.paths, "./navigation/navigation");
+                  nav.pushGuideScreen('');
+                } catch (_unused) {}
+              }), 2000);
             }
-          } catch (_unused) {}
+          } catch (_unused2) {}
           try {
             handlePushedHomeScreen = yield init();
           } catch (err) {
