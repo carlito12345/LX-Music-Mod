@@ -226093,45 +226093,26 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   };
   var handlePlay = exports.handlePlay = /*#__PURE__*/function () {
     var _ref = (0, _asyncToGenerator2.default)(function* (id, source, list) {
+      var _list, _list2;
       var index = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
       var listId = getListId(id, source);
-
-      // 检查播放队列是否已有该歌单的数据
-      var existingQueue = _state.default.allMusicList.get(_$$_REQUIRE(_dependencyMap[5], "../../config/constant").LIST_IDS.TEMP) || [];
-      var hasExistingData = _state.default.tempListMeta.id === listId && existingQueue.length > 0;
-      if (hasExistingData) {
-        // 播放队列已有数据,直接播放,不覆盖
-        void (0, _$$_REQUIRE(_dependencyMap[6], "../../core/player/player").playList)(_$$_REQUIRE(_dependencyMap[5], "../../config/constant").LIST_IDS.TEMP, index);
-
-        // 后台尝试加载完整列表
-        try {
-          var fullList = yield (0, _$$_REQUIRE(_dependencyMap[7], "../../core/songlist").getListDetailAll)(source, id);
-          if (fullList.length > existingQueue.length) {
-            yield (0, _$$_REQUIRE(_dependencyMap[8], "../../core/list").setTempList)(listId, (0, _toConsumableArray2.default)(fullList));
-          }
-        } catch (e) {
-          console.warn('[Songlist] Failed to load full list:', e);
+      var isPlayingList = false;
+      // console.log(list)
+      if (!((_list = list) != null && _list.length)) list = (yield (0, _$$_REQUIRE(_dependencyMap[5], "../../core/songlist").getListDetail)(id, source, 1)).list;
+      if ((_list2 = list) != null && _list2.length) {
+        yield (0, _$$_REQUIRE(_dependencyMap[6], "../../core/list").setTempList)(listId, (0, _toConsumableArray2.default)(list));
+        void (0, _$$_REQUIRE(_dependencyMap[7], "../../core/player/player").playList)(_$$_REQUIRE(_dependencyMap[8], "../../config/constant").LIST_IDS.TEMP, index);
+        isPlayingList = true;
+      }
+      var fullList = yield (0, _$$_REQUIRE(_dependencyMap[5], "../../core/songlist").getListDetailAll)(source, id);
+      if (!fullList.length) return;
+      if (isPlayingList) {
+        if (_state.default.tempListMeta.id == listId) {
+          yield (0, _$$_REQUIRE(_dependencyMap[6], "../../core/list").setTempList)(listId, (0, _toConsumableArray2.default)(fullList));
         }
       } else {
-        var _list, _list2;
-        // 播放队列没有数据,按原逻辑处理
-        var isPlayingList = false;
-        if (!((_list = list) != null && _list.length)) list = (yield (0, _$$_REQUIRE(_dependencyMap[7], "../../core/songlist").getListDetail)(id, source, 1)).list;
-        if ((_list2 = list) != null && _list2.length) {
-          yield (0, _$$_REQUIRE(_dependencyMap[8], "../../core/list").setTempList)(listId, (0, _toConsumableArray2.default)(list));
-          void (0, _$$_REQUIRE(_dependencyMap[6], "../../core/player/player").playList)(_$$_REQUIRE(_dependencyMap[5], "../../config/constant").LIST_IDS.TEMP, index);
-          isPlayingList = true;
-        }
-        var _fullList = yield (0, _$$_REQUIRE(_dependencyMap[7], "../../core/songlist").getListDetailAll)(source, id);
-        if (!_fullList.length) return;
-        if (isPlayingList) {
-          if (_state.default.tempListMeta.id == listId) {
-            yield (0, _$$_REQUIRE(_dependencyMap[8], "../../core/list").setTempList)(listId, (0, _toConsumableArray2.default)(_fullList));
-          }
-        } else {
-          yield (0, _$$_REQUIRE(_dependencyMap[8], "../../core/list").setTempList)(listId, (0, _toConsumableArray2.default)(_fullList));
-          void (0, _$$_REQUIRE(_dependencyMap[6], "../../core/player/player").playList)(_$$_REQUIRE(_dependencyMap[5], "../../config/constant").LIST_IDS.TEMP, index);
-        }
+        yield (0, _$$_REQUIRE(_dependencyMap[6], "../../core/list").setTempList)(listId, (0, _toConsumableArray2.default)(fullList));
+        void (0, _$$_REQUIRE(_dependencyMap[7], "../../core/player/player").playList)(_$$_REQUIRE(_dependencyMap[8], "../../config/constant").LIST_IDS.TEMP, index);
       }
     });
     return function handlePlay(_x, _x2, _x3) {
@@ -226156,8 +226137,8 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
         void (0, _syncSourceList.default)(targetList);
         return;
       }
-      var list = yield (0, _$$_REQUIRE(_dependencyMap[7], "../../core/songlist").getListDetailAll)(source, id);
-      yield (0, _$$_REQUIRE(_dependencyMap[8], "../../core/list").createList)({
+      var list = yield (0, _$$_REQUIRE(_dependencyMap[5], "../../core/songlist").getListDetailAll)(source, id);
+      yield (0, _$$_REQUIRE(_dependencyMap[6], "../../core/list").createList)({
         name: name,
         id: `${source}_${(0, _$$_REQUIRE(_dependencyMap[9], "../../utils/tools").toMD5)(listId)}`,
         list: list,
@@ -226170,7 +226151,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       return _ref2.apply(this, arguments);
     };
   }();
-},1434,[6,41,13,990,1015,680,982,1008,988,543],"src/screens/SonglistDetail/listAction.ts");
+},1434,[6,41,13,990,1015,1008,988,982,680,543],"src/screens/SonglistDetail/listAction.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
