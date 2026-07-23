@@ -11,23 +11,43 @@ const getListId = (id: string, source: LX.OnlineSource) => `${source}__${id}`
 
 export const handlePlay = async(id: string, source: Source, list?: LX.Music.MusicInfoOnline[], index = 0) => {
   const listId = getListId(id, source)
-  let isPlayingList = false
-  // console.log(list)
-  if (!list?.length) list = (await getListDetail(id, source, 1)).list
-  if (list?.length) {
-    await setTempList(listId, [...list])
+  
+  // 检查播放队列是否已有该歌单的数据
+  const existingQueue = listState.allMusicList.get(LIST_IDS.TEMP) || []
+  const hasExistingData = listState.tempListMeta.id === listId && existingQueue.length > 0
+  
+  if (hasExistingData) {
+    // 播放队列已有数据,直接播放,不覆盖
     void playList(LIST_IDS.TEMP, index)
-    isPlayingList = true
-  }
-  const fullList = await getListDetailAll(source, id)
-  if (!fullList.length) return
-  if (isPlayingList) {
-    if (listState.tempListMeta.id == listId) {
-      await setTempList(listId, [...fullList])
+    
+    // 后台尝试加载完整列表
+    try {
+      const fullList = await getListDetailAll(source, id)
+      if (fullList.length > existingQueue.length) {
+        await setTempList(listId, [...fullList])
+      }
+    } catch (e) {
+      console.warn('[Songlist] Failed to load full list:', e)
     }
   } else {
-    await setTempList(listId, [...fullList])
-    void playList(LIST_IDS.TEMP, index)
+    // 播放队列没有数据,按原逻辑处理
+    let isPlayingList = false
+    if (!list?.length) list = (await getListDetail(id, source, 1)).list
+    if (list?.length) {
+      await setTempList(listId, [...list])
+      void playList(LIST_IDS.TEMP, index)
+      isPlayingList = true
+    }
+    const fullList = await getListDetailAll(source, id)
+    if (!fullList.length) return
+    if (isPlayingList) {
+      if (listState.tempListMeta.id == listId) {
+        await setTempList(listId, [...fullList])
+      }
+    } else {
+      await setTempList(listId, [...fullList])
+      void playList(LIST_IDS.TEMP, index)
+    }
   }
 }
 
