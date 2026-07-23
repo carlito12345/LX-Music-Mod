@@ -87,39 +87,21 @@ export async function pushHomeScreen() {
   })
 }
 export function pushPlayQueueScreen(componentId: string) {
-  // 从播放器队列读取
-  const { getListMusicSync } = require('@/utils/listManage')
-  const playerState = require('@/store/player/state').default
-  const listId = playerState.playInfo.playerListId || '__temp__'
-  let queueData = getListMusicSync(listId) || []
-
-  // 如果播放器队列为空,尝试从歌单/排行榜读取
-  if (!queueData || queueData.length === 0) {
-    try {
-      const songDetail = require('@/store/songlist/state').default.listDetailInfo
-      if (songDetail.list && songDetail.list.length > 0) {
-        queueData = songDetail.list
-      }
-    } catch {}
-  }
-  if (!queueData || queueData.length === 0) {
-    try {
-      const boardDetail = require('@/store/leaderboard/state').default.listDetailInfo
-      if (boardDetail.list && boardDetail.list.length > 0) {
-        queueData = boardDetail.list
-      }
-    } catch {}
-  }
-
-  Navigation.push(componentId, {
-    component: {
-      name: PLAY_QUEUE_SCREEN,
-      passProps: { initialQueue: queueData, listId },
-      options: {
-        topBar: { visible: false, drawBehind: true, animate: false },
-        layout: { backgroundColor: 'transparent', componentBackgroundColor: 'transparent' },
+  import('@/utils/listManage').then(mod => {
+    const playerState = require('@/store/player/state').default
+    const listId = playerState.playInfo.playerListId || '__temp__'
+    const queueData = mod.getListMusicSync(listId) || []
+    
+    Navigation.push(componentId, {
+      component: {
+        name: PLAY_QUEUE_SCREEN,
+        passProps: { initialQueue: queueData, listId },
+        options: {
+          topBar: { visible: false, drawBehind: true, animate: false },
+          layout: { backgroundColor: 'transparent', componentBackgroundColor: 'transparent' },
+        },
       },
-    },
+    })
   })
 }
 
