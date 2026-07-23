@@ -8,6 +8,7 @@ import List from './settings/List'
 import Sync from './settings/Sync'
 import Backup from './settings/Backup'
 import LocalMusic from './settings/LocalMusic'
+import Download from './settings/Download'
 import Other from './settings/Other'
 import Version from './settings/Version'
 import About from './settings/About'
@@ -57,6 +58,7 @@ const Main = forwardRef<MainType, {}>((props, ref) => {
       case 'sync': return <Sync />
       case 'backup': return <Backup />
       case 'localMusic': return <LocalMusic />
+      case 'download': return <Download />
       case 'other': return <Other />
       case 'version': return <Version />
       case 'about': return <About />
