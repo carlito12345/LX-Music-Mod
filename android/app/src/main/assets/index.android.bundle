@@ -221863,7 +221863,9 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     var shimmerEnabled = (0, _$$_REQUIRE(_dependencyMap[5], "../../store/setting/hook").useSettingValue)('playDetail.progress.shimmer');
     var primaryColor = theme['c-primary'] || '#07c556';
     var breathe = (0, _react.useRef)(new _reactNative.Animated.Value(0)).current;
+    var breatheNative = (0, _react.useRef)(new _reactNative.Animated.Value(0)).current;
     (0, _react.useEffect)(function () {
+      // JS thread animation for size/opacity changes
       _reactNative.Animated.loop(_reactNative.Animated.sequence([_reactNative.Animated.timing(breathe, {
         toValue: 1,
         duration: 1000,
@@ -221875,7 +221877,19 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
         easing: _reactNative.Easing.inOut(_reactNative.Easing.sin),
         useNativeDriver: false
       })])).start();
-    }, [breathe]);
+      // Native driver animation for transform (scale)
+      _reactNative.Animated.loop(_reactNative.Animated.sequence([_reactNative.Animated.timing(breatheNative, {
+        toValue: 1,
+        duration: 1000,
+        easing: _reactNative.Easing.inOut(_reactNative.Easing.sin),
+        useNativeDriver: true
+      }), _reactNative.Animated.timing(breatheNative, {
+        toValue: 0,
+        duration: 1000,
+        easing: _reactNative.Easing.inOut(_reactNative.Easing.sin),
+        useNativeDriver: true
+      })])).start();
+    }, [breathe, breatheNative]);
     var outerSize = breathe.interpolate({
       inputRange: [0, 1],
       outputRange: [24, 34]
@@ -221888,7 +221902,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       inputRange: [0, 1],
       outputRange: [0.3, 0.6]
     });
-    var dotScale = breathe.interpolate({
+    var dotScale = breatheNative.interpolate({
       inputRange: [0, 1],
       outputRange: [1, 1.2]
     });
@@ -221969,7 +221983,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
         toValue: 1,
         duration: 2000,
         easing: _reactNative.Easing.linear,
-        useNativeDriver: false
+        useNativeDriver: true
       })).start();
     }, [shimmerAnim]);
     var translateX = shimmerAnim.interpolate({

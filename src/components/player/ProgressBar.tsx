@@ -16,19 +16,29 @@ const GlowDot = memo(({ theme, pct }: { theme: any; pct: string }) => {
   const primaryColor = theme['c-primary'] || '#07c556'
   const breathe = useRef(new Animated.Value(0)).current
 
+  const breatheNative = useRef(new Animated.Value(0)).current
+
   useEffect(() => {
+    // JS thread animation for size/opacity changes
     Animated.loop(
       Animated.sequence([
         Animated.timing(breathe, { toValue: 1, duration: 1000, easing: Easing.inOut(Easing.sin), useNativeDriver: false }),
         Animated.timing(breathe, { toValue: 0, duration: 1000, easing: Easing.inOut(Easing.sin), useNativeDriver: false }),
       ])
     ).start()
-  }, [breathe])
+    // Native driver animation for transform (scale)
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(breatheNative, { toValue: 1, duration: 1000, easing: Easing.inOut(Easing.sin), useNativeDriver: true }),
+        Animated.timing(breatheNative, { toValue: 0, duration: 1000, easing: Easing.inOut(Easing.sin), useNativeDriver: true }),
+      ])
+    ).start()
+  }, [breathe, breatheNative])
 
   const outerSize = breathe.interpolate({ inputRange: [0, 1], outputRange: [24, 34] })
   const outerOpacity = breathe.interpolate({ inputRange: [0, 1], outputRange: [0.2, 0.45] })
   const midOpacity = breathe.interpolate({ inputRange: [0, 1], outputRange: [0.3, 0.6] })
-  const dotScale = breathe.interpolate({ inputRange: [0, 1], outputRange: [1, 1.2] })
+  const dotScale = breatheNative.interpolate({ inputRange: [0, 1], outputRange: [1, 1.2] })
 
   return (
     <View
@@ -103,7 +113,7 @@ const ShimmerEffect = memo(({ enabled }: { enabled: boolean }) => {
         toValue: 1,
         duration: 2000,
         easing: Easing.linear,
-        useNativeDriver: false,
+        useNativeDriver: true,
       })
     ).start()
   }, [shimmerAnim])
