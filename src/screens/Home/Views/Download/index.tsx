@@ -5,6 +5,7 @@ import { useTheme } from '@/store/theme/hook'
 import { useI18n } from '@/lang'
 import { createStyle } from '@/utils/tools'
 import Text from '@/components/common/Text'
+import { Icon } from '@/components/common/Icon'
 import { useDownloadTasks, useDownloadHistory } from '@/store/download/hook'
 import DownloadList from './DownloadList'
 import HistoryList from './HistoryList'
@@ -52,7 +53,7 @@ export default memo(() => {
         <View style={styles.headerTop}>
           <Text style={styles.title} size={18} color={theme['c-font']}>{t('download_title')}</Text>
           <TouchableOpacity onPress={() => setShowSettings(true)} style={styles.settingsBtn}>
-            <Text size={14} color={theme['c-primary-font']}>⚙</Text>
+            <Icon name="setting" size={22} color={theme['c-primary-font']} />
           </TouchableOpacity>
         </View>
         <View style={styles.tabs}>
@@ -98,7 +99,7 @@ const styles = createStyle({
     marginBottom: 0,
   },
   settingsBtn: {
-    padding: 8,
+    padding: 10,
   },
   tabs: {
     flexDirection: 'row',

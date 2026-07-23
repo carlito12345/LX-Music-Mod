@@ -218181,10 +218181,10 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
               return setShowSettings(true);
             },
             style: styles.settingsBtn,
-            children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
-              size: 14,
-              color: theme['c-primary-font'],
-              children: "\u2699"
+            children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_$$_REQUIRE(_dependencyMap[12], "../../../../components/common/Icon").Icon, {
+              name: "setting",
+              size: 22,
+              color: theme['c-primary-font']
             })
           })]
         }), /*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.View, {
@@ -218208,7 +218208,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       })]
     });
   });
-  var styles = (0, _$$_REQUIRE(_dependencyMap[12], "../../../../utils/tools").createStyle)({
+  var styles = (0, _$$_REQUIRE(_dependencyMap[13], "../../../../utils/tools").createStyle)({
     container: {
       flex: 1,
       flexDirection: 'column'
@@ -218228,7 +218228,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       marginBottom: 0
     },
     settingsBtn: {
-      padding: 8
+      padding: 10
     },
     tabs: {
       flexDirection: 'row'
@@ -218238,7 +218238,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       paddingBottom: 8
     }
   });
-},1357,[6,7,65,15,967,1358,1360,1362,106,966,698,1121,543],"src/screens/Home/Views/Download/index.tsx");
+},1357,[6,7,65,15,967,1358,1360,1362,106,966,698,1121,1032,543],"src/screens/Home/Views/Download/index.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
