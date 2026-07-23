@@ -218305,14 +218305,13 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     value: true
   });
   exports.default = void 0;
-  var _toConsumableArray2 = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[1], "@babel/runtime/helpers/toConsumableArray"));
-  var _asyncToGenerator2 = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[2], "@babel/runtime/helpers/asyncToGenerator"));
-  var _react = _$$_REQUIRE(_dependencyMap[3], "react");
-  var _reactNative = _$$_REQUIRE(_dependencyMap[4], "react-native");
-  var _Text = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[5], "../../../../components/common/Text"));
-  var _Menu = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[6], "../../../../components/common/Menu"));
-  var _reactNativeFs = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[7], "react-native-fs"));
-  var _jsxRuntime = _$$_REQUIRE(_dependencyMap[8], "react/jsx-runtime");
+  var _asyncToGenerator2 = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[1], "@babel/runtime/helpers/asyncToGenerator"));
+  var _react = _$$_REQUIRE(_dependencyMap[2], "react");
+  var _reactNative = _$$_REQUIRE(_dependencyMap[3], "react-native");
+  var _Text = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[4], "../../../../components/common/Text"));
+  var _Menu = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[5], "../../../../components/common/Menu"));
+  var _reactNativeFs = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[6], "react-native-fs"));
+  var _jsxRuntime = _$$_REQUIRE(_dependencyMap[7], "react/jsx-runtime");
   var _this = this,
     _jsxFileName = "/data/data/com.termux/files/home/lx-music-mobile/src/screens/Home/Views/Download/DownloadListItem.tsx";
   var STATUS_TEXT_MAP = {
@@ -218324,29 +218323,30 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   };
   var _default = exports.default = (0, _react.memo)(function (_ref) {
     var item = _ref.item;
-    var t = (0, _$$_REQUIRE(_dependencyMap[9], "../../../../lang").useI18n)();
-    var theme = (0, _$$_REQUIRE(_dependencyMap[10], "../../../../store/theme/hook").useTheme)();
+    var t = (0, _$$_REQUIRE(_dependencyMap[8], "../../../../lang").useI18n)();
+    var theme = (0, _$$_REQUIRE(_dependencyMap[9], "../../../../store/theme/hook").useTheme)();
+    var menuRef = (0, _react.useRef)(null);
+    var viewRef = (0, _react.useRef)(null);
     var handleDelete = /*#__PURE__*/function () {
       var _ref2 = (0, _asyncToGenerator2.default)(function* () {
-        var confirm = yield (0, _$$_REQUIRE(_dependencyMap[11], "../../../../utils/tools").confirmDialog)({
+        var confirm = yield (0, _$$_REQUIRE(_dependencyMap[10], "../../../../utils/tools").confirmDialog)({
           message: t('download_delete_confirm'),
           bgClose: false
         });
         if (confirm) {
-          yield _$$_REQUIRE(_dependencyMap[12], "../../../../core/download").downloadManager.deleteTask(item.id);
+          yield _$$_REQUIRE(_dependencyMap[11], "../../../../core/download").downloadManager.deleteTask(item.id);
         }
       });
       return function handleDelete() {
         return _ref2.apply(this, arguments);
       };
     }();
-    var menuRef = (0, _react.useRef)(null);
     var handlePlay = (0, _react.useCallback)(/*#__PURE__*/(0, _asyncToGenerator2.default)(function* () {
-      if (!isCompleted || !item.metadata.filePath) return;
+      if (item.status !== 'completed' || !item.metadata.filePath) return;
       try {
         var exists = yield _reactNativeFs.default.exists(item.metadata.filePath);
         if (!exists) {
-          (0, _$$_REQUIRE(_dependencyMap[11], "../../../../utils/tools").toast)(t('download_file_not_found'));
+          (0, _$$_REQUIRE(_dependencyMap[10], "../../../../utils/tools").toast)(t('download_file_not_found'));
           return;
         }
         // Add to temporary list and play
@@ -218355,46 +218355,56 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
             filePath: item.metadata.filePath
           })
         });
-        yield (0, _$$_REQUIRE(_dependencyMap[13], "../../../../core/list").addListMusics)(_$$_REQUIRE(_dependencyMap[14], "../../../../config/constant").LIST_IDS.TEMP, [tempMusicInfo]);
-        yield (0, _$$_REQUIRE(_dependencyMap[15], "../../../../core/player/player").playList)(_$$_REQUIRE(_dependencyMap[14], "../../../../config/constant").LIST_IDS.TEMP, 0);
+        yield (0, _$$_REQUIRE(_dependencyMap[12], "../../../../core/list").addListMusics)(_$$_REQUIRE(_dependencyMap[13], "../../../../config/constant").LIST_IDS.TEMP, [tempMusicInfo]);
+        yield (0, _$$_REQUIRE(_dependencyMap[14], "../../../../core/player/player").playList)(_$$_REQUIRE(_dependencyMap[13], "../../../../config/constant").LIST_IDS.TEMP, 0);
       } catch (err) {
-        (0, _$$_REQUIRE(_dependencyMap[11], "../../../../utils/tools").toast)(t('download_play_failed') + ': ' + err.message);
+        (0, _$$_REQUIRE(_dependencyMap[10], "../../../../utils/tools").toast)(t('download_play_failed') + ': ' + err.message);
       }
-    }), [isCompleted, item, t]);
+    }), [item, t]);
     var handleShowMenu = (0, _react.useCallback)(function () {
-      var _menuRef$current;
-      (_menuRef$current = menuRef.current) == null ? void 0 : _menuRef$current.show();
+      if (viewRef.current) {
+        viewRef.current.measure(function (x, y, width, height, pageX, pageY) {
+          var _menuRef$current;
+          var position = {
+            w: width,
+            h: height,
+            x: pageX,
+            y: pageY
+          };
+          (_menuRef$current = menuRef.current) == null ? void 0 : _menuRef$current.show(position);
+        });
+      }
     }, []);
     var handleMenuPress = (0, _react.useCallback)(/*#__PURE__*/function () {
-      var _ref4 = (0, _asyncToGenerator2.default)(function* (action) {
-        switch (action) {
+      var _ref4 = (0, _asyncToGenerator2.default)(function* (menu) {
+        switch (menu.action) {
           case 'share':
             if (item.metadata.musicInfo) {
-              (0, _$$_REQUIRE(_dependencyMap[11], "../../../../utils/tools").shareMusic)(item.metadata.musicInfo);
+              (0, _$$_REQUIRE(_dependencyMap[10], "../../../../utils/tools").shareMusic)(item.metadata.musicInfo);
             }
             break;
           case 'delete':
-            var confirm = yield (0, _$$_REQUIRE(_dependencyMap[11], "../../../../utils/tools").confirmDialog)({
+            var confirm = yield (0, _$$_REQUIRE(_dependencyMap[10], "../../../../utils/tools").confirmDialog)({
               message: t('download_delete_confirm'),
               bgClose: false
             });
             if (confirm) {
-              yield _$$_REQUIRE(_dependencyMap[12], "../../../../core/download").downloadManager.deleteTask(item.id);
+              yield _$$_REQUIRE(_dependencyMap[11], "../../../../core/download").downloadManager.deleteTask(item.id);
             }
             break;
           case 'deleteFile':
             if (item.metadata.filePath) {
-              var confirmFile = yield (0, _$$_REQUIRE(_dependencyMap[11], "../../../../utils/tools").confirmDialog)({
+              var confirmFile = yield (0, _$$_REQUIRE(_dependencyMap[10], "../../../../utils/tools").confirmDialog)({
                 message: t('download_delete_file_confirm'),
                 bgClose: false
               });
               if (confirmFile) {
                 try {
                   yield _reactNativeFs.default.unlink(item.metadata.filePath);
-                  (0, _$$_REQUIRE(_dependencyMap[11], "../../../../utils/tools").toast)(t('download_file_deleted'));
-                  yield _$$_REQUIRE(_dependencyMap[12], "../../../../core/download").downloadManager.deleteTask(item.id);
+                  (0, _$$_REQUIRE(_dependencyMap[10], "../../../../utils/tools").toast)(t('download_file_deleted'));
+                  yield _$$_REQUIRE(_dependencyMap[11], "../../../../core/download").downloadManager.deleteTask(item.id);
                 } catch (err) {
-                  (0, _$$_REQUIRE(_dependencyMap[11], "../../../../utils/tools").toast)(t('download_delete_file_failed') + ': ' + err.message);
+                  (0, _$$_REQUIRE(_dependencyMap[10], "../../../../utils/tools").toast)(t('download_delete_file_failed') + ': ' + err.message);
                 }
               }
             }
@@ -218407,76 +218417,83 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     }(), [item, t]);
     var isCompleted = item.status === 'completed';
     var isError = item.status === 'error';
+    var menus = [{
+      action: 'share',
+      label: t('share')
+    }, {
+      action: 'delete',
+      label: t('download_delete')
+    }];
+    if (isCompleted && item.metadata.filePath) {
+      menus.push({
+        action: 'deleteFile',
+        label: t('download_delete_file')
+      });
+    }
     return /*#__PURE__*/(0, _jsxRuntime.jsxs)(_jsxRuntime.Fragment, {
-      children: [/*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.TouchableOpacity, {
-        style: Object.assign({}, styles.container, {
-          borderBottomColor: theme['c-border-background']
-        }),
-        onPress: handlePlay,
-        activeOpacity: 0.7,
-        onLongPress: handleShowMenu,
-        children: [/*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.View, {
-          style: styles.info,
-          children: [/*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
-            numberOfLines: 1,
-            size: 14,
-            color: theme['c-font'],
-            children: item.metadata.musicInfo.name
-          }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
-            numberOfLines: 1,
-            size: 12,
-            color: theme['c-font-label'],
-            children: item.metadata.musicInfo.singer
-          }), /*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.View, {
-            style: styles.statusRow,
-            children: [/*#__PURE__*/(0, _jsxRuntime.jsxs)(_Text.default, {
-              size: 12,
-              color: isError ? theme['c-error'] : theme['c-font-label'],
-              children: [t(STATUS_TEXT_MAP[item.status]), isError && item.statusText ? `: ${item.statusText}` : '']
-            }), item.status === 'run' ? /*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
+      children: [/*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.View, {
+        ref: viewRef,
+        children: /*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.TouchableOpacity, {
+          style: Object.assign({}, styles.container, {
+            borderBottomColor: theme['c-border-background']
+          }),
+          onPress: handlePlay,
+          activeOpacity: 0.7,
+          onLongPress: handleShowMenu,
+          children: [/*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.View, {
+            style: styles.info,
+            children: [/*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
+              numberOfLines: 1,
+              size: 14,
+              color: theme['c-font'],
+              children: item.metadata.musicInfo.name
+            }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
+              numberOfLines: 1,
               size: 12,
               color: theme['c-font-label'],
-              children: item.speed
-            }) : null, isCompleted ? /*#__PURE__*/(0, _jsxRuntime.jsxs)(_Text.default, {
-              size: 12,
-              color: theme['c-font-label'],
-              children: [(item.total / 1024 / 1024).toFixed(1), " MB"]
-            }) : null]
-          }), item.status === 'run' ? /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.View, {
-            style: styles.progressBar,
-            children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.View, {
-              style: Object.assign({}, styles.progressFill, {
-                width: `${item.progress * 100}%`,
-                backgroundColor: theme['c-primary']
+              children: item.metadata.musicInfo.singer
+            }), /*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.View, {
+              style: styles.statusRow,
+              children: [/*#__PURE__*/(0, _jsxRuntime.jsxs)(_Text.default, {
+                size: 12,
+                color: isError ? theme['c-error'] : theme['c-font-label'],
+                children: [t(STATUS_TEXT_MAP[item.status]), isError && item.statusText ? `: ${item.statusText}` : '']
+              }), item.status === 'run' ? /*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
+                size: 12,
+                color: theme['c-font-label'],
+                children: item.speed
+              }) : null, isCompleted ? /*#__PURE__*/(0, _jsxRuntime.jsxs)(_Text.default, {
+                size: 12,
+                color: theme['c-font-label'],
+                children: [(item.total / 1024 / 1024).toFixed(1), " MB"]
+              }) : null]
+            }), item.status === 'run' ? /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.View, {
+              style: styles.progressBar,
+              children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.View, {
+                style: Object.assign({}, styles.progressFill, {
+                  width: `${item.progress * 100}%`,
+                  backgroundColor: theme['c-primary']
+                })
               })
+            }) : null]
+          }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.View, {
+            style: styles.action,
+            children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
+              style: styles.deleteBtn,
+              onPress: handleDelete,
+              color: theme['c-error'],
+              children: t('download_delete')
             })
-          }) : null]
-        }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.View, {
-          style: styles.action,
-          children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
-            style: styles.deleteBtn,
-            onPress: handleDelete,
-            color: theme['c-error'],
-            children: t('download_delete')
-          })
-        })]
+          })]
+        })
       }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_Menu.default, {
         ref: menuRef,
-        menus: [{
-          action: 'share',
-          name: t('share')
-        }, {
-          action: 'delete',
-          name: t('download_delete')
-        }].concat((0, _toConsumableArray2.default)(isCompleted && item.metadata.filePath ? [{
-          action: 'deleteFile',
-          name: t('download_delete_file')
-        }] : [])),
+        menus: menus,
         onPress: handleMenuPress
       })]
     });
   });
-  var styles = (0, _$$_REQUIRE(_dependencyMap[11], "../../../../utils/tools").createStyle)({
+  var styles = (0, _$$_REQUIRE(_dependencyMap[10], "../../../../utils/tools").createStyle)({
     container: {
       flexDirection: 'row',
       padding: 12,
@@ -218510,7 +218527,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       padding: 8
     }
   });
-},1359,[6,41,13,65,15,967,1097,668,106,698,966,543,1116,989,680,983],"src/screens/Home/Views/Download/DownloadListItem.tsx");
+},1359,[6,13,65,15,967,1097,668,106,698,966,543,1116,989,680,983],"src/screens/Home/Views/Download/DownloadListItem.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {

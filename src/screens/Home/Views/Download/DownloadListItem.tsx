@@ -5,7 +5,7 @@ import { useTheme } from '@/store/theme/hook'
 import { useI18n } from '@/lang'
 import { createStyle, confirmDialog, toast, shareMusic } from '@/utils/tools'
 import Text from '@/components/common/Text'
-import Menu, { type MenuType } from '@/components/common/Menu'
+import Menu, { type MenuType, type Position } from '@/components/common/Menu'
 import { downloadManager } from '@/core/download'
 import { playList } from '@/core/player/player'
 import { LIST_IDS } from '@/config/constant'
@@ -25,6 +25,8 @@ export default memo(({ item }: {
 }) => {
   const t = useI18n()
   const theme = useTheme()
+  const menuRef = useRef<MenuType>(null)
+  const viewRef = useRef<View>(null)
 
   const handleDelete = async() => {
     const confirm = await confirmDialog({
@@ -36,10 +38,8 @@ export default memo(({ item }: {
     }
   }
 
-  const menuRef = useRef<MenuType>(null)
-
   const handlePlay = useCallback(async () => {
-    if (!isCompleted || !item.metadata.filePath) return
+    if (item.status !== 'completed' || !item.metadata.filePath) return
     try {
       const exists = await RNFS.exists(item.metadata.filePath)
       if (!exists) {
@@ -59,14 +59,19 @@ export default memo(({ item }: {
     } catch (err: any) {
       toast(t('download_play_failed') + ': ' + err.message)
     }
-  }, [isCompleted, item, t])
+  }, [item, t])
 
   const handleShowMenu = useCallback(() => {
-    menuRef.current?.show()
+    if (viewRef.current) {
+      viewRef.current.measure((x, y, width, height, pageX, pageY) => {
+        const position: Position = { w: width, h: height, x: pageX, y: pageY }
+        menuRef.current?.show(position)
+      })
+    }
   }, [])
 
-  const handleMenuPress = useCallback(async (action: string) => {
-    switch (action) {
+  const handleMenuPress = useCallback(async (menu: { action: string }) => {
+    switch (menu.action) {
       case 'share':
         if (item.metadata.musicInfo) {
           shareMusic(item.metadata.musicInfo)
@@ -104,45 +109,60 @@ export default memo(({ item }: {
   const isCompleted = item.status === 'completed'
   const isError = item.status === 'error'
 
+  const menus = [
+    { action: 'share', label: t('share') },
+    { action: 'delete', label: t('download_delete') },
+  ]
+  if (isCompleted && item.metadata.filePath) {
+    menus.push({ action: 'deleteFile', label: t('download_delete_file') })
+  }
+
   return (
     <>
-    <TouchableOpacity style={{ ...styles.container, borderBottomColor: theme['c-border-background'] }} onPress={handlePlay} activeOpacity={0.7} onLongPress={handleShowMenu}>
-      <View style={styles.info}>
-        <Text numberOfLines={1} size={14} color={theme['c-font']}>{item.metadata.musicInfo.name}</Text>
-        <Text numberOfLines={1} size={12} color={theme['c-font-label']}>{item.metadata.musicInfo.singer}</Text>
-        <View style={styles.statusRow}>
-          <Text size={12} color={isError ? theme['c-error'] : theme['c-font-label']}>
-            {t(STATUS_TEXT_MAP[item.status])}
-            {isError && item.statusText ? `: ${item.statusText}` : ''}
-          </Text>
+    <View ref={viewRef}>
+      <TouchableOpacity 
+        style={{ ...styles.container, borderBottomColor: theme['c-border-background'] }} 
+        onPress={handlePlay} 
+        activeOpacity={0.7} 
+        onLongPress={handleShowMenu}
+      >
+        <View style={styles.info}>
+          <Text numberOfLines={1} size={14} color={theme['c-font']}>{item.metadata.musicInfo.name}</Text>
+          <Text numberOfLines={1} size={12} color={theme['c-font-label']}>{item.metadata.musicInfo.singer}</Text>
+          <View style={styles.statusRow}>
+            <Text size={12} color={isError ? theme['c-error'] : theme['c-font-label']}>
+              {t(STATUS_TEXT_MAP[item.status])}
+              {isError && item.statusText ? `: ${item.statusText}` : ''}
+            </Text>
+            {
+              item.status === 'run'
+                ? <Text size={12} color={theme['c-font-label']}>{item.speed}</Text>
+                : null
+            }
+            {
+              isCompleted
+                ? <Text size={12} color={theme['c-font-label']}>{(item.total / 1024 / 1024).toFixed(1)} MB</Text>
+                : null
+            }
+          </View>
           {
             item.status === 'run'
-              ? <Text size={12} color={theme['c-font-label']}>{item.speed}</Text>
-              : null
-          }
-          {
-            isCompleted
-              ? <Text size={12} color={theme['c-font-label']}>{(item.total / 1024 / 1024).toFixed(1)} MB</Text>
+              ? <View style={styles.progressBar}>
+                  <View style={{ ...styles.progressFill, width: `${item.progress * 100}%`, backgroundColor: theme['c-primary'] }} />
+                </View>
               : null
           }
         </View>
-        {
-          item.status === 'run'
-            ? <View style={styles.progressBar}>
-                <View style={{ ...styles.progressFill, width: `${item.progress * 100}%`, backgroundColor: theme['c-primary'] }} />
-              </View>
-            : null
-        }
-      </View>
-      <View style={styles.action}>
-        <Text style={styles.deleteBtn} onPress={handleDelete} color={theme['c-error']}>{t('download_delete')}</Text>
-      </View>
-    </TouchableOpacity>
-    <Menu ref={menuRef} menus={[
-      { action: 'share', name: t('share') },
-      { action: 'delete', name: t('download_delete') },
-      ...(isCompleted && item.metadata.filePath ? [{ action: 'deleteFile', name: t('download_delete_file') }] : []),
-    ]} onPress={handleMenuPress} />
+        <View style={styles.action}>
+          <Text style={styles.deleteBtn} onPress={handleDelete} color={theme['c-error']}>{t('download_delete')}</Text>
+        </View>
+      </TouchableOpacity>
+    </View>
+    <Menu 
+      ref={menuRef} 
+      menus={menus} 
+      onPress={handleMenuPress} 
+    />
     </>
   )
 })
