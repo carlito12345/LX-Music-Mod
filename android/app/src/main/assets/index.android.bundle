@@ -149517,11 +149517,12 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     'common.showExitBtn': true,
     'common.useSystemFileSelector': true,
     'common.alwaysKeepStatusbarHeight': true,
+    'common.guideDone': false,
     'player.startupAutoPlay': true,
     'player.startupPushPlayDetailScreen': true,
     'player.togglePlayMethod': 'listLoop',
     'player.playQuality': '128k',
-    'player.isSavePlayTime': false,
+    'player.isSavePlayTime': true,
     'player.volume': 1,
     'player.playbackRate': 1,
     'player.cacheSize': '1024',
@@ -166977,7 +166978,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
-  exports.VERSION_MODAL = exports.SYNC_MODE_MODAL = exports.SONGLIST_DETAIL_SCREEN = exports.PLAY_QUEUE_SCREEN = exports.PLAY_DETAIL_SCREEN = exports.PACT_MODAL = exports.HOME_SCREEN = exports.COMMENT_SCREEN = void 0;
+  exports.VERSION_MODAL = exports.SYNC_MODE_MODAL = exports.SONGLIST_DETAIL_SCREEN = exports.PLAY_QUEUE_SCREEN = exports.PLAY_DETAIL_SCREEN = exports.PACT_MODAL = exports.HOME_SCREEN = exports.GUIDE_SCREEN = exports.COMMENT_SCREEN = void 0;
   var HOME_SCREEN = exports.HOME_SCREEN = 'lxm.HomeScreen';
   var PLAY_DETAIL_SCREEN = exports.PLAY_DETAIL_SCREEN = 'lxm.PlayDetailScreen';
   var SONGLIST_DETAIL_SCREEN = exports.SONGLIST_DETAIL_SCREEN = 'lxm.SonglistDetailScreen';
@@ -166986,6 +166987,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   var PACT_MODAL = exports.PACT_MODAL = 'lxm.PactModal';
   var SYNC_MODE_MODAL = exports.SYNC_MODE_MODAL = 'lxm.SyncModeModal';
   var PLAY_QUEUE_SCREEN = exports.PLAY_QUEUE_SCREEN = 'lxm.PlayQueueScreen';
+  var GUIDE_SCREEN = exports.GUIDE_SCREEN = 'lxm.GuideScreen';
   // export const SETTING_SCREEN = 'lxm.SettingScreen'
   // export const TOAST_SCREEN = 'lxm.ToastScreen'
 },717,[],"src/navigation/screenNames.ts");
@@ -166995,6 +166997,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     value: true
   });
   exports.pushCommentScreen = pushCommentScreen;
+  exports.pushGuideScreen = pushGuideScreen;
   exports.pushHomeScreen = pushHomeScreen;
   exports.pushPlayDetailScreen = pushPlayDetailScreen;
   exports.pushPlayQueueScreen = pushPlayQueueScreen;
@@ -167102,6 +167105,26 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
           }
         }
       });
+    });
+  }
+  function pushGuideScreen(componentId) {
+    _$$_REQUIRE(_dependencyMap[3], "react-native-navigation").Navigation.showModal({
+      component: {
+        name: GUIDE_SCREEN,
+        passProps: {
+          componentId: componentId
+        },
+        options: {
+          topBar: {
+            visible: false,
+            drawBehind: true
+          },
+          layout: {
+            backgroundColor: 'transparent',
+            componentBackgroundColor: 'transparent'
+          }
+        }
+      }
     });
   }
   function pushPlayDetailScreen(componentId) {
@@ -176933,6 +176956,9 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     // Navigation.registerComponent(SETTING_SCREEN, () => WrappedComponent(Setting))
     _$$_REQUIRE(_dependencyMap[6], "react-native-navigation").Navigation.registerComponent(_$$_REQUIRE(_dependencyMap[7], "./screenNames").PLAY_QUEUE_SCREEN, function () {
       return WrappedComponent(_$$_REQUIRE(_dependencyMap[8], "../screens").PlayQueue);
+    });
+    _$$_REQUIRE(_dependencyMap[6], "react-native-navigation").Navigation.registerComponent('GUIDE', function () {
+      return WrappedComponent(Guide);
     });
     console.info('All screens have been registered...');
   };

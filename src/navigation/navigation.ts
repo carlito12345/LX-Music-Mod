@@ -105,6 +105,19 @@ export function pushPlayQueueScreen(componentId: string) {
   })
 }
 
+export function pushGuideScreen(componentId: string) {
+  Navigation.showModal({
+    component: {
+      name: GUIDE_SCREEN,
+      passProps: { componentId },
+      options: {
+        topBar: { visible: false, drawBehind: true },
+        layout: { backgroundColor: 'transparent', componentBackgroundColor: 'transparent' },
+      },
+    },
+  })
+}
+
 export function pushPlayDetailScreen(componentId: string, skipAnimation = false) {
   /*
     Navigation.setDefaultOptions({
