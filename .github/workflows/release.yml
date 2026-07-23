@@ -175,7 +175,7 @@ jobs:
       - name: Generate file MD5
         run: |
           echo -e '\n### File MD5\n```' >> ./publish/changeLog.md
-          cd artifacts
+          find artifacts -name '*.apk' -exec md5sum {} \; > ../publish/changeLog.md.tmp && cd artifacts
           md5sum *.apk >> ../publish/changeLog.md
           echo -e '```\n' >> ../publish/changeLog.md
           echo -e '\n[软件安装包说明](https://lyswhut.github.io/lx-music-doc/download#%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85%E5%8C%85%E8%AF%B4%E6%98%8E)\n' >> ../publish/changeLog.md
