@@ -7,6 +7,24 @@ import { isUrl } from '@/utils'
 import { privateStorageDirectoryPath } from '@/utils/fs'
 import { type ImageSourcePropType } from 'react-native'
 
+// 根据背景色亮度自动计算对比文字色
+const getContrastColor = (hex: string) => {
+  const match = hex.replace('#', '').match(/[a-f\d]{2}/gi)
+  if (!match || match.length < 3) return '#000000'
+  const [r, g, b] = match.map(v => parseInt(v, 16))
+  const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255
+  return luminance > 0.5 ? '#000000' : '#FFFFFF'
+}
+
+// 根据背景色亮度自动计算次要文字色
+const getContrastLabelColor = (hex: string) => {
+  const match = hex.replace('#', '').match(/[a-f\d]{2}/gi)
+  if (!match || match.length < 3) return 'rgba(0,0,0,0.6)'
+  const [r, g, b] = match.map(v => parseInt(v, 16))
+  const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255
+  return luminance > 0.5 ? 'rgba(0,0,0,0.6)' : 'rgba(255,255,255,0.7)'
+}
+
 export const BG_IMAGES = {
   'china_ink.jpg': require('./images/china_ink.jpg') as ImageSourcePropType,
   'jqbg.jpg': require('./images/jqbg.jpg') as ImageSourcePropType,
@@ -74,8 +92,8 @@ export const buildActiveThemeColors = (theme: LX.Theme): LX.ActiveTheme => {
     isDark: theme.isDark,
     ...theme.config.themeColors,
     ...theme.config.extInfo,
-    'c-font': theme.config.themeColors['c-850'],
-    'c-font-label': theme.config.themeColors['c-450'],
+    'c-font': getContrastColor(theme.config.themeColors['c-content-background'] ?? '#fff'),
+    'c-font-label': getContrastLabelColor(theme.config.themeColors['c-content-background'] ?? '#fff'),
     'c-primary-font': theme.config.themeColors['c-primary'],
     'c-primary-font-hover': theme.config.themeColors['c-primary-alpha-300'],
     'c-primary-font-active': theme.config.themeColors['c-primary-dark-100-alpha-200'],
@@ -83,7 +101,7 @@ export const buildActiveThemeColors = (theme: LX.Theme): LX.ActiveTheme => {
     'c-primary-background-hover': theme.config.themeColors['c-primary-light-300-alpha-800'],
     'c-primary-background-active': theme.config.themeColors['c-primary-light-100-alpha-800'],
     'c-primary-input-background': theme.config.themeColors['c-primary-light-400-alpha-700'],
-    'c-button-font': theme.config.themeColors['c-primary-alpha-100'],
+    'c-button-font': getContrastColor(theme.config.themeColors['c-content-background'] ?? '#fff'),
     'c-button-font-selected': theme.config.themeColors['c-primary-dark-100-alpha-100'],
     'c-button-background': theme.config.themeColors['c-primary-light-400-alpha-700'],
     'c-button-background-selected': theme.config.themeColors['c-primary-alpha-600'],

@@ -167972,8 +167972,8 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       'c-badge-primary': theme['c-primary'],
       'c-badge-secondary': '#4baed5',
       'c-badge-tertiary': '#e7aa36',
-      'c-font': theme['c-850'],
-      'c-font-label': theme['c-450'],
+      'c-font': '#000000',
+      'c-font-label': 'rgba(0,0,0,0.6)',
       'c-primary-font': theme['c-primary'],
       'c-primary-font-hover': theme['c-primary-alpha-300'],
       'c-primary-font-active': theme['c-primary-dark-100-alpha-200'],
@@ -167981,7 +167981,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       'c-primary-background-hover': theme['c-primary-light-300-alpha-800'],
       'c-primary-background-active': theme['c-primary-light-100-alpha-800'],
       'c-primary-input-background': theme['c-primary-light-400-alpha-700'],
-      'c-button-font': theme['c-primary-alpha-100'],
+      'c-button-font': '#000000',
       'c-button-font-selected': theme['c-primary-dark-100-alpha-100'],
       'c-button-background': theme['c-primary-light-400-alpha-700'],
       'c-button-background-selected': theme['c-primary-alpha-600'],
@@ -187425,13 +187425,42 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     value: true
   });
   exports.saveTheme = exports.removeTheme = exports.getTheme = exports.getAllThemes = exports.buildActiveThemeColors = exports.BG_IMAGES = void 0;
-  var _slicedToArray2 = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[1], "@babel/runtime/helpers/slicedToArray"));
-  var _asyncToGenerator2 = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[2], "@babel/runtime/helpers/asyncToGenerator"));
+  var _asyncToGenerator2 = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[1], "@babel/runtime/helpers/asyncToGenerator"));
+  var _slicedToArray2 = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[2], "@babel/runtime/helpers/slicedToArray"));
   var _themes = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[3], "./themes"));
   var _state = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[4], "../../store/setting/state"));
   var _state2 = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[5], "../../store/theme/state"));
   /* eslint-disable @typescript-eslint/no-var-requires */
 
+  // 根据背景色亮度自动计算对比文字色
+  var getContrastColor = function getContrastColor(hex) {
+    var match = hex.replace('#', '').match(/[a-f\d]{2}/gi);
+    if (!match || match.length < 3) return '#000000';
+    var _match$map = match.map(function (v) {
+        return parseInt(v, 16);
+      }),
+      _match$map2 = (0, _slicedToArray2.default)(_match$map, 3),
+      r = _match$map2[0],
+      g = _match$map2[1],
+      b = _match$map2[2];
+    var luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+    return luminance > 0.5 ? '#000000' : '#FFFFFF';
+  };
+
+  // 根据背景色亮度自动计算次要文字色
+  var getContrastLabelColor = function getContrastLabelColor(hex) {
+    var match = hex.replace('#', '').match(/[a-f\d]{2}/gi);
+    if (!match || match.length < 3) return 'rgba(0,0,0,0.6)';
+    var _match$map3 = match.map(function (v) {
+        return parseInt(v, 16);
+      }),
+      _match$map4 = (0, _slicedToArray2.default)(_match$map3, 3),
+      r = _match$map4[0],
+      g = _match$map4[1],
+      b = _match$map4[2];
+    var luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+    return luminance > 0.5 ? 'rgba(0,0,0,0.6)' : 'rgba(255,255,255,0.7)';
+  };
   var BG_IMAGES = exports.BG_IMAGES = {
     'china_ink.jpg': _$$_REQUIRE(_dependencyMap[6], "./images/china_ink.jpg"),
     'jqbg.jpg': _$$_REQUIRE(_dependencyMap[7], "./images/jqbg.jpg"),
@@ -187482,6 +187511,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   }();
   var varColorRxp = /^var\((.+)\)$/;
   var buildActiveThemeColors = exports.buildActiveThemeColors = function buildActiveThemeColors(theme) {
+    var _theme$config$themeCo, _theme$config$themeCo2, _theme$config$themeCo3;
     var bgImg;
     if (theme.isCustom) {
       if (theme.config.extInfo['bg-image']) {
@@ -187506,8 +187536,8 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       name: theme.name,
       isDark: theme.isDark
     }, theme.config.themeColors, theme.config.extInfo, {
-      'c-font': theme.config.themeColors['c-850'],
-      'c-font-label': theme.config.themeColors['c-450'],
+      'c-font': getContrastColor((_theme$config$themeCo = theme.config.themeColors['c-content-background']) != null ? _theme$config$themeCo : '#fff'),
+      'c-font-label': getContrastLabelColor((_theme$config$themeCo2 = theme.config.themeColors['c-content-background']) != null ? _theme$config$themeCo2 : '#fff'),
       'c-primary-font': theme.config.themeColors['c-primary'],
       'c-primary-font-hover': theme.config.themeColors['c-primary-alpha-300'],
       'c-primary-font-active': theme.config.themeColors['c-primary-dark-100-alpha-200'],
@@ -187515,7 +187545,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       'c-primary-background-hover': theme.config.themeColors['c-primary-light-300-alpha-800'],
       'c-primary-background-active': theme.config.themeColors['c-primary-light-100-alpha-800'],
       'c-primary-input-background': theme.config.themeColors['c-primary-light-400-alpha-700'],
-      'c-button-font': theme.config.themeColors['c-primary-alpha-100'],
+      'c-button-font': getContrastColor((_theme$config$themeCo3 = theme.config.themeColors['c-content-background']) != null ? _theme$config$themeCo3 : '#fff'),
       'c-button-font-selected': theme.config.themeColors['c-primary-dark-100-alpha-100'],
       'c-button-background': theme.config.themeColors['c-primary-light-400-alpha-700'],
       'c-button-background-selected': theme.config.themeColors['c-primary-alpha-600'],
@@ -187574,7 +187604,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       return _ref6.apply(this, arguments);
     };
   }();
-},1079,[6,7,13,1080,618,719,1081,1082,1083,1084,1085,695,667,572],"src/theme/themes/index.ts");
+},1079,[6,13,7,1080,618,719,1081,1082,1083,1084,1085,695,667,572],"src/theme/themes/index.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
     value: true
