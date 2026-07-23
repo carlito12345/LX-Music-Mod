@@ -18,6 +18,8 @@ import { getListMusics } from '@/core/list'
 import { LIST_IDS } from '@/config/constant'
 import StatusBar from '@/components/common/StatusBar'
 import { toast } from '@/utils/tools'
+import songlistState from '@/store/songlist/state'
+import boardState from '@/store/leaderboard/state'
 
 export interface PlayQueueProps { componentId: string; initialQueue?: any[]; listId?: string }
 
@@ -47,35 +49,49 @@ export default memo(({ componentId, initialQueue = [], listId: propListId }: Pla
     }
   }, [])
 
-  // 加载当前播放列表全部歌曲(多来源:播放器队列 → 歌单 → 排行榜)
+  // 加载当前播放列表全部歌曲(播放器队列 → 歌单 → 排行榜)
   useEffect(() => {
     const targetId = playerListId || propListId || LIST_IDS.TEMP
     if (initialQueue && initialQueue.length > 0 && currentListSongs.length === 0) {
       setCurrentListSongs(initialQueue)
       return
     }
+    
+    // 1. 从播放器队列读取
     getListMusics(targetId).then(list => {
       if (list && list.length > 0) {
         setCurrentListSongs(list)
         return
       }
-      // 播放器队列为空,尝试从歌单详情读取
-      try {
-        const s = require('@/store/songlist/state').default.listDetailInfo
-        if (s.list && s.list.length > 0) {
-          setCurrentListSongs([...s.list])
-          return
-        }
-      } catch {}
-      // 尝试从排行榜读取
-      try {
-        const b = require('@/store/leaderboard/state').default.listDetailInfo
-        if (b.list && b.list.length > 0) {
-          setCurrentListSongs([...b.list])
-          return
-        }
-      } catch {}
+      
+      // 2. 从当前歌单详情读取
+      const songDetail = songlistState.listDetailInfo
+      if (songDetail.list && songDetail.list.length > 0) {
+        setCurrentListSongs([...songDetail.list])
+        return
+      }
+      
+      // 3. 从当前排行榜读取
+      const boardDetail = boardState.listDetailInfo
+      if (boardDetail.list && boardDetail.list.length > 0) {
+        setCurrentListSongs([...boardDetail.list])
+        return
+      }
     }).catch(() => {})
+    
+    // 同步检查: 如果 getListMusics 返回空但歌单有数据
+    if (currentListSongs.length === 0) {
+      const songDetail = songlistState.listDetailInfo
+      if (songDetail.list && songDetail.list.length > 0) {
+        setCurrentListSongs([...songDetail.list])
+        return
+      }
+      const boardDetail = boardState.listDetailInfo
+      if (boardDetail.list && boardDetail.list.length > 0) {
+        setCurrentListSongs([...boardDetail.list])
+        return
+      }
+    }
   }, [playMusicInfo, playerListId])
 
   // 背景 & 文字颜色(同步播放器设置)

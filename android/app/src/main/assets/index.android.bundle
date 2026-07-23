@@ -227413,7 +227413,9 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   var _Text = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[5], "../../components/common/Text"));
   var _state = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[6], "../../store/player/state"));
   var _StatusBar = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[7], "../../components/common/StatusBar"));
-  var _jsxRuntime = _$$_REQUIRE(_dependencyMap[8], "react/jsx-runtime");
+  var _state2 = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[8], "../../store/songlist/state"));
+  var _state3 = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[9], "../../store/leaderboard/state"));
+  var _jsxRuntime = _$$_REQUIRE(_dependencyMap[10], "react/jsx-runtime");
   var _this = this,
     _jsxFileName = "/data/data/com.termux/files/home/lx-music-mobile/src/screens/PlayQueue/index.tsx";
   /**
@@ -227429,10 +227431,10 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     var t = ((_global$i18n = global.i18n) == null ? void 0 : _global$i18n.t) || function (s) {
       return s;
     };
-    var theme = (0, _$$_REQUIRE(_dependencyMap[9], "../../store/theme/hook").useTheme)();
-    var mi = (0, _$$_REQUIRE(_dependencyMap[10], "../../store/player/hook").usePlayerMusicInfo)();
-    var followCover = (0, _$$_REQUIRE(_dependencyMap[11], "../../store/setting/hook").useSettingValue)('playDetail.background.followCover');
-    var solidColor = (0, _$$_REQUIRE(_dependencyMap[11], "../../store/setting/hook").useSettingValue)('playDetail.background.solidColor');
+    var theme = (0, _$$_REQUIRE(_dependencyMap[11], "../../store/theme/hook").useTheme)();
+    var mi = (0, _$$_REQUIRE(_dependencyMap[12], "../../store/player/hook").usePlayerMusicInfo)();
+    var followCover = (0, _$$_REQUIRE(_dependencyMap[13], "../../store/setting/hook").useSettingValue)('playDetail.background.followCover');
+    var solidColor = (0, _$$_REQUIRE(_dependencyMap[13], "../../store/setting/hook").useSettingValue)('playDetail.background.solidColor');
     var _useState = (0, _react.useState)([]),
       _useState2 = (0, _slicedToArray2.default)(_useState, 2),
       currentListSongs = _useState2[0],
@@ -227465,35 +227467,49 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       };
     }, []);
 
-    // 加载当前播放列表全部歌曲(多来源:播放器队列 → 歌单 → 排行榜)
+    // 加载当前播放列表全部歌曲(播放器队列 → 歌单 → 排行榜)
     (0, _react.useEffect)(function () {
-      var targetId = playerListId || propListId || _$$_REQUIRE(_dependencyMap[12], "../../config/constant").LIST_IDS.TEMP;
+      var targetId = playerListId || propListId || _$$_REQUIRE(_dependencyMap[14], "../../config/constant").LIST_IDS.TEMP;
       if (initialQueue && initialQueue.length > 0 && currentListSongs.length === 0) {
         setCurrentListSongs(initialQueue);
         return;
       }
-      (0, _$$_REQUIRE(_dependencyMap[13], "../../core/list").getListMusics)(targetId).then(function (list) {
+
+      // 1. 从播放器队列读取
+      (0, _$$_REQUIRE(_dependencyMap[15], "../../core/list").getListMusics)(targetId).then(function (list) {
         if (list && list.length > 0) {
           setCurrentListSongs(list);
           return;
         }
-        // 播放器队列为空,尝试从歌单详情读取
-        try {
-          var s = _$$_REQUIRE(_dependencyMap[14], "../../store/songlist/state").default.listDetailInfo;
-          if (s.list && s.list.length > 0) {
-            setCurrentListSongs((0, _toConsumableArray2.default)(s.list));
-            return;
-          }
-        } catch (_unused) {}
-        // 尝试从排行榜读取
-        try {
-          var _b = _$$_REQUIRE(_dependencyMap[15], "../../store/leaderboard/state").default.listDetailInfo;
-          if (_b.list && _b.list.length > 0) {
-            setCurrentListSongs((0, _toConsumableArray2.default)(_b.list));
-            return;
-          }
-        } catch (_unused2) {}
+
+        // 2. 从当前歌单详情读取
+        var songDetail = _state2.default.listDetailInfo;
+        if (songDetail.list && songDetail.list.length > 0) {
+          setCurrentListSongs((0, _toConsumableArray2.default)(songDetail.list));
+          return;
+        }
+
+        // 3. 从当前排行榜读取
+        var boardDetail = _state3.default.listDetailInfo;
+        if (boardDetail.list && boardDetail.list.length > 0) {
+          setCurrentListSongs((0, _toConsumableArray2.default)(boardDetail.list));
+          return;
+        }
       }).catch(function () {});
+
+      // 同步检查: 如果 getListMusics 返回空但歌单有数据
+      if (currentListSongs.length === 0) {
+        var songDetail = _state2.default.listDetailInfo;
+        if (songDetail.list && songDetail.list.length > 0) {
+          setCurrentListSongs((0, _toConsumableArray2.default)(songDetail.list));
+          return;
+        }
+        var boardDetail = _state3.default.listDetailInfo;
+        if (boardDetail.list && boardDetail.list.length > 0) {
+          setCurrentListSongs((0, _toConsumableArray2.default)(boardDetail.list));
+          return;
+        }
+      }
     }, [playMusicInfo, playerListId]);
 
     // 背景 & 文字颜色(同步播放器设置)
@@ -227537,7 +227553,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       var listId = _state.default.playInfo.playerListId;
 
       // 在 playerListId 对应的完整歌曲列表中查找
-      var targetListId = listId || _$$_REQUIRE(_dependencyMap[12], "../../config/constant").LIST_IDS.TEMP;
+      var targetListId = listId || _$$_REQUIRE(_dependencyMap[14], "../../config/constant").LIST_IDS.TEMP;
       var fullList = getList(targetListId);
       var realIdx = (_fullList$findIndex = fullList == null ? void 0 : fullList.findIndex(function (s) {
         return (s.id || '') === songId;
@@ -227553,7 +227569,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
           return (((_t$musicInfo = t.musicInfo) == null ? void 0 : _t$musicInfo.id) || t.id || '') === songId;
         });
         if (tidx >= 0) {
-          void (0, _$$_REQUIRE(_dependencyMap[19], "../../core/player/player").playList)(_$$_REQUIRE(_dependencyMap[12], "../../config/constant").LIST_IDS.TEMP, tidx).catch(function () {
+          void (0, _$$_REQUIRE(_dependencyMap[19], "../../core/player/player").playList)(_$$_REQUIRE(_dependencyMap[14], "../../config/constant").LIST_IDS.TEMP, tidx).catch(function () {
             return (0, _$$_REQUIRE(_dependencyMap[18], "../../utils/tools").toast)('播放失败');
           });
         } else {
@@ -227761,7 +227777,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       alignItems: 'center'
     }
   });
-},1446,[6,41,7,65,15,967,704,1090,106,966,1167,977,680,989,1010,1018,1383,716,543,983,981,1032],"src/screens/PlayQueue/index.tsx");
+},1446,[6,41,7,65,15,967,704,1090,1010,1018,106,966,1167,977,680,989,1383,716,543,983,981,1032],"src/screens/PlayQueue/index.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
     value: true
