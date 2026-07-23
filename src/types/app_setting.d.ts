@@ -76,6 +76,7 @@ declare global {
        */
       'common.alwaysKeepStatusbarHeight': boolean
   'common.guideDone': boolean
+  'localMusic.folderPath': string
 
       /**
        * 主题id

@@ -15,6 +15,7 @@ const defaultSetting: LX.AppSetting = {
   'common.useSystemFileSelector': true,
   'common.alwaysKeepStatusbarHeight': true,
   'common.guideDone': false,
+  'localMusic.folderPath': '',
 
   'player.startupAutoPlay': true,
   'player.startupPushPlayDetailScreen': true,
