@@ -14,7 +14,7 @@ import { Icon } from '@/components/common/Icon'
 import playerState from '@/store/player/state'
 import { playList } from '@/core/player/player'
 import { removeTempPlayList, clearTempPlayeList } from '@/core/player/tempPlayList'
-import { getListMusics } from '@/core/list'
+import { getListMusics, getListMusicSync } from '@/core/list'
 import { LIST_IDS } from '@/config/constant'
 import StatusBar from '@/components/common/StatusBar'
 import { toast } from '@/utils/tools'
@@ -25,6 +25,15 @@ export interface PlayQueueProps { componentId: string; initialQueue?: any[]; lis
 
 export default memo(({ componentId, initialQueue = [], listId: propListId }: PlayQueueProps) => {
   const t = (global.i18n?.t) || ((s: string) => s)
+  
+  // 调试:查看歌单数据状态
+  setTimeout(() => {
+    const sq = songlistState.listDetailInfo.list.length
+    const bq = boardState.listDetailInfo.list.length
+    const pq = initialQueue.length
+    const em = getListMusicSync(playerState.playInfo.playerListId || '').length
+    toast(`队列:${initialQueue.length} 播放器:${em} 歌单:${sq} 排行:${bq}`)
+  }, 500)
   const theme = useTheme()
   const mi = usePlayerMusicInfo()
   const followCover = useSettingValue('playDetail.background.followCover')
@@ -52,8 +61,11 @@ export default memo(({ componentId, initialQueue = [], listId: propListId }: Pla
   // 加载当前播放列表全部歌曲(播放器队列 → 歌单 → 排行榜)
   useEffect(() => {
     const targetId = playerListId || propListId || LIST_IDS.TEMP
+    
+    // 优先使用 initialQueue
     if (initialQueue && initialQueue.length > 0 && currentListSongs.length === 0) {
       setCurrentListSongs(initialQueue)
+      toast('读取队列: ' + initialQueue.length + ' 首')
       return
     }
     
@@ -64,7 +76,7 @@ export default memo(({ componentId, initialQueue = [], listId: propListId }: Pla
         return
       }
       
-      // 2. 从当前歌单详情读取
+      // 2. 从当前歌单详情读取 (listDetailInfo.list)
       const songDetail = songlistState.listDetailInfo
       if (songDetail.list && songDetail.list.length > 0) {
         setCurrentListSongs([...songDetail.list])
@@ -79,16 +91,16 @@ export default memo(({ componentId, initialQueue = [], listId: propListId }: Pla
       }
     }).catch(() => {})
     
-    // 同步检查: 如果 getListMusics 返回空但歌单有数据
+    // 同步回退:当异步 getListMusics 为空时立即检查歌单
     if (currentListSongs.length === 0) {
-      const songDetail = songlistState.listDetailInfo
-      if (songDetail.list && songDetail.list.length > 0) {
-        setCurrentListSongs([...songDetail.list])
+      const sd = songlistState.listDetailInfo
+      if (sd.list && sd.list.length > 0) {
+        setCurrentListSongs([...sd.list])
         return
       }
-      const boardDetail = boardState.listDetailInfo
-      if (boardDetail.list && boardDetail.list.length > 0) {
-        setCurrentListSongs([...boardDetail.list])
+      const bd = boardState.listDetailInfo
+      if (bd.list && bd.list.length > 0) {
+        setCurrentListSongs([...bd.list])
         return
       }
     }
