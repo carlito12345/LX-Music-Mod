@@ -47,7 +47,7 @@ export default ({ children }: Props) => {
         resizeMode="cover"
       >
       </ImageBackground>
-      <View style={{ flex: 1, flexDirection: 'column', backgroundColor: theme['c-main-background'] }}>
+      <View style={{ flex: 1, flexDirection: 'column' }}>
         {children}
       </View>
     </View>
