@@ -7,6 +7,7 @@ import Search from './settings/Search'
 import List from './settings/List'
 import Sync from './settings/Sync'
 import Backup from './settings/Backup'
+import LocalMusic from './settings/LocalMusic'
 import Other from './settings/Other'
 import Version from './settings/Version'
 import About from './settings/About'
@@ -19,6 +20,7 @@ export const SETTING_SCREENS = [
   'list',
   'sync',
   'backup',
+  'localMusic',
   'other',
   'version',
   'about',
@@ -54,6 +56,7 @@ const Main = forwardRef<MainType, {}>((props, ref) => {
       case 'list': return <List />
       case 'sync': return <Sync />
       case 'backup': return <Backup />
+      case 'localMusic': return <LocalMusic />
       case 'other': return <Other />
       case 'version': return <Version />
       case 'about': return <About />
