@@ -8,6 +8,7 @@ import List from './settings/List'
 import Sync from './settings/Sync'
 import Backup from './settings/Backup'
 import Download from './settings/Download'
+import CarKey from './settings/CarKey'
 import Other from './settings/Other'
 import Version from './settings/Version'
 import About from './settings/About'
@@ -20,6 +21,7 @@ export const SETTING_SCREENS = [
   'list',
   'sync',
   'backup',
+  'carKey',
   'other',
   'version',
   'about',
@@ -56,6 +58,7 @@ const Main = forwardRef<MainType, {}>((props, ref) => {
       case 'sync': return <Sync />
       case 'backup': return <Backup />
       case 'download': return <Download />
+      case 'carKey': return <CarKey />
       case 'other': return <Other />
       case 'version': return <Version />
       case 'about': return <About />
