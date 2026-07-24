@@ -120,32 +120,19 @@ export const getPicUrl = async({ musicInfo, listId, isRefresh, skipFilePic, onTo
   onToggleSource?: (musicInfo?: LX.Music.MusicInfoOnline) => void
 }): Promise<string> => {
   if (!isRefresh && !skipFilePic) {
-    let pic = await readPic(musicInfo.meta.filePath).catch(() => null)
-    if (pic) {
-      if (pic.startsWith('/')) pic = `file://${pic}`
-      return pic
-    }
+    try {
+      let pic = await readPic(musicInfo.meta.filePath).catch(() => null)
+      if (pic) {
+        if (pic.startsWith('/')) pic = `file://${pic}`
+        return pic
+      }
+    } catch {}
 
     if (musicInfo.meta.picUrl) return musicInfo.meta.picUrl
   }
 
-  try {
-    return await getOnlineOtherSourcePicByLocal(musicInfo).then(({ url }) => {
-      return url
-    })
-  } catch {}
-
-  onToggleSource()
-  return getOtherSourceByLocal(musicInfo, async(otherSource) => {
-    return getOnlineOtherSourcePicUrl({ musicInfos: [...otherSource], onToggleSource, isRefresh }).then(({ url, musicInfo: targetMusicInfo, isFromCache }) => {
-      if (listId) {
-        musicInfo.meta.picUrl = url
-        void updateListMusics([{ id: listId, musicInfo }])
-      }
-
-      return url
-    })
-  })
+  // 本地文件保护:不搜索网络,返回空封面
+  return ''
 }
 
 export const parseLyric = (lrc: string): LX.Music.LyricInfo => {
@@ -222,23 +209,14 @@ export const getLyricInfo = async({ musicInfo, isRefresh, skipFileLyric, onToggl
     if (lyricInfo?.lyric) return buildLyricInfo(lyricInfo)
   }
 
+  // 尝试读取缓存歌词
   try {
-    // eslint-disable-next-line @typescript-eslint/promise-function-async
     return await getOnlineOtherSourceLyricByLocal(musicInfo, isRefresh).then(({ lyricInfo, isFromCache }) => {
       if (!isFromCache) void saveLyric(musicInfo, lyricInfo)
       return buildLyricInfo(lyricInfo)
     })
   } catch {}
 
-  onToggleSource()
-  return getOtherSourceByLocal(musicInfo, async(otherSource) => {
-    return getOnlineOtherSourceLyricInfo({ musicInfos: [...otherSource], onToggleSource, isRefresh }).then(async({ lyricInfo, musicInfo: targetMusicInfo, isFromCache }) => {
-      void saveLyric(musicInfo, lyricInfo)
-
-      if (isFromCache) return buildLyricInfo(lyricInfo)
-      void saveLyric(targetMusicInfo, lyricInfo)
-
-      return buildLyricInfo(lyricInfo)
-    })
-  })
+  // 本地文件保护:不搜索网络,返回空歌词
+  return buildLyricInfo({})
 }

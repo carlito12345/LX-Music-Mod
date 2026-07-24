@@ -181666,46 +181666,20 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
         _ref7$onToggleSource = _ref7.onToggleSource,
         onToggleSource = _ref7$onToggleSource === void 0 ? function () {} : _ref7$onToggleSource;
       if (!isRefresh && !skipFilePic) {
-        var pic = yield (0, _$$_REQUIRE(_dependencyMap[8], "../../utils/localMediaMetadata").readPic)(musicInfo.meta.filePath).catch(function () {
-          return null;
-        });
-        if (pic) {
-          if (pic.startsWith('/')) pic = `file://${pic}`;
-          return pic;
-        }
+        try {
+          var pic = yield (0, _$$_REQUIRE(_dependencyMap[8], "../../utils/localMediaMetadata").readPic)(musicInfo.meta.filePath).catch(function () {
+            return null;
+          });
+          if (pic) {
+            if (pic.startsWith('/')) pic = `file://${pic}`;
+            return pic;
+          }
+        } catch (_unused8) {}
         if (musicInfo.meta.picUrl) return musicInfo.meta.picUrl;
       }
-      try {
-        return yield (0, _$$_REQUIRE(_dependencyMap[4], "./utils").getOnlineOtherSourcePicByLocal)(musicInfo).then(function (_ref9) {
-          var url = _ref9.url;
-          return url;
-        });
-      } catch (_unused8) {}
-      onToggleSource();
-      return getOtherSourceByLocal(musicInfo, /*#__PURE__*/function () {
-        var _ref0 = (0, _asyncToGenerator2.default)(function* (otherSource) {
-          return (0, _$$_REQUIRE(_dependencyMap[4], "./utils").getOnlineOtherSourcePicUrl)({
-            musicInfos: (0, _toConsumableArray2.default)(otherSource),
-            onToggleSource: onToggleSource,
-            isRefresh: isRefresh
-          }).then(function (_ref1) {
-            var url = _ref1.url,
-              targetMusicInfo = _ref1.musicInfo,
-              isFromCache = _ref1.isFromCache;
-            if (listId) {
-              musicInfo.meta.picUrl = url;
-              void (0, _$$_REQUIRE(_dependencyMap[9], "../list").updateListMusics)([{
-                id: listId,
-                musicInfo: musicInfo
-              }]);
-            }
-            return url;
-          });
-        });
-        return function (_x6) {
-          return _ref0.apply(this, arguments);
-        };
-      }());
+
+      // 本地文件保护:不搜索网络,返回空封面
+      return '';
     });
     return function getPicUrl(_x5) {
       return _ref8.apply(this, arguments);
@@ -181761,24 +181735,24 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     }, parsedInfo);
   };
   var getMusicFileLyric = /*#__PURE__*/function () {
-    var _ref10 = (0, _asyncToGenerator2.default)(function* (filePath) {
+    var _ref9 = (0, _asyncToGenerator2.default)(function* (filePath) {
       var lyric = yield (0, _$$_REQUIRE(_dependencyMap[8], "../../utils/localMediaMetadata").readLyric)(filePath).catch(function () {
         return null;
       });
       if (!lyric) return null;
       return parseLyric(lyric);
     });
-    return function getMusicFileLyric(_x7) {
-      return _ref10.apply(this, arguments);
+    return function getMusicFileLyric(_x6) {
+      return _ref9.apply(this, arguments);
     };
   }();
   var getLyricInfo = exports.getLyricInfo = /*#__PURE__*/function () {
-    var _ref12 = (0, _asyncToGenerator2.default)(function* (_ref11) {
-      var musicInfo = _ref11.musicInfo,
-        isRefresh = _ref11.isRefresh,
-        skipFileLyric = _ref11.skipFileLyric,
-        _ref11$onToggleSource = _ref11.onToggleSource,
-        onToggleSource = _ref11$onToggleSource === void 0 ? function () {} : _ref11$onToggleSource;
+    var _ref1 = (0, _asyncToGenerator2.default)(function* (_ref0) {
+      var musicInfo = _ref0.musicInfo,
+        isRefresh = _ref0.isRefresh,
+        skipFileLyric = _ref0.skipFileLyric,
+        _ref0$onToggleSource = _ref0.onToggleSource,
+        onToggleSource = _ref0$onToggleSource === void 0 ? function () {} : _ref0$onToggleSource;
       if (!isRefresh && !skipFileLyric) {
         // const lyricInfo = await getCachedLyricInfo(musicInfo)
         // if (lyricInfo?.rawlrcInfo.lyric && lyricInfo.lyric != lyricInfo.rawlrcInfo.lyric) {
@@ -181792,47 +181766,25 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
         var lyricInfo = yield (0, _$$_REQUIRE(_dependencyMap[4], "./utils").getCachedLyricInfo)(musicInfo);
         if (lyricInfo != null && lyricInfo.lyric) return (0, _$$_REQUIRE(_dependencyMap[4], "./utils").buildLyricInfo)(lyricInfo);
       }
+
+      // 尝试读取缓存歌词
       try {
-        // eslint-disable-next-line @typescript-eslint/promise-function-async
-        return yield (0, _$$_REQUIRE(_dependencyMap[4], "./utils").getOnlineOtherSourceLyricByLocal)(musicInfo, isRefresh).then(function (_ref13) {
-          var lyricInfo = _ref13.lyricInfo,
-            isFromCache = _ref13.isFromCache;
+        return yield (0, _$$_REQUIRE(_dependencyMap[4], "./utils").getOnlineOtherSourceLyricByLocal)(musicInfo, isRefresh).then(function (_ref10) {
+          var lyricInfo = _ref10.lyricInfo,
+            isFromCache = _ref10.isFromCache;
           if (!isFromCache) void (0, _$$_REQUIRE(_dependencyMap[7], "../../utils/data").saveLyric)(musicInfo, lyricInfo);
           return (0, _$$_REQUIRE(_dependencyMap[4], "./utils").buildLyricInfo)(lyricInfo);
         });
       } catch (_unused9) {}
-      onToggleSource();
-      return getOtherSourceByLocal(musicInfo, /*#__PURE__*/function () {
-        var _ref14 = (0, _asyncToGenerator2.default)(function* (otherSource) {
-          return (0, _$$_REQUIRE(_dependencyMap[4], "./utils").getOnlineOtherSourceLyricInfo)({
-            musicInfos: (0, _toConsumableArray2.default)(otherSource),
-            onToggleSource: onToggleSource,
-            isRefresh: isRefresh
-          }).then(/*#__PURE__*/function () {
-            var _ref16 = (0, _asyncToGenerator2.default)(function* (_ref15) {
-              var lyricInfo = _ref15.lyricInfo,
-                targetMusicInfo = _ref15.musicInfo,
-                isFromCache = _ref15.isFromCache;
-              void (0, _$$_REQUIRE(_dependencyMap[7], "../../utils/data").saveLyric)(musicInfo, lyricInfo);
-              if (isFromCache) return (0, _$$_REQUIRE(_dependencyMap[4], "./utils").buildLyricInfo)(lyricInfo);
-              void (0, _$$_REQUIRE(_dependencyMap[7], "../../utils/data").saveLyric)(targetMusicInfo, lyricInfo);
-              return (0, _$$_REQUIRE(_dependencyMap[4], "./utils").buildLyricInfo)(lyricInfo);
-            });
-            return function (_x0) {
-              return _ref16.apply(this, arguments);
-            };
-          }());
-        });
-        return function (_x9) {
-          return _ref14.apply(this, arguments);
-        };
-      }());
+
+      // 本地文件保护:不搜索网络,返回空歌词
+      return (0, _$$_REQUIRE(_dependencyMap[4], "./utils").buildLyricInfo)({});
     });
-    return function getLyricInfo(_x8) {
-      return _ref12.apply(this, arguments);
+    return function getLyricInfo(_x7) {
+      return _ref1.apply(this, arguments);
     };
   }();
-},992,[6,41,7,13,988,667,993,695,994,989],"src/core/music/local.ts");
+},992,[6,41,7,13,988,667,993,695,994],"src/core/music/local.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
