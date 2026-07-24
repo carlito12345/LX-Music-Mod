@@ -81,7 +81,7 @@
 - **功能**: 优化底部导航栏和播放器控制栏的视觉样式,提升用户体验
 
 ### 📥 完整下载管理系统
-- **PR**: [#1074](https://github.com/lyswhut/lx-music-mobile/pull/1074)
+- **PR**: [#1037](https://github.com/lyswhut/lx-music-mobile/pull/1037)
 - **作者**: 原仓库贡献者
 - **功能**: 
   - 3并发下载队列
