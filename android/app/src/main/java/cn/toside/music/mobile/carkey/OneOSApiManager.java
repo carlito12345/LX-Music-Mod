@@ -1,18 +1,17 @@
 package cn.toside.music.mobile.carkey;
 
 import android.content.Context;
+import android.os.IBinder;
+import android.os.RemoteException;
 import android.util.Log;
 
-/**
- * 精简版 OneOSApiManager - 仅用于连接 KeyInputManager
- * 完整版在 GIB 项目中,这里只提取方控必需部分
- */
 public class OneOSApiManager {
   private static final String TAG = "[OneOS]";
   private static volatile OneOSApiManager sInstance;
   private final Context mContext;
   private ServiceConnectionManager mServiceConnectionManager;
   private KeyInputManager mKeyInputManager;
+  private String mDiagnostic = "";
 
   public static OneOSApiManager getInstance(Context context) {
     if (sInstance == null) {
@@ -47,15 +46,33 @@ public class OneOSApiManager {
   public KeyInputManager getKeyInputManager() {
     if (mKeyInputManager == null && mServiceConnectionManager.isServiceBound()) {
       try {
-        mKeyInputManager = new KeyInputManager(
-          mContext,
-          mServiceConnectionManager.getServiceManager().getService(8)
-        );
-        Log.d(TAG, "KeyInputManager obtained (service 8)");
-      } catch (Exception e) {
-        Log.e(TAG, "getKeyInputManager failed: " + e.getMessage());
+        IServiceManager sm = mServiceConnectionManager.getServiceManager();
+        if (sm == null) {
+          mDiagnostic = "getServiceManager()=null";
+          return null;
+        }
+        IBinder binder = sm.getService(8);
+        if (binder == null) {
+          mDiagnostic = "svc(8)=null, available:";
+          for (int i = 0; i < 30; i++) {
+            try {
+              if (sm.getService(i) != null) mDiagnostic += " " + i;
+            } catch (Exception e) {}
+          }
+          return null;
+        }
+        mKeyInputManager = new KeyInputManager(mContext, binder);
+        mDiagnostic = "OK";
+      } catch (RemoteException e) {
+        mDiagnostic = "RemoteEx: " + e.getMessage();
       }
+    } else if (!mServiceConnectionManager.isServiceBound()) {
+      mDiagnostic = "not bound";
     }
     return mKeyInputManager;
+  }
+
+  public String getDiagnostic() {
+    return mDiagnostic;
   }
 }
