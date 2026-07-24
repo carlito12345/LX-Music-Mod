@@ -235416,12 +235416,12 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
 
       // 在 playerListId 对应的完整歌曲列表中查找
       var targetListId = listId || _$$_REQUIRE(_dependencyMap[13], "../../config/constant").LIST_IDS.TEMP;
-      var fullList = getList(targetListId);
+      var fullList = (0, _$$_REQUIRE(_dependencyMap[17], "../../utils/listManage").getListMusicSync)(targetListId);
       var realIdx = (_fullList$findIndex = fullList == null ? void 0 : fullList.findIndex(function (s) {
         return (s.id || '') === songId;
       })) != null ? _fullList$findIndex : -1;
       if (realIdx >= 0) {
-        void (0, _$$_REQUIRE(_dependencyMap[17], "../../core/player/player").playList)(targetListId, realIdx).catch(function () {
+        void (0, _$$_REQUIRE(_dependencyMap[18], "../../core/player/player").playList)(targetListId, realIdx).catch(function () {
           return (0, _$$_REQUIRE(_dependencyMap[16], "../../utils/tools").toast)('播放失败');
         });
       } else {
@@ -235431,7 +235431,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
           return (((_t$musicInfo = t.musicInfo) == null ? void 0 : _t$musicInfo.id) || t.id || '') === songId;
         });
         if (tidx >= 0) {
-          void (0, _$$_REQUIRE(_dependencyMap[17], "../../core/player/player").playList)(_$$_REQUIRE(_dependencyMap[13], "../../config/constant").LIST_IDS.TEMP, tidx).catch(function () {
+          void (0, _$$_REQUIRE(_dependencyMap[18], "../../core/player/player").playList)(_$$_REQUIRE(_dependencyMap[13], "../../config/constant").LIST_IDS.TEMP, tidx).catch(function () {
             return (0, _$$_REQUIRE(_dependencyMap[16], "../../utils/tools").toast)('播放失败');
           });
         } else {
@@ -235447,10 +235447,10 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
         var _t$musicInfo2;
         return ((_t$musicInfo2 = t.musicInfo) == null ? void 0 : _t$musicInfo2.id) === item.id;
       });
-      if (tidx >= 0) (0, _$$_REQUIRE(_dependencyMap[18], "../../core/player/tempPlayList").removeTempPlayList)(tidx);
+      if (tidx >= 0) (0, _$$_REQUIRE(_dependencyMap[19], "../../core/player/tempPlayList").removeTempPlayList)(tidx);
     }, [allQueue, currentItemId]);
     var handleClear = function handleClear() {
-      (0, _$$_REQUIRE(_dependencyMap[18], "../../core/player/tempPlayList").clearTempPlayeList)();
+      (0, _$$_REQUIRE(_dependencyMap[19], "../../core/player/tempPlayList").clearTempPlayeList)();
       (0, _$$_REQUIRE(_dependencyMap[16], "../../utils/tools").toast)('已清空');
     };
     var handleLoadLocalMusic = /*#__PURE__*/function () {
@@ -235460,7 +235460,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
           var allFiles = [];
           for (var dir of dirs) {
             try {
-              var files = yield (0, _$$_REQUIRE(_dependencyMap[19], "../../utils/localMediaMetadata").scanAudioFiles)(dir, true);
+              var files = yield (0, _$$_REQUIRE(_dependencyMap[20], "../../utils/localMediaMetadata").scanAudioFiles)(dir, true);
               allFiles = allFiles.concat(files);
             } catch (_unused) {}
           }
@@ -235482,7 +235482,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
               }
             };
           });
-          yield (0, _$$_REQUIRE(_dependencyMap[20], "../../core/list").setTempList)('local_queue', musicList);
+          yield (0, _$$_REQUIRE(_dependencyMap[21], "../../core/list").setTempList)('local_queue', musicList);
           setCurrentListSongs(musicList);
           (0, _$$_REQUIRE(_dependencyMap[16], "../../utils/tools").toast)(`已加载 ${musicList.length} 首本地歌曲`);
         } catch (err) {
@@ -235572,7 +235572,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
         children: [/*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.TouchableOpacity, {
           onPress: handleBack,
           style: styles.backBtn,
-          children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_$$_REQUIRE(_dependencyMap[21], "../../components/common/Icon").Icon, {
+          children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_$$_REQUIRE(_dependencyMap[22], "../../components/common/Icon").Icon, {
             name: "chevron-left",
             size: 22,
             color: textColor
@@ -235679,7 +235679,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       alignItems: 'center'
     }
   });
-},1449,[6,13,41,7,65,15,967,1076,704,106,966,1161,977,680,1386,716,543,983,981,994,989,1032],"src/screens/PlayQueue/index.tsx");
+},1449,[6,13,41,7,65,15,967,1076,704,106,966,1161,977,680,1386,716,543,694,983,981,994,989,1032],"src/screens/PlayQueue/index.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
     value: true

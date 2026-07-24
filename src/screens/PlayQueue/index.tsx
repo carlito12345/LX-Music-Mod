@@ -15,6 +15,7 @@ import { Icon } from '@/components/common/Icon'
 import { playList } from '@/core/player/player'
 import { removeTempPlayList, clearTempPlayeList } from '@/core/player/tempPlayList'
 import { getListMusics } from '@/core/list'
+import { getListMusicSync } from '@/utils/listManage'
 import { LIST_IDS } from '@/config/constant'
 import StatusBar from '@/components/common/StatusBar'
 import playerState from '@/store/player/state'
@@ -103,7 +104,7 @@ export default memo(({ componentId, initialQueue = [] }: PlayQueueProps) => {
 
     // 在 playerListId 对应的完整歌曲列表中查找
     const targetListId = listId || LIST_IDS.TEMP
-    const fullList = getList(targetListId) as any[]
+    const fullList = getListMusicSync(targetListId) as any[]
     const realIdx = fullList?.findIndex((s: any) => (s.id || '') === songId) ?? -1
       if (realIdx >= 0) {
         void playList(targetListId, realIdx).catch(() => toast('播放失败'))
