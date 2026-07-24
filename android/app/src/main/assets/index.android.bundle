@@ -222649,6 +222649,10 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       _useState6 = (0, _slicedToArray2.default)(_useState5, 2),
       geelyConnected = _useState6[0],
       setGeelyConnected = _useState6[1];
+    var _useState7 = (0, _react.useState)(''),
+      _useState8 = (0, _slicedToArray2.default)(_useState7, 2),
+      diag = _useState8[0],
+      setDiag = _useState8[1];
     var checkStatus = (0, _react.useCallback)(/*#__PURE__*/(0, _asyncToGenerator2.default)(function* () {
       var _carKeyPlugin;
       if (!((_carKeyPlugin = carKeyPlugin) != null && _carKeyPlugin.isAvailable)) return;
@@ -222814,6 +222818,33 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
           color: theme['c-font'],
           children: ["OneOS API: ", geelyConnected ? '已连接' : '未连接']
         })]
+      }), diag ? /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.View, {
+        style: [styles.statusBar, {
+          backgroundColor: '#33333320'
+        }],
+        children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
+          size: 11,
+          color: theme['c-font-label'],
+          numberOfLines: 3,
+          children: diag
+        })
+      }) : null, /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.TouchableOpacity, {
+        style: [styles.btn, {
+          backgroundColor: theme['c-button-background']
+        }],
+        onPress: /*#__PURE__*/(0, _asyncToGenerator2.default)(function* () {
+          try {
+            var _carKeyPlugin7;
+            var d = yield (_carKeyPlugin7 = carKeyPlugin) == null ? void 0 : _carKeyPlugin7.getGeelyDiagnostic == null ? void 0 : _carKeyPlugin7.getGeelyDiagnostic();
+            setDiag(d || 'no data');
+          } catch (_unused6) {}
+        }),
+        activeOpacity: 0.7,
+        children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
+          size: 14,
+          color: theme['c-button-font'],
+          children: "\u8BCA\u65AD"
+        })
       }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.View, {
         style: styles.info,
         children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
@@ -222857,6 +222888,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     value: true
   });
   exports.default = void 0;
+  exports.getGeelyDiagnostic = getGeelyDiagnostic;
   exports.isAccessibilityServiceRunning = isAccessibilityServiceRunning;
   exports.isCarKeyListening = isCarKeyListening;
   exports.isGeelyConnected = isGeelyConnected;
@@ -222962,6 +222994,20 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       }
     });
     return _isAccessibilityServiceRunning.apply(this, arguments);
+  }
+  function getGeelyDiagnostic() {
+    return _getGeelyDiagnostic.apply(this, arguments);
+  }
+  function _getGeelyDiagnostic() {
+    _getGeelyDiagnostic = (0, _asyncToGenerator2.default)(function* () {
+      if (!isAvailable) return 'Module not available';
+      try {
+        return yield CarKeyModule.getGeelyDiagnostic();
+      } catch (e) {
+        return String(e);
+      }
+    });
+    return _getGeelyDiagnostic.apply(this, arguments);
   }
   function isGeelyConnected() {
     return _isGeelyConnected.apply(this, arguments);

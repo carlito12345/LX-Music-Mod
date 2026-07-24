@@ -68,6 +68,11 @@ export async function isAccessibilityServiceRunning(): Promise<boolean> {
   try { return await CarKeyModule.isServiceRunning() } catch { return false }
 }
 
+export async function getGeelyDiagnostic(): Promise<string> {
+  if (!isAvailable) return 'Module not available'
+  try { return await CarKeyModule.getGeelyDiagnostic() } catch (e:any) { return String(e) }
+}
+
 export async function isGeelyConnected(): Promise<boolean> {
   if (!isAvailable) return false
   try { return await CarKeyModule.isGeelyConnected() } catch { return false }

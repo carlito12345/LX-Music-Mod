@@ -17,6 +17,7 @@ export default memo(() => {
   const [a11yRunning, setA11yRunning] = useState(false)
   const [listening, setListening] = useState(false)
   const [geelyConnected, setGeelyConnected] = useState(false)
+  const [diag, setDiag] = useState('')
 
   const checkStatus = useCallback(async () => {
     if (!carKeyPlugin?.isAvailable) return
@@ -118,6 +119,21 @@ export default memo(() => {
         <View style={[styles.indicator, { backgroundColor: geelyConnected ? '#1b8a3d' : '#e65100' }]} />
         <Text size={14} color={theme['c-font']}>OneOS API: {geelyConnected ? '已连接' : '未连接'}</Text>
       </View>
+
+      {diag ? (
+        <View style={[styles.statusBar, { backgroundColor: '#33333320' }]}>
+          <Text size={11} color={theme['c-font-label']} numberOfLines={3}>{diag}</Text>
+        </View>
+      ) : null}
+
+      <TouchableOpacity style={[styles.btn, { backgroundColor: theme['c-button-background'] }]} onPress={async () => {
+        try {
+          const d = await carKeyPlugin?.getGeelyDiagnostic?.()
+          setDiag(d || 'no data')
+        } catch {}
+      }} activeOpacity={0.7}>
+        <Text size={14} color={theme['c-button-font']}>诊断</Text>
+      </TouchableOpacity>
 
       <View style={styles.info}>
         <Text size={12} color={theme['c-font-label']}>

@@ -20,6 +20,7 @@ public class GeelyCarKeyManager {
   private ServiceConnectionManager serviceConnectionManager;
   private KeyInputManager keyInputManager;
   private boolean connected = false;
+  private String lastError = "";
 
   // 需要监听的按键列表(吉利车机方向盘键)
   private static final int[] STEERING_WHEEL_KEYS = {
@@ -89,6 +90,7 @@ public class GeelyCarKeyManager {
   }
 
   public boolean isConnected() { return connected; }
+  public String getLastError() { return lastError; }
 
   private final KeyInputManager.BaseInputListener inputListener = new KeyInputManager.BaseInputListener() {
     @Override

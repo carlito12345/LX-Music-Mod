@@ -212,6 +212,19 @@ public class CarKeyModule extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
+  public void getGeelyDiagnostic(Promise promise) {
+    try {
+      String diag = "GeelyCarKeyManager:";
+      GeelyCarKeyManager geelyManager = GeelyCarKeyManager.getInstance(reactContext);
+      diag += " connected=" + geelyManager.isConnected();
+      diag += " lastError=" + geelyManager.getLastError();
+      promise.resolve(diag);
+    } catch (Exception e) {
+      promise.resolve("Error: " + e.getMessage());
+    }
+  }
+
+  @ReactMethod
   public void isGeelyConnected(Promise promise) {
     try {
       GeelyCarKeyManager geelyManager = GeelyCarKeyManager.getInstance(reactContext);
