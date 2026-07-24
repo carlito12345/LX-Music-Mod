@@ -181657,14 +181657,38 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       return _ref3.apply(this, arguments);
     };
   }();
+
+  // 网络检测:3秒超时,超时视为无网
+  var checkNetwork = /*#__PURE__*/function () {
+    var _ref7 = (0, _asyncToGenerator2.default)(function* () {
+      try {
+        var controller = new AbortController();
+        var timer = setTimeout(function () {
+          return controller.abort();
+        }, 3000);
+        yield fetch('https://www.baidu.com/favicon.ico', {
+          signal: controller.signal,
+          cache: 'no-store'
+        });
+        clearTimeout(timer);
+        return true;
+      } catch (_unused8) {
+        return false;
+      }
+    });
+    return function checkNetwork() {
+      return _ref7.apply(this, arguments);
+    };
+  }();
   var getPicUrl = exports.getPicUrl = /*#__PURE__*/function () {
-    var _ref8 = (0, _asyncToGenerator2.default)(function* (_ref7) {
-      var musicInfo = _ref7.musicInfo,
-        listId = _ref7.listId,
-        isRefresh = _ref7.isRefresh,
-        skipFilePic = _ref7.skipFilePic,
-        _ref7$onToggleSource = _ref7.onToggleSource,
-        onToggleSource = _ref7$onToggleSource === void 0 ? function () {} : _ref7$onToggleSource;
+    var _ref9 = (0, _asyncToGenerator2.default)(function* (_ref8) {
+      var musicInfo = _ref8.musicInfo,
+        listId = _ref8.listId,
+        isRefresh = _ref8.isRefresh,
+        skipFilePic = _ref8.skipFilePic,
+        _ref8$onToggleSource = _ref8.onToggleSource,
+        onToggleSource = _ref8$onToggleSource === void 0 ? function () {} : _ref8$onToggleSource;
+      // 1. 先读本地文件封面
       if (!isRefresh && !skipFilePic) {
         try {
           var pic = yield (0, _$$_REQUIRE(_dependencyMap[8], "../../utils/localMediaMetadata").readPic)(musicInfo.meta.filePath).catch(function () {
@@ -181674,15 +181698,53 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
             if (pic.startsWith('/')) pic = `file://${pic}`;
             return pic;
           }
-        } catch (_unused8) {}
+        } catch (_unused9) {}
         if (musicInfo.meta.picUrl) return musicInfo.meta.picUrl;
       }
 
-      // 本地文件保护:不搜索网络,返回空封面
-      return '';
+      // 2. 有网时才搜索网络
+      var hasNetwork = yield checkNetwork();
+      if (!hasNetwork) return '';
+      try {
+        return yield (0, _$$_REQUIRE(_dependencyMap[4], "./utils").getOnlineOtherSourcePicByLocal)(musicInfo).then(function (_ref0) {
+          var url = _ref0.url;
+          return url;
+        });
+      } catch (_unused0) {}
+
+      // 3. 有网但搜索失败,尝试其他源
+      try {
+        onToggleSource();
+        return yield getOtherSourceByLocal(musicInfo, /*#__PURE__*/function () {
+          var _ref1 = (0, _asyncToGenerator2.default)(function* (otherSource) {
+            return (0, _$$_REQUIRE(_dependencyMap[4], "./utils").getOnlineOtherSourcePicUrl)({
+              musicInfos: (0, _toConsumableArray2.default)(otherSource),
+              onToggleSource: onToggleSource,
+              isRefresh: isRefresh
+            }).then(function (_ref10) {
+              var url = _ref10.url,
+                targetMusicInfo = _ref10.musicInfo,
+                isFromCache = _ref10.isFromCache;
+              if (listId) {
+                musicInfo.meta.picUrl = url;
+                void (0, _$$_REQUIRE(_dependencyMap[9], "../list").updateListMusics)([{
+                  id: listId,
+                  musicInfo: musicInfo
+                }]);
+              }
+              return url;
+            });
+          });
+          return function (_x6) {
+            return _ref1.apply(this, arguments);
+          };
+        }());
+      } catch (_unused1) {
+        return '';
+      }
     });
     return function getPicUrl(_x5) {
-      return _ref8.apply(this, arguments);
+      return _ref9.apply(this, arguments);
     };
   }();
   var parseLyric = exports.parseLyric = function parseLyric(lrc) {
@@ -181735,24 +181797,24 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     }, parsedInfo);
   };
   var getMusicFileLyric = /*#__PURE__*/function () {
-    var _ref9 = (0, _asyncToGenerator2.default)(function* (filePath) {
+    var _ref11 = (0, _asyncToGenerator2.default)(function* (filePath) {
       var lyric = yield (0, _$$_REQUIRE(_dependencyMap[8], "../../utils/localMediaMetadata").readLyric)(filePath).catch(function () {
         return null;
       });
       if (!lyric) return null;
       return parseLyric(lyric);
     });
-    return function getMusicFileLyric(_x6) {
-      return _ref9.apply(this, arguments);
+    return function getMusicFileLyric(_x7) {
+      return _ref11.apply(this, arguments);
     };
   }();
   var getLyricInfo = exports.getLyricInfo = /*#__PURE__*/function () {
-    var _ref1 = (0, _asyncToGenerator2.default)(function* (_ref0) {
-      var musicInfo = _ref0.musicInfo,
-        isRefresh = _ref0.isRefresh,
-        skipFileLyric = _ref0.skipFileLyric,
-        _ref0$onToggleSource = _ref0.onToggleSource,
-        onToggleSource = _ref0$onToggleSource === void 0 ? function () {} : _ref0$onToggleSource;
+    var _ref13 = (0, _asyncToGenerator2.default)(function* (_ref12) {
+      var musicInfo = _ref12.musicInfo,
+        isRefresh = _ref12.isRefresh,
+        skipFileLyric = _ref12.skipFileLyric,
+        _ref12$onToggleSource = _ref12.onToggleSource,
+        onToggleSource = _ref12$onToggleSource === void 0 ? function () {} : _ref12$onToggleSource;
       if (!isRefresh && !skipFileLyric) {
         // const lyricInfo = await getCachedLyricInfo(musicInfo)
         // if (lyricInfo?.rawlrcInfo.lyric && lyricInfo.lyric != lyricInfo.rawlrcInfo.lyric) {
@@ -181767,24 +181829,55 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
         if (lyricInfo != null && lyricInfo.lyric) return (0, _$$_REQUIRE(_dependencyMap[4], "./utils").buildLyricInfo)(lyricInfo);
       }
 
-      // 尝试读取缓存歌词
+      // 2. 有网时才搜索网络
+      var hasNetwork = yield checkNetwork();
+      if (!hasNetwork) return (0, _$$_REQUIRE(_dependencyMap[4], "./utils").buildLyricInfo)({});
       try {
-        return yield (0, _$$_REQUIRE(_dependencyMap[4], "./utils").getOnlineOtherSourceLyricByLocal)(musicInfo, isRefresh).then(function (_ref10) {
-          var lyricInfo = _ref10.lyricInfo,
-            isFromCache = _ref10.isFromCache;
+        return yield (0, _$$_REQUIRE(_dependencyMap[4], "./utils").getOnlineOtherSourceLyricByLocal)(musicInfo, isRefresh).then(function (_ref14) {
+          var lyricInfo = _ref14.lyricInfo,
+            isFromCache = _ref14.isFromCache;
           if (!isFromCache) void (0, _$$_REQUIRE(_dependencyMap[7], "../../utils/data").saveLyric)(musicInfo, lyricInfo);
           return (0, _$$_REQUIRE(_dependencyMap[4], "./utils").buildLyricInfo)(lyricInfo);
         });
-      } catch (_unused9) {}
+      } catch (_unused10) {}
 
-      // 本地文件保护:不搜索网络,返回空歌词
-      return (0, _$$_REQUIRE(_dependencyMap[4], "./utils").buildLyricInfo)({});
+      // 3. 有网但搜索失败,尝试其他源
+      try {
+        onToggleSource();
+        return yield getOtherSourceByLocal(musicInfo, /*#__PURE__*/function () {
+          var _ref15 = (0, _asyncToGenerator2.default)(function* (otherSource) {
+            return (0, _$$_REQUIRE(_dependencyMap[4], "./utils").getOnlineOtherSourceLyricInfo)({
+              musicInfos: (0, _toConsumableArray2.default)(otherSource),
+              onToggleSource: onToggleSource,
+              isRefresh: isRefresh
+            }).then(/*#__PURE__*/function () {
+              var _ref17 = (0, _asyncToGenerator2.default)(function* (_ref16) {
+                var lyricInfo = _ref16.lyricInfo,
+                  targetMusicInfo = _ref16.musicInfo,
+                  isFromCache = _ref16.isFromCache;
+                void (0, _$$_REQUIRE(_dependencyMap[7], "../../utils/data").saveLyric)(musicInfo, lyricInfo);
+                if (isFromCache) return (0, _$$_REQUIRE(_dependencyMap[4], "./utils").buildLyricInfo)(lyricInfo);
+                void (0, _$$_REQUIRE(_dependencyMap[7], "../../utils/data").saveLyric)(targetMusicInfo, lyricInfo);
+                return (0, _$$_REQUIRE(_dependencyMap[4], "./utils").buildLyricInfo)(lyricInfo);
+              });
+              return function (_x0) {
+                return _ref17.apply(this, arguments);
+              };
+            }());
+          });
+          return function (_x9) {
+            return _ref15.apply(this, arguments);
+          };
+        }());
+      } catch (_unused11) {
+        return (0, _$$_REQUIRE(_dependencyMap[4], "./utils").buildLyricInfo)({});
+      }
     });
-    return function getLyricInfo(_x7) {
-      return _ref1.apply(this, arguments);
+    return function getLyricInfo(_x8) {
+      return _ref13.apply(this, arguments);
     };
   }();
-},992,[6,41,7,13,988,667,993,695,994],"src/core/music/local.ts");
+},992,[6,41,7,13,988,667,993,695,994,989],"src/core/music/local.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
