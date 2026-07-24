@@ -217546,15 +217546,14 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   var _List = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[7], "./settings/List"));
   var _Sync = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[8], "./settings/Sync"));
   var _Backup = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[9], "./settings/Backup"));
-  var _LocalMusic = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[10], "./settings/LocalMusic"));
-  var _Download = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[11], "./settings/Download"));
-  var _Other = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[12], "./settings/Other"));
-  var _Version = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[13], "./settings/Version"));
-  var _About = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[14], "./settings/About"));
-  var _jsxRuntime = _$$_REQUIRE(_dependencyMap[15], "react/jsx-runtime");
+  var _Download = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[10], "./settings/Download"));
+  var _Other = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[11], "./settings/Other"));
+  var _Version = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[12], "./settings/Version"));
+  var _About = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[13], "./settings/About"));
+  var _jsxRuntime = _$$_REQUIRE(_dependencyMap[14], "react/jsx-runtime");
   var _this = this,
     _jsxFileName = "/data/data/com.termux/files/home/lx-music-mobile/src/screens/Home/Views/Setting/Main.tsx";
-  var SETTING_SCREENS = exports.SETTING_SCREENS = ['basic', 'player', 'lyric_desktop', 'search', 'list', 'sync', 'backup', 'localMusic', 'other', 'version', 'about'];
+  var SETTING_SCREENS = exports.SETTING_SCREENS = ['basic', 'player', 'lyric_desktop', 'search', 'list', 'sync', 'backup', 'other', 'version', 'about'];
 
   // interface MainProps {
   //   onUpdateActiveId: (id: string) => void
@@ -217590,8 +217589,6 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
           return /*#__PURE__*/(0, _jsxRuntime.jsx)(_Sync.default, {});
         case 'backup':
           return /*#__PURE__*/(0, _jsxRuntime.jsx)(_Backup.default, {});
-        case 'localMusic':
-          return /*#__PURE__*/(0, _jsxRuntime.jsx)(_LocalMusic.default, {});
         case 'download':
           return /*#__PURE__*/(0, _jsxRuntime.jsx)(_Download.default, {});
         case 'other':
@@ -217608,7 +217605,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     return component;
   });
   var _default = exports.default = Main;
-},1352,[6,7,65,1226,1260,1280,1303,1306,1314,1340,1311,1313,1343,1350,1351,106],"src/screens/Home/Views/Setting/Main.tsx");
+},1352,[6,7,65,1226,1260,1280,1303,1306,1314,1340,1313,1343,1350,1351,106],"src/screens/Home/Views/Setting/Main.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
