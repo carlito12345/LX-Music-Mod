@@ -23,7 +23,7 @@ public interface IServiceManagerCallback extends IInterface {
     void onServiceChanged(int type) throws RemoteException;
 
     public static abstract class Stub extends Binder implements IServiceManagerCallback {
-        private static final String DESCRIPTOR = "cn.toside.music.mobile.carkey.IServiceManagerCallback";
+        private static final String DESCRIPTOR = "com.geely.lib.oneosapi.IServiceManagerCallback";
         static final int TRANSACTION_onServiceChanged = 1;
 
         @Override // android.os.IInterface

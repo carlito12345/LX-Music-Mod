@@ -53,7 +53,7 @@ public interface IInputListener extends IInterface {
     void onShortClick(int keyCode, int softKeyFunction) throws RemoteException;
 
     public static abstract class Stub extends Binder implements IInputListener {
-        private static final String DESCRIPTOR = "cn.toside.music.mobile.carkey.IInputListener";
+        private static final String DESCRIPTOR = "com.geely.lib.oneosapi.input.IInputListener";
         static final int TRANSACTION_onDoubleClick = 6;
         static final int TRANSACTION_onHoldingPressStarted = 3;
         static final int TRANSACTION_onHoldingPressStopped = 4;

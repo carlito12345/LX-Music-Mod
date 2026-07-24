@@ -51,7 +51,7 @@ public interface IInputManager extends IInterface {
     void unregisterListener(IInputListener listener, String packageName) throws RemoteException;
 
     public static abstract class Stub extends Binder implements IInputManager {
-        private static final String DESCRIPTOR = "cn.toside.music.mobile.carkey.IInputManager";
+        private static final String DESCRIPTOR = "com.geely.lib.oneosapi.input.IInputManager";
         static final int TRANSACTION_getControlIndex = 5;
         static final int TRANSACTION_interceptKeyCode = 1;
         static final int TRANSACTION_registerListener = 3;

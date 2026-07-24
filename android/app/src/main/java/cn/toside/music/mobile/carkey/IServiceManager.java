@@ -50,7 +50,7 @@ public interface IServiceManager extends IInterface {
     void unregisterCallback(IServiceManagerCallback callback) throws RemoteException;
 
     public static abstract class Stub extends Binder implements IServiceManager {
-        private static final String DESCRIPTOR = "cn.toside.music.mobile.carkey.IServiceManager";
+        private static final String DESCRIPTOR = "com.geely.lib.oneosapi.IServiceManager";
         static final int TRANSACTION_addService = 1;
         static final int TRANSACTION_getPermissionService = 3;
         static final int TRANSACTION_getService = 2;
