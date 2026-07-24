@@ -5,6 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.view.KeyEvent;
+import android.provider.Settings;
+import android.accessibilityservice.AccessibilityServiceInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.ServiceInfo;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -148,6 +152,46 @@ public class CarKeyModule extends ReactContextBaseJavaModule {
       reactContext
         .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
         .emit(eventName, params);
+    }
+  }
+
+
+  @ReactMethod
+  public void openAccessibilitySettings(Promise promise) {
+    try {
+      Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
+      intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+      reactContext.startActivity(intent);
+      promise.resolve(true);
+    } catch (Exception e) {
+      promise.reject("CARKEY_ERROR", e.getMessage());
+    }
+  }
+
+  @ReactMethod
+  public void isServiceRunning(Promise promise) {
+    try {
+      boolean running = false;
+      PackageManager pm = reactContext.getPackageManager();
+      try {
+        ServiceInfo serviceInfo = pm.getServiceInfo(
+          new android.content.ComponentName(reactContext, CarKeyAccessibilityService.class),
+          0
+        );
+        // Check if our accessibility service is enabled
+        String enabledServices = Settings.Secure.getString(
+          reactContext.getContentResolver(),
+          Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES
+        );
+        if (enabledServices != null && enabledServices.contains(reactContext.getPackageName())) {
+          running = true;
+        }
+      } catch (PackageManager.NameNotFoundException e) {
+        // Service not found - not running
+      }
+      promise.resolve(running);
+    } catch (Exception e) {
+      promise.reject("CARKEY_ERROR", e.getMessage());
     }
   }
 
