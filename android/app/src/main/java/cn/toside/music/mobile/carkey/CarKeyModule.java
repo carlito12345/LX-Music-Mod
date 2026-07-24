@@ -21,6 +21,7 @@ public class CarKeyModule extends ReactContextBaseJavaModule {
   CarKeyModule(ReactApplicationContext reactContext) {
     super(reactContext);
     this.reactContext = reactContext;
+    CarKeyBridge.setReactContext(reactContext);
   }
 
   @Override
