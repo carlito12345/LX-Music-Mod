@@ -181593,35 +181593,17 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   }();
   var getMusicUrl = exports.getMusicUrl = /*#__PURE__*/function () {
     var _ref3 = (0, _asyncToGenerator2.default)(function* (_ref2) {
-      var _musicInfo$meta;
       var musicInfo = _ref2.musicInfo,
         isRefresh = _ref2.isRefresh,
         _ref2$allowToggleSour = _ref2.allowToggleSource,
         allowToggleSource = _ref2$allowToggleSour === void 0 ? true : _ref2$allowToggleSour,
         _ref2$onToggleSource = _ref2.onToggleSource,
         onToggleSource = _ref2$onToggleSource === void 0 ? function () {} : _ref2$onToggleSource;
-      var filePath = (_musicInfo$meta = musicInfo.meta) == null ? void 0 : _musicInfo$meta.filePath;
-
-      // 本地文件保护:有文件路径就直接播放,不搜索网络
-      if (filePath) {
-        if (!isRefresh) {
-          // 尝试检查文件是否存在
-          try {
-            var path = yield (0, _$$_REQUIRE(_dependencyMap[6], "../../utils/music").getLocalFilePath)(musicInfo);
-            if (path) return path;
-          } catch (_unused6) {}
-
-          // existsFile 失败或返回空,但路径有效就直接返回
-          if (filePath.startsWith('/storage/') || filePath.startsWith('/data/') || filePath.startsWith('/sdcard/')) {
-            return filePath;
-          }
-        }
-
-        // isRefresh=true 或路径无效,直接报错,不搜索网络
-        throw new Error('local file not accessible');
+      if (!isRefresh) {
+        var path = yield (0, _$$_REQUIRE(_dependencyMap[6], "../../utils/music").getLocalFilePath)(musicInfo);
+        // console.log(path)
+        if (path) return path;
       }
-
-      // 没有 filePath 的才走网络搜索
       try {
         return yield (0, _$$_REQUIRE(_dependencyMap[4], "./utils").getOnlineOtherSourceMusicUrlByLocal)(musicInfo, isRefresh).then(function (_ref4) {
           var url = _ref4.url,
@@ -181630,7 +181612,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
           if (!isFromCache) void (0, _$$_REQUIRE(_dependencyMap[7], "../../utils/data").saveMusicUrl)(musicInfo, quality, url);
           return url;
         });
-      } catch (_unused7) {}
+      } catch (_unused6) {}
       if (!allowToggleSource) throw new Error('failed');
       onToggleSource();
       return getOtherSourceByLocal(musicInfo, /*#__PURE__*/function () {
@@ -181644,7 +181626,10 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
               targetQuality = _ref6.quality,
               targetMusicInfo = _ref6.musicInfo,
               isFromCache = _ref6.isFromCache;
+            // saveLyric(musicInfo, data.lyricInfo)
             if (!isFromCache) void (0, _$$_REQUIRE(_dependencyMap[7], "../../utils/data").saveMusicUrl)(targetMusicInfo, targetQuality, url);
+
+            // TODO: save url ?
             return url;
           });
         });
@@ -181657,94 +181642,58 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       return _ref3.apply(this, arguments);
     };
   }();
-
-  // 网络检测:3秒超时,超时视为无网
-  var checkNetwork = /*#__PURE__*/function () {
-    var _ref7 = (0, _asyncToGenerator2.default)(function* () {
-      try {
-        var controller = new AbortController();
-        var timer = setTimeout(function () {
-          return controller.abort();
-        }, 3000);
-        yield fetch('https://www.baidu.com/favicon.ico', {
-          signal: controller.signal,
-          cache: 'no-store'
-        });
-        clearTimeout(timer);
-        return true;
-      } catch (_unused8) {
-        return false;
-      }
-    });
-    return function checkNetwork() {
-      return _ref7.apply(this, arguments);
-    };
-  }();
   var getPicUrl = exports.getPicUrl = /*#__PURE__*/function () {
-    var _ref9 = (0, _asyncToGenerator2.default)(function* (_ref8) {
-      var musicInfo = _ref8.musicInfo,
-        listId = _ref8.listId,
-        isRefresh = _ref8.isRefresh,
-        skipFilePic = _ref8.skipFilePic,
-        _ref8$onToggleSource = _ref8.onToggleSource,
-        onToggleSource = _ref8$onToggleSource === void 0 ? function () {} : _ref8$onToggleSource;
-      // 1. 先读本地文件封面
+    var _ref8 = (0, _asyncToGenerator2.default)(function* (_ref7) {
+      var musicInfo = _ref7.musicInfo,
+        listId = _ref7.listId,
+        isRefresh = _ref7.isRefresh,
+        skipFilePic = _ref7.skipFilePic,
+        _ref7$onToggleSource = _ref7.onToggleSource,
+        onToggleSource = _ref7$onToggleSource === void 0 ? function () {} : _ref7$onToggleSource;
       if (!isRefresh && !skipFilePic) {
-        try {
-          var pic = yield (0, _$$_REQUIRE(_dependencyMap[8], "../../utils/localMediaMetadata").readPic)(musicInfo.meta.filePath).catch(function () {
-            return null;
-          });
-          if (pic) {
-            if (pic.startsWith('/')) pic = `file://${pic}`;
-            return pic;
-          }
-        } catch (_unused9) {}
+        var pic = yield (0, _$$_REQUIRE(_dependencyMap[8], "../../utils/localMediaMetadata").readPic)(musicInfo.meta.filePath).catch(function () {
+          return null;
+        });
+        if (pic) {
+          if (pic.startsWith('/')) pic = `file://${pic}`;
+          return pic;
+        }
         if (musicInfo.meta.picUrl) return musicInfo.meta.picUrl;
       }
-
-      // 2. 有网时才搜索网络
-      var hasNetwork = yield checkNetwork();
-      if (!hasNetwork) return '';
       try {
-        return yield (0, _$$_REQUIRE(_dependencyMap[4], "./utils").getOnlineOtherSourcePicByLocal)(musicInfo).then(function (_ref0) {
-          var url = _ref0.url;
+        return yield (0, _$$_REQUIRE(_dependencyMap[4], "./utils").getOnlineOtherSourcePicByLocal)(musicInfo).then(function (_ref9) {
+          var url = _ref9.url;
           return url;
         });
-      } catch (_unused0) {}
-
-      // 3. 有网但搜索失败,尝试其他源
-      try {
-        onToggleSource();
-        return yield getOtherSourceByLocal(musicInfo, /*#__PURE__*/function () {
-          var _ref1 = (0, _asyncToGenerator2.default)(function* (otherSource) {
-            return (0, _$$_REQUIRE(_dependencyMap[4], "./utils").getOnlineOtherSourcePicUrl)({
-              musicInfos: (0, _toConsumableArray2.default)(otherSource),
-              onToggleSource: onToggleSource,
-              isRefresh: isRefresh
-            }).then(function (_ref10) {
-              var url = _ref10.url,
-                targetMusicInfo = _ref10.musicInfo,
-                isFromCache = _ref10.isFromCache;
-              if (listId) {
-                musicInfo.meta.picUrl = url;
-                void (0, _$$_REQUIRE(_dependencyMap[9], "../list").updateListMusics)([{
-                  id: listId,
-                  musicInfo: musicInfo
-                }]);
-              }
-              return url;
-            });
+      } catch (_unused7) {}
+      onToggleSource();
+      return getOtherSourceByLocal(musicInfo, /*#__PURE__*/function () {
+        var _ref0 = (0, _asyncToGenerator2.default)(function* (otherSource) {
+          return (0, _$$_REQUIRE(_dependencyMap[4], "./utils").getOnlineOtherSourcePicUrl)({
+            musicInfos: (0, _toConsumableArray2.default)(otherSource),
+            onToggleSource: onToggleSource,
+            isRefresh: isRefresh
+          }).then(function (_ref1) {
+            var url = _ref1.url,
+              targetMusicInfo = _ref1.musicInfo,
+              isFromCache = _ref1.isFromCache;
+            if (listId) {
+              musicInfo.meta.picUrl = url;
+              void (0, _$$_REQUIRE(_dependencyMap[9], "../list").updateListMusics)([{
+                id: listId,
+                musicInfo: musicInfo
+              }]);
+            }
+            return url;
           });
-          return function (_x6) {
-            return _ref1.apply(this, arguments);
-          };
-        }());
-      } catch (_unused1) {
-        return '';
-      }
+        });
+        return function (_x6) {
+          return _ref0.apply(this, arguments);
+        };
+      }());
     });
     return function getPicUrl(_x5) {
-      return _ref9.apply(this, arguments);
+      return _ref8.apply(this, arguments);
     };
   }();
   var parseLyric = exports.parseLyric = function parseLyric(lrc) {
@@ -181797,7 +181746,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     }, parsedInfo);
   };
   var getMusicFileLyric = /*#__PURE__*/function () {
-    var _ref11 = (0, _asyncToGenerator2.default)(function* (filePath) {
+    var _ref10 = (0, _asyncToGenerator2.default)(function* (filePath) {
       var lyric = yield (0, _$$_REQUIRE(_dependencyMap[8], "../../utils/localMediaMetadata").readLyric)(filePath).catch(function () {
         return null;
       });
@@ -181805,16 +181754,16 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       return parseLyric(lyric);
     });
     return function getMusicFileLyric(_x7) {
-      return _ref11.apply(this, arguments);
+      return _ref10.apply(this, arguments);
     };
   }();
   var getLyricInfo = exports.getLyricInfo = /*#__PURE__*/function () {
-    var _ref13 = (0, _asyncToGenerator2.default)(function* (_ref12) {
-      var musicInfo = _ref12.musicInfo,
-        isRefresh = _ref12.isRefresh,
-        skipFileLyric = _ref12.skipFileLyric,
-        _ref12$onToggleSource = _ref12.onToggleSource,
-        onToggleSource = _ref12$onToggleSource === void 0 ? function () {} : _ref12$onToggleSource;
+    var _ref12 = (0, _asyncToGenerator2.default)(function* (_ref11) {
+      var musicInfo = _ref11.musicInfo,
+        isRefresh = _ref11.isRefresh,
+        skipFileLyric = _ref11.skipFileLyric,
+        _ref11$onToggleSource = _ref11.onToggleSource,
+        onToggleSource = _ref11$onToggleSource === void 0 ? function () {} : _ref11$onToggleSource;
       if (!isRefresh && !skipFileLyric) {
         // const lyricInfo = await getCachedLyricInfo(musicInfo)
         // if (lyricInfo?.rawlrcInfo.lyric && lyricInfo.lyric != lyricInfo.rawlrcInfo.lyric) {
@@ -181828,53 +181777,44 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
         var lyricInfo = yield (0, _$$_REQUIRE(_dependencyMap[4], "./utils").getCachedLyricInfo)(musicInfo);
         if (lyricInfo != null && lyricInfo.lyric) return (0, _$$_REQUIRE(_dependencyMap[4], "./utils").buildLyricInfo)(lyricInfo);
       }
-
-      // 2. 有网时才搜索网络
-      var hasNetwork = yield checkNetwork();
-      if (!hasNetwork) return (0, _$$_REQUIRE(_dependencyMap[4], "./utils").buildLyricInfo)({});
       try {
-        return yield (0, _$$_REQUIRE(_dependencyMap[4], "./utils").getOnlineOtherSourceLyricByLocal)(musicInfo, isRefresh).then(function (_ref14) {
-          var lyricInfo = _ref14.lyricInfo,
-            isFromCache = _ref14.isFromCache;
+        // eslint-disable-next-line @typescript-eslint/promise-function-async
+        return yield (0, _$$_REQUIRE(_dependencyMap[4], "./utils").getOnlineOtherSourceLyricByLocal)(musicInfo, isRefresh).then(function (_ref13) {
+          var lyricInfo = _ref13.lyricInfo,
+            isFromCache = _ref13.isFromCache;
           if (!isFromCache) void (0, _$$_REQUIRE(_dependencyMap[7], "../../utils/data").saveLyric)(musicInfo, lyricInfo);
           return (0, _$$_REQUIRE(_dependencyMap[4], "./utils").buildLyricInfo)(lyricInfo);
         });
-      } catch (_unused10) {}
-
-      // 3. 有网但搜索失败,尝试其他源
-      try {
-        onToggleSource();
-        return yield getOtherSourceByLocal(musicInfo, /*#__PURE__*/function () {
-          var _ref15 = (0, _asyncToGenerator2.default)(function* (otherSource) {
-            return (0, _$$_REQUIRE(_dependencyMap[4], "./utils").getOnlineOtherSourceLyricInfo)({
-              musicInfos: (0, _toConsumableArray2.default)(otherSource),
-              onToggleSource: onToggleSource,
-              isRefresh: isRefresh
-            }).then(/*#__PURE__*/function () {
-              var _ref17 = (0, _asyncToGenerator2.default)(function* (_ref16) {
-                var lyricInfo = _ref16.lyricInfo,
-                  targetMusicInfo = _ref16.musicInfo,
-                  isFromCache = _ref16.isFromCache;
-                void (0, _$$_REQUIRE(_dependencyMap[7], "../../utils/data").saveLyric)(musicInfo, lyricInfo);
-                if (isFromCache) return (0, _$$_REQUIRE(_dependencyMap[4], "./utils").buildLyricInfo)(lyricInfo);
-                void (0, _$$_REQUIRE(_dependencyMap[7], "../../utils/data").saveLyric)(targetMusicInfo, lyricInfo);
-                return (0, _$$_REQUIRE(_dependencyMap[4], "./utils").buildLyricInfo)(lyricInfo);
-              });
-              return function (_x0) {
-                return _ref17.apply(this, arguments);
-              };
-            }());
-          });
-          return function (_x9) {
-            return _ref15.apply(this, arguments);
-          };
-        }());
-      } catch (_unused11) {
-        return (0, _$$_REQUIRE(_dependencyMap[4], "./utils").buildLyricInfo)({});
-      }
+      } catch (_unused8) {}
+      onToggleSource();
+      return getOtherSourceByLocal(musicInfo, /*#__PURE__*/function () {
+        var _ref14 = (0, _asyncToGenerator2.default)(function* (otherSource) {
+          return (0, _$$_REQUIRE(_dependencyMap[4], "./utils").getOnlineOtherSourceLyricInfo)({
+            musicInfos: (0, _toConsumableArray2.default)(otherSource),
+            onToggleSource: onToggleSource,
+            isRefresh: isRefresh
+          }).then(/*#__PURE__*/function () {
+            var _ref16 = (0, _asyncToGenerator2.default)(function* (_ref15) {
+              var lyricInfo = _ref15.lyricInfo,
+                targetMusicInfo = _ref15.musicInfo,
+                isFromCache = _ref15.isFromCache;
+              void (0, _$$_REQUIRE(_dependencyMap[7], "../../utils/data").saveLyric)(musicInfo, lyricInfo);
+              if (isFromCache) return (0, _$$_REQUIRE(_dependencyMap[4], "./utils").buildLyricInfo)(lyricInfo);
+              void (0, _$$_REQUIRE(_dependencyMap[7], "../../utils/data").saveLyric)(targetMusicInfo, lyricInfo);
+              return (0, _$$_REQUIRE(_dependencyMap[4], "./utils").buildLyricInfo)(lyricInfo);
+            });
+            return function (_x0) {
+              return _ref16.apply(this, arguments);
+            };
+          }());
+        });
+        return function (_x9) {
+          return _ref14.apply(this, arguments);
+        };
+      }());
     });
     return function getLyricInfo(_x8) {
-      return _ref13.apply(this, arguments);
+      return _ref12.apply(this, arguments);
     };
   }();
 },992,[6,41,7,13,988,667,993,695,994,989],"src/core/music/local.ts");

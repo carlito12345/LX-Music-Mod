@@ -72,28 +72,12 @@ export const getMusicUrl = async({ musicInfo, isRefresh, allowToggleSource = tru
   onToggleSource?: (musicInfo?: LX.Music.MusicInfoOnline) => void
   allowToggleSource?: boolean
 }): Promise<string> => {
-  const filePath = musicInfo.meta?.filePath
-
-  // 本地文件保护:有文件路径就直接播放,不搜索网络
-  if (filePath) {
-    if (!isRefresh) {
-      // 尝试检查文件是否存在
-      try {
-        const path = await getLocalFilePath(musicInfo)
-        if (path) return path
-      } catch {}
-
-      // existsFile 失败或返回空,但路径有效就直接返回
-      if (filePath.startsWith('/storage/') || filePath.startsWith('/data/') || filePath.startsWith('/sdcard/')) {
-        return filePath
-      }
-    }
-
-    // isRefresh=true 或路径无效,直接报错,不搜索网络
-    throw new Error('local file not accessible')
+  if (!isRefresh) {
+    const path = await getLocalFilePath(musicInfo)
+    // console.log(path)
+    if (path) return path
   }
 
-  // 没有 filePath 的才走网络搜索
   try {
     return await getOnlineOtherSourceMusicUrlByLocal(musicInfo, isRefresh).then(({ url, quality, isFromCache }) => {
       if (!isFromCache) void saveMusicUrl(musicInfo, quality, url)
@@ -106,23 +90,13 @@ export const getMusicUrl = async({ musicInfo, isRefresh, allowToggleSource = tru
   onToggleSource()
   return getOtherSourceByLocal(musicInfo, async(otherSource) => {
     return getOnlineOtherSourceMusicUrl({ musicInfos: [...otherSource], onToggleSource, isRefresh }).then(({ url, quality: targetQuality, musicInfo: targetMusicInfo, isFromCache }) => {
+      // saveLyric(musicInfo, data.lyricInfo)
       if (!isFromCache) void saveMusicUrl(targetMusicInfo, targetQuality, url)
+
+      // TODO: save url ?
       return url
     })
   })
-}
-
-// 网络检测:3秒超时,超时视为无网
-const checkNetwork = async(): Promise<boolean> => {
-  try {
-    const controller = new AbortController()
-    const timer = setTimeout(() => controller.abort(), 3000)
-    await fetch('https://www.baidu.com/favicon.ico', { signal: controller.signal, cache: 'no-store' })
-    clearTimeout(timer)
-    return true
-  } catch {
-    return false
-  }
 }
 
 export const getPicUrl = async({ musicInfo, listId, isRefresh, skipFilePic, onToggleSource = () => {} }: {
@@ -132,42 +106,33 @@ export const getPicUrl = async({ musicInfo, listId, isRefresh, skipFilePic, onTo
   skipFilePic?: boolean
   onToggleSource?: (musicInfo?: LX.Music.MusicInfoOnline) => void
 }): Promise<string> => {
-  // 1. 先读本地文件封面
   if (!isRefresh && !skipFilePic) {
-    try {
-      let pic = await readPic(musicInfo.meta.filePath).catch(() => null)
-      if (pic) {
-        if (pic.startsWith('/')) pic = `file://${pic}`
-        return pic
-      }
-    } catch {}
+    let pic = await readPic(musicInfo.meta.filePath).catch(() => null)
+    if (pic) {
+      if (pic.startsWith('/')) pic = `file://${pic}`
+      return pic
+    }
 
     if (musicInfo.meta.picUrl) return musicInfo.meta.picUrl
   }
 
-  // 2. 有网时才搜索网络
-  const hasNetwork = await checkNetwork()
-  if (!hasNetwork) return ''
-
   try {
-    return await getOnlineOtherSourcePicByLocal(musicInfo).then(({ url }) => url)
+    return await getOnlineOtherSourcePicByLocal(musicInfo).then(({ url }) => {
+      return url
+    })
   } catch {}
 
-  // 3. 有网但搜索失败,尝试其他源
-  try {
-    onToggleSource()
-    return await getOtherSourceByLocal(musicInfo, async(otherSource) => {
-      return getOnlineOtherSourcePicUrl({ musicInfos: [...otherSource], onToggleSource, isRefresh }).then(({ url, musicInfo: targetMusicInfo, isFromCache }) => {
-        if (listId) {
-          musicInfo.meta.picUrl = url
-          void updateListMusics([{ id: listId, musicInfo }])
-        }
-        return url
-      })
+  onToggleSource()
+  return getOtherSourceByLocal(musicInfo, async(otherSource) => {
+    return getOnlineOtherSourcePicUrl({ musicInfos: [...otherSource], onToggleSource, isRefresh }).then(({ url, musicInfo: targetMusicInfo, isFromCache }) => {
+      if (listId) {
+        musicInfo.meta.picUrl = url
+        void updateListMusics([{ id: listId, musicInfo }])
+      }
+
+      return url
     })
-  } catch {
-    return ''
-  }
+  })
 }
 
 export const parseLyric = (lrc: string): LX.Music.LyricInfo => {
@@ -244,29 +209,23 @@ export const getLyricInfo = async({ musicInfo, isRefresh, skipFileLyric, onToggl
     if (lyricInfo?.lyric) return buildLyricInfo(lyricInfo)
   }
 
-  // 2. 有网时才搜索网络
-  const hasNetwork = await checkNetwork()
-  if (!hasNetwork) return buildLyricInfo({})
-
   try {
+    // eslint-disable-next-line @typescript-eslint/promise-function-async
     return await getOnlineOtherSourceLyricByLocal(musicInfo, isRefresh).then(({ lyricInfo, isFromCache }) => {
       if (!isFromCache) void saveLyric(musicInfo, lyricInfo)
       return buildLyricInfo(lyricInfo)
     })
   } catch {}
 
-  // 3. 有网但搜索失败,尝试其他源
-  try {
-    onToggleSource()
-    return await getOtherSourceByLocal(musicInfo, async(otherSource) => {
-      return getOnlineOtherSourceLyricInfo({ musicInfos: [...otherSource], onToggleSource, isRefresh }).then(async({ lyricInfo, musicInfo: targetMusicInfo, isFromCache }) => {
-        void saveLyric(musicInfo, lyricInfo)
-        if (isFromCache) return buildLyricInfo(lyricInfo)
-        void saveLyric(targetMusicInfo, lyricInfo)
-        return buildLyricInfo(lyricInfo)
-      })
+  onToggleSource()
+  return getOtherSourceByLocal(musicInfo, async(otherSource) => {
+    return getOnlineOtherSourceLyricInfo({ musicInfos: [...otherSource], onToggleSource, isRefresh }).then(async({ lyricInfo, musicInfo: targetMusicInfo, isFromCache }) => {
+      void saveLyric(musicInfo, lyricInfo)
+
+      if (isFromCache) return buildLyricInfo(lyricInfo)
+      void saveLyric(targetMusicInfo, lyricInfo)
+
+      return buildLyricInfo(lyricInfo)
     })
-  } catch {
-    return buildLyricInfo({})
-  }
+  })
 }
