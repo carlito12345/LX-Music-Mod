@@ -1,4 +1,3 @@
-
 import { saveLyric, saveMusicUrl } from '@/utils/data'
 import { updateListMusics } from '@/core/list'
 import {
@@ -72,12 +71,25 @@ export const getMusicUrl = async({ musicInfo, isRefresh, allowToggleSource = tru
   onToggleSource?: (musicInfo?: LX.Music.MusicInfoOnline) => void
   allowToggleSource?: boolean
 }): Promise<string> => {
-  if (!isRefresh) {
-    const path = await getLocalFilePath(musicInfo)
-    // console.log(path)
-    if (path) return path
+  const filePath = musicInfo.meta?.filePath
+
+  // 本地文件保护:有文件路径就直接播放,不搜索网络
+  if (filePath && !isRefresh) {
+    try {
+      const path = await getLocalFilePath(musicInfo)
+      if (path) return path
+    } catch {}
+
+    // existsFile 失败或返回空,但路径有效就直接返回
+    if (filePath.startsWith('/storage/') || filePath.startsWith('/data/') || filePath.startsWith('/sdcard/')) {
+      return filePath
+    }
+
+    // 路径无效或文件不存在,直接报错
+    throw new Error('local file not accessible: ' + filePath)
   }
 
+  // 没有 filePath 的才走网络搜索(保持原有逻辑)
   try {
     return await getOnlineOtherSourceMusicUrlByLocal(musicInfo, isRefresh).then(({ url, quality, isFromCache }) => {
       if (!isFromCache) void saveMusicUrl(musicInfo, quality, url)
@@ -90,10 +102,7 @@ export const getMusicUrl = async({ musicInfo, isRefresh, allowToggleSource = tru
   onToggleSource()
   return getOtherSourceByLocal(musicInfo, async(otherSource) => {
     return getOnlineOtherSourceMusicUrl({ musicInfos: [...otherSource], onToggleSource, isRefresh }).then(({ url, quality: targetQuality, musicInfo: targetMusicInfo, isFromCache }) => {
-      // saveLyric(musicInfo, data.lyricInfo)
       if (!isFromCache) void saveMusicUrl(targetMusicInfo, targetQuality, url)
-
-      // TODO: save url ?
       return url
     })
   })
@@ -107,19 +116,20 @@ export const getPicUrl = async({ musicInfo, listId, isRefresh, skipFilePic, onTo
   onToggleSource?: (musicInfo?: LX.Music.MusicInfoOnline) => void
 }): Promise<string> => {
   if (!isRefresh && !skipFilePic) {
-    let pic = await readPic(musicInfo.meta.filePath).catch(() => null)
-    if (pic) {
-      if (pic.startsWith('/')) pic = `file://${pic}`
-      return pic
-    }
+    try {
+      let pic = await readPic(musicInfo.meta.filePath).catch(() => null)
+      if (pic) {
+        if (pic.startsWith('/')) pic = `file://${pic}`
+        return pic
+      }
+    } catch {}
 
     if (musicInfo.meta.picUrl) return musicInfo.meta.picUrl
   }
 
+  // 保持原有逻辑:尝试从网络获取
   try {
-    return await getOnlineOtherSourcePicByLocal(musicInfo).then(({ url }) => {
-      return url
-    })
+    return await getOnlineOtherSourcePicByLocal(musicInfo).then(({ url }) => url)
   } catch {}
 
   onToggleSource()
@@ -129,65 +139,11 @@ export const getPicUrl = async({ musicInfo, listId, isRefresh, skipFilePic, onTo
         musicInfo.meta.picUrl = url
         void updateListMusics([{ id: listId, musicInfo }])
       }
-
       return url
     })
   })
 }
 
-export const parseLyric = (lrc: string): LX.Music.LyricInfo => {
-  const verifyAwlrc = (lrc: string) => {
-    return /(?:^|\s*)\[\d+:\d+(?:\.\d+)]<\d+,\d+>.+$/m.test(lrc)
-  }
-  const verifylrc = (lrc: string) => {
-    return /(?:^|\s*)\[\d+:\d+(?:\.\d+)].+$/m.test(lrc)
-  }
-  const lrcTags = {
-    awlrc: {
-      name: 'lxlyric',
-      verify: verifyAwlrc,
-    },
-    lrc: {
-      name: 'lyric',
-      verify: verifylrc,
-    },
-    tlrc: {
-      name: 'tlyric',
-      verify: verifylrc,
-    },
-    rlrc: {
-      name: 'rlyric',
-      verify: verifylrc,
-    },
-  } as const
-  const tagRxp = /(?:^|\n\s*)\[awlrc:([^\]]+)]/i
-  const lrcRxp = /^(lrc|awlrc|tlrc|rlrc):([^,]+)$/i
-  const parse = (content: string) => {
-    const lyricInfo: Partial<LX.Music.LyricInfo> = {}
-    const lrcs = content.trim().split(',')
-    for (const lrc of lrcs) {
-      const result = lrcRxp.exec(lrc.trim())
-      if (!result) continue
-      const target = lrcTags[result[1].toLowerCase() as 'tlrc' | 'rlrc' | 'lrc' | 'awlrc']
-      if (!target) continue
-      const data = Buffer.from(result[2], 'base64').toString('utf-8').trim()
-      if (target.verify(data)) lyricInfo[target.name] = data
-    }
-    return lyricInfo
-  }
-  let parsedInfo: Partial<LX.Music.LyricInfo> = {}
-  let lyric = lrc.replace(tagRxp, (_: string, p1: string) => {
-    parsedInfo = parse(p1)
-    return ''
-  }).trim()
-  return { lyric, ...parsedInfo }
-}
-
-const getMusicFileLyric = async(filePath: string) => {
-  const lyric = await readLyric(filePath).catch(() => null)
-  if (!lyric) return null
-  return parseLyric(lyric)
-}
 export const getLyricInfo = async({ musicInfo, isRefresh, skipFileLyric, onToggleSource = () => {} }: {
   musicInfo: LX.Music.MusicInfoLocal
   skipFileLyric?: boolean
@@ -195,22 +151,18 @@ export const getLyricInfo = async({ musicInfo, isRefresh, skipFileLyric, onToggl
   onToggleSource?: (musicInfo?: LX.Music.MusicInfoOnline) => void
 }): Promise<LX.Player.LyricInfo> => {
   if (!isRefresh && !skipFileLyric) {
-    // const lyricInfo = await getCachedLyricInfo(musicInfo)
-    // if (lyricInfo?.rawlrcInfo.lyric && lyricInfo.lyric != lyricInfo.rawlrcInfo.lyric) {
-    //   // 存在已编辑歌词
-    //   return buildLyricInfo(lyricInfo)
-    // }
-
     // 尝试读取文件内歌词
-    const rawlrcInfo = await getMusicFileLyric(musicInfo.meta.filePath)
-    if (rawlrcInfo) return buildLyricInfo(rawlrcInfo)
+    try {
+      const rawlrcInfo = await getMusicFileLyric(musicInfo.meta.filePath)
+      if (rawlrcInfo) return buildLyricInfo(rawlrcInfo)
+    } catch {}
 
     const lyricInfo = await getCachedLyricInfo(musicInfo)
     if (lyricInfo?.lyric) return buildLyricInfo(lyricInfo)
   }
 
+  // 保持原有逻辑:尝试从网络获取
   try {
-    // eslint-disable-next-line @typescript-eslint/promise-function-async
     return await getOnlineOtherSourceLyricByLocal(musicInfo, isRefresh).then(({ lyricInfo, isFromCache }) => {
       if (!isFromCache) void saveLyric(musicInfo, lyricInfo)
       return buildLyricInfo(lyricInfo)
@@ -221,11 +173,15 @@ export const getLyricInfo = async({ musicInfo, isRefresh, skipFileLyric, onToggl
   return getOtherSourceByLocal(musicInfo, async(otherSource) => {
     return getOnlineOtherSourceLyricInfo({ musicInfos: [...otherSource], onToggleSource, isRefresh }).then(async({ lyricInfo, musicInfo: targetMusicInfo, isFromCache }) => {
       void saveLyric(musicInfo, lyricInfo)
-
       if (isFromCache) return buildLyricInfo(lyricInfo)
       void saveLyric(targetMusicInfo, lyricInfo)
-
       return buildLyricInfo(lyricInfo)
     })
   })
+}
+
+const getMusicFileLyric = async(filePath: string) => {
+  const lyric = await readLyric(filePath).catch(() => null)
+  if (!lyric) return null
+  return { lyric }
 }
