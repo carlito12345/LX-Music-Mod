@@ -1,6 +1,6 @@
 import { memo, type ComponentProps } from 'react'
 import { StyleSheet, type StyleProp, type TextStyle } from 'react-native'
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { scaleSizeW } from '@/utils/pixelRatio'
 import { useTextShadow, useTheme } from '@/store/theme/hook'
 
@@ -61,19 +61,15 @@ const ICON_MAP: Record<string, string> = {
   'exit': 'exit-run',
   'exit2': 'exit-to-app',
   'logo': 'music',
-  'playlist': 'playlist-music',
-  'add_folder': 'folder-plus',
 }
 
-type TextShadow = ReturnType<typeof useTextShadow>
-
-interface IconProps extends Omit<ComponentProps<typeof Icon>, 'style'> {
+export interface IconProps extends Omit<ComponentProps<typeof MCIcon>, 'style'> {
   style?: StyleProp<TextStyle>
   rawSize?: number
   name: string
 }
 
-export const IconComponent = memo(({ size = 15, rawSize, color, name, style, ...props }: IconProps) => {
+export const Icon = memo(({ size = 15, rawSize, color, name, style, ...props }: IconProps) => {
   const theme = useTheme()
   const textShadow = useTextShadow()
   const resolvedName = ICON_MAP[name] || name
@@ -83,7 +79,7 @@ export const IconComponent = memo(({ size = 15, rawSize, color, name, style, ...
     textShadowRadius: 2,
   }, style) : style
   return (
-    <Icon
+    <MCIcon
       name={resolvedName}
       size={rawSize ?? scaleSizeW(size)}
       color={color ?? theme['c-font']}
@@ -93,6 +89,4 @@ export const IconComponent = memo(({ size = 15, rawSize, color, name, style, ...
   )
 })
 
-export { Icon } from 'react-native-vector-icons/MaterialCommunityIcons'
-export type { IconProps }
-export default IconComponent
+export default Icon
