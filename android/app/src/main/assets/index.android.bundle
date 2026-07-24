@@ -222638,19 +222638,23 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     var theme = (0, _$$_REQUIRE(_dependencyMap[10], "../../../../../../store/theme/hook").useTheme)();
     var _useState = (0, _react.useState)(false),
       _useState2 = (0, _slicedToArray2.default)(_useState, 2),
-      running = _useState2[0],
-      setRunning = _useState2[1];
+      a11yRunning = _useState2[0],
+      setA11yRunning = _useState2[1];
+    var _useState3 = (0, _react.useState)(false),
+      _useState4 = (0, _slicedToArray2.default)(_useState3, 2),
+      listening = _useState4[0],
+      setListening = _useState4[1];
     var checkStatus = (0, _react.useCallback)(/*#__PURE__*/(0, _asyncToGenerator2.default)(function* () {
       var _carKeyPlugin;
       if (!((_carKeyPlugin = carKeyPlugin) != null && _carKeyPlugin.isAvailable)) return;
       try {
         var isRunning = yield carKeyPlugin.isAccessibilityServiceRunning();
-        setRunning(isRunning);
+        setA11yRunning(isRunning);
       } catch (_unused2) {}
     }), []);
     (0, _react.useEffect)(function () {
       checkStatus();
-      var timer = setInterval(checkStatus, 3000);
+      var timer = setInterval(checkStatus, 5000);
       return function () {
         return clearInterval(timer);
       };
@@ -222658,8 +222662,16 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     var handleOpenSettings = /*#__PURE__*/function () {
       var _ref2 = (0, _asyncToGenerator2.default)(function* () {
         var _carKeyPlugin2;
-        if (!((_carKeyPlugin2 = carKeyPlugin) != null && _carKeyPlugin2.isAvailable)) return;
-        yield carKeyPlugin.openAccessibilitySettings();
+        if (!((_carKeyPlugin2 = carKeyPlugin) != null && _carKeyPlugin2.isAvailable)) {
+          (0, _$$_REQUIRE(_dependencyMap[11], "../../../../../../utils/tools").toast)('CarKey模块不可用');
+          return;
+        }
+        try {
+          yield carKeyPlugin.openAccessibilitySettings();
+          (0, _$$_REQUIRE(_dependencyMap[11], "../../../../../../utils/tools").toast)('已跳转到无障碍设置');
+        } catch (_unused3) {
+          (0, _$$_REQUIRE(_dependencyMap[11], "../../../../../../utils/tools").toast)('跳转失败');
+        }
       });
       return function handleOpenSettings() {
         return _ref2.apply(this, arguments);
@@ -222668,29 +222680,70 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     var handleStartListening = /*#__PURE__*/function () {
       var _ref3 = (0, _asyncToGenerator2.default)(function* () {
         var _carKeyPlugin3;
-        if (!((_carKeyPlugin3 = carKeyPlugin) != null && _carKeyPlugin3.isAvailable)) return;
-        yield carKeyPlugin.startCarKeyListening();
+        if (!((_carKeyPlugin3 = carKeyPlugin) != null && _carKeyPlugin3.isAvailable)) {
+          (0, _$$_REQUIRE(_dependencyMap[11], "../../../../../../utils/tools").toast)('CarKey模块不可用');
+          return;
+        }
+        try {
+          (0, _$$_REQUIRE(_dependencyMap[11], "../../../../../../utils/tools").toast)('正在连接方控...');
+          var result = yield carKeyPlugin.startCarKeyListening();
+          if (result) {
+            setListening(true);
+            (0, _$$_REQUIRE(_dependencyMap[11], "../../../../../../utils/tools").toast)('方控监听已启动');
+          } else {
+            (0, _$$_REQUIRE(_dependencyMap[11], "../../../../../../utils/tools").toast)('方控启动失败');
+          }
+        } catch (e) {
+          (0, _$$_REQUIRE(_dependencyMap[11], "../../../../../../utils/tools").toast)('方控错误: ' + ((e == null ? void 0 : e.message) || String(e)));
+        }
       });
       return function handleStartListening() {
         return _ref3.apply(this, arguments);
+      };
+    }();
+    var handleStopListening = /*#__PURE__*/function () {
+      var _ref4 = (0, _asyncToGenerator2.default)(function* () {
+        var _carKeyPlugin4;
+        if (!((_carKeyPlugin4 = carKeyPlugin) != null && _carKeyPlugin4.isAvailable)) return;
+        try {
+          yield carKeyPlugin.stopCarKeyListening();
+          setListening(false);
+          (0, _$$_REQUIRE(_dependencyMap[11], "../../../../../../utils/tools").toast)('方控监听已停止');
+        } catch (_unused4) {}
+      });
+      return function handleStopListening() {
+        return _ref4.apply(this, arguments);
       };
     }();
     return /*#__PURE__*/(0, _jsxRuntime.jsxs)(_Section.default, {
       title: "\u65B9\u5411\u76D8\u63A7\u5236",
       children: [/*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.View, {
         style: [styles.statusBar, {
-          backgroundColor: running ? '#1b8a3d20' : '#e6510020'
+          backgroundColor: a11yRunning ? '#1b8a3d20' : '#e6510020'
         }],
         children: [/*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.View, {
           style: [styles.indicator, {
-            backgroundColor: running ? '#1b8a3d' : '#e65100'
+            backgroundColor: a11yRunning ? '#1b8a3d' : '#e65100'
           }]
         }), /*#__PURE__*/(0, _jsxRuntime.jsxs)(_Text.default, {
           size: 14,
           color: theme['c-font'],
-          children: ["\u65E0\u969C\u788D\u670D\u52A1: ", running ? '已开启' : '未开启']
+          children: ["\u65E0\u969C\u788D\u670D\u52A1: ", a11yRunning ? '已开启' : '未开启']
         })]
-      }), !running && /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.TouchableOpacity, {
+      }), /*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.View, {
+        style: [styles.statusBar, {
+          backgroundColor: listening ? '#1b8a3d20' : '#66666620'
+        }],
+        children: [/*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.View, {
+          style: [styles.indicator, {
+            backgroundColor: listening ? '#1b8a3d' : '#999'
+          }]
+        }), /*#__PURE__*/(0, _jsxRuntime.jsxs)(_Text.default, {
+          size: 14,
+          color: theme['c-font'],
+          children: ["\u6309\u952E\u76D1\u542C: ", listening ? '运行中' : '未启动']
+        })]
+      }), !a11yRunning && /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.TouchableOpacity, {
         style: [styles.btn, {
           backgroundColor: theme['c-primary'] || '#07c556'
         }],
@@ -222701,23 +222754,34 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
           color: "#fff",
           children: "\u524D\u5F80\u7CFB\u7EDF\u8BBE\u7F6E\u5F00\u542F\u65E0\u969C\u788D"
         })
-      }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.View, {
-        style: styles.info,
-        children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
-          size: 12,
-          color: theme['c-font-label'],
-          children: "\u65B9\u5411\u76D8\u63A7\u5236\u901A\u8FC7\u65E0\u969C\u788D\u670D\u52A1\u6355\u83B7\u6309\u952E,\u9700\u5728\u7CFB\u7EDF\u8BBE\u7F6E\u2192\u65E0\u969C\u788D\u2192LX Music\u4E2D\u624B\u52A8\u5F00\u542F\u3002"
-        })
-      }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.TouchableOpacity, {
+      }), !listening ? /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.TouchableOpacity, {
         style: [styles.btn, {
-          backgroundColor: theme['c-button-background']
+          backgroundColor: theme['c-primary'] || '#07c556'
         }],
         onPress: handleStartListening,
         activeOpacity: 0.7,
         children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
           size: 14,
-          color: theme['c-button-font'],
+          color: "#fff",
           children: "\u542F\u52A8\u6309\u952E\u76D1\u542C"
+        })
+      }) : /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.TouchableOpacity, {
+        style: [styles.btn, {
+          backgroundColor: theme['c-button-background']
+        }],
+        onPress: handleStopListening,
+        activeOpacity: 0.7,
+        children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
+          size: 14,
+          color: theme['c-button-font'],
+          children: "\u505C\u6B62\u6309\u952E\u76D1\u542C"
+        })
+      }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.View, {
+        style: styles.info,
+        children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
+          size: 12,
+          color: theme['c-font-label'],
+          children: "\u65B9\u63A7\u901A\u8FC7\u5409\u5229OneOS API\u76F4\u63A5\u8FDE\u63A5\u7CFB\u7EDF\u670D\u52A1,\u9700platform\u7B7E\u540D\u3002\u5982\u679COneOS\u4E0D\u53EF\u7528,\u5C06\u56DE\u9000\u5230\u65E0\u969C\u788D\u670D\u52A1+MEDIA_BUTTON\u5E7F\u64AD\u3002"
         })
       })]
     });
