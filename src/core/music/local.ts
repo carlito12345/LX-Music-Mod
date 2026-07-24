@@ -72,25 +72,28 @@ export const getMusicUrl = async({ musicInfo, isRefresh, allowToggleSource = tru
   onToggleSource?: (musicInfo?: LX.Music.MusicInfoOnline) => void
   allowToggleSource?: boolean
 }): Promise<string> => {
-  // 本地文件保护:优先直接播放本地文件,不搜索网络
-  if (!isRefresh && musicInfo.meta?.filePath) {
-    try {
-      const path = await getLocalFilePath(musicInfo)
-      if (path) return path
-    } catch {
-      // existsFile 失败时,如果路径看起来有效,直接返回路径尝试播放
-      if (musicInfo.meta.filePath.startsWith('/')) {
-        return musicInfo.meta.filePath
+  const filePath = musicInfo.meta?.filePath
+
+  // 本地文件保护:有文件路径就直接播放,不搜索网络
+  if (filePath) {
+    if (!isRefresh) {
+      // 尝试检查文件是否存在
+      try {
+        const path = await getLocalFilePath(musicInfo)
+        if (path) return path
+      } catch {}
+
+      // existsFile 失败或返回空,但路径有效就直接返回
+      if (filePath.startsWith('/storage/') || filePath.startsWith('/data/') || filePath.startsWith('/sdcard/')) {
+        return filePath
       }
     }
+
+    // isRefresh=true 或路径无效,直接报错,不搜索网络
+    throw new Error('local file not accessible')
   }
 
-  // 本地文件不存在时,不搜索网络,直接报错
-  if (musicInfo.source === 'local' && musicInfo.meta?.filePath) {
-    throw new Error('local file not found: ' + musicInfo.meta.filePath)
-  }
-
-  // 以下逻辑仅对非本地文件执行
+  // 没有 filePath 的才走网络搜索
   try {
     return await getOnlineOtherSourceMusicUrlByLocal(musicInfo, isRefresh).then(({ url, quality, isFromCache }) => {
       if (!isFromCache) void saveMusicUrl(musicInfo, quality, url)

@@ -181593,32 +181593,35 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   }();
   var getMusicUrl = exports.getMusicUrl = /*#__PURE__*/function () {
     var _ref3 = (0, _asyncToGenerator2.default)(function* (_ref2) {
-      var _musicInfo$meta, _musicInfo$meta2;
+      var _musicInfo$meta;
       var musicInfo = _ref2.musicInfo,
         isRefresh = _ref2.isRefresh,
         _ref2$allowToggleSour = _ref2.allowToggleSource,
         allowToggleSource = _ref2$allowToggleSour === void 0 ? true : _ref2$allowToggleSour,
         _ref2$onToggleSource = _ref2.onToggleSource,
         onToggleSource = _ref2$onToggleSource === void 0 ? function () {} : _ref2$onToggleSource;
-      // 本地文件保护:优先直接播放本地文件,不搜索网络
-      if (!isRefresh && (_musicInfo$meta = musicInfo.meta) != null && _musicInfo$meta.filePath) {
-        try {
-          var path = yield (0, _$$_REQUIRE(_dependencyMap[6], "../../utils/music").getLocalFilePath)(musicInfo);
-          if (path) return path;
-        } catch (_unused6) {
-          // existsFile 失败时,如果路径看起来有效,直接返回路径尝试播放
-          if (musicInfo.meta.filePath.startsWith('/')) {
-            return musicInfo.meta.filePath;
+      var filePath = (_musicInfo$meta = musicInfo.meta) == null ? void 0 : _musicInfo$meta.filePath;
+
+      // 本地文件保护:有文件路径就直接播放,不搜索网络
+      if (filePath) {
+        if (!isRefresh) {
+          // 尝试检查文件是否存在
+          try {
+            var path = yield (0, _$$_REQUIRE(_dependencyMap[6], "../../utils/music").getLocalFilePath)(musicInfo);
+            if (path) return path;
+          } catch (_unused6) {}
+
+          // existsFile 失败或返回空,但路径有效就直接返回
+          if (filePath.startsWith('/storage/') || filePath.startsWith('/data/') || filePath.startsWith('/sdcard/')) {
+            return filePath;
           }
         }
+
+        // isRefresh=true 或路径无效,直接报错,不搜索网络
+        throw new Error('local file not accessible');
       }
 
-      // 本地文件不存在时,不搜索网络,直接报错
-      if (musicInfo.source === 'local' && (_musicInfo$meta2 = musicInfo.meta) != null && _musicInfo$meta2.filePath) {
-        throw new Error('local file not found: ' + musicInfo.meta.filePath);
-      }
-
-      // 以下逻辑仅对非本地文件执行
+      // 没有 filePath 的才走网络搜索
       try {
         return yield (0, _$$_REQUIRE(_dependencyMap[4], "./utils").getOnlineOtherSourceMusicUrlByLocal)(musicInfo, isRefresh).then(function (_ref4) {
           var url = _ref4.url,
