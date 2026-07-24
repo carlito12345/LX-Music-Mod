@@ -75,6 +75,13 @@ public class CarKeyModule extends ReactContextBaseJavaModule {
     WritableMap params = Arguments.createMap();
     params.putInt("keyCode", keyCode);
     
+    // Map some additional key codes used by different car brands
+    if (keyCode == 79 || keyCode == 126 || keyCode == 127) {
+      // KEYCODE_HEADSETHOOK(79), KEYCODE_MEDIA_PLAY(126), KEYCODE_MEDIA_PAUSE(127)
+      keyCode = android.view.KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE;
+    } else if (keyCode == 90 || keyCode == 127) {
+      keyCode = android.view.KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE;
+    }
     switch (keyCode) {
       case android.view.KeyEvent.KEYCODE_MEDIA_NEXT:
               params.putString("action", "next");
