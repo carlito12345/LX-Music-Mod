@@ -66,3 +66,7 @@ buck-out/
 
 # testing
 /coverage
+
+# Signing keys
+lx-music-mod.jks
+lx-music-mod.jks.base64
