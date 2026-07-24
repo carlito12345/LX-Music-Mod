@@ -13,13 +13,13 @@ const defaultSetting: LX.AppSetting = {
   'common.showBackBtn': false,
   'common.showExitBtn': true,
   'common.useSystemFileSelector': true,
-  'common.alwaysKeepStatusbarHeight': false,
+  'common.alwaysKeepStatusbarHeight': true,
 
-  'player.startupAutoPlay': false,
-  'player.startupPushPlayDetailScreen': false,
+  'player.startupAutoPlay': true,
+  'player.startupPushPlayDetailScreen': true,
   'player.togglePlayMethod': 'listLoop',
   'player.playQuality': '128k',
-  'player.isSavePlayTime': false,
+  'player.isSavePlayTime': true,
   'player.volume': 1,
   'player.playbackRate': 1,
   'player.cacheSize': '1024',
@@ -37,6 +37,46 @@ const defaultSetting: LX.AppSetting = {
 
   // 'playDetail.isZoomActiveLrc': false,
   // 'playDetail.isShowLyricProgressSetting': false,
+
+  'playDetail.background.type': 'theme',
+  'playDetail.background.solidColor': '#000000',
+  'playDetail.background.followCover': false,
+  'playDetail.background.blurRadius': 20,
+  'playDetail.cover.style': 'circle',
+  'playDetail.cover.effect.glow': false,
+  'playDetail.cover.effect.particles': false,
+  'playDetail.cover.effect.rotate': false,
+  'playDetail.cover.effect.swipe': false,
+
+  'playDetail.effect.starfield.enabled': false,
+  'playDetail.effect.starfield.particleCount': 40,
+  'playDetail.effect.starfield.particleSize': 2,
+  'playDetail.effect.starfield.speed': 1,
+  'playDetail.effect.starfield.pattern': 'random',
+
+  'playDetail.effect.lyricStage.enabled': false,
+
+  'playDetail.effect.cinematic.enabled': false,
+  'playDetail.effect.cinematic.zoomIntensity': 0.92,
+  'playDetail.effect.cinematic.crossfadeDuration': 500,
+
+  'playDetail.effect.controlBtn.enabled': false,
+  'playDetail.effect.echo.enabled': false,
+  'playDetail.effect.wallpaper.enabled': false,
+  'playDetail.effect.lyric3d.enabled': false,
+  'playDetail.effect.slideshow.enabled': false,
+  'playDetail.effect.lyricGlow.enabled': false,
+  'playDetail.effect.cinemaShake.enabled': false,
+  'playDetail.effect.wallpaper.color': '',
+  'playDetail.vertical.style.lrcLineCount': 7,
+  'playDetail.effect.echo.color': '',
+  'playDetail.effect.whiteParticles.enabled': false,
+  'playDetail.effect.blurMask.enabled': false,
+  'playDetail.effect.echo.speed': 1,
+  'playDetail.effect.echo.amplitude': 1,
+  'playDetail.effect.spectrum.enabled': false,
+
+  'playDetail.progress.shimmer': false,
   'playDetail.style.align': 'left',
   'playDetail.vertical.style.lrcFontSize': 210,
   'playDetail.horizontal.style.lrcFontSize': 220,
@@ -57,6 +97,8 @@ const defaultSetting: LX.AppSetting = {
   'desktopLyric.style.lyricUnplayColor': 'rgba(255, 255, 255, 1)',
   'desktopLyric.style.lyricPlayedColor': 'rgba(7, 197, 86, 1)',
   'desktopLyric.style.lyricShadowColor': 'rgba(0, 0, 0, 0.6)',
+  'desktopLyric.style.lyricGradientColors': null,
+  'desktopLyric.style.lyricGradientPositions': null,
 
   'search.isShowHotSearch': false,
   'search.isShowHistorySearch': false,
@@ -69,6 +111,9 @@ const defaultSetting: LX.AppSetting = {
   'list.addMusicLocationType': 'top',
 
   'download.fileName': '歌名 - 歌手',
+  'download.dir': '',
+  'download.conflictAction': 'overwrite',
+  'download.enabled': false,
 
   'sync.enable': false,
 

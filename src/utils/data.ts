@@ -582,3 +582,34 @@ export const setUserApiAllowShowUpdateAlert = async(id: string, enable: boolean)
   targetApi.allowShowUpdateAlert = enable
   await saveData(userApiPrefix, userApis)
 }
+
+
+// Download functions
+const downloadTaskKey = storageDataPrefix.downloadTask
+const downloadHistoryKey = storageDataPrefix.downloadHistory
+const downloadSavePathKey = storageDataPrefix.downloadSavePath
+
+export const getDownloadTasks = async(): Promise<LX.Download.ListItem[]> => {
+  return await getData<LX.Download.ListItem[]>(downloadTaskKey) ?? []
+}
+export const saveDownloadTasks = async(tasks: LX.Download.ListItem[]) => {
+  await saveData(downloadTaskKey, tasks)
+}
+
+export const getDownloadHistory = async(): Promise<LX.Download.DownloadHistoryItem[]> => {
+  return await getData<LX.Download.DownloadHistoryItem[]>(downloadHistoryKey) ?? []
+}
+export const saveDownloadHistory = async(history: LX.Download.DownloadHistoryItem[]) => {
+  await saveData(downloadHistoryKey, history)
+}
+
+export const getDownloadSavePath = async(): Promise<string | null> => {
+  return await getData<string | null>(downloadSavePathKey) ?? null
+}
+export const setDownloadSavePath = async(path: string | null) => {
+  if (path == null) {
+    await removeData(downloadSavePathKey)
+  } else {
+    await saveData(downloadSavePathKey, path)
+  }
+}

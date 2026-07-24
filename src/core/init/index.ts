@@ -13,6 +13,7 @@ import commonActions from '@/store/common/action'
 import settingState from '@/store/setting/state'
 import { checkUpdate } from '@/core/version'
 import { bootLog } from '@/utils/bootLog'
+import { downloadManager } from '@/core/download'
 import { cheatTip } from '@/utils/tools'
 
 let isFirstPush = true
@@ -62,6 +63,9 @@ export default async() => {
 
   void initSync(setting)
   bootLog('Sync inited.')
+
+  void downloadManager.init()
+  bootLog('Download Manager inited.')
 
   // syncSetting()
 

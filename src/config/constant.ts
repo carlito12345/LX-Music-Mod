@@ -78,6 +78,10 @@ export const storageDataPrefix = {
   dislikeList: '@dislike_list',
 
   userApi: '@user_api__',
+
+  downloadTask: '@download_task__',
+  downloadHistory: '@download_history',
+  downloadSavePath: '@download_save_path',
 } as const
 
 // v0.x.x 版本的 data keys
