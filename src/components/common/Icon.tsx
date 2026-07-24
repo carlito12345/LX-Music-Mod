@@ -1,71 +1,98 @@
-import { createIconSetFromIcoMoon } from 'react-native-vector-icons'
-import icoMoonConfig from '@/resources/fonts/selection.json'
-import { scaleSizeW } from '@/utils/pixelRatio'
 import { memo, type ComponentProps } from 'react'
-import { useTextShadow, useTheme } from '@/store/theme/hook'
 import { StyleSheet, type StyleProp, type TextStyle } from 'react-native'
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import { scaleSizeW } from '@/utils/pixelRatio'
+import { useTextShadow, useTheme } from '@/store/theme/hook'
 
-// import IconAntDesign from 'react-native-vector-icons/AntDesign'
-// import IconEntypo from 'react-native-vector-icons/Entypo'
-// import IconEvilIcons from 'react-native-vector-icons/EvilIcons'
-// import IconFeather from 'react-native-vector-icons/Feather'
-// import IconFontAwesome from 'react-native-vector-icons/FontAwesome'
-// import IconFontAwesome5 from 'react-native-vector-icons/FontAwesome5'
-// import IconFontisto from 'react-native-vector-icons/Fontisto'
-// import IconFoundation from 'react-native-vector-icons/Foundation'
-// import IconIonicons from 'react-native-vector-icons/Ionicons'
-// import IconMaterialIcons from 'react-native-vector-icons/MaterialIcons'
-// import IconMaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
-// import IconOcticons from 'react-native-vector-icons/Octicons'
-// import IconZocial from 'react-native-vector-icons/Zocial'
-// import IconSimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons'
-
-
-const IcoMoon = createIconSetFromIcoMoon(icoMoonConfig)
-
-
-// https://oblador.github.io/react-native-vector-icons/
-
-type IconType = ReturnType<typeof createIconSetFromIcoMoon>
-
-interface IconProps extends Omit<ComponentProps<IconType>, 'style'> {
-  style?: StyleProp<TextStyle>
-  rawSize?: number
+// 旧 IcoMoon 图标名 → MaterialCommunityIcons 图标名映射
+const ICON_MAP: Record<string, string> = {
+  'chevron-left': 'chevron-left',
+  'chevron-right': 'chevron-right',
+  'chevron-left-2': 'chevron-left',
+  'chevron-right-2': 'chevron-right',
+  'back-2': 'arrow-left',
+  'close': 'close',
+  'remove': 'close-circle-outline',
+  'menu': 'menu',
+  'home': 'home',
+  'pause': 'pause',
+  'play': 'play',
+  'play-outline': 'play-circle-outline',
+  'nextMusic': 'skip-next',
+  'prevMusic': 'skip-previous',
+  'skip-next': 'skip-next',
+  'skip-previous': 'skip-previous',
+  'setting': 'cog',
+  'download-2': 'download',
+  'love': 'heart',
+  'leaderboard': 'trophy',
+  'album': 'album',
+  'search-2': 'magnify',
+  'share': 'share-variant',
+  'dots-vertical': 'dots-vertical',
+  'thumbs-up': 'thumb-up',
+  'add_folder': 'folder-plus',
+  'add-music': 'music-box-plus',
+  'comment': 'comment-text-outline',
+  'playlist': 'playlist-music',
+  'eraser': 'eraser',
+  'music_time': 'clock-music',
+  'available_updates': 'cellphone-arrow-down',
+  'sd-card': 'sd',
+  'help': 'help-circle',
+  'volume-mute': 'volume-mute',
+  'volume-off': 'volume-off',
+  'volume-low': 'volume-low',
+  'volume-medium': 'volume-medium',
+  'volume-higt': 'volume-high',
+  'list-loop': 'repeat',
+  'list-random': 'shuffle',
+  'list-order': 'order-bool-ascending',
+  'single-loop': 'repeat-once',
+  'single': 'repeat-off',
+  'full_stop': 'circle-medium',
+  'checkbox-blank-outline': 'checkbox-blank-outline',
+  'checkbox-marked': 'checkbox-marked',
+  'minus-box': 'minus-box',
+  'slider': 'tune',
+  'lyric-off': 'subtitles-outline',
+  'lyric-on': 'subtitles',
+  'playback-rate': 'play-speed',
+  'exit': 'exit-run',
+  'exit2': 'exit-to-app',
+  'logo': 'music',
+  'playlist': 'playlist-music',
+  'add_folder': 'folder-plus',
 }
 
-export const Icon = memo(({ size = 15, rawSize, color, style, ...props }: IconProps) => {
+type TextShadow = ReturnType<typeof useTextShadow>
+
+interface IconProps extends Omit<ComponentProps<typeof Icon>, 'style'> {
+  style?: StyleProp<TextStyle>
+  rawSize?: number
+  name: string
+}
+
+export const IconComponent = memo(({ size = 15, rawSize, color, name, style, ...props }: IconProps) => {
   const theme = useTheme()
   const textShadow = useTextShadow()
+  const resolvedName = ICON_MAP[name] || name
   const newStyle = textShadow ? StyleSheet.compose({
     textShadowColor: theme['c-primary-dark-300-alpha-800'],
     textShadowOffset: { width: 0.2, height: 0.2 },
     textShadowRadius: 2,
   }, style) : style
   return (
-    <IcoMoon
+    <Icon
+      name={resolvedName}
       size={rawSize ?? scaleSizeW(size)}
       color={color ?? theme['c-font']}
-      // @ts-expect-error
       style={newStyle}
       {...props}
     />
   )
 })
 
-
-export {
-  // IconAntDesign,
-  // IconEntypo,
-  // IconEvilIcons,
-  // IconFeather,
-  // IconFontAwesome,
-  // IconFontAwesome5,
-  // IconFontisto,
-  // IconFoundation,
-  // IconIonicons,
-  // IconMaterialIcons,
-  // IconMaterialCommunityIcons,
-  // IconOcticons,
-  // IconZocial,
-  // IconSimpleLineIcons,
-}
+export { Icon } from 'react-native-vector-icons/MaterialCommunityIcons'
+export type { IconProps }
+export default IconComponent
