@@ -222634,6 +222634,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     carKeyPlugin = _$$_REQUIRE(_dependencyMap[8], "../../../../../../plugins/carkey").default;
   } catch (_unused) {}
   var _default = exports.default = (0, _react.memo)(function () {
+    var _carKeyPlugin4, _carKeyPlugin5, _carKeyPlugin6;
     var t = (0, _$$_REQUIRE(_dependencyMap[9], "../../../../../../lang").useI18n)();
     var theme = (0, _$$_REQUIRE(_dependencyMap[10], "../../../../../../store/theme/hook").useTheme)();
     var _useState = (0, _react.useState)(false),
@@ -222644,6 +222645,10 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       _useState4 = (0, _slicedToArray2.default)(_useState3, 2),
       listening = _useState4[0],
       setListening = _useState4[1];
+    var _useState5 = (0, _react.useState)(false),
+      _useState6 = (0, _slicedToArray2.default)(_useState5, 2),
+      geelyConnected = _useState6[0],
+      setGeelyConnected = _useState6[1];
     var checkStatus = (0, _react.useCallback)(/*#__PURE__*/(0, _asyncToGenerator2.default)(function* () {
       var _carKeyPlugin;
       if (!((_carKeyPlugin = carKeyPlugin) != null && _carKeyPlugin.isAvailable)) return;
@@ -222651,6 +222656,10 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
         var isRunning = yield carKeyPlugin.isAccessibilityServiceRunning();
         setA11yRunning(isRunning);
       } catch (_unused2) {}
+      try {
+        var connected = yield carKeyPlugin.isGeelyConnected == null ? void 0 : carKeyPlugin.isGeelyConnected();
+        setGeelyConnected(connected === true);
+      } catch (_unused3) {}
     }), []);
     (0, _react.useEffect)(function () {
       checkStatus();
@@ -222659,59 +222668,62 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
         return clearInterval(timer);
       };
     }, [checkStatus]);
-    var handleOpenSettings = /*#__PURE__*/function () {
+    var handleStartListening = /*#__PURE__*/function () {
       var _ref2 = (0, _asyncToGenerator2.default)(function* () {
-        var _carKeyPlugin2;
-        if (!((_carKeyPlugin2 = carKeyPlugin) != null && _carKeyPlugin2.isAvailable)) {
-          (0, _$$_REQUIRE(_dependencyMap[11], "../../../../../../utils/tools").toast)('CarKey模块不可用');
+        if (!carKeyPlugin) {
+          (0, _$$_REQUIRE(_dependencyMap[11], "../../../../../../utils/tools").toast)('CarKey插件加载失败');
+          return;
+        }
+        if (!carKeyPlugin.isAvailable) {
+          (0, _$$_REQUIRE(_dependencyMap[11], "../../../../../../utils/tools").toast)('CarKey原生模块未注册');
           return;
         }
         try {
-          yield carKeyPlugin.openAccessibilitySettings();
-          (0, _$$_REQUIRE(_dependencyMap[11], "../../../../../../utils/tools").toast)('已跳转到无障碍设置');
-        } catch (_unused3) {
-          (0, _$$_REQUIRE(_dependencyMap[11], "../../../../../../utils/tools").toast)('跳转失败');
+          (0, _$$_REQUIRE(_dependencyMap[11], "../../../../../../utils/tools").toast)('正在连接...');
+          var result = yield carKeyPlugin.startCarKeyListening();
+          if (result) {
+            setListening(true);
+            (0, _$$_REQUIRE(_dependencyMap[11], "../../../../../../utils/tools").toast)('方控监听已启动');
+          } else {
+            (0, _$$_REQUIRE(_dependencyMap[11], "../../../../../../utils/tools").toast)('方控启动返回false');
+          }
+        } catch (e) {
+          var msg = (e == null ? void 0 : e.message) || String(e) || '未知错误';
+          (0, _$$_REQUIRE(_dependencyMap[11], "../../../../../../utils/tools").toast)('错误: ' + msg.substring(0, 60));
         }
       });
-      return function handleOpenSettings() {
+      return function handleStartListening() {
         return _ref2.apply(this, arguments);
       };
     }();
-    var handleStartListening = /*#__PURE__*/function () {
+    var handleStopListening = /*#__PURE__*/function () {
       var _ref3 = (0, _asyncToGenerator2.default)(function* () {
+        var _carKeyPlugin2;
+        if (!((_carKeyPlugin2 = carKeyPlugin) != null && _carKeyPlugin2.isAvailable)) return;
+        try {
+          yield carKeyPlugin.stopCarKeyListening();
+          setListening(false);
+          (0, _$$_REQUIRE(_dependencyMap[11], "../../../../../../utils/tools").toast)('已停止');
+        } catch (_unused4) {}
+      });
+      return function handleStopListening() {
+        return _ref3.apply(this, arguments);
+      };
+    }();
+    var handleOpenSettings = /*#__PURE__*/function () {
+      var _ref4 = (0, _asyncToGenerator2.default)(function* () {
         var _carKeyPlugin3;
         if (!((_carKeyPlugin3 = carKeyPlugin) != null && _carKeyPlugin3.isAvailable)) {
           (0, _$$_REQUIRE(_dependencyMap[11], "../../../../../../utils/tools").toast)('CarKey模块不可用');
           return;
         }
         try {
-          (0, _$$_REQUIRE(_dependencyMap[11], "../../../../../../utils/tools").toast)('正在连接方控...');
-          var result = yield carKeyPlugin.startCarKeyListening();
-          if (result) {
-            setListening(true);
-            (0, _$$_REQUIRE(_dependencyMap[11], "../../../../../../utils/tools").toast)('方控监听已启动');
-          } else {
-            (0, _$$_REQUIRE(_dependencyMap[11], "../../../../../../utils/tools").toast)('方控启动失败');
-          }
-        } catch (e) {
-          (0, _$$_REQUIRE(_dependencyMap[11], "../../../../../../utils/tools").toast)('方控错误: ' + ((e == null ? void 0 : e.message) || String(e)));
+          yield carKeyPlugin.openAccessibilitySettings();
+        } catch (_unused5) {
+          (0, _$$_REQUIRE(_dependencyMap[11], "../../../../../../utils/tools").toast)('跳转失败');
         }
       });
-      return function handleStartListening() {
-        return _ref3.apply(this, arguments);
-      };
-    }();
-    var handleStopListening = /*#__PURE__*/function () {
-      var _ref4 = (0, _asyncToGenerator2.default)(function* () {
-        var _carKeyPlugin4;
-        if (!((_carKeyPlugin4 = carKeyPlugin) != null && _carKeyPlugin4.isAvailable)) return;
-        try {
-          yield carKeyPlugin.stopCarKeyListening();
-          setListening(false);
-          (0, _$$_REQUIRE(_dependencyMap[11], "../../../../../../utils/tools").toast)('方控监听已停止');
-        } catch (_unused4) {}
-      });
-      return function handleStopListening() {
+      return function handleOpenSettings() {
         return _ref4.apply(this, arguments);
       };
     }();
@@ -222728,7 +222740,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
         }), /*#__PURE__*/(0, _jsxRuntime.jsxs)(_Text.default, {
           size: 14,
           color: theme['c-font'],
-          children: ["\u65E0\u969C\u788D\u670D\u52A1: ", a11yRunning ? '已开启' : '未开启']
+          children: ["\u65E0\u969C\u788D: ", a11yRunning ? '已开启' : '未开启']
         })]
       }), /*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.View, {
         style: [styles.statusBar, {
@@ -222741,7 +222753,20 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
         }), /*#__PURE__*/(0, _jsxRuntime.jsxs)(_Text.default, {
           size: 14,
           color: theme['c-font'],
-          children: ["\u6309\u952E\u76D1\u542C: ", listening ? '运行中' : '未启动']
+          children: ["\u76D1\u542C: ", listening ? '运行中' : '未启动']
+        })]
+      }), /*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.View, {
+        style: [styles.statusBar, {
+          backgroundColor: (_carKeyPlugin4 = carKeyPlugin) != null && _carKeyPlugin4.isAvailable ? '#1b8a3d20' : '#e6510020'
+        }],
+        children: [/*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.View, {
+          style: [styles.indicator, {
+            backgroundColor: (_carKeyPlugin5 = carKeyPlugin) != null && _carKeyPlugin5.isAvailable ? '#1b8a3d' : '#e65100'
+          }]
+        }), /*#__PURE__*/(0, _jsxRuntime.jsxs)(_Text.default, {
+          size: 14,
+          color: theme['c-font'],
+          children: ["\u539F\u751F\u6A21\u5757: ", (_carKeyPlugin6 = carKeyPlugin) != null && _carKeyPlugin6.isAvailable ? '可用' : '不可用']
         })]
       }), !a11yRunning && /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.TouchableOpacity, {
         style: [styles.btn, {
@@ -222752,7 +222777,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
         children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
           size: 14,
           color: "#fff",
-          children: "\u524D\u5F80\u7CFB\u7EDF\u8BBE\u7F6E\u5F00\u542F\u65E0\u969C\u788D"
+          children: "\u524D\u5F80\u65E0\u969C\u788D\u8BBE\u7F6E"
         })
       }), !listening ? /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.TouchableOpacity, {
         style: [styles.btn, {
@@ -222776,12 +222801,25 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
           color: theme['c-button-font'],
           children: "\u505C\u6B62\u6309\u952E\u76D1\u542C"
         })
+      }), /*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.View, {
+        style: [styles.statusBar, {
+          backgroundColor: geelyConnected ? '#1b8a3d20' : '#e6510020'
+        }],
+        children: [/*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.View, {
+          style: [styles.indicator, {
+            backgroundColor: geelyConnected ? '#1b8a3d' : '#e65100'
+          }]
+        }), /*#__PURE__*/(0, _jsxRuntime.jsxs)(_Text.default, {
+          size: 14,
+          color: theme['c-font'],
+          children: ["OneOS API: ", geelyConnected ? '已连接' : '未连接']
+        })]
       }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.View, {
         style: styles.info,
         children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
           size: 12,
           color: theme['c-font-label'],
-          children: "\u65B9\u63A7\u901A\u8FC7\u5409\u5229OneOS API\u76F4\u63A5\u8FDE\u63A5\u7CFB\u7EDF\u670D\u52A1,\u9700platform\u7B7E\u540D\u3002\u5982\u679COneOS\u4E0D\u53EF\u7528,\u5C06\u56DE\u9000\u5230\u65E0\u969C\u788D\u670D\u52A1+MEDIA_BUTTON\u5E7F\u64AD\u3002"
+          children: "\u65B9\u63A7\u901A\u8FC7\u5409\u5229OneOS API\u76F4\u8FDE\u7CFB\u7EDF\u670D\u52A1,\u9700platform\u7B7E\u540D\u3002\u542F\u52A8\u540E\u5C1D\u8BD5\u8FDE\u63A5OneOS,\u540C\u65F6\u6CE8\u518CMEDIA_BUTTON\u5E7F\u64AD\u4F5C\u4E3A\u540E\u5907\u3002"
         })
       })]
     });
@@ -222792,7 +222830,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       alignItems: 'center',
       padding: 12,
       borderRadius: 8,
-      marginBottom: 10
+      marginBottom: 8
     },
     indicator: {
       width: 10,
@@ -222821,18 +222859,12 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   exports.default = void 0;
   exports.isAccessibilityServiceRunning = isAccessibilityServiceRunning;
   exports.isCarKeyListening = isCarKeyListening;
+  exports.isGeelyConnected = isGeelyConnected;
   exports.openAccessibilitySettings = openAccessibilitySettings;
   exports.startCarKeyListening = startCarKeyListening;
   exports.stopCarKeyListening = stopCarKeyListening;
   var _asyncToGenerator2 = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[1], "@babel/runtime/helpers/asyncToGenerator"));
   var _reactNative = _$$_REQUIRE(_dependencyMap[2], "react-native");
-  /**
-   * CarKey - 方向盘按键监听桥接层
-   * 支持:
-   * 1. 原生 MEDIA_BUTTON 广播(CarKeyModule)
-   * 2. 无障碍服务捕获(AccessibilityService,需手动开启)
-   */
-
   var CarKeyModule = _reactNative.NativeModules.CarKeyModule;
   var eventEmitter = null;
   var isListening = false;
@@ -222854,6 +222886,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   if (isAvailable) {
     eventEmitter = new _reactNative.NativeEventEmitter(CarKeyModule);
     eventEmitter.addListener('onCarKey', function (data) {
+      console.log('[CarKey] Event:', data);
       var handler = ACTION_MAP[data.action];
       if (handler) handler();
     });
@@ -222863,15 +222896,22 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   }
   function _startCarKeyListening() {
     _startCarKeyListening = (0, _asyncToGenerator2.default)(function* () {
-      if (!isAvailable || isListening) return false;
+      if (!isAvailable) {
+        console.warn('[CarKey] Module not available');
+        return false;
+      }
+      if (isListening) {
+        console.log('[CarKey] Already listening');
+        return true;
+      }
       try {
         yield CarKeyModule.startListening();
         isListening = true;
-        console.log('[CarKey] Started');
+        console.log('[CarKey] Started successfully');
         return true;
       } catch (e) {
-        console.warn('[CarKey] Failed:', String(e).substring(0, 80));
-        return false;
+        console.warn('[CarKey] Failed:', (e == null ? void 0 : e.message) || String(e));
+        throw e;
       }
     });
     return _startCarKeyListening.apply(this, arguments);
@@ -222885,9 +222925,8 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       try {
         yield CarKeyModule.stopListening();
         isListening = false;
-        console.log('[CarKey] Stopped');
       } catch (e) {
-        console.warn('[CarKey] Failed to stop:', String(e).substring(0, 80));
+        console.warn('[CarKey] Stop failed:', String(e));
       }
     });
     return _stopCarKeyListening.apply(this, arguments);
@@ -222895,12 +222934,9 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   function isCarKeyListening() {
     return isListening;
   }
-
-  /** 打开系统无障碍设置页面 */
   function openAccessibilitySettings() {
     return _openAccessibilitySettings.apply(this, arguments);
   }
-  /** 查询无障碍服务是否已开启 */
   function _openAccessibilitySettings() {
     _openAccessibilitySettings = (0, _asyncToGenerator2.default)(function* () {
       if (!isAvailable) return false;
@@ -222927,13 +222963,28 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     });
     return _isAccessibilityServiceRunning.apply(this, arguments);
   }
+  function isGeelyConnected() {
+    return _isGeelyConnected.apply(this, arguments);
+  }
+  function _isGeelyConnected() {
+    _isGeelyConnected = (0, _asyncToGenerator2.default)(function* () {
+      if (!isAvailable) return false;
+      try {
+        return yield CarKeyModule.isGeelyConnected();
+      } catch (_unused3) {
+        return false;
+      }
+    });
+    return _isGeelyConnected.apply(this, arguments);
+  }
   var _default = exports.default = {
     startCarKeyListening: startCarKeyListening,
     stopCarKeyListening: stopCarKeyListening,
     isCarKeyListening: isCarKeyListening,
     isAvailable: isAvailable,
     openAccessibilitySettings: openAccessibilitySettings,
-    isAccessibilityServiceRunning: isAccessibilityServiceRunning
+    isAccessibilityServiceRunning: isAccessibilityServiceRunning,
+    isGeelyConnected: isGeelyConnected
   };
 },1330,[6,13,15,983],"src/plugins/carkey/index.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {

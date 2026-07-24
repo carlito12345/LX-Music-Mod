@@ -1,9 +1,3 @@
-/**
- * CarKey - 方向盘按键监听桥接层
- * 支持:
- * 1. 原生 MEDIA_BUTTON 广播(CarKeyModule)
- * 2. 无障碍服务捕获(AccessibilityService,需手动开启)
- */
 import { NativeModules, NativeEventEmitter } from 'react-native'
 import { playNext, playPrev, togglePlay } from '@/core/player/player'
 
@@ -23,21 +17,29 @@ const ACTION_MAP: Record<string, () => void> = {
 if (isAvailable) {
   eventEmitter = new NativeEventEmitter(CarKeyModule)
   eventEmitter.addListener('onCarKey', (data: { keyCode: number; action: string }) => {
+    console.log('[CarKey] Event:', data)
     const handler = ACTION_MAP[data.action]
     if (handler) handler()
   })
 }
 
 export async function startCarKeyListening(): Promise<boolean> {
-  if (!isAvailable || isListening) return false
+  if (!isAvailable) {
+    console.warn('[CarKey] Module not available')
+    return false
+  }
+  if (isListening) {
+    console.log('[CarKey] Already listening')
+    return true
+  }
   try {
     await CarKeyModule.startListening()
     isListening = true
-    console.log('[CarKey] Started')
+    console.log('[CarKey] Started successfully')
     return true
-  } catch (e) {
-    console.warn('[CarKey] Failed:', String(e).substring(0, 80))
-    return false
+  } catch (e: any) {
+    console.warn('[CarKey] Failed:', e?.message || String(e))
+    throw e
   }
 }
 
@@ -46,38 +48,32 @@ export async function stopCarKeyListening(): Promise<void> {
   try {
     await CarKeyModule.stopListening()
     isListening = false
-    console.log('[CarKey] Stopped')
   } catch (e) {
-    console.warn('[CarKey] Failed to stop:', String(e).substring(0, 80))
+    console.warn('[CarKey] Stop failed:', String(e))
   }
 }
 
-export function isCarKeyListening(): boolean {
-  return isListening
-}
+export function isCarKeyListening(): boolean { return isListening }
 
-/** 打开系统无障碍设置页面 */
 export async function openAccessibilitySettings(): Promise<boolean> {
   if (!isAvailable) return false
   try {
     await CarKeyModule.openAccessibilitySettings()
     return true
-  } catch {
-    return false
-  }
+  } catch { return false }
 }
 
-/** 查询无障碍服务是否已开启 */
 export async function isAccessibilityServiceRunning(): Promise<boolean> {
   if (!isAvailable) return false
-  try {
-    return await CarKeyModule.isServiceRunning()
-  } catch {
-    return false
-  }
+  try { return await CarKeyModule.isServiceRunning() } catch { return false }
+}
+
+export async function isGeelyConnected(): Promise<boolean> {
+  if (!isAvailable) return false
+  try { return await CarKeyModule.isGeelyConnected() } catch { return false }
 }
 
 export default {
   startCarKeyListening, stopCarKeyListening, isCarKeyListening,
-  isAvailable, openAccessibilitySettings, isAccessibilityServiceRunning,
+  isAvailable, openAccessibilitySettings, isAccessibilityServiceRunning, isGeelyConnected,
 }
