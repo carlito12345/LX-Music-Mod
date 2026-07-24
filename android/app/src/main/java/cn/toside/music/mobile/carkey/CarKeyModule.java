@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.view.KeyEvent;
+import android.util.Log;
+import cn.toside.music.mobile.carkey.GeelyCarKeyManager;
 import android.provider.Settings;
 import android.accessibilityservice.AccessibilityServiceInfo;
 import android.content.pm.PackageManager;
@@ -35,6 +37,14 @@ public class CarKeyModule extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public void startListening(Promise promise) {
+    // Try Geely OneOS API first
+    try {
+      GeelyCarKeyManager geelyManager = GeelyCarKeyManager.getInstance(reactContext);
+      geelyManager.connect();
+    } catch (Exception e) {
+      Log.d("[CarKey]", "Geely API not available: " + e.getMessage());
+    }
+    // Also start standard MEDIA_BUTTON listener
     if (isListening) {
       promise.resolve(true);
       return;
@@ -54,6 +64,12 @@ public class CarKeyModule extends ReactContextBaseJavaModule {
   @ReactMethod
   public void stopListening(Promise promise) {
     try {
+      // Stop Geely manager
+      try {
+        GeelyCarKeyManager geelyManager = GeelyCarKeyManager.getInstance(reactContext);
+        geelyManager.disconnect();
+      } catch (Exception e) { /* ignore */ }
+      // Stop standard receiver
       if (isListening) {
         reactContext.unregisterReceiver(keyReceiver);
         isListening = false;
