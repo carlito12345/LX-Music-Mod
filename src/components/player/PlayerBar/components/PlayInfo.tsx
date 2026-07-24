@@ -5,6 +5,7 @@ import Progress, { ProgressPlain } from '@/components/player/Progress'
 import Status from './Status'
 import { useProgress } from '@/store/player/hook'
 import { useTheme } from '@/store/theme/hook'
+import { useBgPic } from '@/store/common/hook'
 import { createStyle } from '@/utils/tools'
 import Text from '@/components/common/Text'
 import { COMPONENT_IDS } from '@/config/constant'
@@ -21,17 +22,19 @@ const PADDING_TOP_PROGRESS = PADDING_TOP + MARGIN_TOP
 
 const PlayTimeCurrent = ({ timeStr }: { timeStr: string }) => {
   const theme = useTheme()
-  // console.log(timeStr)
-  return <Text size={FONT_SIZE} color={theme['c-500']}>{timeStr}</Text>
+  const bgPic = useBgPic()
+  return <Text size={FONT_SIZE} color={bgPic ? '#fff' : theme['c-500']}>{timeStr}</Text>
 }
 
 const PlayTimeMax = memo(({ timeStr }: { timeStr: string }) => {
   const theme = useTheme()
-  return <Text size={FONT_SIZE} color={theme['c-500']}>{timeStr}</Text>
+  const bgPic = useBgPic()
+  return <Text size={FONT_SIZE} color={bgPic ? '#fff' : theme['c-500']}>{timeStr}</Text>
 })
 
 export default ({ isHome }: { isHome: boolean }) => {
   const theme = useTheme()
+  const bgPic = useBgPic()
   const [autoUpdate, setAutoUpdate] = useState(true)
   const { maxPlayTimeStr, nowPlayTimeStr, progress, maxPlayTime } = useProgress(autoUpdate)
   const buffered = useBufferProgress()
@@ -49,7 +52,7 @@ export default ({ isHome }: { isHome: boolean }) => {
       </View>
       <View style={{ flexGrow: 0, flexShrink: 0, flexDirection: 'row', alignItems: 'flex-start' }} >
         <PlayTimeCurrent timeStr={nowPlayTimeStr} />
-        <Text size={FONT_SIZE} color={theme['c-500']}> / </Text>
+        <Text size={FONT_SIZE} color={bgPic ? '#fff' : theme['c-500']}> / </Text>
         <PlayTimeMax timeStr={maxPlayTimeStr} />
       </View>
       <View style={[StyleSheet.absoluteFill, stylesRaw.progress]}>

@@ -6,6 +6,7 @@ import {
   PLAY_DETAIL_SCREEN,
   SONGLIST_DETAIL_SCREEN,
   COMMENT_SCREEN,
+  PLAY_QUEUE_SCREEN,
   // SETTING_SCREEN,
 } from './screenNames'
 
@@ -85,6 +86,38 @@ export async function pushHomeScreen() {
     },
   })
 }
+export function pushPlayQueueScreen(componentId: string) {
+  import('@/utils/listManage').then(mod => {
+    const playerState = require('@/store/player/state').default
+    const listId = playerState.playInfo.playerListId || '__temp__'
+    const queueData = mod.getListMusicSync(listId) || []
+    
+    Navigation.push(componentId, {
+      component: {
+        name: PLAY_QUEUE_SCREEN,
+        passProps: { initialQueue: queueData, listId },
+        options: {
+          topBar: { visible: false, drawBehind: true, animate: false },
+          layout: { backgroundColor: 'transparent', componentBackgroundColor: 'transparent' },
+        },
+      },
+    })
+  })
+}
+
+export function pushGuideScreen(componentId: string) {
+  Navigation.showModal({
+    component: {
+      name: GUIDE_SCREEN,
+      passProps: { componentId },
+      options: {
+        topBar: { visible: false, drawBehind: true },
+        layout: { backgroundColor: 'transparent', componentBackgroundColor: 'transparent' },
+      },
+    },
+  })
+}
+
 export function pushPlayDetailScreen(componentId: string, skipAnimation = false) {
   /*
     Navigation.setDefaultOptions({
@@ -199,26 +232,6 @@ export function pushPlayDetailScreen(componentId: string, skipAnimation = false)
     })
   })
 }
-
-export function pushPlayQueueScreen(componentId: string) {
-  import('@/utils/listManage').then(mod => {
-    const playerState = require('@/store/player/state').default
-    const listId = playerState.playInfo.playerListId || '__temp__'
-    const queueData = mod.getListMusicSync(listId) || []
-    
-    Navigation.push(componentId, {
-      component: {
-        name: PLAY_QUEUE_SCREEN,
-        passProps: { initialQueue: queueData, listId },
-        options: {
-          topBar: { visible: false, drawBehind: true, animate: false },
-          layout: { backgroundColor: 'transparent', componentBackgroundColor: 'transparent' },
-        },
-      },
-    })
-  })
-}
-
 export function pushSonglistDetailScreen(componentId: string, info: ListInfoItem) {
   const theme = themeState.theme
 

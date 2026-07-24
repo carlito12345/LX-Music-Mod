@@ -26,9 +26,7 @@ export default memo(() => {
 
   const handlePlayAll = () => {
     if (!songlistState.listDetailInfo.info.name) return
-    requestAnimationFrame(() => {
-      void handlePlay(info.id, info.source, songlistState.listDetailInfo.list)
-    })
+    void handlePlay(info.id, info.source, songlistState.listDetailInfo.list)
   }
 
   const handleCollection = () => {

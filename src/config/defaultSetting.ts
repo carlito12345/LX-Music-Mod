@@ -37,7 +37,6 @@ const defaultSetting: LX.AppSetting = {
 
   // 'playDetail.isZoomActiveLrc': false,
   // 'playDetail.isShowLyricProgressSetting': false,
-
   'playDetail.background.type': 'theme',
   'playDetail.background.solidColor': '#000000',
   'playDetail.background.followCover': false,

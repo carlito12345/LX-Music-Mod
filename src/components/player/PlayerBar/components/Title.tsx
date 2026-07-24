@@ -4,6 +4,7 @@ import { usePlayerMusicInfo } from '@/store/player/hook'
 // import { toast } from '@/utils/tools'
 import { useSettingValue } from '@/store/setting/hook'
 import { useTheme } from '@/store/theme/hook'
+import { useBgPic } from '@/store/common/hook'
 import commonState from '@/store/common/state'
 import playerState from '@/store/player/state'
 import Text from '@/components/common/Text'
@@ -16,6 +17,7 @@ export default ({ isHome }: { isHome: boolean }) => {
   const musicInfo = usePlayerMusicInfo()
   const downloadFileName = useSettingValue('download.fileName')
   const theme = useTheme()
+  const bgPic = useBgPic()
 
   const handlePress = () => {
     // console.log('')
@@ -40,7 +42,7 @@ export default ({ isHome }: { isHome: boolean }) => {
   // console.log(playMusicInfo)
   return (
     <TouchableOpacity style={styles.container} onLongPress={handleLongPress} onPress={handlePress} activeOpacity={0.7} >
-      <Text color={theme['c-font-label']} numberOfLines={1}>{title}</Text>
+      <Text color={bgPic ? '#fff' : theme['c-font-label']} numberOfLines={1}>{title}</Text>
     </TouchableOpacity>
   )
 }

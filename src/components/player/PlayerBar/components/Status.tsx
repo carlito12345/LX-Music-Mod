@@ -1,6 +1,7 @@
 import { useLrcPlay } from '@/plugins/lyric'
 import { useIsPlay, useStatusText } from '@/store/player/hook'
 // import { createStyle } from '@/utils/tools'
+import { useBgPic } from '@/store/common/hook'
 import Text from '@/components/common/Text'
 
 
@@ -11,8 +12,9 @@ export default ({ autoUpdate }: { autoUpdate: boolean }) => {
   // console.log('render status')
 
   const status = isPlay ? text : statusText
+  const bgPic = useBgPic()
 
-  return <Text numberOfLines={1} size={12}>{status}</Text>
+  return <Text numberOfLines={1} size={12} color={bgPic ? '#fff' : undefined}>{status}</Text>
 }
 
 // const styles = createStyle({

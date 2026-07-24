@@ -9,6 +9,7 @@ import { useTheme } from '@/store/theme/hook'
 import Image from '@/components/common/Image'
 
 const gap = scaleSizeW(15)
+
 export default memo(({ item, index, width, showSource, onPress }: {
   item: ListInfoItem
   index: number
@@ -18,9 +19,7 @@ export default memo(({ item, index, width, showSource, onPress }: {
 }) => {
   const theme = useTheme()
   const itemWidth = width - gap
-  const handlePress = () => {
-    onPress(item, index)
-  }
+  const handlePress = () => { onPress(item, index) }
   return (
     item.source
       ? (
@@ -28,13 +27,21 @@ export default memo(({ item, index, width, showSource, onPress }: {
             <View style={{ ...styles.listItemImg, backgroundColor: theme['c-content-background'] }}>
               <TouchableOpacity activeOpacity={0.5} onPress={handlePress}>
                 <Image url={item.img} nativeID={`${NAV_SHEAR_NATIVE_IDS.songlistDetail_pic}_from_${item.id}`} style={{ width: itemWidth, height: itemWidth, borderRadius: 4 }} />
-                { showSource ? <Text style={styles.sourceLabel} size={9} color="#fff" >{item.source}</Text> : null }
+                { showSource
+                  ? <View style={[styles.tagBadge, { backgroundColor: theme['c-primary'] }]}>
+                      <Text size={8} color={theme['c-button-font']}>{item.source.toUpperCase()}</Text>
+                    </View>
+                  : null
+                }
+                { item.play_count
+                  ? <Text style={styles.playCount} size={9} color="rgba(255,255,255,0.9)">{item.play_count}</Text>
+                  : null
+                }
               </TouchableOpacity>
             </View>
             <TouchableOpacity activeOpacity={0.5} onPress={handlePress}>
-              <Text style={styles.listItemTitle} numberOfLines={ 2 }>{item.name}</Text>
+              <Text style={styles.listItemTitle} numberOfLines={2} color={theme['c-font']}>{item.name}</Text>
             </TouchableOpacity>
-            {/* <Text>{JSON.stringify(item)}</Text> */}
           </View>
         )
       : <View style={{ ...styles.listItem, width: itemWidth }} />
@@ -43,21 +50,16 @@ export default memo(({ item, index, width, showSource, onPress }: {
 
 const styles = createStyle({
   listItem: {
-    // width: 90,
     margin: 10,
   },
   listItemImg: {
-    // backgroundColor: '#eee',
     borderRadius: 4,
     marginBottom: 5,
     overflow: 'hidden',
     ...Platform.select({
       ios: {
         shadowColor: '#000',
-        shadowOffset: {
-          width: 0,
-          height: 1,
-        },
+        shadowOffset: { width: 0, height: 1 },
         shadowOpacity: 0.20,
         shadowRadius: 1.41,
       },
@@ -66,19 +68,22 @@ const styles = createStyle({
       },
     }),
   },
-  sourceLabel: {
-    paddingLeft: 4,
-    paddingBottom: 2,
-    paddingRight: 4,
+  tagBadge: {
     position: 'absolute',
-    top: 0,
-    right: 0,
-    borderBottomLeftRadius: 3,
-    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+    top: 6,
+    right: 6,
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 4,
+  },
+  playCount: {
+    position: 'absolute',
+    bottom: 6,
+    right: 8,
   },
   listItemTitle: {
     fontSize: 12,
-    // overflow: 'hidden',
     marginBottom: 5,
+    lineHeight: 16,
   },
 })
