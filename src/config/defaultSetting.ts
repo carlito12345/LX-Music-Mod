@@ -111,6 +111,9 @@ const defaultSetting: LX.AppSetting = {
   'list.addMusicLocationType': 'top',
 
   'download.fileName': '歌名 - 歌手',
+  'download.dir': '',
+  'download.conflictAction': 'overwrite',
+  'download.enabled': false,
 
   'sync.enable': false,
 
