@@ -1,38 +1,34 @@
 package cn.toside.music.mobile.carkey;
 
 import android.content.Context;
-import android.os.RemoteException;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
-
-import cn.toside.music.mobile.carkey.ServiceConnectionManager;
-import cn.toside.music.mobile.carkey.KeyCode;
-import cn.toside.music.mobile.carkey.KeyInputManager;
-import cn.toside.music.mobile.carkey.ApiConnectCallBack;
 
 /**
  * 吉利/亿咖通 OneOS API 方控直连模块
- * 需要 platform 公签才能绑定 com.geely.service.oneosapi 系统服务
+ * 模仿 GIB 的连接逻辑:先 init,再等 isAlive
  */
 public class GeelyCarKeyManager {
   private static final String TAG = "[CarKey-Geely]";
   private static GeelyCarKeyManager instance;
   private final Context context;
-  private ServiceConnectionManager serviceConnectionManager;
   private KeyInputManager keyInputManager;
   private boolean connected = false;
   private String lastError = "";
 
-  // 需要监听的按键列表(吉利车机方向盘键)
   private static final int[] STEERING_WHEEL_KEYS = {
-    KeyCode.KEYCODE_R_MEDIA_NEXT,      // 200087 下一曲
-    KeyCode.KEYCODE_R_MEDIA_PREVIOUS,  // 200088 上一曲
-    KeyCode.KEYCODE_R_MEDIA_PLAY_PAUSE, // 200085 播放/暂停
-    KeyCode.KEYCODE_R_VOLUME_UP,       // 200024 音量+
-    KeyCode.KEYCODE_R_VOLUME_DOWN,     // 200025 音量-
-    KeyCode.KEYCODE_R_VOLUME_MUTE,     // 200164 静音
-    KeyCode.KEYCODE_R_MULTI_FUNCTION,  // 200600 多功能键
-    KeyCode.KEYCODE_R_SEEK_NEXT,       // 210005 快进
-    KeyCode.KEYCODE_R_SEEK_REVIOUS,    // 210006 快退
+    KeyCode.KEYCODE_R_MEDIA_NEXT,
+    KeyCode.KEYCODE_R_MEDIA_PREVIOUS,
+    KeyCode.KEYCODE_R_MEDIA_PLAY_PAUSE,
+    KeyCode.KEYCODE_R_VOLUME_UP,
+    KeyCode.KEYCODE_R_VOLUME_DOWN,
+    KeyCode.KEYCODE_R_VOLUME_MUTE,
+    KeyCode.KEYCODE_R_MULTI_FUNCTION,
+    KeyCode.KEYCODE_R_SEEK_NEXT,
+    KeyCode.KEYCODE_R_SEEK_REVIOUS,
+    // Standard media keys as fallback
+    87, 88, 85, 79, 126, 127
   };
 
   public static GeelyCarKeyManager getInstance(Context context) {
@@ -48,43 +44,56 @@ public class GeelyCarKeyManager {
 
   public void connect() {
     if (connected) return;
-    Log.d(TAG, "Connecting to OneOS API...");
-    serviceConnectionManager = new ServiceConnectionManager(context);
-    serviceConnectionManager.connect(new ApiConnectCallBack() {
-      @Override
-      public void success() {
-        Log.d(TAG, "OneOS API connected");
-        initKeyInputManager();
-      }
-      @Override
-      public void fail() {
-        Log.w(TAG, "OneOS API connection failed");
-      }
-    });
+    Log.d(TAG, "Starting OneOS connection...");
+    try {
+      // Step 1: Init OneOSApiManager (same as GIB)
+      OneOSApiManager.getInstance(context).init();
+      Log.d(TAG, "OneOSApiManager.init() called");
+      
+      // Step 2: Retry with isAlive check (same as GIB's launchDynamicRetry)
+      retryWithIsAlive();
+    } catch (Exception e) {
+      lastError = "init: " + e.getMessage();
+      Log.e(TAG, lastError);
+    }
   }
 
-  private void initKeyInputManager() {
-    try {
-      keyInputManager = new KeyInputManager(context, serviceConnectionManager.getServiceManager().getService(8));
-      keyInputManager.registerListener(inputListener, context.getPackageName(), STEERING_WHEEL_KEYS);
-      connected = true;
-      Log.d(TAG, "KeyInputManager ready, listening for steering wheel keys");
-    } catch (Exception e) {
-      Log.e(TAG, "KeyInputManager init failed: " + e.getMessage());
-    }
+  private void retryWithIsAlive() {
+    new Thread(() -> {
+      for (int i = 0; i < 20; i++) {
+        try { Thread.sleep(500); } catch (InterruptedException e) { break; }
+        try {
+          // Get KeyInputManager from OneOSApiManager  
+          KeyInputManager kim = OneOSApiManager.getInstance(context).getKeyInputManager();
+          Log.d(TAG, "Attempt " + (i+1) + ": kim=" + kim + (kim != null ? " isAlive=" + kim.isAlive() : ""));
+          
+          if (kim != null && kim.isAlive()) {
+            kim.registerListener(inputListener, context.getPackageName(), STEERING_WHEEL_KEYS);
+            keyInputManager = kim;
+            connected = true;
+            Log.d(TAG, "KeyInputManager ready! Registered listener.");
+            return;
+          } else if (kim == null) {
+            lastError = "kim=null at attempt " + (i+1);
+          } else {
+            lastError = "kim not alive at attempt " + (i+1);
+          }
+        } catch (Exception e) {
+          lastError = "attempt " + (i+1) + ": " + e.getMessage();
+          Log.w(TAG, lastError);
+        }
+      }
+      lastError = "Timed out after 20 retries. Last: " + lastError;
+      Log.w(TAG, lastError);
+    }).start();
   }
 
   public void disconnect() {
     if (keyInputManager != null) {
-      try {
-        keyInputManager.unregisterListener(inputListener, context.getPackageName());
-      } catch (Exception e) { /* ignore */ }
+      try { keyInputManager.unregisterListener(inputListener, context.getPackageName()); } catch (Exception e) { }
       keyInputManager = null;
     }
-    if (serviceConnectionManager != null) {
-      serviceConnectionManager.release();
-      serviceConnectionManager = null;
-    }
+    try { OneOSApiManager.getInstance(context).release(); } catch (Exception e) { }
     connected = false;
     Log.d(TAG, "Disconnected");
   }
@@ -96,9 +105,7 @@ public class GeelyCarKeyManager {
     @Override
     public void onKeyCodeEvent(int keyCode, int event, int softKeyFunction) {
       Log.d(TAG, "Key event: " + keyCode + " event=" + event);
-      if (event == 0) { // ACTION_DOWN
-        handleKey(keyCode);
-      }
+      if (event == 0) handleKey(keyCode);
     }
 
     @Override
@@ -113,27 +120,16 @@ public class GeelyCarKeyManager {
     switch (keyCode) {
       case KeyCode.KEYCODE_R_MEDIA_NEXT:
       case KeyCode.KEYCODE_R_SEEK_NEXT:
-        action = "next";
-        break;
+      case 87: action = "next"; break;
       case KeyCode.KEYCODE_R_MEDIA_PREVIOUS:
       case KeyCode.KEYCODE_R_SEEK_REVIOUS:
-        action = "previous";
-        break;
+      case 88: action = "previous"; break;
       case KeyCode.KEYCODE_R_MEDIA_PLAY_PAUSE:
       case KeyCode.KEYCODE_R_MULTI_FUNCTION:
-        action = "playPause";
-        break;
-      case KeyCode.KEYCODE_R_VOLUME_UP:
-        action = "volumeUp";
-        break;
-      case KeyCode.KEYCODE_R_VOLUME_DOWN:
-        action = "volumeDown";
-        break;
-      case KeyCode.KEYCODE_R_VOLUME_MUTE:
-        action = "volumeMute";
-        break;
-      default:
-        return;
+      case 85: case 79: case 126: case 127: action = "playPause"; break;
+      case KeyCode.KEYCODE_R_VOLUME_UP: action = "volumeUp"; break;
+      case KeyCode.KEYCODE_R_VOLUME_DOWN: action = "volumeDown"; break;
+      default: return;
     }
     CarKeyBridge.sendKeyEvent(keyCode, action);
   }
