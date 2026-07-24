@@ -133,15 +133,19 @@ export const getPicUrl = async({ musicInfo, listId, isRefresh, skipFilePic, onTo
   } catch {}
 
   onToggleSource()
-  return getOtherSourceByLocal(musicInfo, async(otherSource) => {
-    return getOnlineOtherSourcePicUrl({ musicInfos: [...otherSource], onToggleSource, isRefresh }).then(({ url, musicInfo: targetMusicInfo, isFromCache }) => {
-      if (listId) {
-        musicInfo.meta.picUrl = url
-        void updateListMusics([{ id: listId, musicInfo }])
-      }
-      return url
+  try {
+    return await getOtherSourceByLocal(musicInfo, async(otherSource) => {
+      return getOnlineOtherSourcePicUrl({ musicInfos: [...otherSource], onToggleSource, isRefresh }).then(({ url, musicInfo: targetMusicInfo, isFromCache }) => {
+        if (listId) {
+          musicInfo.meta.picUrl = url
+          void updateListMusics([{ id: listId, musicInfo }])
+        }
+        return url
+      })
     })
-  })
+  } catch {
+    return ''
+  }
 }
 
 export const getLyricInfo = async({ musicInfo, isRefresh, skipFileLyric, onToggleSource = () => {} }: {
@@ -170,14 +174,18 @@ export const getLyricInfo = async({ musicInfo, isRefresh, skipFileLyric, onToggl
   } catch {}
 
   onToggleSource()
-  return getOtherSourceByLocal(musicInfo, async(otherSource) => {
-    return getOnlineOtherSourceLyricInfo({ musicInfos: [...otherSource], onToggleSource, isRefresh }).then(async({ lyricInfo, musicInfo: targetMusicInfo, isFromCache }) => {
-      void saveLyric(musicInfo, lyricInfo)
-      if (isFromCache) return buildLyricInfo(lyricInfo)
-      void saveLyric(targetMusicInfo, lyricInfo)
-      return buildLyricInfo(lyricInfo)
+  try {
+    return await getOtherSourceByLocal(musicInfo, async(otherSource) => {
+      return getOnlineOtherSourceLyricInfo({ musicInfos: [...otherSource], onToggleSource, isRefresh }).then(async({ lyricInfo, musicInfo: targetMusicInfo, isFromCache }) => {
+        void saveLyric(musicInfo, lyricInfo)
+        if (isFromCache) return buildLyricInfo(lyricInfo)
+        void saveLyric(targetMusicInfo, lyricInfo)
+        return buildLyricInfo(lyricInfo)
+      })
     })
-  })
+  } catch {
+    return buildLyricInfo({})
+  }
 }
 
 const getMusicFileLyric = async(filePath: string) => {
