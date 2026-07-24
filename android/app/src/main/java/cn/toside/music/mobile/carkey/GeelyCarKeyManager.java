@@ -65,7 +65,10 @@ public class GeelyCarKeyManager {
         try {
           // Get KeyInputManager from OneOSApiManager  
           KeyInputManager kim = OneOSApiManager.getInstance(context).getKeyInputManager();
-          Log.d(TAG, "Attempt " + (i+1) + ": kim=" + kim + (kim != null ? " isAlive=" + kim.isAlive() : ""));
+          OneOSApiManager oneos = OneOSApiManager.getInstance(context);
+          boolean bound = oneos.isServiceBound();
+          Log.d(TAG, "Attempt " + (i+1) + ": bound=" + bound + " kim=" + kim + (kim != null ? " isAlive=" + kim.isAlive() : ""));
+          if (!bound) { lastError = "svc not bound attempt " + (i+1); continue; }
           
           if (kim != null && kim.isAlive()) {
             kim.registerListener(inputListener, context.getPackageName(), STEERING_WHEEL_KEYS);

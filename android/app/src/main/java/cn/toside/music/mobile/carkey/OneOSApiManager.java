@@ -40,6 +40,10 @@ public class OneOSApiManager {
     mKeyInputManager = null;
   }
 
+  public boolean isServiceBound() {
+    return mServiceConnectionManager != null && mServiceConnectionManager.isServiceBound();
+  }
+
   public KeyInputManager getKeyInputManager() {
     if (mKeyInputManager == null && mServiceConnectionManager.isServiceBound()) {
       try {
