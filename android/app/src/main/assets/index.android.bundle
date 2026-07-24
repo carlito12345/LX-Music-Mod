@@ -218561,13 +218561,23 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
           (0, _$$_REQUIRE(_dependencyMap[10], "../../../../utils/tools").toast)(t('download_file_not_found'));
           return;
         }
-        var tempMusicInfo = Object.assign({}, item.musicInfo, {
-          meta: Object.assign({}, item.musicInfo.meta, {
-            filePath: item.filePath
-          })
-        });
-        yield (0, _$$_REQUIRE(_dependencyMap[12], "../../../../core/list").addListMusics)(_$$_REQUIRE(_dependencyMap[13], "../../../../config/constant").LIST_IDS.TEMP, [tempMusicInfo]);
-        yield (0, _$$_REQUIRE(_dependencyMap[14], "../../../../core/player/player").playList)(_$$_REQUIRE(_dependencyMap[13], "../../../../config/constant").LIST_IDS.TEMP, 0);
+        // 当作本地文件播放,避免污染当前歌单
+        var fileName = item.filePath.split('/').pop() || item.musicInfo.name;
+        var ext = fileName.includes('.') ? fileName.split('.').pop() || '' : '';
+        var localMusicInfo = {
+          id: item.filePath,
+          name: item.musicInfo.name || fileName.replace(/\.[^/.]+$/, ''),
+          singer: item.musicInfo.singer || '本地文件',
+          source: 'local',
+          quality: item.quality || 'unknown',
+          interval: null,
+          meta: {
+            filePath: item.filePath,
+            ext: ext
+          }
+        };
+        yield (0, _$$_REQUIRE(_dependencyMap[12], "../../../../core/list").setTempList)('download_play', [localMusicInfo]);
+        yield (0, _$$_REQUIRE(_dependencyMap[13], "../../../../core/player/player").playList)(_$$_REQUIRE(_dependencyMap[14], "../../../../config/constant").LIST_IDS.TEMP, 0);
       } catch (err) {
         (0, _$$_REQUIRE(_dependencyMap[10], "../../../../utils/tools").toast)(t('download_play_failed') + ': ' + err.message);
       }
@@ -218596,15 +218606,6 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
           case 'share':
             if (item.musicInfo) {
               (0, _$$_REQUIRE(_dependencyMap[10], "../../../../utils/tools").shareMusic)(item.musicInfo);
-            }
-            break;
-          case 'delete':
-            var confirm = yield (0, _$$_REQUIRE(_dependencyMap[10], "../../../../utils/tools").confirmDialog)({
-              message: t('download_delete_confirm'),
-              bgClose: false
-            });
-            if (confirm) {
-              yield _$$_REQUIRE(_dependencyMap[11], "../../../../core/download").downloadManager.deleteTask(item.id);
             }
             break;
           case 'deleteFile':
@@ -218658,10 +218659,6 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
         label: t('download_retry')
       });
     }
-    menus.push({
-      action: 'delete',
-      label: t('download_delete')
-    });
     return /*#__PURE__*/(0, _jsxRuntime.jsxs)(_jsxRuntime.Fragment, {
       children: [/*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.TouchableOpacity, {
         style: Object.assign({}, styles.container, {
@@ -218754,7 +218751,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       padding: 8
     }
   });
-},1361,[6,13,65,15,967,1097,668,106,698,966,543,1116,989,680,983],"src/screens/Home/Views/Download/HistoryListItem.tsx");
+},1361,[6,13,65,15,967,1097,668,106,698,966,543,1116,989,983,680],"src/screens/Home/Views/Download/HistoryListItem.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {

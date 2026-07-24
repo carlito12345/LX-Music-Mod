@@ -9,7 +9,7 @@ import Menu, { type MenuType, type Position } from '@/components/common/Menu'
 import { downloadManager } from '@/core/download'
 import { playList } from '@/core/player/player'
 import { LIST_IDS } from '@/config/constant'
-import { addListMusics } from '@/core/list'
+import { setTempList } from '@/core/list'
 import RNFS from 'react-native-fs'
 
 export default memo(({ item }: {
@@ -41,14 +41,19 @@ export default memo(({ item }: {
         toast(t('download_file_not_found'))
         return
       }
-      const tempMusicInfo = {
-        ...item.musicInfo,
-        meta: {
-          ...item.musicInfo.meta,
-          filePath: item.filePath,
-        },
+      // 当作本地文件播放,避免污染当前歌单
+      const fileName = item.filePath.split('/').pop() || item.musicInfo.name
+      const ext = fileName.includes('.') ? fileName.split('.').pop() || '' : ''
+      const localMusicInfo = {
+        id: item.filePath,
+        name: item.musicInfo.name || fileName.replace(/\.[^/.]+$/, ''),
+        singer: item.musicInfo.singer || '本地文件',
+        source: 'local' as const,
+        quality: item.quality || 'unknown',
+        interval: null,
+        meta: { filePath: item.filePath, ext },
       }
-      await addListMusics(LIST_IDS.TEMP, [tempMusicInfo])
+      await setTempList('download_play', [localMusicInfo])
       await playList(LIST_IDS.TEMP, 0)
     } catch (err: any) {
       toast(t('download_play_failed') + ': ' + err.message)
@@ -71,15 +76,6 @@ export default memo(({ item }: {
       case 'share':
         if (item.musicInfo) {
           shareMusic(item.musicInfo)
-        }
-        break
-      case 'delete':
-        const confirm = await confirmDialog({
-          message: t('download_delete_confirm'),
-          bgClose: false,
-        })
-        if (confirm) {
-          await downloadManager.deleteTask(item.id)
         }
         break
       case 'deleteFile':
@@ -119,7 +115,6 @@ export default memo(({ item }: {
   if (isFailed) {
     menus.push({ action: 'retry', label: t('download_retry') })
   }
-  menus.push({ action: 'delete', label: t('download_delete') })
 
   return (
     <>
