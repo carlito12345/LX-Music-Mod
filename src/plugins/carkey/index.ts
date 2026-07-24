@@ -80,5 +80,5 @@ export async function isGeelyConnected(): Promise<boolean> {
 
 export default {
   startCarKeyListening, stopCarKeyListening, isCarKeyListening,
-  isAvailable, openAccessibilitySettings, isAccessibilityServiceRunning, isGeelyConnected,
+  isAvailable, openAccessibilitySettings, isAccessibilityServiceRunning, getGeelyDiagnostic, isGeelyConnected,
 }

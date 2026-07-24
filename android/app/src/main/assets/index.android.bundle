@@ -223030,6 +223030,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     isAvailable: isAvailable,
     openAccessibilitySettings: openAccessibilitySettings,
     isAccessibilityServiceRunning: isAccessibilityServiceRunning,
+    getGeelyDiagnostic: getGeelyDiagnostic,
     isGeelyConnected: isGeelyConnected
   };
 },1330,[6,13,15,983],"src/plugins/carkey/index.ts");
