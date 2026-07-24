@@ -238172,7 +238172,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
-  exports.default = void 0;
+  exports.handleGIBIntent = exports.default = void 0;
   exports.isCarKeyListening = isCarKeyListening;
   exports.startCarKeyListening = startCarKeyListening;
   exports.stopCarKeyListening = stopCarKeyListening;
@@ -238180,13 +238180,9 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   var _reactNative = _$$_REQUIRE(_dependencyMap[2], "react-native");
   /**
    * CarKey - 方向盘按键监听桥接层
-   * 连接 Android 车载按键到 LX Music 播放控制
-   *
-   * 支持按键:
-   * - 上一曲 / 下一曲
-   * - 播放 / 暂停
-   * - 音量控制
-   * - 快进 / 快退
+   * 支持:
+   * 1. 原生 MEDIA_BUTTON 广播(CarKeyModule)
+   * 2. GIB 广播监听 (com.salat.gbinder.*)
    */
 
   var CarKeyModule = _reactNative.NativeModules.CarKeyModule;
@@ -238207,27 +238203,44 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     },
     stop: function stop() {
       return (0, _$$_REQUIRE(_dependencyMap[3], "../../core/player/player").togglePlay)();
-    }
+    },
+    volumeUp: function volumeUp() {},
+    volumeDown: function volumeDown() {},
+    volumeMute: function volumeMute() {}
+  };
+
+  // GIB 广播动作映射
+  var GIB_ACTIONS = {
+    'com.salat.gbinder.TOGGLE_LAUNCHER': 'toggle',
+    'com.salat.gbinder.SHORT_CLICK': 'playPause',
+    'com.salat.gbinder.LONG_PRESS': 'previous',
+    'com.salat.gbinder.DOUBLE_CLICK': 'next',
+    'com.salat.gbinder.SET_AUDIO_SOURCE': 'toggle',
+    'com.salat.gbinder.ENABLE_MEDIA_CONTROL': 'playPause',
+    'com.salat.gbinder.DISABLE_MEDIA_CONTROL': 'stop',
+    'com.salat.gbinder.PHONE_CALL': 'toggle',
+    'com.salat.gbinder.ANSWER_CALL': 'toggle',
+    'com.salat.gbinder.REJECT_CALL': 'toggle',
+    'com.salat.gbinder.TOGGLE_CAMERA': 'toggle'
   };
   if (isAvailable) {
     eventEmitter = new _reactNative.NativeEventEmitter(CarKeyModule);
     eventEmitter.addListener('onCarKey', function (data) {
       var handler = ACTION_MAP[data.action];
-      if (handler) {
-        handler();
-      }
+      if (handler) handler();
     });
   }
 
-  /**
-   * 开始监听方向盘按键
-   */
+  // 监听 GIB 广播
+  var handleGIBIntent = exports.handleGIBIntent = function handleGIBIntent(action) {
+    var mapped = GIB_ACTIONS[action];
+    if (mapped && ACTION_MAP[mapped]) {
+      ACTION_MAP[mapped]();
+    }
+  };
   function startCarKeyListening() {
     return _startCarKeyListening.apply(this, arguments);
   }
-  /**
-   * 停止监听方向盘按键
-   */
   function _startCarKeyListening() {
     _startCarKeyListening = (0, _asyncToGenerator2.default)(function* () {
       if (!isAvailable || isListening) return false;
@@ -238246,9 +238259,6 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   function stopCarKeyListening() {
     return _stopCarKeyListening.apply(this, arguments);
   }
-  /**
-   * 是否正在监听
-   */
   function _stopCarKeyListening() {
     _stopCarKeyListening = (0, _asyncToGenerator2.default)(function* () {
       if (!isAvailable || !isListening) return;
@@ -238269,7 +238279,8 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     startCarKeyListening: startCarKeyListening,
     stopCarKeyListening: stopCarKeyListening,
     isCarKeyListening: isCarKeyListening,
-    isAvailable: isAvailable
+    isAvailable: isAvailable,
+    handleGIBIntent: handleGIBIntent
   };
 },1475,[6,13,15,983],"src/plugins/carkey/index.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
