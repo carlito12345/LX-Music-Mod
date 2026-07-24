@@ -71,6 +71,29 @@
 搜索 → 歌单 → 排行榜 → 我的列表 → 本地音乐 → 下载管理 → 设置
 ```
 
+## 致谢
+
+本项目合并了以下来自原仓库的优秀 Pull Request:
+
+### 🎨 底部 Tab 与 PlayerBar 样式优化
+- **PR**: [#1059](https://github.com/lyswhut/lx-music-mobile/pull/1059)
+- **作者**: 原仓库贡献者
+- **功能**: 优化底部导航栏和播放器控制栏的视觉样式,提升用户体验
+
+### 📥 完整下载管理系统
+- **PR**: [#1074](https://github.com/lyswhut/lx-music-mobile/pull/1074)
+- **作者**: 原仓库贡献者
+- **功能**: 
+  - 3并发下载队列
+  - 下载进度实时显示
+  - 下载历史记录
+  - 失败重试机制
+  - 任务持久化
+  - 中文错误提示
+  - 独立的下载管理页面 UI
+
+感谢原仓库作者的出色工作!
+
 ## 基于
 
 - [LX Music Mobile](https://github.com/lyswhut/lx-music-mobile) by lyswhut
