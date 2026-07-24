@@ -18,7 +18,7 @@ const defaultSetting: LX.AppSetting = {
   'localMusic.folderPath': '',
 
   'player.startupAutoPlay': true,
-  'player.startupPushPlayDetailScreen': true,
+  'player.startupPushPlayDetailScreen': false,
   'player.togglePlayMethod': 'listLoop',
   'player.playQuality': '128k',
   'player.isSavePlayTime': true,

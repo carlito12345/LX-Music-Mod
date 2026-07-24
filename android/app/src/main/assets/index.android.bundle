@@ -149532,7 +149532,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     'common.guideDone': false,
     'localMusic.folderPath': '',
     'player.startupAutoPlay': true,
-    'player.startupPushPlayDetailScreen': true,
+    'player.startupPushPlayDetailScreen': false,
     'player.togglePlayMethod': 'listLoop',
     'player.playQuality': '128k',
     'player.isSavePlayTime': true,
