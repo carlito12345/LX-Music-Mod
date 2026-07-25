@@ -45,5 +45,13 @@ export default (setting: any): Partial<LX.AppSetting> => {
     setting['theme.id'] = setting.themeId
   }
 
+  // 强制迁移:移除"跟随主题"模式,改为纯色
+  if (setting['playDetail.background.type'] === 'theme' || !setting['playDetail.background.type']) {
+    setting['playDetail.background.type'] = 'solid'
+    if (!setting['playDetail.background.solidColor'] || setting['playDetail.background.solidColor'] === '#000000') {
+      setting['playDetail.background.solidColor'] = '#1a1a2e'
+    }
+  }
+
   return setting
 }

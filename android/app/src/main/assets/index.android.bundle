@@ -161043,6 +161043,14 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       setting['sync.enable'] = (_setting$sync = setting.sync) == null ? void 0 : _setting$sync.enable;
       setting['theme.id'] = setting.themeId;
     }
+
+    // 强制迁移:移除"跟随主题"模式,改为纯色
+    if (setting['playDetail.background.type'] === 'theme' || !setting['playDetail.background.type']) {
+      setting['playDetail.background.type'] = 'solid';
+      if (!setting['playDetail.background.solidColor'] || setting['playDetail.background.solidColor'] === '#000000') {
+        setting['playDetail.background.solidColor'] = '#1a1a2e';
+      }
+    }
     return setting;
   };
 },692,[572],"src/config/migrateSetting.ts");
@@ -226991,7 +226999,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
         };
       }
       return {
-        backgroundColor: theme['c-content-background']
+        backgroundColor: solidColor || '#1a1a2e'
       };
     }, [bgType, solidColor, followCover, dominantColor, theme, wallpaperEnabled]);
 
@@ -227746,8 +227754,8 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   var _this = this,
     _jsxFileName = "/data/data/com.termux/files/home/lx-music-mobile/src/screens/PlayDetail/components/SettingPopup/settings/SettingBackground.tsx";
   var BG_TYPES = [{
-    id: 'theme',
-    label: '跟随主题'
+    id: 'solid',
+    label: '纯色'
   }, {
     id: 'follow',
     label: '封面主色'
@@ -227829,6 +227837,11 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
           (0, _$$_REQUIRE(_dependencyMap[7], "../../../../../core/common").updateSetting)({
             'playDetail.background.type': 'solid',
             'playDetail.background.followCover': true
+          });
+        } else if (mode === 'solid') {
+          (0, _$$_REQUIRE(_dependencyMap[7], "../../../../../core/common").updateSetting)({
+            'playDetail.background.type': 'solid',
+            'playDetail.background.followCover': false
           });
         } else {
           (0, _$$_REQUIRE(_dependencyMap[7], "../../../../../core/common").updateSetting)({

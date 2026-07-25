@@ -88,7 +88,7 @@ export default memo(({ componentId }: { componentId: string }) => {
     if (bgType === 'solid') {
       return { backgroundColor: followCover ? dominantColor : solidColor }
     }
-    return { backgroundColor: theme['c-content-background'] }
+    return { backgroundColor: solidColor || '#1a1a2e' }
   }, [bgType, solidColor, followCover, dominantColor, theme, wallpaperEnabled])
 
   // 用于对比度计算的实际背景色(不考虑透明效果)
