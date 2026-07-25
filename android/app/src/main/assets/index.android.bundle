@@ -3064,7 +3064,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       (0, _$$_REQUIRE(_dependencyMap[17], "./utils/nativeModules/utils").exitApp)();
     });
   });
-},5,[6,7,13,14,684,1454,695,682,1458,679,1459,962,1330,543,1477,618,718,666,716],"src/app.ts");
+},5,[6,7,13,14,684,1454,695,682,1458,679,1459,962,1330,543,1479,618,718,666,716],"src/app.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   function _interopRequireDefault(e) {
     return e && e.__esModule ? e : {
@@ -236943,7 +236943,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     isInited || (isInited = true);
     return handlePushedHomeScreen;
   });
-},1459,[6,13,1460,1461,1462,1463,1465,1474,1475,1476,696,618,543,973,978,689,1458,1228,1102],"src/core/init/index.ts");
+},1459,[6,13,1460,1461,1462,1463,1465,1476,1477,1478,696,618,543,973,978,689,1458,1228,1102],"src/core/init/index.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -237740,7 +237740,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       return _ref.apply(this, arguments);
     };
   }();
-},1465,[6,13,1466,1467,1468,1469,1470,1471,1472,1473],"src/core/init/player/index.ts");
+},1465,[6,13,1466,1469,1470,1471,1472,1473,1474,1475],"src/core/init/player/index.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -237750,46 +237750,47 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   var _asyncToGenerator2 = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[1], "@babel/runtime/helpers/asyncToGenerator"));
   var _state = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[2], "../../../store/player/state"));
   var _state2 = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[3], "../../../store/setting/state"));
+  var _mediaInteraction = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[4], "./mediaInteraction"));
   // import { resetPlayerMusicInfo } from '@/core/player/playInfo'
   var _default = exports.default = /*#__PURE__*/function () {
     var _ref = (0, _asyncToGenerator2.default)(function* (setting) {
       var setPlayStatus = function setPlayStatus() {
-        (0, _$$_REQUIRE(_dependencyMap[4], "../../player/playStatus").setIsPlay)(true);
+        (0, _$$_REQUIRE(_dependencyMap[5], "../../player/playStatus").setIsPlay)(true);
       };
       var setPauseStatus = function setPauseStatus() {
-        (0, _$$_REQUIRE(_dependencyMap[4], "../../player/playStatus").setIsPlay)(false);
-        if (global.lx.isPlayedStop) void (0, _$$_REQUIRE(_dependencyMap[5], "../../player/player").pause)();
+        (0, _$$_REQUIRE(_dependencyMap[5], "../../player/playStatus").setIsPlay)(false);
+        if (global.lx.isPlayedStop) void (0, _$$_REQUIRE(_dependencyMap[6], "../../player/player").pause)();
       };
       var handleEnded = function handleEnded() {
         // setTimeout(() => {
         if (global.lx.isPlayedStop) {
-          (0, _$$_REQUIRE(_dependencyMap[4], "../../player/playStatus").setStatusText)(global.i18n.t('player__end'));
+          (0, _$$_REQUIRE(_dependencyMap[5], "../../player/playStatus").setStatusText)(global.i18n.t('player__end'));
           return;
         }
         // resetPlayerMusicInfo()
         // global.app_event.stop()
         global.app_event.setProgress(0);
-        (0, _$$_REQUIRE(_dependencyMap[4], "../../player/playStatus").setStatusText)(global.i18n.t('player__end'));
-        void (0, _$$_REQUIRE(_dependencyMap[5], "../../player/player").playNext)(true);
+        (0, _$$_REQUIRE(_dependencyMap[5], "../../player/playStatus").setStatusText)(global.i18n.t('player__end'));
+        void (0, _$$_REQUIRE(_dependencyMap[6], "../../player/player").playNext)(true);
         // })
       };
       var setStopStatus = function setStopStatus() {
-        (0, _$$_REQUIRE(_dependencyMap[4], "../../player/playStatus").setIsPlay)(false);
-        (0, _$$_REQUIRE(_dependencyMap[4], "../../player/playStatus").setStatusText)('');
-        void (0, _$$_REQUIRE(_dependencyMap[6], "../../../plugins/player").setStop)();
+        (0, _$$_REQUIRE(_dependencyMap[5], "../../player/playStatus").setIsPlay)(false);
+        (0, _$$_REQUIRE(_dependencyMap[5], "../../player/playStatus").setStatusText)('');
+        void (0, _$$_REQUIRE(_dependencyMap[7], "../../../plugins/player").setStop)();
       };
       var updatePic = function updatePic() {
         if (!_state2.default.setting['player.isShowNotificationImage']) return;
         if (_state.default.playMusicInfo.musicInfo && _state.default.musicInfo.pic) {
-          (0, _$$_REQUIRE(_dependencyMap[7], "../../../plugins/player/playList").delayUpdateMusicInfo)(_state.default.musicInfo);
+          (0, _$$_REQUIRE(_dependencyMap[8], "../../../plugins/player/playList").delayUpdateMusicInfo)(_state.default.musicInfo);
         }
       };
       var handleConfigUpdated = function handleConfigUpdated(keys, settings) {
         if (keys.includes('player.togglePlayMethod')) {
           var newValue = settings['player.togglePlayMethod'];
-          if (_state.default.playedList.length) (0, _$$_REQUIRE(_dependencyMap[8], "../../player/playedList").clearPlayedList)();
+          if (_state.default.playedList.length) (0, _$$_REQUIRE(_dependencyMap[9], "../../player/playedList").clearPlayedList)();
           var playMusicInfo = _state.default.playMusicInfo;
-          if (newValue == 'random' && playMusicInfo.musicInfo && !playMusicInfo.isTempPlay) (0, _$$_REQUIRE(_dependencyMap[8], "../../player/playedList").addPlayedList)(Object.assign({}, playMusicInfo));
+          if (newValue == 'random' && playMusicInfo.musicInfo && !playMusicInfo.isTempPlay) (0, _$$_REQUIRE(_dependencyMap[9], "../../player/playedList").addPlayedList)(Object.assign({}, playMusicInfo));
         }
       };
       global.app_event.on('play', setPlayStatus);
@@ -237799,12 +237800,258 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       global.app_event.on('playerEnded', handleEnded);
       global.app_event.on('picUpdated', updatePic);
       global.state_event.on('configUpdated', handleConfigUpdated);
+
+      // Initialize media interaction for car integration
+      void (0, _mediaInteraction.default)();
     });
     return function (_x) {
       return _ref.apply(this, arguments);
     };
   }();
-},1466,[6,13,704,618,984,983,705,707,998],"src/core/init/player/player.ts");
+},1466,[6,13,704,618,1467,984,983,705,707,998],"src/core/init/player/player.ts");
+__d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
+  var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.default = void 0;
+  var _asyncToGenerator2 = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[1], "@babel/runtime/helpers/asyncToGenerator"));
+  var _state = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[2], "../../../store/player/state"));
+  var _mediainteraction = _interopRequireWildcard(_$$_REQUIRE(_dependencyMap[3], "../../../plugins/mediainteraction"));
+  function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function _interopRequireWildcard(e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, default: e }; if (null === e || "object" != typeof e && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (var _t in e) "default" !== _t && {}.hasOwnProperty.call(e, _t) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, _t)) && (i.get || i.set) ? o(f, _t, i) : f[_t] = e[_t]); return f; })(e, t); }
+  var initialized = false;
+  var lastMusicId = '';
+  var _default = exports.default = /*#__PURE__*/(0, _asyncToGenerator2.default)(function* () {
+    // 初始化 MediaInteraction 模块
+    var isAvailable = yield _mediainteraction.default.initialize();
+    if (!isAvailable) {
+      console.log('[MediaInteraction] Not available on this device');
+      return;
+    }
+    initialized = true;
+    console.log('[MediaInteraction] Initialized successfully');
+    var updateMediaInfo = /*#__PURE__*/function () {
+      var _ref2 = (0, _asyncToGenerator2.default)(function* () {
+        if (!initialized) return;
+        var musicInfo = _state.default.musicInfo;
+        if (!musicInfo || !musicInfo.id) return;
+
+        // 避免重复更新同一首歌
+        if (musicInfo.id === lastMusicId) return;
+        lastMusicId = musicInfo.id;
+        var title = musicInfo.name || '';
+        var artist = musicInfo.singer || '';
+        var album = musicInfo.albumName || '';
+        var artworkPath = musicInfo.pic || '';
+        var duration = musicInfo.interval || 0;
+        var isPlaying = _state.default.isPlay;
+
+        // 根据音乐来源确定 sourceType
+        var sourceType = musicInfo.source === 'local' ? _mediainteraction.SourceType.LOCAL : _mediainteraction.SourceType.ONLINE;
+        yield _mediainteraction.default.updateMediaInfo({
+          title: title,
+          artist: artist,
+          album: album,
+          artworkPath: artworkPath,
+          duration: duration,
+          playing: isPlaying,
+          sourceType: sourceType
+        });
+      });
+      return function updateMediaInfo() {
+        return _ref2.apply(this, arguments);
+      };
+    }();
+    var updatePlayStatus = /*#__PURE__*/function () {
+      var _ref3 = (0, _asyncToGenerator2.default)(function* () {
+        if (!initialized) return;
+        var musicInfo = _state.default.musicInfo;
+        if (!musicInfo || !musicInfo.id) return;
+        var title = musicInfo.name || '';
+        var artist = musicInfo.singer || '';
+        var album = musicInfo.albumName || '';
+        var artworkPath = musicInfo.pic || '';
+        var duration = musicInfo.interval || 0;
+        var isPlaying = _state.default.isPlay;
+        var sourceType = musicInfo.source === 'local' ? _mediainteraction.SourceType.LOCAL : _mediainteraction.SourceType.ONLINE;
+        yield _mediainteraction.default.updateMediaInfo({
+          title: title,
+          artist: artist,
+          album: album,
+          artworkPath: artworkPath,
+          duration: duration,
+          playing: isPlaying,
+          sourceType: sourceType
+        });
+      });
+      return function updatePlayStatus() {
+        return _ref3.apply(this, arguments);
+      };
+    }();
+    var handleStop = /*#__PURE__*/function () {
+      var _ref4 = (0, _asyncToGenerator2.default)(function* () {
+        if (!initialized) return;
+        lastMusicId = '';
+        // 停止时清空媒体信息
+        yield _mediainteraction.default.updateMediaInfo({
+          title: '',
+          artist: '',
+          album: '',
+          artworkPath: '',
+          duration: 0,
+          playing: false,
+          sourceType: _mediainteraction.SourceType.LOCAL
+        });
+      });
+      return function handleStop() {
+        return _ref4.apply(this, arguments);
+      };
+    }();
+
+    // 监听播放器事件
+    global.app_event.on('play', updatePlayStatus);
+    global.app_event.on('pause', updatePlayStatus);
+    global.app_event.on('musicToggled', updateMediaInfo);
+    global.app_event.on('picUpdated', updateMediaInfo);
+    global.app_event.on('stop', handleStop);
+    console.log('[MediaInteraction] Event listeners registered');
+  });
+},1467,[6,13,704,1468],"src/core/init/player/mediaInteraction.ts");
+__d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
+  var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.default = exports.SourceType = void 0;
+  exports.initialize = initialize;
+  exports.isMediaInteractionAvailable = isMediaInteractionAvailable;
+  exports.release = release;
+  exports.updateMediaInfo = updateMediaInfo;
+  exports.updateProgress = updateProgress;
+  var _asyncToGenerator2 = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[1], "@babel/runtime/helpers/asyncToGenerator"));
+  var _reactNative = _$$_REQUIRE(_dependencyMap[2], "react-native");
+  /**
+   * MediaInteraction - 车机媒体交互集成
+   * 直接调用车机的 IMediaInteraction API 同步媒体信息和封面
+   */
+
+  var MediaInteraction = _reactNative.NativeModules.MediaInteraction;
+  var isAvailable = !!MediaInteraction;
+
+  // 音源类型
+  var SourceType = exports.SourceType = {
+    LOCAL: 0,
+    USB: 1,
+    BT: 2,
+    FM: 3,
+    AM: 4,
+    AUX: 5,
+    ONLINE: 6,
+    USB2: 7,
+    STATION: 8,
+    NET_NEWS: 9,
+    NET_VIDEO: 10,
+    DAB: 11
+  };
+  /**
+   * 初始化媒体交互模块
+   */
+  function initialize() {
+    return _initialize.apply(this, arguments);
+  }
+  /**
+   * 更新媒体信息到车机系统
+   */
+  function _initialize() {
+    _initialize = (0, _asyncToGenerator2.default)(function* () {
+      if (!isAvailable) {
+        console.log('[MediaInteraction] Module not available');
+        return false;
+      }
+      try {
+        var result = yield MediaInteraction.initialize();
+        console.log('[MediaInteraction] Initialized:', result);
+        return result;
+      } catch (e) {
+        console.warn('[MediaInteraction] Init failed:', String(e).substring(0, 80));
+        return false;
+      }
+    });
+    return _initialize.apply(this, arguments);
+  }
+  function updateMediaInfo(_x) {
+    return _updateMediaInfo.apply(this, arguments);
+  }
+  /**
+   * 更新播放进度
+   */
+  function _updateMediaInfo() {
+    _updateMediaInfo = (0, _asyncToGenerator2.default)(function* (info) {
+      if (!isAvailable) return false;
+      try {
+        var _info$sourceType;
+        var result = yield MediaInteraction.updateMediaInfo(info.title || '', info.artist || '', info.album || '', info.artworkPath || '', info.duration || 0, info.playing || false, (_info$sourceType = info.sourceType) != null ? _info$sourceType : SourceType.ONLINE);
+        console.log('[MediaInteraction] Updated:', info.title);
+        return result;
+      } catch (e) {
+        console.warn('[MediaInteraction] Update failed:', String(e).substring(0, 80));
+        return false;
+      }
+    });
+    return _updateMediaInfo.apply(this, arguments);
+  }
+  function updateProgress(_x2) {
+    return _updateProgress.apply(this, arguments);
+  }
+  /**
+   * 释放媒体交互模块
+   */
+  function _updateProgress() {
+    _updateProgress = (0, _asyncToGenerator2.default)(function* (position) {
+      if (!isAvailable) return false;
+      try {
+        var result = yield MediaInteraction.updateProgress(position);
+        return result;
+      } catch (e) {
+        console.warn('[MediaInteraction] Progress update failed:', String(e).substring(0, 80));
+        return false;
+      }
+    });
+    return _updateProgress.apply(this, arguments);
+  }
+  function release() {
+    return _release.apply(this, arguments);
+  }
+  /**
+   * 检查模块是否可用
+   */
+  function _release() {
+    _release = (0, _asyncToGenerator2.default)(function* () {
+      if (!isAvailable) return false;
+      try {
+        var result = yield MediaInteraction.release();
+        console.log('[MediaInteraction] Released');
+        return result;
+      } catch (e) {
+        console.warn('[MediaInteraction] Release failed:', String(e).substring(0, 80));
+        return false;
+      }
+    });
+    return _release.apply(this, arguments);
+  }
+  function isMediaInteractionAvailable() {
+    return isAvailable;
+  }
+  var _default = exports.default = {
+    isAvailable: isAvailable,
+    initialize: initialize,
+    updateMediaInfo: updateMediaInfo,
+    updateProgress: updateProgress,
+    release: release,
+    isMediaInteractionAvailable: isMediaInteractionAvailable,
+    SourceType: SourceType
+  };
+},1468,[6,13,15],"src/plugins/mediainteraction/index.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -237853,7 +238100,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       return _ref.apply(this, arguments);
     };
   }();
-},1467,[6,13,695,989,983],"src/core/init/player/playInfo.ts");
+},1469,[6,13,695,989,983],"src/core/init/player/playInfo.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -237940,7 +238187,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       setButtons();
     });
   };
-},1468,[6,13,704,705],"src/core/init/player/playStatus.ts");
+},1470,[6,13,704,705],"src/core/init/player/playStatus.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -238070,7 +238317,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     global.app_event.on('playerError', handleError);
     global.app_event.on('musicToggled', handleSetPlayInfo);
   };
-},1469,[6,552,704,983,984,705,997,543],"src/core/init/player/playerEvent.ts");
+},1471,[6,552,704,983,984,705,997,543],"src/core/init/player/playerEvent.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -238112,7 +238359,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     global.app_event.on('myListMusicUpdate', handleListChange);
     global.app_event.on('downloadListUpdate', handleDownloadListChange);
   };
-},1470,[6,704,543,996,983],"src/core/init/player/watchList.ts");
+},1472,[6,704,543,996,983],"src/core/init/player/watchList.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -238280,7 +238527,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     global.state_event.on('configUpdated', handleConfigUpdated);
     (0, _$$_REQUIRE(_dependencyMap[12], "../../../utils/nativeModules/utils").onScreenStateChange)(handleScreenStateChanged);
   };
-},1471,[6,13,552,704,618,15,543,695,705,997,989,575,666],"src/core/init/player/playProgress.ts");
+},1473,[6,13,552,704,618,15,543,695,705,997,989,575,666],"src/core/init/player/playProgress.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -238366,7 +238613,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     global.state_event.on('configUpdated', handleConfigUpdated);
     global.state_event.on('playProgressChanged', handlePlayProgressChanged);
   };
-},1472,[6,7,13,704,983,985,706,551],"src/core/init/player/preloadNextMusic.ts");
+},1474,[6,7,13,704,983,985,706,551],"src/core/init/player/preloadNextMusic.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -238442,7 +238689,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       return _ref2.apply(this, arguments);
     };
   }();
-},1473,[6,13,704,996,706,1257,702,689],"src/core/init/player/lyric.ts");
+},1475,[6,13,704,996,706,1257,702,689],"src/core/init/player/lyric.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -238481,7 +238728,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       return _ref.apply(this, arguments);
     };
   }();
-},1474,[6,13,548,1458,989,1005,689,695,667,543],"src/core/init/dataInit.ts");
+},1476,[6,13,548,1458,989,1005,689,695,667,543],"src/core/init/dataInit.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -238506,7 +238753,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       return _ref.apply(this, arguments);
     };
   }();
-},1475,[6,13,1323,689,1304],"src/core/init/sync.ts");
+},1477,[6,13,1323,689,1304],"src/core/init/sync.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -238586,7 +238833,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       return _ref.apply(this, arguments);
     };
   }();
-},1476,[6,13,704,1048,689],"src/core/init/common.ts");
+},1478,[6,13,704,1048,689],"src/core/init/common.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -238706,6 +238953,6 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     isAvailable: isAvailable,
     getExternalPaths: getExternalPaths
   };
-},1477,[6,13,15,543,994,989],"src/plugins/usb/index.ts");
+},1479,[6,13,15,543,994,989],"src/plugins/usb/index.ts");
 __r(69);
 __r(0);
