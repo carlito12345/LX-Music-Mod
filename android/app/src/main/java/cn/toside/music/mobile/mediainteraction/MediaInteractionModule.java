@@ -52,7 +52,8 @@ public class MediaInteractionModule extends ReactContextBaseJavaModule {
             Context context = getReactApplicationContext();
             
             // 创建封面缓存目录
-            artworkCacheDir = new File(context.getCacheDir(), "artwork");
+            // 使用共享目录保存封面,以便车机系统可以访问
+            artworkCacheDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "LXMusic_Artwork");
             if (!artworkCacheDir.exists()) {
                 artworkCacheDir.mkdirs();
             }
@@ -205,34 +206,48 @@ public class MediaInteractionModule extends ReactContextBaseJavaModule {
         }
     }
 
-    private Uri downloadArtwork(String url) {
-        try {
-            // 使用简单的 HTTP 下载
-            java.net.URL imageUrl = new java.net.URL(url);
-            java.net.HttpURLConnection connection = (java.net.HttpURLConnection) imageUrl.openConnection();
-            connection.setDoInput(true);
-            connection.connect();
-            java.io.InputStream input = connection.getInputStream();
-            android.graphics.Bitmap bitmap = android.graphics.BitmapFactory.decodeStream(input);
-            input.close();
-            connection.disconnect();
+    private Uri downloadArtwork(final String url) {
+        final Uri[] result = new Uri[1];
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    // 使用简单的 HTTP 下载
+                    java.net.URL imageUrl = new java.net.URL(url);
+                    java.net.HttpURLConnection connection = (java.net.HttpURLConnection) imageUrl.openConnection();
+                    connection.setDoInput(true);
+                    connection.setConnectTimeout(5000);
+                    connection.setReadTimeout(5000);
+                    connection.connect();
+                    java.io.InputStream input = connection.getInputStream();
+                    android.graphics.Bitmap bitmap = android.graphics.BitmapFactory.decodeStream(input);
+                    input.close();
+                    connection.disconnect();
 
-            if (bitmap != null) {
-                // 保存到本地文件
-                String filename = "artwork_" + System.currentTimeMillis() + ".jpg";
-                java.io.File artworkFile = new java.io.File(artworkCacheDir, filename);
-                java.io.FileOutputStream fos = new java.io.FileOutputStream(artworkFile);
-                bitmap.compress(android.graphics.Bitmap.CompressFormat.JPEG, 90, fos);
-                fos.close();
-                
-                Uri artworkUri = Uri.fromFile(artworkFile);
-                Log.d(TAG, "Artwork downloaded: " + artworkUri);
-                return artworkUri;
+                    if (bitmap != null) {
+                        // 保存到共享目录
+                        String filename = "artwork_" + System.currentTimeMillis() + ".jpg";
+                        java.io.File artworkFile = new java.io.File(artworkCacheDir, filename);
+                        java.io.FileOutputStream fos = new java.io.FileOutputStream(artworkFile);
+                        bitmap.compress(android.graphics.Bitmap.CompressFormat.JPEG, 90, fos);
+                        fos.close();
+                        
+                        Uri artworkUri = Uri.fromFile(artworkFile);
+                        Log.d(TAG, "Artwork downloaded: " + artworkUri);
+                        result[0] = artworkUri;
+                    }
+                } catch (Exception e) {
+                    Log.e(TAG, "Failed to download artwork", e);
+                }
             }
-        } catch (Exception e) {
-            Log.e(TAG, "Failed to download artwork", e);
+        });
+        thread.start();
+        try {
+            thread.join(3000); // 最多等待3秒
+        } catch (InterruptedException e) {
+            Log.e(TAG, "Download interrupted", e);
         }
-        return null;
+        return result[0];
     }
 
     @ReactMethod

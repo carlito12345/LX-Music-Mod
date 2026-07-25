@@ -43,7 +43,7 @@ public class CarKeyAccessibilityService extends AccessibilityService {
       String action = mapToAction(keyCode);
       if (action != null) {
         Log.d(TAG, "Key captured: " + keyCode + " -> " + action);
-        CarKeyBridge.sendKeyEvent(keyCode, action);
+        CarKeyBridge.sendKeyEvent(keyCode, action, "AccessibilityService");
         return true; // 消费按键,防止传给其他应用
       }
     }

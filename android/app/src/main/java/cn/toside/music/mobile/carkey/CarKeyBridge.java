@@ -15,7 +15,7 @@ public class CarKeyBridge {
     reactContext = ctx;
   }
 
-  public static void sendKeyEvent(int keyCode, String action) {
+  public static void sendKeyEvent(int keyCode, String action, String source) {
     if (reactContext != null && reactContext.hasActiveReactInstance()) {
       WritableMap params = Arguments.createMap();
       params.putInt("keyCode", keyCode);

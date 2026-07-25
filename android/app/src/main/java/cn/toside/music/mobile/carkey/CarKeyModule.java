@@ -24,6 +24,7 @@ public class CarKeyModule extends ReactContextBaseJavaModule {
   private static final String TAG = "CarKey";
   private static long lastKeyTime = 0;
   private static int lastKeyCode = -1;
+  private static String lastKeySource = "";
   private final ReactApplicationContext reactContext;
   private boolean isListening = false;
 
@@ -89,23 +90,24 @@ public class CarKeyModule extends ReactContextBaseJavaModule {
       if (Intent.ACTION_MEDIA_BUTTON.equals(intent.getAction())) {
         KeyEvent event = intent.getParcelableExtra(Intent.EXTRA_KEY_EVENT);
         if (event != null && event.getAction() == KeyEvent.ACTION_DOWN) {
-          handleKeyEvent(event.getKeyCode());
+          handleKeyEvent(event.getKeyCode(), "BroadcastReceiver");
         }
       }
     }
   };
 
-  private void handleKeyEvent(int keyCode) {
-    Log.d(TAG, "handleKeyEvent: keyCode=" + keyCode);
+  private void handleKeyEvent(int keyCode, String source) {
+    Log.d(TAG, "handleKeyEvent: keyCode=" + keyCode + " from=" + source);
     
-    // 防止重复按键事件(200ms内相同键值忽略)
+    // 防止重复按键事件(200ms内相同键值和来源忽略)
     long now = System.currentTimeMillis();
-    if (keyCode == lastKeyCode && (now - lastKeyTime) < 200) {
+    if (keyCode == lastKeyCode && source.equals(lastKeySource) && (now - lastKeyTime) < 300) {
       Log.d(TAG, "Duplicate key event ignored");
       return;
     }
     lastKeyCode = keyCode;
     lastKeyTime = now;
+    lastKeySource = source;
     WritableMap params = Arguments.createMap();
     params.putInt("keyCode", keyCode);
     

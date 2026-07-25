@@ -137,6 +137,6 @@ public class GeelyCarKeyManager {
       case KeyCode.KEYCODE_R_VOLUME_DOWN: action = "volumeDown"; break;
       default: return;
     }
-    CarKeyBridge.sendKeyEvent(keyCode, action);
+    CarKeyBridge.sendKeyEvent(keyCode, action, "GeelyCarKeyManager");
   }
 }
