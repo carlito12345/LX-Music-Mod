@@ -7,10 +7,21 @@ import Text from '@/components/common/Text'
 import { updateSetting } from '@/core/common'
 
 const BG_TYPES = [
-  { id: 'theme', label: '跟随主题' },
+  { id: 'solid', label: '纯色' },
   { id: 'follow', label: '封面主色' },
   { id: 'blur', label: '封面模糊' },
   { id: 'wallpaper', label: '星云壁纸' },
+] as const
+
+const SOLID_COLORS = [
+  { label: '深蓝', value: '#1a1a2e' },
+  { label: '深空黑', value: '#0d1117' },
+  { label: '暗夜紫', value: '#1a0d2e' },
+  { label: '墨绿', value: '#0d2818' },
+  { label: '酒红', value: '#2e0d1a' },
+  { label: '深灰', value: '#1c1c1c' },
+  { label: '午夜蓝', value: '#0d1b2a' },
+  { label: '炭黑', value: '#121212' },
 ] as const
 
 const WALLPAPER_COLORS = [
@@ -30,6 +41,7 @@ export default memo(() => {
   const followCover = useSettingValue('playDetail.background.followCover')
   const wallpaperEnabled = useSettingValue('playDetail.effect.wallpaper.enabled')
   const wallpaperColor = useSettingValue('playDetail.effect.wallpaper.color')
+  const solidColor = useSettingValue('playDetail.background.solidColor')
 
   const activeMode = wallpaperEnabled ? 'wallpaper'
     : bgType === 'solid' && followCover ? 'follow' : bgType
@@ -43,6 +55,11 @@ export default memo(() => {
         updateSetting({
           'playDetail.background.type': 'solid',
           'playDetail.background.followCover': true,
+        })
+      } else if (mode === 'solid') {
+        updateSetting({
+          'playDetail.background.type': 'solid',
+          'playDetail.background.followCover': false,
         })
       } else {
         updateSetting({
@@ -84,6 +101,23 @@ export default memo(() => {
                 style={[styles.colorDot, { backgroundColor: c.value === 'gradient' ? '#000' : c.value }, wallpaperColor === c.value && styles.colorDotActive]}
                 onPress={() => updateSetting({ 'playDetail.effect.wallpaper.color': c.value } as any)}
               />
+            ))}
+          </View>
+        </>
+      )}
+
+      {activeMode === 'solid' && (
+        <>
+          <Text size={13} color={theme['c-font-label']} style={{ marginBottom: 6, marginTop: 8 }}>纯色背景</Text>
+          <View style={styles.row}>
+            {SOLID_COLORS.map(c => (
+              <TouchableOpacity
+                key={c.value}
+                style={[styles.colorDot, { backgroundColor: c.value }, solidColor === c.value && styles.colorDotActive]}
+                onPress={() => updateSetting({ 'playDetail.background.solidColor': c.value } as any)}
+              >
+                <Text size={10} color="#fff" style={{ textAlign: 'center', lineHeight: 24 }}>{c.label}</Text>
+              </TouchableOpacity>
             ))}
           </View>
         </>
