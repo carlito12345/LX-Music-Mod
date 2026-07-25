@@ -21,6 +21,7 @@ import com.facebook.react.bridge.Promise;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 
 public class CarKeyModule extends ReactContextBaseJavaModule {
+  private static final String TAG = "CarKey";
   private final ReactApplicationContext reactContext;
   private boolean isListening = false;
 
@@ -93,6 +94,7 @@ public class CarKeyModule extends ReactContextBaseJavaModule {
   };
 
   private void handleKeyEvent(int keyCode) {
+    Log.d(TAG, "handleKeyEvent: keyCode=" + keyCode);
     WritableMap params = Arguments.createMap();
     params.putInt("keyCode", keyCode);
     
@@ -127,6 +129,7 @@ public class CarKeyModule extends ReactContextBaseJavaModule {
       // KEYCODE_HEADSETHOOK(79), KEYCODE_MEDIA_PLAY(126), KEYCODE_MEDIA_PAUSE(127)
       keyCode = android.view.KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE;
     }
+    Log.d(TAG, "Mapped keyCode: " + keyCode);
     switch (keyCode) {
       case android.view.KeyEvent.KEYCODE_MEDIA_NEXT:
               params.putString("action", "next");

@@ -57,11 +57,13 @@ public class MediaInteractionModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void updateMediaInfo(String title, String artist, String album, String artworkPath, double duration, boolean playing, int sourceType, Promise promise) {
+        Log.d(TAG, "updateMediaInfo: title=" + title + ", artist=" + artist + ", artworkPath=" + artworkPath + ", playing=" + playing);
         try {
             this.currentTitle = title != null ? title : "";
             this.currentArtist = artist != null ? artist : "";
             this.currentAlbum = album != null ? album : "";
             this.currentArtwork = artworkPath != null && !artworkPath.isEmpty() ? Uri.parse(artworkPath) : null;
+            Log.d(TAG, "Parsed artwork URI: " + this.currentArtwork);
             this.currentDuration = (long) duration;
             this.isPlaying = playing;
             this.sourceType = sourceType;
