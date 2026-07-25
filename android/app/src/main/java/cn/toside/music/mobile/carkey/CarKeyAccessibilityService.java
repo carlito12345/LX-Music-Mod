@@ -38,6 +38,11 @@ public class CarKeyAccessibilityService extends AccessibilityService {
 
   @Override
   protected boolean onKeyEvent(KeyEvent event) {
+    // Geely OneOS API 已连接时,不处理按键(避免双重触发)
+    if (GeelyCarKeyManager.isInstanceConnected()) {
+      return false;
+    }
+    
     if (event.getAction() == KeyEvent.ACTION_DOWN) {
       int keyCode = event.getKeyCode();
       String action = mapToAction(keyCode);

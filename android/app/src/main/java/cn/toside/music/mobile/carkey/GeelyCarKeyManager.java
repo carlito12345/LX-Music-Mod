@@ -105,6 +105,7 @@ public class GeelyCarKeyManager {
   }
 
   public boolean isConnected() { return connected; }
+  public static boolean isInstanceConnected() { return instance != null && instance.connected; }
   public String getLastError() { return lastError; }
 
   private final KeyInputManager.BaseInputListener inputListener = new KeyInputManager.BaseInputListener() {
