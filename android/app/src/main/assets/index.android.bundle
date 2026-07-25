@@ -237848,6 +237848,9 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
 
         // 根据音乐来源确定 sourceType
         var sourceType = musicInfo.source === 'local' ? _mediainteraction.SourceType.LOCAL : _mediainteraction.SourceType.ONLINE;
+
+        // 原生模块会处理网络图片下载
+
         yield _mediainteraction.default.updateMediaInfo({
           title: title,
           artist: artist,
@@ -237874,6 +237877,9 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
         var duration = musicInfo.interval || 0;
         var isPlaying = _state.default.isPlay;
         var sourceType = musicInfo.source === 'local' ? _mediainteraction.SourceType.LOCAL : _mediainteraction.SourceType.ONLINE;
+
+        // 原生模块会处理网络图片下载
+
         yield _mediainteraction.default.updateMediaInfo({
           title: title,
           artist: artist,

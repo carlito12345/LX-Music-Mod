@@ -1,6 +1,13 @@
 package cn.toside.music.mobile.mediainteraction;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.media.MediaMetadata;
+import android.media.session.MediaController;
+import android.media.session.MediaSessionManager;
+import android.media.session.PlaybackState;
 import android.net.Uri;
+import android.os.Environment;
 import android.util.Log;
 
 import com.ecarx.xui.adaptapi.diminteraction.DimInteraction;
@@ -10,10 +17,16 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.util.List;
+
 public class MediaInteractionModule extends ReactContextBaseJavaModule {
     private static final String TAG = "MediaInteraction";
     private DimInteraction mDimInteraction;
     private IMediaInteraction mMediaInteraction;
+    private MediaSessionManager mMediaSessionManager;
+    private android.content.ComponentName mComponentName;
     private String currentTitle = "";
     private String currentArtist = "";
     private String currentAlbum = "";
@@ -22,6 +35,7 @@ public class MediaInteractionModule extends ReactContextBaseJavaModule {
     private long currentPosition = 0;
     private boolean isPlaying = false;
     private int sourceType = IMediaInteraction.SOURCE_TYPE_ONLINE;
+    private File artworkCacheDir;
 
     public MediaInteractionModule(ReactApplicationContext reactContext) {
         super(reactContext);
@@ -35,11 +49,24 @@ public class MediaInteractionModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void initialize(Promise promise) {
         try {
-            mDimInteraction = DimInteraction.create(getReactApplicationContext());
+            Context context = getReactApplicationContext();
+            
+            // 创建封面缓存目录
+            artworkCacheDir = new File(context.getCacheDir(), "artwork");
+            if (!artworkCacheDir.exists()) {
+                artworkCacheDir.mkdirs();
+            }
+
+            // 初始化 DimInteraction
+            mDimInteraction = DimInteraction.create(context);
             if (mDimInteraction != null) {
                 mMediaInteraction = mDimInteraction.getMediaInteraction();
                 if (mMediaInteraction != null) {
                     Log.d(TAG, "MediaInteraction initialized successfully");
+                    
+                    // 初始化 MediaSessionManager
+                    initMediaSessionManager();
+                    
                     promise.resolve(true);
                 } else {
                     Log.w(TAG, "MediaInteraction is null");
@@ -55,18 +82,36 @@ public class MediaInteractionModule extends ReactContextBaseJavaModule {
         }
     }
 
+    private void initMediaSessionManager() {
+        try {
+            Context context = getReactApplicationContext();
+            mMediaSessionManager = (MediaSessionManager) context.getSystemService(Context.MEDIA_SESSION_SERVICE);
+            mComponentName = new android.content.ComponentName(context, MediaInteractionNotificationService.class);
+            Log.d(TAG, "MediaSessionManager initialized");
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to initialize MediaSessionManager", e);
+        }
+    }
+
     @ReactMethod
     public void updateMediaInfo(String title, String artist, String album, String artworkPath, double duration, boolean playing, int sourceType, Promise promise) {
-        Log.d(TAG, "updateMediaInfo: title=" + title + ", artist=" + artist + ", artworkPath=" + artworkPath + ", playing=" + playing);
         try {
             this.currentTitle = title != null ? title : "";
             this.currentArtist = artist != null ? artist : "";
             this.currentAlbum = album != null ? album : "";
-            this.currentArtwork = artworkPath != null && !artworkPath.isEmpty() ? Uri.parse(artworkPath) : null;
-            Log.d(TAG, "Parsed artwork URI: " + this.currentArtwork);
             this.currentDuration = (long) duration;
             this.isPlaying = playing;
             this.sourceType = sourceType;
+
+            // 处理封面路径:如果是网络URL,下载到本地
+            this.currentArtwork = null;
+            if (artworkPath != null && !artworkPath.isEmpty()) {
+                if (artworkPath.startsWith("http://") || artworkPath.startsWith("https://")) {
+                    this.currentArtwork = downloadArtwork(artworkPath);
+                } else {
+                    this.currentArtwork = Uri.parse(artworkPath);
+                }
+            }
 
             if (mMediaInteraction != null) {
                 mMediaInteraction.updatePlaybackInfo(new IMediaInteraction.IPlaybackInfo() {
@@ -160,6 +205,36 @@ public class MediaInteractionModule extends ReactContextBaseJavaModule {
         }
     }
 
+    private Uri downloadArtwork(String url) {
+        try {
+            // 使用简单的 HTTP 下载
+            java.net.URL imageUrl = new java.net.URL(url);
+            java.net.HttpURLConnection connection = (java.net.HttpURLConnection) imageUrl.openConnection();
+            connection.setDoInput(true);
+            connection.connect();
+            java.io.InputStream input = connection.getInputStream();
+            android.graphics.Bitmap bitmap = android.graphics.BitmapFactory.decodeStream(input);
+            input.close();
+            connection.disconnect();
+
+            if (bitmap != null) {
+                // 保存到本地文件
+                String filename = "artwork_" + System.currentTimeMillis() + ".jpg";
+                java.io.File artworkFile = new java.io.File(artworkCacheDir, filename);
+                java.io.FileOutputStream fos = new java.io.FileOutputStream(artworkFile);
+                bitmap.compress(android.graphics.Bitmap.CompressFormat.JPEG, 90, fos);
+                fos.close();
+                
+                Uri artworkUri = Uri.fromFile(artworkFile);
+                Log.d(TAG, "Artwork downloaded: " + artworkUri);
+                return artworkUri;
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to download artwork", e);
+        }
+        return null;
+    }
+
     @ReactMethod
     public void release(Promise promise) {
         try {
@@ -172,6 +247,35 @@ public class MediaInteractionModule extends ReactContextBaseJavaModule {
         } catch (Exception e) {
             Log.e(TAG, "Failed to release MediaInteraction", e);
             promise.reject("RELEASE_ERROR", e.getMessage());
+        }
+    }
+
+    // 从 MediaSession 提取封面并保存到本地文件
+    private Uri extractAndSaveArtwork(MediaMetadata metadata, String trackId) {
+        try {
+            // 尝试获取封面 Bitmap
+            Bitmap artBitmap = metadata.getBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART);
+            if (artBitmap == null) {
+                artBitmap = metadata.getBitmap(MediaMetadata.METADATA_KEY_ART);
+            }
+            
+            if (artBitmap == null) {
+                Log.d(TAG, "No artwork bitmap found");
+                return null;
+            }
+
+            // 保存到本地文件
+            File artworkFile = new File(artworkCacheDir, trackId + ".jpg");
+            FileOutputStream fos = new FileOutputStream(artworkFile);
+            artBitmap.compress(Bitmap.CompressFormat.JPEG, 90, fos);
+            fos.close();
+            
+            Uri artworkUri = Uri.fromFile(artworkFile);
+            Log.d(TAG, "Artwork saved: " + artworkUri);
+            return artworkUri;
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to save artwork", e);
+            return null;
         }
     }
 }

@@ -1,6 +1,7 @@
 import playerState from '@/store/player/state'
 import mediaInteraction, { SourceType } from '@/plugins/mediainteraction'
 
+
 let initialized = false
 let lastMusicId = ''
 
@@ -27,12 +28,16 @@ export default async() => {
     const title = musicInfo.name || ''
     const artist = musicInfo.singer || ''
     const album = musicInfo.albumName || ''
-    const artworkPath = musicInfo.pic || ''
+    let artworkPath = musicInfo.pic || ''
     const duration = musicInfo.interval || 0
     const isPlaying = playerState.isPlay
 
     // 根据音乐来源确定 sourceType
     const sourceType = musicInfo.source === 'local' ? SourceType.LOCAL : SourceType.ONLINE
+
+    // 原生模块会处理网络图片下载
+
+
 
     await mediaInteraction.updateMediaInfo({
       title,
@@ -54,10 +59,12 @@ export default async() => {
     const title = musicInfo.name || ''
     const artist = musicInfo.singer || ''
     const album = musicInfo.albumName || ''
-    const artworkPath = musicInfo.pic || ''
+    let artworkPath = musicInfo.pic || ''
     const duration = musicInfo.interval || 0
     const isPlaying = playerState.isPlay
     const sourceType = musicInfo.source === 'local' ? SourceType.LOCAL : SourceType.ONLINE
+
+    // 原生模块会处理网络图片下载
 
     await mediaInteraction.updateMediaInfo({
       title,
