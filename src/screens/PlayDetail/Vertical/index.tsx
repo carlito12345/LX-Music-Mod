@@ -122,16 +122,6 @@ export default memo(({ componentId }: { componentId: string }) => {
           return '#' + [r,g,b].map(x => x.toString(16).padStart(2,'0')).join('')
         }
       }
-      // 如果是 rgba 格式,提取 rgb 部分
-      if (themeBg.startsWith('rgba')) {
-        const match = themeBg.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/)
-        if (match) {
-          const r = parseInt(match[1])
-          const g = parseInt(match[2])
-          const b = parseInt(match[3])
-          return '#' + [r,g,b].map(x => x.toString(16).padStart(2,'0')).join('')
-        }
-      }
       return themeBg
     }
     // 默认使用深色

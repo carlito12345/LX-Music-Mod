@@ -227028,18 +227028,6 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
             }).join('');
           }
         }
-        // 如果是 rgba 格式,提取 rgb 部分
-        if (themeBg.startsWith('rgba')) {
-          var _match = themeBg.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
-          if (_match) {
-            var _r = parseInt(_match[1]);
-            var _g = parseInt(_match[2]);
-            var _b = parseInt(_match[3]);
-            return '#' + [_r, _g, _b].map(function (x) {
-              return x.toString(16).padStart(2, '0');
-            }).join('');
-          }
-        }
         return themeBg;
       }
       // 默认使用深色
@@ -227746,8 +227734,8 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   var _this = this,
     _jsxFileName = "/data/data/com.termux/files/home/lx-music-mobile/src/screens/PlayDetail/components/SettingPopup/settings/SettingBackground.tsx";
   var BG_TYPES = [{
-    id: 'solid',
-    label: '纯色'
+    id: 'theme',
+    label: '跟随主题'
   }, {
     id: 'follow',
     label: '封面主色'
@@ -227757,31 +227745,6 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   }, {
     id: 'wallpaper',
     label: '星云壁纸'
-  }];
-  var SOLID_COLORS = [{
-    label: '深蓝',
-    value: '#1a1a2e'
-  }, {
-    label: '深空黑',
-    value: '#0d1117'
-  }, {
-    label: '暗夜紫',
-    value: '#1a0d2e'
-  }, {
-    label: '墨绿',
-    value: '#0d2818'
-  }, {
-    label: '酒红',
-    value: '#2e0d1a'
-  }, {
-    label: '深灰',
-    value: '#1c1c1c'
-  }, {
-    label: '午夜蓝',
-    value: '#0d1b2a'
-  }, {
-    label: '炭黑',
-    value: '#121212'
   }];
   var WALLPAPER_COLORS = [{
     label: '主题色',
@@ -227814,7 +227777,6 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     var followCover = (0, _$$_REQUIRE(_dependencyMap[6], "../../../../../store/setting/hook").useSettingValue)('playDetail.background.followCover');
     var wallpaperEnabled = (0, _$$_REQUIRE(_dependencyMap[6], "../../../../../store/setting/hook").useSettingValue)('playDetail.effect.wallpaper.enabled');
     var wallpaperColor = (0, _$$_REQUIRE(_dependencyMap[6], "../../../../../store/setting/hook").useSettingValue)('playDetail.effect.wallpaper.color');
-    var solidColor = (0, _$$_REQUIRE(_dependencyMap[6], "../../../../../store/setting/hook").useSettingValue)('playDetail.background.solidColor');
     var activeMode = wallpaperEnabled ? 'wallpaper' : bgType === 'solid' && followCover ? 'follow' : bgType;
     var handleTypeChange = (0, _react.useCallback)(function (mode) {
       if (mode === 'wallpaper') {
@@ -227829,11 +227791,6 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
           (0, _$$_REQUIRE(_dependencyMap[7], "../../../../../core/common").updateSetting)({
             'playDetail.background.type': 'solid',
             'playDetail.background.followCover': true
-          });
-        } else if (mode === 'solid') {
-          (0, _$$_REQUIRE(_dependencyMap[7], "../../../../../core/common").updateSetting)({
-            'playDetail.background.type': 'solid',
-            'playDetail.background.followCover': false
           });
         } else {
           (0, _$$_REQUIRE(_dependencyMap[7], "../../../../../core/common").updateSetting)({
@@ -227904,39 +227861,6 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
               }
             }, c.value);
           })]
-        })]
-      }), activeMode === 'solid' && /*#__PURE__*/(0, _jsxRuntime.jsxs)(_jsxRuntime.Fragment, {
-        children: [/*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
-          size: 13,
-          color: theme['c-font-label'],
-          style: {
-            marginBottom: 6,
-            marginTop: 8
-          },
-          children: "\u7EAF\u8272\u80CC\u666F"
-        }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.View, {
-          style: styles.row,
-          children: SOLID_COLORS.map(function (c) {
-            return /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.TouchableOpacity, {
-              style: [styles.colorDot, {
-                backgroundColor: c.value
-              }, solidColor === c.value && styles.colorDotActive],
-              onPress: function onPress() {
-                return (0, _$$_REQUIRE(_dependencyMap[7], "../../../../../core/common").updateSetting)({
-                  'playDetail.background.solidColor': c.value
-                });
-              },
-              children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
-                size: 10,
-                color: "#fff",
-                style: {
-                  textAlign: 'center',
-                  lineHeight: 24
-                },
-                children: c.label
-              })
-            }, c.value);
-          })
         })]
       })]
     });
