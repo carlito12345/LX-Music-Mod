@@ -7,7 +7,7 @@ import Text from '@/components/common/Text'
 import { updateSetting } from '@/core/common'
 
 const BG_TYPES = [
-  { id: 'solid', label: '纯色' },
+  { id: 'theme', label: '跟随主题' },
   { id: 'follow', label: '封面主色' },
   { id: 'blur', label: '封面模糊' },
   { id: 'wallpaper', label: '星云壁纸' },
@@ -55,11 +55,6 @@ export default memo(() => {
         updateSetting({
           'playDetail.background.type': 'solid',
           'playDetail.background.followCover': true,
-        })
-      } else if (mode === 'solid') {
-        updateSetting({
-          'playDetail.background.type': 'solid',
-          'playDetail.background.followCover': false,
         })
       } else {
         updateSetting({
