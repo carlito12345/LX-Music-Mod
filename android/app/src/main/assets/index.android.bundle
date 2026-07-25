@@ -161043,6 +161043,14 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       setting['sync.enable'] = (_setting$sync = setting.sync) == null ? void 0 : _setting$sync.enable;
       setting['theme.id'] = setting.themeId;
     }
+
+    // 迁移:移除跟随主题模式,改为纯色
+    if (setting['playDetail.background.type'] === 'theme') {
+      setting['playDetail.background.type'] = 'solid';
+      if (!setting['playDetail.background.solidColor'] || setting['playDetail.background.solidColor'] === '#000000') {
+        setting['playDetail.background.solidColor'] = '#1a1a2e';
+      }
+    }
     return setting;
   };
 },692,[572],"src/config/migrateSetting.ts");
