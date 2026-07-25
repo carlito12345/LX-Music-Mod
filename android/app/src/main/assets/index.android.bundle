@@ -227028,6 +227028,18 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
             }).join('');
           }
         }
+        // 如果是 rgba 格式,提取 rgb 部分
+        if (themeBg.startsWith('rgba')) {
+          var _match = themeBg.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+          if (_match) {
+            var _r = parseInt(_match[1]);
+            var _g = parseInt(_match[2]);
+            var _b = parseInt(_match[3]);
+            return '#' + [_r, _g, _b].map(function (x) {
+              return x.toString(16).padStart(2, '0');
+            }).join('');
+          }
+        }
         return themeBg;
       }
       // 默认使用深色
