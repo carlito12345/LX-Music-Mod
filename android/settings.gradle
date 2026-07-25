@@ -1,4 +1,8 @@
 rootProject.name = 'cn.toside.music.mobile'
 apply from: file("../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesSettingsGradle(settings)
 include ':app'
+include ':adaptapi'
+include ':com_geely'
+include ':ecarx_car'
+include ':ecarx_fw'
 includeBuild('../node_modules/@react-native/gradle-plugin')
