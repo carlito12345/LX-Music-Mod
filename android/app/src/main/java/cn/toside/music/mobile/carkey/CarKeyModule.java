@@ -22,6 +22,8 @@ import com.facebook.react.modules.core.DeviceEventManagerModule;
 
 public class CarKeyModule extends ReactContextBaseJavaModule {
   private static final String TAG = "CarKey";
+  private static long lastKeyTime = 0;
+  private static int lastKeyCode = -1;
   private final ReactApplicationContext reactContext;
   private boolean isListening = false;
 
@@ -95,6 +97,15 @@ public class CarKeyModule extends ReactContextBaseJavaModule {
 
   private void handleKeyEvent(int keyCode) {
     Log.d(TAG, "handleKeyEvent: keyCode=" + keyCode);
+    
+    // 防止重复按键事件(200ms内相同键值忽略)
+    long now = System.currentTimeMillis();
+    if (keyCode == lastKeyCode && (now - lastKeyTime) < 200) {
+      Log.d(TAG, "Duplicate key event ignored");
+      return;
+    }
+    lastKeyCode = keyCode;
+    lastKeyTime = now;
     WritableMap params = Arguments.createMap();
     params.putInt("keyCode", keyCode);
     

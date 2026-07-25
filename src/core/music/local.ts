@@ -75,17 +75,22 @@ export const getMusicUrl = async({ musicInfo, isRefresh, allowToggleSource = tru
 
   // 本地文件保护:有文件路径就直接播放,不搜索网络
   if (filePath && !isRefresh) {
+    // 先尝试检查文件是否存在
     try {
       const path = await getLocalFilePath(musicInfo)
       if (path) return path
-    } catch {}
+    } catch (e) {
+      console.log('[LocalMusic] File check failed:', String(e).substring(0, 50))
+    }
 
     // existsFile 失败或返回空,但路径有效就直接返回
-    if (filePath.startsWith('/storage/') || filePath.startsWith('/data/') || filePath.startsWith('/sdcard/')) {
+    if (filePath.startsWith('/storage/') || filePath.startsWith('/data/') || filePath.startsWith('/sdcard/') || filePath.startsWith('/')) {
+      console.log('[LocalMusic] Using file path directly:', filePath)
       return filePath
     }
 
     // 路径无效或文件不存在,直接报错
+    console.error('[LocalMusic] Invalid file path:', filePath)
     throw new Error('local file not accessible: ' + filePath)
   }
 

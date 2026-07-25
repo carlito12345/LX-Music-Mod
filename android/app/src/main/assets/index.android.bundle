@@ -181604,17 +181604,22 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
 
       // 本地文件保护:有文件路径就直接播放,不搜索网络
       if (filePath && !isRefresh) {
+        // 先尝试检查文件是否存在
         try {
           var path = yield (0, _$$_REQUIRE(_dependencyMap[6], "../../utils/music").getLocalFilePath)(musicInfo);
           if (path) return path;
-        } catch (_unused6) {}
+        } catch (e) {
+          console.log('[LocalMusic] File check failed:', String(e).substring(0, 50));
+        }
 
         // existsFile 失败或返回空,但路径有效就直接返回
-        if (filePath.startsWith('/storage/') || filePath.startsWith('/data/') || filePath.startsWith('/sdcard/')) {
+        if (filePath.startsWith('/storage/') || filePath.startsWith('/data/') || filePath.startsWith('/sdcard/') || filePath.startsWith('/')) {
+          console.log('[LocalMusic] Using file path directly:', filePath);
           return filePath;
         }
 
         // 路径无效或文件不存在,直接报错
+        console.error('[LocalMusic] Invalid file path:', filePath);
         throw new Error('local file not accessible: ' + filePath);
       }
 
@@ -181627,7 +181632,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
           if (!isFromCache) void (0, _$$_REQUIRE(_dependencyMap[7], "../../utils/data").saveMusicUrl)(musicInfo, quality, url);
           return url;
         });
-      } catch (_unused7) {}
+      } catch (_unused6) {}
       if (!allowToggleSource) throw new Error('failed');
       onToggleSource();
       return getOtherSourceByLocal(musicInfo, /*#__PURE__*/function () {
@@ -181671,7 +181676,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
             if (pic.startsWith('/')) pic = `file://${pic}`;
             return pic;
           }
-        } catch (_unused8) {}
+        } catch (_unused7) {}
         if (musicInfo.meta.picUrl) return musicInfo.meta.picUrl;
       }
 
@@ -181681,7 +181686,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
           var url = _ref9.url;
           return url;
         });
-      } catch (_unused9) {}
+      } catch (_unused8) {}
       onToggleSource();
       try {
         return yield getOtherSourceByLocal(musicInfo, /*#__PURE__*/function () {
@@ -181708,7 +181713,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
             return _ref0.apply(this, arguments);
           };
         }());
-      } catch (_unused0) {
+      } catch (_unused9) {
         return '';
       }
     });
@@ -181728,7 +181733,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
         try {
           var rawlrcInfo = yield getMusicFileLyric(musicInfo.meta.filePath);
           if (rawlrcInfo) return (0, _$$_REQUIRE(_dependencyMap[4], "./utils").buildLyricInfo)(rawlrcInfo);
-        } catch (_unused1) {}
+        } catch (_unused0) {}
         var lyricInfo = yield (0, _$$_REQUIRE(_dependencyMap[4], "./utils").getCachedLyricInfo)(musicInfo);
         if (lyricInfo != null && lyricInfo.lyric) return (0, _$$_REQUIRE(_dependencyMap[4], "./utils").buildLyricInfo)(lyricInfo);
       }
@@ -181741,7 +181746,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
           if (!isFromCache) void (0, _$$_REQUIRE(_dependencyMap[7], "../../utils/data").saveLyric)(musicInfo, lyricInfo);
           return (0, _$$_REQUIRE(_dependencyMap[4], "./utils").buildLyricInfo)(lyricInfo);
         });
-      } catch (_unused10) {}
+      } catch (_unused1) {}
       onToggleSource();
       try {
         return yield getOtherSourceByLocal(musicInfo, /*#__PURE__*/function () {
@@ -181769,7 +181774,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
             return _ref13.apply(this, arguments);
           };
         }());
-      } catch (_unused11) {
+      } catch (_unused10) {
         return (0, _$$_REQUIRE(_dependencyMap[4], "./utils").buildLyricInfo)({});
       }
     });
