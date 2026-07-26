@@ -67,15 +67,16 @@ public class MiniPlayerView {
       layoutFlag = WindowManager.LayoutParams.TYPE_PHONE;
     }
 
-    float density = reactContext.getResources().getDisplayMetrics().density;
-    int width = (int) (600 * density); // 600dp = 1200px @2x
-    int height = (int) (200 * density); // 200dp = 400px @2x
-    int densityDp = (int) density;
+    int densityDp = (int) reactContext.getResources().getDisplayMetrics().density;
+    int width = (int) ((isVertical ? VERTICAL_WIDTH_DP : MINI_WIDTH_DP) * reactContext.getResources().getDisplayMetrics().density);
+    int height = (int) ((isVertical ? VERTICAL_HEIGHT_DP : MINI_HEIGHT_DP) * reactContext.getResources().getDisplayMetrics().density);
 
     // 适配屏幕(最大占屏幕 95%)
     // CAP REMOVED FOR DEBUGGING
     Log.d(TAG, "Screen=" + screenWidth + "x" + screenHeight + " density=" + densityDp + " rawW=" + width + " rawH=" + height);
-    // DEBUG: forcing fixed size, no cap
+    // 适配屏幕
+    if (width > screenWidth * 0.95f) width = (int) (screenWidth * 0.95f);
+    if (height > screenHeight * 0.95f) height = (int) (screenHeight * 0.95f);
 
     final WindowManager.LayoutParams params = new WindowManager.LayoutParams(
         width, height,
