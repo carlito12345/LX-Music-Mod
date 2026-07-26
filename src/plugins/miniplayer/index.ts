@@ -28,6 +28,7 @@ if (isAvailable) {
   eventEmitter.addListener('onMiniPlayerReady', () => {
     try {
       const playerState = require('@/store/player/state').default
+      const lrcTools = require('@/plugins/lyric')
       const info = playerState?.musicInfo
       if (info?.id) {
         const title = info.name || ''
@@ -37,10 +38,8 @@ if (isAvailable) {
         const playing = playerState.isPlay
         updateCover(pic)
         updatePlaybackInfo(title, artist, playing, 0, duration)
+        console.log('[MiniPlayer] State pushed:', title)
       }
-      const lrc = require('@/plugins/lyric')
-      const lrcInfo = lrc.useLrcPlay?.()
-      console.log('[MiniPlayer] State pushed to native view')
     } catch (e) {
       console.warn('[MiniPlayer] Push state error:', e)
     }

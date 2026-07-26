@@ -229332,6 +229332,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     eventEmitter.addListener('onMiniPlayerReady', function () {
       try {
         var playerState = _$$_REQUIRE(_dependencyMap[4], "../../store/player/state").default;
+        var lrcTools = _$$_REQUIRE(_dependencyMap[5], "../lyric");
         var info = playerState == null ? void 0 : playerState.musicInfo;
         if (info != null && info.id) {
           var title = info.name || '';
@@ -229341,10 +229342,8 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
           var playing = playerState.isPlay;
           updateCover(pic);
           updatePlaybackInfo(title, artist, playing, 0, duration);
+          console.log('[MiniPlayer] State pushed:', title);
         }
-        var lrc = _$$_REQUIRE(_dependencyMap[5], "../lyric");
-        var lrcInfo = lrc.useLrcPlay == null ? void 0 : lrc.useLrcPlay();
-        console.log('[MiniPlayer] State pushed to native view');
       } catch (e) {
         console.warn('[MiniPlayer] Push state error:', e);
       }
