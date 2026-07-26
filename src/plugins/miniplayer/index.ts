@@ -24,9 +24,26 @@ if (isAvailable) {
     if (handler) handler()
   })
 
-  // 小窗打开时,ReactRootView 会自动从 playerState 获取最新状态
+  // 小窗打开时,推当前播放状态到原生 View
   eventEmitter.addListener('onMiniPlayerReady', () => {
-    console.log('[MiniPlayer] Ready - ReactRootView auto syncs player state')
+    try {
+      const playerState = require('@/store/player/state').default
+      const info = playerState?.musicInfo
+      if (info?.id) {
+        const title = info.name || ''
+        const artist = info.singer || ''
+        const pic = info.pic || ''
+        const duration = info.interval || 0
+        const playing = playerState.isPlay
+        updateCover(pic)
+        updatePlaybackInfo(title, artist, playing, 0, duration)
+      }
+      const lrc = require('@/plugins/lyric')
+      const lrcInfo = lrc.useLrcPlay?.()
+      console.log('[MiniPlayer] State pushed to native view')
+    } catch (e) {
+      console.warn('[MiniPlayer] Push state error:', e)
+    }
   })
 }
 
