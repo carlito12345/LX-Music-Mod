@@ -104,10 +104,7 @@
           android:name="android.support.FILE_PROVIDER_PATHS"
           android:resource="@xml/file_paths" />
       </provider>
-        <receiver android:name=".carkey.MediaButtonReceiver" android:enabled="true">
-      <intent-filter android:priority="2147483647">
-        <action android:name="android.intent.action.MEDIA_BUTTON" />
-      </intent-filter>
+        <receiver android:name=".carkey.MediaButtonReceiver" android:enabled="true" android:exported="false">
     </receiver>
     <receiver android:name=".boot.BootReceiver" android:enabled="true">
       <intent-filter>
