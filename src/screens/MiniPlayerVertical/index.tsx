@@ -6,7 +6,7 @@ import Text from '@/components/common/Text'
 import { useTheme } from '@/store/theme/hook'
 import { playNext, playPrev, togglePlay } from '@/core/player/player'
 import { getContrastTextColor } from '@/utils/colorContrast'
-import Progress from '@/components/player/ProgressBar'
+
 
 export default memo(() => {
   const theme = useTheme()
@@ -48,8 +48,8 @@ export default memo(() => {
         </View>
 
         {/* 进度条 */}
-        <View style={styles.progressArea}>
-          <Progress progress={progress} duration={maxPlayTime} backgroundColor={bgColor} />
+        <View style={styles.progressBar}>
+          <View style={[styles.progressFill, { width: maxPlayTime > 0 ? (progress / maxPlayTime * 100) + '%' : '0%' }]} />
         </View>
 
         {/* 控制按钮 */}
@@ -99,6 +99,19 @@ const styles = StyleSheet.create({
     width: 110,
     height: 110,
     borderRadius: 16,
+  },
+  progressBar: {
+    width: '100%',
+    height: 3,
+    borderRadius: 1.5,
+    backgroundColor: 'rgba(128,128,128,0.3)',
+    marginBottom: 12,
+    overflow: 'hidden',
+  },
+  progressFill: {
+    height: '100%',
+    borderRadius: 1.5,
+    backgroundColor: 'rgba(255,255,255,0.8)',
   },
   coverPlaceholder: {
     width: 110,
