@@ -100,7 +100,8 @@ public class MiniPlayerView {
     params.y = (int) (sh * 0.15f);
 
     floatingView = new FrameLayout(context);
-    floatingView.setBackgroundColor(0xCC1A1A2E);
+    // Apple Design: glassmorphism background
+    floatingView.setBackgroundColor(0xE61A1A2E);
 
     LinearLayout root = new LinearLayout(context);
     root.setOrientation(isVertical ? LinearLayout.VERTICAL : LinearLayout.HORIZONTAL);
@@ -114,10 +115,12 @@ public class MiniPlayerView {
     coverView.setLayoutParams(coverLp);
     coverView.setScaleType(ImageView.ScaleType.CENTER_CROP);
     coverView.setImageResource(android.R.drawable.ic_menu_gallery);
+    // Apple Design: rounded cover with shadow
     GradientDrawable coverBg = new GradientDrawable();
-    coverBg.setCornerRadius(dp(12));
+    coverBg.setCornerRadius(dp(isVertical ? 16 : 12));
     coverView.setBackground(coverBg);
     coverView.setClipToOutline(true);
+    coverView.setElevation(dp(4));
     root.addView(coverView);
 
     if (isVertical) {
@@ -174,7 +177,7 @@ public class MiniPlayerView {
     titleView = new TextView(context);
     titleView.setTextColor(Color.WHITE);
     titleView.setTextSize(isV ? 18 : 14);
-    titleView.setTypeface(null, Typeface.BOLD);
+    titleView.setTypeface(Typeface.DEFAULT_BOLD);
     titleView.setMaxLines(1);
     titleView.setEllipsize(android.text.TextUtils.TruncateAt.END);
     ll.addView(titleView);
@@ -232,15 +235,21 @@ public class MiniPlayerView {
     int iconSize = isV ? 28 : 20;
 
     prevBtn = makeBtn(ICON_PREV, iconSize, btnSize, btnRadius);
-    prevBtn.setOnClickListener(v -> sendAction("previous"));
+    prevBtn.setOnClickListener(new View.OnClickListener() {
+      @Override public void onClick(View v) { sendAction("previous"); }
+    });
     ll.addView(prevBtn);
 
     playBtn = makeBtn(isPlaying ? ICON_PAUSE : ICON_PLAY, isV ? 36 : 26, isV ? dp(68) : dp(50), isV ? dp(34) : dp(25));
-    playBtn.setOnClickListener(v -> sendAction("playPause"));
+    playBtn.setOnClickListener(new View.OnClickListener() {
+      @Override public void onClick(View v) { sendAction("playPause"); }
+    });
     ll.addView(playBtn);
 
     nextBtn = makeBtn(ICON_NEXT, iconSize, btnSize, btnRadius);
-    nextBtn.setOnClickListener(v -> sendAction("next"));
+    nextBtn.setOnClickListener(new View.OnClickListener() {
+      @Override public void onClick(View v) { sendAction("next"); }
+    });
     ll.addView(nextBtn);
 
     return ll;
