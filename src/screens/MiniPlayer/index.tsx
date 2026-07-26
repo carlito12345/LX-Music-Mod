@@ -10,104 +10,82 @@ import { playNext, playPrev, togglePlay } from '@/core/player/player'
 import { useLrcPlay } from '@/plugins/lyric'
 import { getContrastTextColor } from '@/utils/colorContrast'
 
-const SIZES = {
-  // 所有数值基于容器宽度 W 的比例,确保永远不溢出
-  W_RATIO: {
-    coverSize: 0.08,        // 封面 = W * 0.08
-    coverRadius: 0.018,
-    iconSize: 0.025,         // 图标 = W * 0.025
-    playSize: 0.042,         // 播放键 = W * 0.042
-    padH: 0.015,             // 水平内边距 = W * 0.015
-    ctrlGap: 0.008,
-    titleSize: 0.018,
-    subSize: 0.014,
-  }
+const S = {
+  coverRatio: 0.08,
+  coverRadius: 0.018,
+  iconRatio: 0.03,
+  playRatio: 0.05,
+  titleRatio: 0.02,
+  subRatio: 0.016,
 }
 
 export default memo(() => {
-  const theme = useTheme()
-  const musicInfo = usePlayerMusicInfo()
-  const isPlay = useIsPlay()
-  const lrcInfo = useLrcPlay()
-  const [containerW, setContainerW] = useState(400)
-
+  const [W, setW] = useState(400)
   const onLayout = useCallback((e: LayoutChangeEvent) => {
     const w = e.nativeEvent.layout.width
-    if (w > 0) setContainerW(w)
+    if (w > 0) setW(w)
   }, [])
 
-  const W = containerW
-  const s = {
-    coverSize: W * SIZES.W_RATIO.coverSize,
-    coverRadius: W * SIZES.W_RATIO.coverRadius,
-    iconSize: W * SIZES.W_RATIO.iconSize,
-    playSize: W * SIZES.W_RATIO.playSize,
-    padH: W * SIZES.W_RATIO.padH,
-    ctrlGap: W * SIZES.W_RATIO.ctrlGap,
-    titleSize: W * SIZES.W_RATIO.titleSize,
-    subSize: W * SIZES.W_RATIO.subSize,
-  }
-
-  const name = musicInfo.name || ''
-  const singer = musicInfo.singer || ''
-  const pic = musicInfo.pic || ''
+  const theme = useTheme()
+  const mi = usePlayerMusicInfo()
+  const isPlay = useIsPlay()
+  const lrcInfo = useLrcPlay()
+  const name = mi.name || ''
+  const singer = mi.singer || ''
+  const pic = mi.pic || ''
   const lrcLine = lrcInfo.text || ''
-  const solidColor = useSettingValue('playDetail.background.solidColor')
-  const bgColor = solidColor || theme['c-content-background'] || '#1a1a2e'
-  const textColor = getContrastTextColor(bgColor)
+  const sc = useSettingValue('playDetail.background.solidColor')
+  const bg = sc || theme['c-content-background'] || '#1a1a2e'
+  const tc = getContrastTextColor(bg)
+  const c = { coverSize: W * S.coverRatio, iconSz: W * S.iconRatio, playSz: W * S.playRatio, pad: W * 0.02 }
 
   return (
     <View style={styles.container} onLayout={onLayout}>
-      <BlurView style={StyleSheet.absoluteFill} blurType="dark" blurAmount={20} reducedTransparencyFallbackColor={bgColor} />
-      <View style={[StyleSheet.absoluteFill, { backgroundColor: bgColor, opacity: 0.8 }]} />
+      <BlurView style={StyleSheet.absoluteFill} blurType="dark" blurAmount={20} reducedTransparencyFallbackColor={bg} />
+      <View style={[StyleSheet.absoluteFill, { backgroundColor: bg, opacity: 0.8 }]} />
 
-      <View style={[styles.content, { paddingHorizontal: s.padH }]}>
-        <View style={[styles.coverWrap, { width: s.coverSize, height: s.coverSize, borderRadius: s.coverRadius }]}>
-          {pic ? (
-            <Image source={{ uri: pic }} style={[styles.cover, { borderRadius: s.coverRadius }]} />
-          ) : (
-            <View style={[styles.coverPlaceholder, { borderRadius: s.coverRadius, backgroundColor: textColor + '20' }]}>
-              <Text size={s.coverSize * 0.35} color={textColor} style={{ opacity: 0.5 }}>♪</Text>
-            </View>
-          )}
-        </View>
+      {/* 封面 - 绝对定位在左侧 */}
+      <View style={[styles.coverWrap, { width: c.coverSize, height: c.coverSize, borderRadius: c.coverRadius, left: c.pad, top: (W * 0.22 - c.coverSize) / 2 }]}>
+        {pic ? (
+          <Image source={{ uri: pic }} style={[styles.cover, { borderRadius: c.coverRadius }]} />
+        ) : (
+          <View style={[styles.coverPlaceholder, { borderRadius: c.coverRadius, backgroundColor: tc + '20' }]}>
+            <Text size={c.coverSize * 0.3} color={tc} style={{ opacity: 0.5 }}>♪</Text>
+          </View>
+        )}
+      </View>
 
-        <View style={styles.midArea}>
-          <Text numberOfLines={1} size={s.titleSize} color={textColor} style={{ fontWeight: '600' }}>
-            {name || '未播放'}
-          </Text>
-          <Text numberOfLines={1} size={s.subSize} color={textColor} style={{ opacity: 0.5, marginTop: 1 }}>
-            {singer || ''}
-          </Text>
-          <Text numberOfLines={1} size={s.subSize} color={textColor} style={{ opacity: 0.4, marginTop: 2 }}>
-            {lrcLine || '♪'}
-          </Text>
-        </View>
+      {/* 歌名 - 在封面右侧 */}
+      <View style={[styles.infoArea, { left: c.pad * 2 + c.coverSize, top: W * 0.02 }]}>
+        <Text numberOfLines={1} size={S.titleRatio * W} color={tc} style={{ fontWeight: '600' }}>{name || '未播放'}</Text>
+        <Text numberOfLines={1} size={S.subRatio * W} color={tc} style={{ opacity: 0.5 }}>{singer || ''}</Text>
+        <Text numberOfLines={1} size={S.subRatio * W} color={tc} style={{ opacity: 0.4 }}>{lrcLine || '♪'}</Text>
+      </View>
 
-        <View style={styles.controls}>
-          <TouchableOpacity style={[styles.ctrlBtn, { width: s.playSize * 1.0, height: s.playSize * 1.0, borderRadius: s.playSize * 0.5 }]} onPress={() => playPrev()} activeOpacity={0.6}>
-            <Icon name="skip-previous" size={s.iconSize} color={textColor} />
-          </TouchableOpacity>
-          <TouchableOpacity style={[styles.playBtn, { width: s.playSize, height: s.playSize, borderRadius: s.playSize / 2, backgroundColor: textColor + '18' }]} onPress={() => togglePlay()} activeOpacity={0.6}>
-            <Icon name={isPlay ? 'pause-circle' : 'play-circle'} size={s.playSize * 0.7} color={textColor} />
-          </TouchableOpacity>
-          <TouchableOpacity style={[styles.ctrlBtn, { width: s.playSize * 1.0, height: s.playSize * 1.0, borderRadius: s.playSize * 0.5 }]} onPress={() => playNext()} activeOpacity={0.6}>
-            <Icon name="skip-next" size={s.iconSize} color={textColor} />
-          </TouchableOpacity>
-        </View>
+      {/* 控件 - 绝对定位在右侧 */}
+      <View style={[styles.controls, { right: c.pad, top: (W * 0.22 - c.playSz) / 2, gap: W * 0.06 }]}>
+        <TouchableOpacity style={[styles.btn, { width: c.playSz * 0.9, height: c.playSz * 0.9, borderRadius: c.playSz * 0.45 }]} onPress={() => playPrev()} activeOpacity={0.6}>
+          <Icon name="skip-previous" size={c.iconSz} color={tc} />
+        </TouchableOpacity>
+        <TouchableOpacity style={[styles.pbtn, { width: c.playSz, height: c.playSz, borderRadius: c.playSz / 2, backgroundColor: tc + '18' }]} onPress={() => togglePlay()} activeOpacity={0.6}>
+          <Icon name={isPlay ? 'pause-circle' : 'play-circle'} size={c.playSz * 0.75} color={tc} />
+        </TouchableOpacity>
+        <TouchableOpacity style={[styles.btn, { width: c.playSz * 0.9, height: c.playSz * 0.9, borderRadius: c.playSz * 0.45 }]} onPress={() => playNext()} activeOpacity={0.6}>
+          <Icon name="skip-next" size={c.iconSz} color={tc} />
+        </TouchableOpacity>
       </View>
     </View>
   )
 })
 
 const styles = StyleSheet.create({
-  container: { width: '100%', height: '100%', overflow: 'hidden' },
-  content: { flex: 1, flexDirection: 'row', alignItems: 'center', position: 'relative' },
-  coverWrap: { flexShrink: 0, overflow: 'hidden', elevation: 6, shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.3, shadowRadius: 6 },
+  container: { width: '100%', height: '100%', overflow: 'visible' },
+  coverWrap: { position: 'absolute', overflow: 'hidden', elevation: 6, shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.3, shadowRadius: 6 },
   cover: { width: '100%', height: '100%' },
   coverPlaceholder: { width: '100%', height: '100%', justifyContent: 'center', alignItems: 'center' },
-  midArea: { flex: 1, marginHorizontal: 8, justifyContent: 'center' },
-  controls: { flexDirection: 'row', alignItems: 'center', position: 'absolute', right: 12, top: 0, bottom: 0 },
-  ctrlBtn: { justifyContent: 'center', alignItems: 'center', overflow: 'visible' },
-  playBtn: { justifyContent: 'center', alignItems: 'center', overflow: 'hidden' },
+  infoArea: { position: 'absolute', right: 120 },
+  controls: { position: 'absolute', flexDirection: 'row', alignItems: 'center' },
+  btn: { justifyContent: 'center', alignItems: 'center' },
+  pbtn: { justifyContent: 'center', alignItems: 'center' },
 })
+// 注意:gap 使用 W * 0.04 需要动态计算,已在 JSX 中设置
