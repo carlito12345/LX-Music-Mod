@@ -45,17 +45,17 @@ export default memo(() => {
               </View>
             )}
           </View>
-          <Text numberOfLines={1} size={15} color={textColor} style={{ fontWeight: '600', marginTop: 6 }}>
+          <Text numberOfLines={1} size={14} color={textColor} style={{ fontWeight: '600', marginTop: 4 }}>
             {name || '未播放'}
           </Text>
-          <Text numberOfLines={1} size={12} color={textColor} style={{ opacity: 0.5, marginTop: 1 }}>
+          <Text numberOfLines={1} size={11} color={textColor} style={{ opacity: 0.5, marginTop: 1 }}>
             {singer || ''}
           </Text>
         </View>
 
         {/* 中 1/3:歌词 */}
         <View style={styles.midSection}>
-          <Text numberOfLines={4} size={14} color={textColor} style={{ textAlign: 'center', opacity: 0.7, lineHeight: 22 }}>
+          <Text numberOfLines={3} size={13} color={textColor} style={{ textAlign: 'center', opacity: 0.7, lineHeight: 20 }}>
             {lrcLine || '♪ 聆听音乐的美好 ♪'}
           </Text>
         </View>
@@ -75,13 +75,13 @@ export default memo(() => {
           {/* 控件 */}
           <View style={styles.controls}>
             <TouchableOpacity style={styles.btn} onPress={() => playPrev()} activeOpacity={0.6}>
-              <Icon name="skip-previous" size={24} color={textColor} />
+              <Icon name="skip-previous" size={22} color={textColor} />
             </TouchableOpacity>
             <TouchableOpacity style={[styles.playBtn, { backgroundColor: textColor + '18' }]} onPress={() => togglePlay()} activeOpacity={0.6}>
-              <Icon name={isPlay ? 'pause-circle' : 'play-circle'} size={44} color={textColor} />
+              <Icon name={isPlay ? 'pause-circle' : 'play-circle'} size={38} color={textColor} />
             </TouchableOpacity>
             <TouchableOpacity style={styles.btn} onPress={() => playNext()} activeOpacity={0.6}>
-              <Icon name="skip-next" size={24} color={textColor} />
+              <Icon name="skip-next" size={22} color={textColor} />
             </TouchableOpacity>
           </View>
         </View>
@@ -99,8 +99,8 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    paddingHorizontal: 20,
-    paddingVertical: 16,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
   },
   topSection: {
     flex: 1,
@@ -108,9 +108,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   coverWrap: {
-    width: 140,
-    height: 140,
-    borderRadius: 20,
+    width: 120,
+    height: 120,
+    borderRadius: 18,
     overflow: 'hidden',
     elevation: 10,
     shadowColor: '#000',
@@ -119,14 +119,14 @@ const styles = StyleSheet.create({
     shadowRadius: 10,
   },
   cover: {
-    width: 140,
-    height: 140,
-    borderRadius: 20,
+    width: 120,
+    height: 120,
+    borderRadius: 18,
   },
   coverPlaceholder: {
-    width: 140,
-    height: 140,
-    borderRadius: 20,
+    width: 120,
+    height: 120,
+    borderRadius: 18,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -161,16 +161,16 @@ const styles = StyleSheet.create({
     gap: 20,
   },
   btn: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
     justifyContent: 'center',
     alignItems: 'center',
   },
   playBtn: {
-    width: 72,
-    height: 72,
-    borderRadius: 36,
+    width: 64,
+    height: 64,
+    borderRadius: 32,
     justifyContent: 'center',
     alignItems: 'center',
   },

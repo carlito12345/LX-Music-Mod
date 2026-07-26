@@ -126530,7 +126530,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
           style: styles.midArea,
           children: [/*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
             numberOfLines: 1,
-            size: 14,
+            size: 13,
             color: textColor,
             style: {
               fontWeight: '600'
@@ -126538,7 +126538,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
             children: name || '未播放'
           }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
             numberOfLines: 1,
-            size: 11,
+            size: 10,
             color: textColor,
             style: {
               opacity: 0.5,
@@ -126547,11 +126547,11 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
             children: singer || ''
           }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
             numberOfLines: 1,
-            size: 11,
+            size: 10,
             color: textColor,
             style: {
               opacity: 0.4,
-              marginTop: 3
+              marginTop: 2
             },
             children: lrcLine || '♪'
           })]
@@ -126567,7 +126567,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
               activeOpacity: 0.6,
               children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_$$_REQUIRE(_dependencyMap[12], "../../components/common/Icon").Icon, {
                 name: "skip-previous",
-                size: 20,
+                size: 18,
                 color: textColor
               })
             }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.TouchableOpacity, {
@@ -126580,7 +126580,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
               activeOpacity: 0.6,
               children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_$$_REQUIRE(_dependencyMap[12], "../../components/common/Icon").Icon, {
                 name: isPlay ? 'pause-circle' : 'play-circle',
-                size: 36,
+                size: 32,
                 color: textColor
               })
             }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.TouchableOpacity, {
@@ -126591,7 +126591,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
               activeOpacity: 0.6,
               children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_$$_REQUIRE(_dependencyMap[12], "../../components/common/Icon").Icon, {
                 name: "skip-next",
-                size: 20,
+                size: 18,
                 color: textColor
               })
             })]
@@ -126611,12 +126611,12 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       flex: 1,
       flexDirection: 'row',
       alignItems: 'center',
-      paddingHorizontal: 14
+      paddingHorizontal: 12
     },
     coverWrap: {
-      width: 72,
-      height: 72,
-      borderRadius: 14,
+      width: 60,
+      height: 60,
+      borderRadius: 12,
       overflow: 'hidden',
       elevation: 6,
       shadowColor: '#000',
@@ -126628,20 +126628,20 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       shadowRadius: 6
     },
     cover: {
-      width: 72,
-      height: 72,
-      borderRadius: 14
+      width: 60,
+      height: 60,
+      borderRadius: 12
     },
     coverPlaceholder: {
-      width: 72,
-      height: 72,
-      borderRadius: 14,
+      width: 60,
+      height: 60,
+      borderRadius: 12,
       justifyContent: 'center',
       alignItems: 'center'
     },
     midArea: {
       flex: 1,
-      marginHorizontal: 12,
+      marginHorizontal: 16,
       justifyContent: 'center'
     },
     rightArea: {
@@ -126650,19 +126650,19 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     controls: {
       flexDirection: 'row',
       alignItems: 'center',
-      gap: 6
+      gap: 4
     },
     ctrlBtn: {
-      width: 38,
-      height: 38,
-      borderRadius: 19,
+      width: 34,
+      height: 34,
+      borderRadius: 17,
       justifyContent: 'center',
       alignItems: 'center'
     },
     playBtn: {
-      width: 48,
-      height: 48,
-      borderRadius: 24,
+      width: 40,
+      height: 40,
+      borderRadius: 20,
       justifyContent: 'center',
       alignItems: 'center'
     }
@@ -175830,16 +175830,16 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
             })
           }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
             numberOfLines: 1,
-            size: 15,
+            size: 14,
             color: textColor,
             style: {
               fontWeight: '600',
-              marginTop: 6
+              marginTop: 4
             },
             children: name || '未播放'
           }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
             numberOfLines: 1,
-            size: 12,
+            size: 11,
             color: textColor,
             style: {
               opacity: 0.5,
@@ -175850,13 +175850,13 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
         }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.View, {
           style: styles.midSection,
           children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
-            numberOfLines: 4,
-            size: 14,
+            numberOfLines: 3,
+            size: 13,
             color: textColor,
             style: {
               textAlign: 'center',
               opacity: 0.7,
-              lineHeight: 22
+              lineHeight: 20
             },
             children: lrcLine || '♪ 聆听音乐的美好 ♪'
           })
@@ -175885,7 +175885,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
               activeOpacity: 0.6,
               children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_$$_REQUIRE(_dependencyMap[12], "../../components/common/Icon").Icon, {
                 name: "skip-previous",
-                size: 24,
+                size: 22,
                 color: textColor
               })
             }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.TouchableOpacity, {
@@ -175898,7 +175898,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
               activeOpacity: 0.6,
               children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_$$_REQUIRE(_dependencyMap[12], "../../components/common/Icon").Icon, {
                 name: isPlay ? 'pause-circle' : 'play-circle',
-                size: 44,
+                size: 38,
                 color: textColor
               })
             }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.TouchableOpacity, {
@@ -175909,7 +175909,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
               activeOpacity: 0.6,
               children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_$$_REQUIRE(_dependencyMap[12], "../../components/common/Icon").Icon, {
                 name: "skip-next",
-                size: 24,
+                size: 22,
                 color: textColor
               })
             })]
@@ -175927,8 +175927,8 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     },
     content: {
       flex: 1,
-      paddingHorizontal: 20,
-      paddingVertical: 16
+      paddingHorizontal: 16,
+      paddingVertical: 12
     },
     topSection: {
       flex: 1,
@@ -175936,9 +175936,9 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       justifyContent: 'center'
     },
     coverWrap: {
-      width: 140,
-      height: 140,
-      borderRadius: 20,
+      width: 120,
+      height: 120,
+      borderRadius: 18,
       overflow: 'hidden',
       elevation: 10,
       shadowColor: '#000',
@@ -175950,14 +175950,14 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       shadowRadius: 10
     },
     cover: {
-      width: 140,
-      height: 140,
-      borderRadius: 20
+      width: 120,
+      height: 120,
+      borderRadius: 18
     },
     coverPlaceholder: {
-      width: 140,
-      height: 140,
-      borderRadius: 20,
+      width: 120,
+      height: 120,
+      borderRadius: 18,
       justifyContent: 'center',
       alignItems: 'center'
     },
@@ -175992,16 +175992,16 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       gap: 20
     },
     btn: {
-      width: 44,
-      height: 44,
-      borderRadius: 22,
+      width: 40,
+      height: 40,
+      borderRadius: 20,
       justifyContent: 'center',
       alignItems: 'center'
     },
     playBtn: {
-      width: 72,
-      height: 72,
-      borderRadius: 36,
+      width: 64,
+      height: 64,
+      borderRadius: 32,
       justifyContent: 'center',
       alignItems: 'center'
     }

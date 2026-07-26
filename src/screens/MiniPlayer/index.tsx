@@ -44,13 +44,13 @@ export default memo(() => {
 
         {/* 信息 + 歌词 */}
         <View style={styles.midArea}>
-          <Text numberOfLines={1} size={14} color={textColor} style={{ fontWeight: '600' }}>
+          <Text numberOfLines={1} size={13} color={textColor} style={{ fontWeight: '600' }}>
             {name || '未播放'}
           </Text>
-          <Text numberOfLines={1} size={11} color={textColor} style={{ opacity: 0.5, marginTop: 1 }}>
+          <Text numberOfLines={1} size={10} color={textColor} style={{ opacity: 0.5, marginTop: 1 }}>
             {singer || ''}
           </Text>
-          <Text numberOfLines={1} size={11} color={textColor} style={{ opacity: 0.4, marginTop: 3 }}>
+          <Text numberOfLines={1} size={10} color={textColor} style={{ opacity: 0.4, marginTop: 2 }}>
             {lrcLine || '♪'}
           </Text>
         </View>
@@ -59,13 +59,13 @@ export default memo(() => {
         <View style={styles.rightArea}>
           <View style={styles.controls}>
             <TouchableOpacity style={styles.ctrlBtn} onPress={() => playPrev()} activeOpacity={0.6}>
-              <Icon name="skip-previous" size={20} color={textColor} />
+              <Icon name="skip-previous" size={18} color={textColor} />
             </TouchableOpacity>
             <TouchableOpacity style={[styles.playBtn, { backgroundColor: textColor + '18' }]} onPress={() => togglePlay()} activeOpacity={0.6}>
-              <Icon name={isPlay ? 'pause-circle' : 'play-circle'} size={36} color={textColor} />
+              <Icon name={isPlay ? 'pause-circle' : 'play-circle'} size={32} color={textColor} />
             </TouchableOpacity>
             <TouchableOpacity style={styles.ctrlBtn} onPress={() => playNext()} activeOpacity={0.6}>
-              <Icon name="skip-next" size={20} color={textColor} />
+              <Icon name="skip-next" size={18} color={textColor} />
             </TouchableOpacity>
           </View>
         </View>
@@ -85,12 +85,12 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 14,
+    paddingHorizontal: 12,
   },
   coverWrap: {
-    width: 72,
-    height: 72,
-    borderRadius: 14,
+    width: 60,
+    height: 60,
+    borderRadius: 12,
     overflow: 'hidden',
     elevation: 6,
     shadowColor: '#000',
@@ -99,20 +99,20 @@ const styles = StyleSheet.create({
     shadowRadius: 6,
   },
   cover: {
-    width: 72,
-    height: 72,
-    borderRadius: 14,
+    width: 60,
+    height: 60,
+    borderRadius: 12,
   },
   coverPlaceholder: {
-    width: 72,
-    height: 72,
-    borderRadius: 14,
+    width: 60,
+    height: 60,
+    borderRadius: 12,
     justifyContent: 'center',
     alignItems: 'center',
   },
   midArea: {
     flex: 1,
-    marginHorizontal: 12,
+    marginHorizontal: 16,
     justifyContent: 'center',
   },
   rightArea: {
@@ -121,19 +121,19 @@ const styles = StyleSheet.create({
   controls: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
+    gap: 4,
   },
   ctrlBtn: {
-    width: 38,
-    height: 38,
-    borderRadius: 19,
+    width: 34,
+    height: 34,
+    borderRadius: 17,
     justifyContent: 'center',
     alignItems: 'center',
   },
   playBtn: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
     justifyContent: 'center',
     alignItems: 'center',
   },
