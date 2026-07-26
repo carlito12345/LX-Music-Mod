@@ -57,10 +57,10 @@ export default memo(() => {
 
         {/* 歌曲信息 */}
         <View style={styles.info}>
-          <Text numberOfLines={1} size={14} color={textColor} style={{ fontWeight: '600' }}>
+          <Text numberOfLines={1} size={18} color={textColor} style={{ fontWeight: '600' }}>
             {name || '未播放'}
           </Text>
-          <Text numberOfLines={1} size={12} color={textColor} style={{ opacity: 0.6 }}>
+          <Text numberOfLines={1} size={16} color={textColor} style={{ opacity: 0.6 }}>
             {singer || ''}
           </Text>
         </View>
@@ -86,8 +86,8 @@ const styles = StyleSheet.create({
   content: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 12,
-    paddingHorizontal: 12,
+    paddingVertical: 20,
+    paddingHorizontal: 20,
     flex: 1,
   },
   coverWrap: {
@@ -103,9 +103,9 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   coverPlaceholder: {
-    width: 56,
-    height: 56,
-    borderRadius: 10,
+    width: 96,
+    height: 96,
+    borderRadius: 16,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -119,9 +119,9 @@ const styles = StyleSheet.create({
     gap: 2,
   },
   ctrlBtn: {
-    width: 38,
-    height: 38,
-    borderRadius: 19,
+    width: 56,
+    height: 56,
+    borderRadius: 28,
     justifyContent: 'center',
     alignItems: 'center',
   },

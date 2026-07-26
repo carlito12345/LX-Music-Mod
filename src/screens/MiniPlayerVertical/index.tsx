@@ -43,10 +43,10 @@ export default memo(() => {
 
         {/* 歌曲信息 */}
         <View style={styles.lyricArea}>
-          <Text numberOfLines={2} size={13} color={textColor} style={{ textAlign: 'center', fontWeight: '500' }}>
+          <Text numberOfLines={2} size={18} color={textColor} style={{ textAlign: 'center', fontWeight: '500' }}>
             {name || '未播放'}
           </Text>
-          <Text numberOfLines={1} size={11} color={textColor} style={{ textAlign: 'center', opacity: 0.5, marginTop: 2 }}>
+          <Text numberOfLines={1} size={15} color={textColor} style={{ textAlign: 'center', opacity: 0.5, marginTop: 4 }}>
             {singer || ''}
           </Text>
         </View>
@@ -57,20 +57,20 @@ export default memo(() => {
         </View>
 
         {/* 歌词 */}
-        <Text numberOfLines={2} size={11} color={textColor} style={{ textAlign: 'center', opacity: 0.6, marginBottom: 8, paddingHorizontal: 4 }}>
+        <Text numberOfLines={2} size={16} color={textColor} style={{ textAlign: 'center', opacity: 0.6, marginBottom: 12, paddingHorizontal: 8 }}>
           {lrcLine || ''}
         </Text>
 
         {/* 控制按钮 */}
         <View style={styles.controls}>
           <TouchableOpacity style={styles.btn} onPress={() => playPrev()}>
-            <Icon name="prevMusic" size={20} color={textColor} />
+            <Icon name="prevMusic" size={32} color={textColor} />
           </TouchableOpacity>
           <TouchableOpacity style={[styles.playBtn, { backgroundColor: textColor + '20' }]} onPress={() => togglePlay()}>
-            <Icon name={isPlay ? 'pause' : 'play'} size={30} color={textColor} />
+            <Icon name={isPlay ? 'pause' : 'play'} size={42} color={textColor} />
           </TouchableOpacity>
           <TouchableOpacity style={styles.btn} onPress={() => playNext()}>
-            <Icon name="nextMusic" size={20} color={textColor} />
+            <Icon name="nextMusic" size={32} color={textColor} />
           </TouchableOpacity>
         </View>
       </View>
@@ -89,15 +89,15 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 16,
+    paddingHorizontal: 24,
+    paddingVertical: 24,
   },
   coverWrap: {
-    width: 110,
-    height: 110,
-    borderRadius: 16,
+    width: 220,
+    height: 220,
+    borderRadius: 24,
     overflow: 'hidden',
-    marginBottom: 10,
+    marginBottom: 16,
     elevation: 8,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
@@ -105,14 +105,14 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
   },
   cover: {
-    width: 110,
-    height: 110,
-    borderRadius: 16,
+    width: 220,
+    height: 220,
+    borderRadius: 24,
   },
   progressBar: {
     width: '100%',
-    height: 3,
-    borderRadius: 1.5,
+    height: 6,
+    borderRadius: 3,
     backgroundColor: 'rgba(128,128,128,0.3)',
     marginBottom: 12,
     overflow: 'hidden',
@@ -123,9 +123,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255,255,255,0.8)',
   },
   coverPlaceholder: {
-    width: 110,
-    height: 110,
-    borderRadius: 16,
+    width: 220,
+    height: 220,
+    borderRadius: 24,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -142,19 +142,19 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 16,
+    gap: 24,
   },
   btn: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: 60,
+    height: 60,
+    borderRadius: 30,
     justifyContent: 'center',
     alignItems: 'center',
   },
   playBtn: {
-    width: 56,
-    height: 56,
-    borderRadius: 28,
+    width: 80,
+    height: 80,
+    borderRadius: 40,
     justifyContent: 'center',
     alignItems: 'center',
   },

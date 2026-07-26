@@ -31,10 +31,10 @@ public class MiniPlayerView {
   private int screenWidth;
   private int screenHeight;
 
-  private static final int MINI_WIDTH_DP = 380;
-  private static final int MINI_HEIGHT_DP = 220;
-  private static final int VERTICAL_WIDTH_DP = 200;
-  private static final int VERTICAL_HEIGHT_DP = 360;
+  private static final int MINI_WIDTH_DP = 1140;
+  private static final int MINI_HEIGHT_DP = 660;
+  private static final int VERTICAL_WIDTH_DP = 600;
+  private static final int VERTICAL_HEIGHT_DP = 1080;
   private boolean isVertical = false;
 
   public MiniPlayerView(ReactApplicationContext reactContext, MiniPlayerEvent eventEmitter) {
@@ -71,8 +71,9 @@ public class MiniPlayerView {
     int width = (int) ((isVertical ? VERTICAL_WIDTH_DP : MINI_WIDTH_DP) * densityDp);
     int height = (int) ((isVertical ? VERTICAL_HEIGHT_DP : MINI_HEIGHT_DP) * densityDp);
 
-    if (width > screenWidth * 0.9f) width = (int) (screenWidth * 0.9f);
-    if (height > screenHeight * 0.9f) height = (int) (screenHeight * 0.9f);
+    // 适配屏幕(最大占屏幕 95%)
+    if (width > screenWidth * 0.95f) width = (int) (screenWidth * 0.95f);
+    if (height > screenHeight * 0.95f) height = (int) (screenHeight * 0.95f);
 
     final WindowManager.LayoutParams params = new WindowManager.LayoutParams(
         width, height,
