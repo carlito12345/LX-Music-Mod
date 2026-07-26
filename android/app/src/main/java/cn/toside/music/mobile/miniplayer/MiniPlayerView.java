@@ -31,10 +31,10 @@ public class MiniPlayerView {
   private int screenWidth;
   private int screenHeight;
 
-  private static final int MINI_WIDTH_DP = 1470;
-  private static final int MINI_HEIGHT_DP = 420;
-  private static final int VERTICAL_WIDTH_DP = 1020;
-  private static final int VERTICAL_HEIGHT_DP = 1680;
+  private static final int MINI_WIDTH_DP = 980;
+  private static final int MINI_HEIGHT_DP = 280;
+  private static final int VERTICAL_WIDTH_DP = 680;
+  private static final int VERTICAL_HEIGHT_DP = 1120;
   private boolean isVertical = false;
 
   public MiniPlayerView(ReactApplicationContext reactContext, MiniPlayerEvent eventEmitter) {
