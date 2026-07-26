@@ -27,7 +27,7 @@ const useResponsive = (customBase: number) => {
     titleSize: base * 0.038,
     subSize: base * 0.032,
     lyricSize: base * 0.035,
-    gap: base * 0.04,
+    gap: base * 0.05,
     progressHeight: base * 0.012,
     borderRadius: base * 0.07,
   }

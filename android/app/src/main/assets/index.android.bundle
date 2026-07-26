@@ -126488,7 +126488,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       coverSize: base * 0.16,
       coverRadius: base * 0.035,
       padH: base * 0.03,
-      ctrlGap: base * 0.012,
+      ctrlGap: base * 0.015,
       titleSize: base * 0.035,
       subSize: base * 0.028,
       borderRadius: base * 0.045
@@ -126684,7 +126684,8 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     controls: {
       flexDirection: 'row',
       alignItems: 'center',
-      flexShrink: 0
+      flexShrink: 0,
+      marginLeft: 'auto'
     },
     ctrlBtn: {
       justifyContent: 'center',
@@ -175815,7 +175816,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       titleSize: base * 0.038,
       subSize: base * 0.032,
       lyricSize: base * 0.035,
-      gap: base * 0.04,
+      gap: base * 0.05,
       progressHeight: base * 0.012,
       borderRadius: base * 0.07
     };

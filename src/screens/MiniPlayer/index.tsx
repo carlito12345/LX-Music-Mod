@@ -19,7 +19,7 @@ const useResponsive = (customBase) => {
     coverSize: base * 0.16,
     coverRadius: base * 0.035,
     padH: base * 0.03,
-    ctrlGap: base * 0.012,
+    ctrlGap: base * 0.015,
     titleSize: base * 0.035,
     subSize: base * 0.028,
     borderRadius: base * 0.045,
@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
   cover: { width: '100%', height: '100%' },
   coverPlaceholder: { width: '100%', height: '100%', justifyContent: 'center', alignItems: 'center' },
   midArea: { flex: 1, justifyContent: 'center' },
-  controls: { flexDirection: 'row', alignItems: 'center', flexShrink: 0 },
+  controls: { flexDirection: 'row', alignItems: 'center', flexShrink: 0, marginLeft: 'auto' },
   ctrlBtn: { justifyContent: 'center', alignItems: 'center' },
   playBtn: { justifyContent: 'center', alignItems: 'center' },
 })
