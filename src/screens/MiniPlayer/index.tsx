@@ -3,15 +3,16 @@ import { View, StyleSheet, TouchableOpacity, Image } from 'react-native'
 import { BlurView } from '@react-native-community/blur'
 import { usePlayerMusicInfo, useIsPlay, useThemeColors } from '@/store/player/hook'
 import Text from '@/components/common/Text'
+import { Icon } from '@/components/common/Icon'
 import { useTheme } from '@/store/theme/hook'
 import { playNext, playPrev, togglePlay } from '@/core/player/player'
 import { getContrastTextColor } from '@/utils/colorContrast'
 
-const ControlBtn = memo(({ icon, size, onPress, color }: {
-  icon: string; size: number; onPress: () => void; color: string
+const ControlBtn = memo(({ icon, size, onPress, color, isPlay }: {
+  icon: string; size: number; onPress: () => void; color: string; isPlay?: boolean
 }) => (
   <TouchableOpacity onPress={onPress} style={styles.ctrlBtn}>
-    <Text size={size} color={color}>{icon}</Text>
+    <Icon name={icon} size={size} color={color} />
   </TouchableOpacity>
 ))
 
@@ -66,9 +67,9 @@ export default memo(() => {
 
         {/* 控制按钮 */}
         <View style={styles.controls}>
-          <ControlBtn icon="⏮" size={20} onPress={() => playPrev()} color={controlColor} />
-          <ControlBtn icon={isPlay ? "⏸" : "▶️"} size={24} onPress={() => togglePlay()} color={controlColor} />
-          <ControlBtn icon="⏭" size={20} onPress={() => playNext()} color={controlColor} />
+          <ControlBtn icon="prevMusic" size={20} onPress={() => playPrev()} color={controlColor} />
+          <ControlBtn icon={isPlay ? "pause" : "play"} size={24} onPress={() => togglePlay()} color={controlColor} isPlay={isPlay} />
+          <ControlBtn icon="nextMusic" size={20} onPress={() => playNext()} color={controlColor} />
         </View>
       </View>
     </View>

@@ -3,8 +3,10 @@ import { View, StyleSheet, Image, TouchableOpacity } from 'react-native'
 import { BlurView } from '@react-native-community/blur'
 import { usePlayerMusicInfo, useIsPlay, useProgress } from '@/store/player/hook'
 import Text from '@/components/common/Text'
+import { Icon } from '@/components/common/Icon'
 import { useTheme } from '@/store/theme/hook'
 import { playNext, playPrev, togglePlay } from '@/core/player/player'
+import { useLrcPlay } from '@/plugins/lyric'
 import { getContrastTextColor } from '@/utils/colorContrast'
 
 
@@ -13,6 +15,8 @@ export default memo(() => {
   const musicInfo = usePlayerMusicInfo()
   const isPlay = useIsPlay()
   const { progress, maxPlayTime } = useProgress()
+  const lrcInfo = useLrcPlay()
+  const lrcLine = lrcInfo.text || ''
   
   const name = musicInfo.name || ''
   const singer = musicInfo.singer || ''
@@ -52,16 +56,21 @@ export default memo(() => {
           <View style={[styles.progressFill, { width: maxPlayTime > 0 ? (progress / maxPlayTime * 100) + '%' : '0%' }]} />
         </View>
 
+        {/* 歌词 */}
+        <Text numberOfLines={2} size={11} color={textColor} style={{ textAlign: 'center', opacity: 0.6, marginBottom: 8, paddingHorizontal: 4 }}>
+          {lrcLine || ''}
+        </Text>
+
         {/* 控制按钮 */}
         <View style={styles.controls}>
           <TouchableOpacity style={styles.btn} onPress={() => playPrev()}>
-            <Text size={18} color={textColor}>⏮</Text>
+            <Icon name="prevMusic" size={20} color={textColor} />
           </TouchableOpacity>
           <TouchableOpacity style={[styles.playBtn, { backgroundColor: textColor + '20' }]} onPress={() => togglePlay()}>
-            <Text size={28} color={textColor}>{isPlay ? '⏸' : '▶️'}</Text>
+            <Icon name={isPlay ? 'pause' : 'play'} size={30} color={textColor} />
           </TouchableOpacity>
           <TouchableOpacity style={styles.btn} onPress={() => playNext()}>
-            <Text size={18} color={textColor}>⏭</Text>
+            <Icon name="nextMusic" size={20} color={textColor} />
           </TouchableOpacity>
         </View>
       </View>
