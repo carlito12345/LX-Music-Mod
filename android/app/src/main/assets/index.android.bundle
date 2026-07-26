@@ -229197,8 +229197,6 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   exports.isMiniPlayerShowing = isMiniPlayerShowing;
   exports.openOverlaySettings = openOverlaySettings;
   exports.show = show;
-  exports.updateCover = updateCover;
-  exports.updatePlaybackInfo = updatePlaybackInfo;
   var _asyncToGenerator2 = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[1], "@babel/runtime/helpers/asyncToGenerator"));
   var _reactNative = _$$_REQUIRE(_dependencyMap[2], "react-native");
   /**
@@ -229228,19 +229226,9 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       if (handler) handler();
     });
 
-    // 小窗打开时,立即推送当前播放状态
+    // 小窗打开时,ReactRootView 会自动从 playerState 获取最新状态
     eventEmitter.addListener('onMiniPlayerReady', function () {
-      var playerState = _$$_REQUIRE(_dependencyMap[4], "../../store/player/state").default;
-      var info = playerState.musicInfo;
-      if (info && info.id) {
-        var title = info.name || '';
-        var artist = info.singer || '';
-        var pic = info.pic || '';
-        var duration = info.interval || 0;
-        var playing = playerState.isPlay;
-        updateCover(pic);
-        updatePlaybackInfo(title, artist, playing, 0, duration);
-      }
+      console.log('[MiniPlayer] Ready - ReactRootView auto syncs player state');
     });
   }
 
@@ -229269,9 +229257,6 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   function hide() {
     return _hide.apply(this, arguments);
   }
-  /**
-   * 更新封面
-   */
   function _hide() {
     _hide = (0, _asyncToGenerator2.default)(function* () {
       if (!isAvailable || !isShowing) return false;
@@ -229285,33 +229270,6 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     });
     return _hide.apply(this, arguments);
   }
-  function updateCover(_x) {
-    return _updateCover.apply(this, arguments);
-  }
-  /**
-   * 更新播放信息(标题、歌手、播放状态、进度)
-   */
-  function _updateCover() {
-    _updateCover = (0, _asyncToGenerator2.default)(function* (coverPath) {
-      if (!isAvailable || !isShowing) return;
-      try {
-        yield MiniPlayerModule.updateCover(coverPath);
-      } catch (_unused3) {}
-    });
-    return _updateCover.apply(this, arguments);
-  }
-  function updatePlaybackInfo(_x2, _x3, _x4, _x5, _x6) {
-    return _updatePlaybackInfo.apply(this, arguments);
-  }
-  function _updatePlaybackInfo() {
-    _updatePlaybackInfo = (0, _asyncToGenerator2.default)(function* (title, artist, playing, progress, maxProgress) {
-      if (!isAvailable || !isShowing) return;
-      try {
-        yield MiniPlayerModule.updatePlaybackInfo(title || '', artist || '', playing, progress || 0, maxProgress || 100);
-      } catch (_unused4) {}
-    });
-    return _updatePlaybackInfo.apply(this, arguments);
-  }
   function isMiniPlayerShowing() {
     return isShowing;
   }
@@ -229323,7 +229281,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       if (!isAvailable) return false;
       try {
         return yield MiniPlayerModule.hasOverlayPermission();
-      } catch (_unused5) {
+      } catch (_unused3) {
         return false;
       }
     });
@@ -229338,7 +229296,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       try {
         yield MiniPlayerModule.openOverlaySettings();
         return true;
-      } catch (_unused6) {
+      } catch (_unused4) {
         return false;
       }
     });
@@ -229354,7 +229312,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     hasOverlayPermission: hasOverlayPermission,
     openOverlaySettings: openOverlaySettings
   };
-},1389,[6,13,15,983,704],"src/plugins/miniplayer/index.ts");
+},1389,[6,13,15,983],"src/plugins/miniplayer/index.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -238094,7 +238052,6 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   var _asyncToGenerator2 = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[1], "@babel/runtime/helpers/asyncToGenerator"));
   var _state = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[2], "../../../store/player/state"));
   var _mediainteraction = _interopRequireWildcard(_$$_REQUIRE(_dependencyMap[3], "../../../plugins/mediainteraction"));
-  var _miniplayer = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[4], "../../../plugins/miniplayer"));
   function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function _interopRequireWildcard(e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, default: e }; if (null === e || "object" != typeof e && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (var _t in e) "default" !== _t && {}.hasOwnProperty.call(e, _t) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, _t)) && (i.get || i.set) ? o(f, _t, i) : f[_t] = e[_t]); return f; })(e, t); }
   var initialized = false;
   var lastMusicId = '';
@@ -238137,12 +238094,6 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
           playing: isPlaying,
           sourceType: sourceType
         });
-
-        // 同时更新小窗播放器
-        if (_miniplayer.default.isMiniPlayerShowing()) {
-          yield _miniplayer.default.updateCover(artworkPath);
-          yield _miniplayer.default.updatePlaybackInfo(title, artist, isPlaying, 0, duration);
-        }
       });
       return function updateMediaInfo() {
         return _ref2.apply(this, arguments);
@@ -238172,12 +238123,6 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
           playing: isPlaying,
           sourceType: sourceType
         });
-
-        // 同时更新小窗播放器
-        if (_miniplayer.default.isMiniPlayerShowing()) {
-          yield _miniplayer.default.updateCover(artworkPath);
-          yield _miniplayer.default.updatePlaybackInfo(title, artist, isPlaying, 0, duration);
-        }
       });
       return function updatePlayStatus() {
         return _ref3.apply(this, arguments);
@@ -238211,7 +238156,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     global.app_event.on('stop', handleStop);
     console.log('[MediaInteraction] Event listeners registered');
   });
-},1468,[6,13,704,1469,1389],"src/core/init/player/mediaInteraction.ts");
+},1468,[6,13,704,1469],"src/core/init/player/mediaInteraction.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {

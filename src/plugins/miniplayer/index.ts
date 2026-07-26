@@ -24,19 +24,9 @@ if (isAvailable) {
     if (handler) handler()
   })
 
-  // 小窗打开时,立即推送当前播放状态
+  // 小窗打开时,ReactRootView 会自动从 playerState 获取最新状态
   eventEmitter.addListener('onMiniPlayerReady', () => {
-    const playerState = require('@/store/player/state').default
-    const info = playerState.musicInfo
-    if (info && info.id) {
-      const title = info.name || ''
-      const artist = info.singer || ''
-      const pic = info.pic || ''
-      const duration = info.interval || 0
-      const playing = playerState.isPlay
-      updateCover(pic)
-      updatePlaybackInfo(title, artist, playing, 0, duration)
-    }
+    console.log('[MiniPlayer] Ready - ReactRootView auto syncs player state')
   })
 }
 
@@ -66,38 +56,6 @@ export async function hide(): Promise<boolean> {
   } catch {
     return false
   }
-}
-
-/**
- * 更新封面
- */
-export async function updateCover(coverPath: string): Promise<void> {
-  if (!isAvailable || !isShowing) return
-  try {
-    await MiniPlayerModule.updateCover(coverPath)
-  } catch {}
-}
-
-/**
- * 更新播放信息(标题、歌手、播放状态、进度)
- */
-export async function updatePlaybackInfo(
-  title: string,
-  artist: string,
-  playing: boolean,
-  progress?: number,
-  maxProgress?: number
-): Promise<void> {
-  if (!isAvailable || !isShowing) return
-  try {
-    await MiniPlayerModule.updatePlaybackInfo(
-      title || '',
-      artist || '',
-      playing,
-      progress || 0,
-      maxProgress || 100
-    )
-  } catch {}
 }
 
 export function isMiniPlayerShowing(): boolean {
