@@ -85,13 +85,13 @@ export default memo(() => {
         </View>
 
         <View style={styles.controls}>
-          <TouchableOpacity style={[styles.ctrlBtn, { width: s.playSize * 0.9, height: s.playSize * 0.9, borderRadius: s.playSize * 0.45 }]} onPress={() => playPrev()} activeOpacity={0.6}>
+          <TouchableOpacity style={[styles.ctrlBtn, { width: s.playSize * 1.0, height: s.playSize * 1.0, borderRadius: s.playSize * 0.5 }]} onPress={() => playPrev()} activeOpacity={0.6}>
             <Icon name="skip-previous" size={s.iconSize} color={textColor} />
           </TouchableOpacity>
           <TouchableOpacity style={[styles.playBtn, { width: s.playSize, height: s.playSize, borderRadius: s.playSize / 2, backgroundColor: textColor + '18' }]} onPress={() => togglePlay()} activeOpacity={0.6}>
             <Icon name={isPlay ? 'pause-circle' : 'play-circle'} size={s.playSize * 0.7} color={textColor} />
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.ctrlBtn, { width: s.playSize * 0.9, height: s.playSize * 0.9, borderRadius: s.playSize * 0.45 }]} onPress={() => playNext()} activeOpacity={0.6}>
+          <TouchableOpacity style={[styles.ctrlBtn, { width: s.playSize * 1.0, height: s.playSize * 1.0, borderRadius: s.playSize * 0.5 }]} onPress={() => playNext()} activeOpacity={0.6}>
             <Icon name="skip-next" size={s.iconSize} color={textColor} />
           </TouchableOpacity>
         </View>

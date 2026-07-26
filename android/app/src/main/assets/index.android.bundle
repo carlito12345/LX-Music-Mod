@@ -126606,9 +126606,9 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
           style: styles.controls,
           children: [/*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.TouchableOpacity, {
             style: [styles.ctrlBtn, {
-              width: s.playSize * 0.9,
-              height: s.playSize * 0.9,
-              borderRadius: s.playSize * 0.45
+              width: s.playSize * 1.0,
+              height: s.playSize * 1.0,
+              borderRadius: s.playSize * 0.5
             }],
             onPress: function onPress() {
               return (0, _$$_REQUIRE(_dependencyMap[12], "../../core/player/player").playPrev)();
@@ -126637,9 +126637,9 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
             })
           }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.TouchableOpacity, {
             style: [styles.ctrlBtn, {
-              width: s.playSize * 0.9,
-              height: s.playSize * 0.9,
-              borderRadius: s.playSize * 0.45
+              width: s.playSize * 1.0,
+              height: s.playSize * 1.0,
+              borderRadius: s.playSize * 0.5
             }],
             onPress: function onPress() {
               return (0, _$$_REQUIRE(_dependencyMap[12], "../../core/player/player").playNext)();
