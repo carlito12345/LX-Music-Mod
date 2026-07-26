@@ -62,10 +62,29 @@ export default memo(({ backgroundColor }: HeaderProps) => {
                 toast('小窗已关闭')
               } else {
                 await mp.show()
-                toast('小窗已打开')
+                toast('小窗已打开(横)')
               }
             })
-          }} color={controlColor} />
+          }} color={controlColor}
+          onLongPress={() => {
+            void import('@/plugins/miniplayer').then(async(mod) => {
+              const mp = mod?.default
+              if (!mp || !mp.isAvailable) { toast('小窗模式不可用'); return }
+              if (!await mp.hasOverlayPermission()) {
+                toast('需要悬浮窗权限')
+                void mp.openOverlaySettings()
+                return
+              }
+              const showing = mp.isMiniPlayerShowing()
+              if (showing) {
+                await mp.hide()
+                toast('小窗已关闭')
+              } else {
+                await mp.showVertical()
+                toast('小窗已打开(竖)')
+              }
+            })
+          }} />
         <Btn icon="slider" onPress={showSetting} color={controlColor} />
       </View>
       <SettingPopup ref={popupRef} direction="vertical" />

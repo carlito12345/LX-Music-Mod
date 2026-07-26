@@ -33,6 +33,17 @@ if (isAvailable) {
 /**
  * 显示小窗播放器
  */
+export async function showVertical(): Promise<boolean> {
+  if (!isAvailable || isShowing) return false
+  try {
+    await MiniPlayerModule.showVertical()
+    isShowing = true
+    return true
+  } catch {
+    return false
+  }
+}
+
 export async function show(): Promise<boolean> {
   if (!isAvailable || isShowing) return false
   try {
@@ -75,6 +86,7 @@ export async function openOverlaySettings(): Promise<boolean> {
 export default {
   isAvailable,
   show,
+  showVertical,
   hide,
   isMiniPlayerShowing,
   hasOverlayPermission,

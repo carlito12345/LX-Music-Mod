@@ -33,6 +33,9 @@ public class MiniPlayerView {
 
   private static final int MINI_WIDTH_DP = 380;
   private static final int MINI_HEIGHT_DP = 220;
+  private static final int VERTICAL_WIDTH_DP = 200;
+  private static final int VERTICAL_HEIGHT_DP = 360;
+  private boolean isVertical = false;
 
   public MiniPlayerView(ReactApplicationContext reactContext, MiniPlayerEvent eventEmitter) {
     this.reactContext = reactContext;
@@ -64,8 +67,9 @@ public class MiniPlayerView {
       layoutFlag = WindowManager.LayoutParams.TYPE_PHONE;
     }
 
-    int width = (int) (MINI_WIDTH_DP * reactContext.getResources().getDisplayMetrics().density);
-    int height = (int) (MINI_HEIGHT_DP * reactContext.getResources().getDisplayMetrics().density);
+    int densityDp = (int) reactContext.getResources().getDisplayMetrics().density;
+    int width = (int) ((isVertical ? VERTICAL_WIDTH_DP : MINI_WIDTH_DP) * densityDp);
+    int height = (int) ((isVertical ? VERTICAL_HEIGHT_DP : MINI_HEIGHT_DP) * densityDp);
 
     if (width > screenWidth * 0.9f) width = (int) (screenWidth * 0.9f);
     if (height > screenHeight * 0.9f) height = (int) (screenHeight * 0.9f);
@@ -87,7 +91,7 @@ public class MiniPlayerView {
     try {
       MainApplication app = (MainApplication) reactContext.getApplicationContext();
       ReactInstanceManager rim = app.getReactNativeHost().getReactInstanceManager();
-      reactRootView.startReactApplication(rim, "MiniPlayer", null);
+      reactRootView.startReactApplication(rim, isVertical ? "MiniPlayerVertical" : "MiniPlayer", null);
     } catch (Exception e) {
       Log.e(TAG, "Failed to start React application", e);
     }
@@ -137,6 +141,11 @@ public class MiniPlayerView {
     } catch (Exception e) {
       Log.e(TAG, "Failed to show", e);
     }
+  }
+
+  public void showVertical() {
+    isVertical = true;
+    show(false);
   }
 
   public void hide() {

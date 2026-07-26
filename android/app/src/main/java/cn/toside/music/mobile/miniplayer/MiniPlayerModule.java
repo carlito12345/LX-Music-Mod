@@ -64,6 +64,20 @@ public class MiniPlayerModule extends ReactContextBaseJavaModule {
   public void removeListeners(Integer count) {}
 
   @ReactMethod
+  public void showVertical(Promise promise) {
+    try {
+      if (miniPlayerView == null) {
+        miniPlayerView = new MiniPlayerView(reactContext, miniPlayerEvent);
+      }
+      miniPlayerView.showVertical();
+      promise.resolve(true);
+    } catch (Exception e) {
+      Log.e(TAG, "Failed to show vertical", e);
+      promise.reject("SHOW_ERROR", e.getMessage());
+    }
+  }
+
+  @ReactMethod
   public void show(Promise promise) {
     try {
       if (miniPlayerView == null) {
