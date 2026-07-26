@@ -126480,11 +126480,36 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   var _jsxRuntime = _$$_REQUIRE(_dependencyMap[4], "react/jsx-runtime");
   var _this = this,
     _jsxFileName = "/data/data/com.termux/files/home/lx-music-mobile/src/screens/MiniPlayer/index.tsx";
+  /** 基于屏幕最小宽度计算缩放尺寸 */
+  var useResponsive = function useResponsive() {
+    var _Dimensions$get = _reactNative.Dimensions.get('window'),
+      width = _Dimensions$get.width,
+      height = _Dimensions$get.height;
+    var base = Math.min(width, height);
+    return {
+      // 图标大小 = 屏幕最小边的 5%
+      iconSize: base * 0.05,
+      playSize: base * 0.085,
+      // 封面 = 屏幕最小边的 16%
+      coverSize: base * 0.16,
+      coverRadius: base * 0.035,
+      // 内边距 = 屏幕最小边的 3%
+      padH: base * 0.03,
+      // 控件间距
+      ctrlGap: base * 0.012,
+      // 字体
+      titleSize: base * 0.035,
+      subSize: base * 0.028,
+      // 容器圆角
+      borderRadius: base * 0.045
+    };
+  };
   var _default = exports.default = (0, _react.memo)(function () {
     var theme = (0, _$$_REQUIRE(_dependencyMap[5], "../../store/theme/hook").useTheme)();
     var musicInfo = (0, _$$_REQUIRE(_dependencyMap[6], "../../store/player/hook").usePlayerMusicInfo)();
     var isPlay = (0, _$$_REQUIRE(_dependencyMap[6], "../../store/player/hook").useIsPlay)();
     var lrcInfo = (0, _$$_REQUIRE(_dependencyMap[7], "../../plugins/lyric").useLrcPlay)();
+    var s = useResponsive();
     var name = musicInfo.name || '';
     var singer = musicInfo.singer || '';
     var pic = musicInfo.pic || '';
@@ -126493,7 +126518,9 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     var bgColor = solidColor || theme['c-content-background'] || '#1a1a2e';
     var textColor = (0, _$$_REQUIRE(_dependencyMap[9], "../../utils/colorContrast").getContrastTextColor)(bgColor);
     return /*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.View, {
-      style: styles.container,
+      style: [styles.container, {
+        borderRadius: s.borderRadius
+      }],
       children: [/*#__PURE__*/(0, _jsxRuntime.jsx)(_$$_REQUIRE(_dependencyMap[10], "@react-native-community/blur").BlurView, {
         style: _reactNative.StyleSheet.absoluteFill,
         blurType: "dark",
@@ -126505,20 +126532,30 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
           opacity: 0.8
         }]
       }), /*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.View, {
-        style: styles.content,
+        style: [styles.content, {
+          paddingHorizontal: s.padH
+        }],
         children: [/*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.View, {
-          style: styles.coverWrap,
+          style: [styles.coverWrap, {
+            width: s.coverSize,
+            height: s.coverSize,
+            borderRadius: s.coverRadius,
+            marginRight: s.padH
+          }],
           children: pic ? /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.Image, {
             source: {
               uri: pic
             },
-            style: styles.cover
+            style: [styles.cover, {
+              borderRadius: s.coverRadius
+            }]
           }) : /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.View, {
             style: [styles.coverPlaceholder, {
+              borderRadius: s.coverRadius,
               backgroundColor: textColor + '20'
             }],
             children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
-              size: 24,
+              size: s.coverSize * 0.35,
               color: textColor,
               style: {
                 opacity: 0.5
@@ -126530,7 +126567,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
           style: styles.midArea,
           children: [/*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
             numberOfLines: 1,
-            size: 13,
+            size: s.titleSize,
             color: textColor,
             style: {
               fontWeight: '600'
@@ -126538,7 +126575,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
             children: name || '未播放'
           }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
             numberOfLines: 1,
-            size: 10,
+            size: s.subSize,
             color: textColor,
             style: {
               opacity: 0.5,
@@ -126547,7 +126584,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
             children: singer || ''
           }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
             numberOfLines: 1,
-            size: 10,
+            size: s.subSize,
             color: textColor,
             style: {
               opacity: 0.4,
@@ -126555,47 +126592,58 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
             },
             children: lrcLine || '♪'
           })]
-        }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.View, {
-          style: styles.rightArea,
-          children: /*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.View, {
-            style: styles.controls,
-            children: [/*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.TouchableOpacity, {
-              style: styles.ctrlBtn,
-              onPress: function onPress() {
-                return (0, _$$_REQUIRE(_dependencyMap[11], "../../core/player/player").playPrev)();
-              },
-              activeOpacity: 0.6,
-              children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_$$_REQUIRE(_dependencyMap[12], "../../components/common/Icon").Icon, {
-                name: "skip-previous",
-                size: 18,
-                color: textColor
-              })
-            }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.TouchableOpacity, {
-              style: [styles.playBtn, {
-                backgroundColor: textColor + '18'
-              }],
-              onPress: function onPress() {
-                return (0, _$$_REQUIRE(_dependencyMap[11], "../../core/player/player").togglePlay)();
-              },
-              activeOpacity: 0.6,
-              children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_$$_REQUIRE(_dependencyMap[12], "../../components/common/Icon").Icon, {
-                name: isPlay ? 'pause-circle' : 'play-circle',
-                size: 32,
-                color: textColor
-              })
-            }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.TouchableOpacity, {
-              style: styles.ctrlBtn,
-              onPress: function onPress() {
-                return (0, _$$_REQUIRE(_dependencyMap[11], "../../core/player/player").playNext)();
-              },
-              activeOpacity: 0.6,
-              children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_$$_REQUIRE(_dependencyMap[12], "../../components/common/Icon").Icon, {
-                name: "skip-next",
-                size: 18,
-                color: textColor
-              })
-            })]
-          })
+        }), /*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.View, {
+          style: [styles.controls, {
+            gap: s.ctrlGap,
+            marginLeft: s.padH * 0.5
+          }],
+          children: [/*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.TouchableOpacity, {
+            style: [styles.ctrlBtn, {
+              width: s.iconSize * 1.6,
+              height: s.iconSize * 1.6,
+              borderRadius: s.iconSize * 0.8
+            }],
+            onPress: function onPress() {
+              return (0, _$$_REQUIRE(_dependencyMap[11], "../../core/player/player").playPrev)();
+            },
+            activeOpacity: 0.6,
+            children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_$$_REQUIRE(_dependencyMap[12], "../../components/common/Icon").Icon, {
+              name: "skip-previous",
+              size: s.iconSize,
+              color: textColor
+            })
+          }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.TouchableOpacity, {
+            style: [styles.playBtn, {
+              width: s.playSize,
+              height: s.playSize,
+              borderRadius: s.playSize / 2,
+              backgroundColor: textColor + '18'
+            }],
+            onPress: function onPress() {
+              return (0, _$$_REQUIRE(_dependencyMap[11], "../../core/player/player").togglePlay)();
+            },
+            activeOpacity: 0.6,
+            children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_$$_REQUIRE(_dependencyMap[12], "../../components/common/Icon").Icon, {
+              name: isPlay ? 'pause-circle' : 'play-circle',
+              size: s.playSize * 0.75,
+              color: textColor
+            })
+          }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.TouchableOpacity, {
+            style: [styles.ctrlBtn, {
+              width: s.iconSize * 1.6,
+              height: s.iconSize * 1.6,
+              borderRadius: s.iconSize * 0.8
+            }],
+            onPress: function onPress() {
+              return (0, _$$_REQUIRE(_dependencyMap[11], "../../core/player/player").playNext)();
+            },
+            activeOpacity: 0.6,
+            children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_$$_REQUIRE(_dependencyMap[12], "../../components/common/Icon").Icon, {
+              name: "skip-next",
+              size: s.iconSize,
+              color: textColor
+            })
+          })]
         })]
       })]
     });
@@ -126604,19 +126652,15 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     container: {
       width: '100%',
       height: '100%',
-      borderRadius: 18,
       overflow: 'hidden'
     },
     content: {
       flex: 1,
       flexDirection: 'row',
-      alignItems: 'center',
-      paddingHorizontal: 16
+      alignItems: 'center'
     },
     coverWrap: {
-      width: 60,
-      height: 60,
-      borderRadius: 12,
+      flexShrink: 0,
       overflow: 'hidden',
       elevation: 6,
       shadowColor: '#000',
@@ -126628,43 +126672,29 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       shadowRadius: 6
     },
     cover: {
-      width: 60,
-      height: 60,
-      borderRadius: 12
+      width: '100%',
+      height: '100%'
     },
     coverPlaceholder: {
-      width: 60,
-      height: 60,
-      borderRadius: 12,
+      width: '100%',
+      height: '100%',
       justifyContent: 'center',
       alignItems: 'center'
     },
     midArea: {
       flex: 1,
-      marginHorizontal: 16,
       justifyContent: 'center'
-    },
-    rightArea: {
-      justifyContent: 'center',
-      flexShrink: 0,
-      marginLeft: 4
     },
     controls: {
       flexDirection: 'row',
       alignItems: 'center',
-      gap: 4
+      flexShrink: 0
     },
     ctrlBtn: {
-      width: 34,
-      height: 34,
-      borderRadius: 17,
       justifyContent: 'center',
       alignItems: 'center'
     },
     playBtn: {
-      width: 40,
-      height: 40,
-      borderRadius: 20,
       justifyContent: 'center',
       alignItems: 'center'
     }
@@ -175777,6 +175807,33 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   var _jsxRuntime = _$$_REQUIRE(_dependencyMap[4], "react/jsx-runtime");
   var _this = this,
     _jsxFileName = "/data/data/com.termux/files/home/lx-music-mobile/src/screens/MiniPlayerVertical/index.tsx";
+  var useResponsive = function useResponsive() {
+    var _Dimensions$get = _reactNative.Dimensions.get('window'),
+      width = _Dimensions$get.width,
+      height = _Dimensions$get.height;
+    var base = Math.min(width, height);
+    return {
+      // 封面 = 宽度的 32%
+      coverSize: base * 0.32,
+      coverRadius: base * 0.05,
+      // 图标
+      iconSize: base * 0.06,
+      playSize: base * 0.12,
+      // 内边距
+      padH: base * 0.04,
+      padV: base * 0.035,
+      // 字体
+      titleSize: base * 0.038,
+      subSize: base * 0.032,
+      lyricSize: base * 0.035,
+      // 间距
+      gap: base * 0.04,
+      // 进度条高度
+      progressHeight: base * 0.012,
+      // 圆角
+      borderRadius: base * 0.07
+    };
+  };
   var _default = exports.default = (0, _react.memo)(function () {
     var theme = (0, _$$_REQUIRE(_dependencyMap[5], "../../store/theme/hook").useTheme)();
     var musicInfo = (0, _$$_REQUIRE(_dependencyMap[6], "../../store/player/hook").usePlayerMusicInfo)();
@@ -175785,17 +175842,18 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       progress = _useProgress.progress,
       maxPlayTime = _useProgress.maxPlayTime;
     var lrcInfo = (0, _$$_REQUIRE(_dependencyMap[7], "../../plugins/lyric").useLrcPlay)();
+    var s = useResponsive();
     var lrcLine = lrcInfo.text || '';
     var name = musicInfo.name || '';
     var singer = musicInfo.singer || '';
     var pic = musicInfo.pic || '';
-
-    // 跟随播放器纯色背景
     var solidColor = (0, _$$_REQUIRE(_dependencyMap[8], "../../store/setting/hook").useSettingValue)('playDetail.background.solidColor');
     var bgColor = solidColor || theme['c-content-background'] || '#1a1a2e';
     var textColor = (0, _$$_REQUIRE(_dependencyMap[9], "../../utils/colorContrast").getContrastTextColor)(bgColor);
     return /*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.View, {
-      style: styles.container,
+      style: [styles.container, {
+        borderRadius: s.borderRadius
+      }],
       children: [/*#__PURE__*/(0, _jsxRuntime.jsx)(_$$_REQUIRE(_dependencyMap[10], "@react-native-community/blur").BlurView, {
         style: _reactNative.StyleSheet.absoluteFill,
         blurType: "dark",
@@ -175807,22 +175865,33 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
           opacity: 0.75
         }]
       }), /*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.View, {
-        style: styles.content,
+        style: [styles.content, {
+          paddingHorizontal: s.padH,
+          paddingVertical: s.padV,
+          paddingBottom: s.padV * 1.2
+        }],
         children: [/*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.View, {
           style: styles.topSection,
           children: [/*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.View, {
-            style: styles.coverWrap,
+            style: [styles.coverWrap, {
+              width: s.coverSize,
+              height: s.coverSize,
+              borderRadius: s.coverRadius
+            }],
             children: pic ? /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.Image, {
               source: {
                 uri: pic
               },
-              style: styles.cover
+              style: [styles.cover, {
+                borderRadius: s.coverRadius
+              }]
             }) : /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.View, {
               style: [styles.coverPlaceholder, {
+                borderRadius: s.coverRadius,
                 backgroundColor: textColor + '20'
               }],
               children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
-                size: 36,
+                size: s.coverSize * 0.3,
                 color: textColor,
                 style: {
                   opacity: 0.5
@@ -175832,16 +175901,16 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
             })
           }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
             numberOfLines: 1,
-            size: 14,
+            size: s.titleSize,
             color: textColor,
             style: {
               fontWeight: '600',
-              marginTop: 4
+              marginTop: s.padV * 0.4
             },
             children: name || '未播放'
           }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
             numberOfLines: 1,
-            size: 11,
+            size: s.subSize,
             color: textColor,
             style: {
               opacity: 0.5,
@@ -175852,46 +175921,57 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
         }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.View, {
           style: styles.midSection,
           children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
-            numberOfLines: 3,
-            size: 13,
+            numberOfLines: 4,
+            size: s.lyricSize,
             color: textColor,
             style: {
               textAlign: 'center',
               opacity: 0.7,
-              lineHeight: 20
+              lineHeight: s.lyricSize * 1.6
             },
             children: lrcLine || '♪ 聆听音乐的美好 ♪'
           })
         }), /*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.View, {
           style: styles.botSection,
           children: [/*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.View, {
-            style: styles.progressWrap,
+            style: [styles.progressBg, {
+              height: s.progressHeight,
+              borderRadius: s.progressHeight / 2,
+              backgroundColor: textColor + '20',
+              marginBottom: s.gap * 0.8
+            }],
             children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.View, {
-              style: [styles.progressBg, {
-                backgroundColor: textColor + '20'
-              }],
-              children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.View, {
-                style: [styles.progressFill, {
-                  width: maxPlayTime > 0 ? progress / maxPlayTime * 100 + '%' : '0%',
-                  backgroundColor: textColor
-                }]
-              })
+              style: [styles.progressFill, {
+                height: '100%',
+                borderRadius: s.progressHeight / 2,
+                backgroundColor: textColor,
+                width: maxPlayTime > 0 ? progress / maxPlayTime * 100 + '%' : '0%'
+              }]
             })
           }), /*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.View, {
-            style: styles.controls,
+            style: [styles.controls, {
+              gap: s.gap * 0.5
+            }],
             children: [/*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.TouchableOpacity, {
-              style: styles.btn,
+              style: [styles.btn, {
+                width: s.iconSize * 1.8,
+                height: s.iconSize * 1.8,
+                borderRadius: s.iconSize * 0.9
+              }],
               onPress: function onPress() {
                 return (0, _$$_REQUIRE(_dependencyMap[11], "../../core/player/player").playPrev)();
               },
               activeOpacity: 0.6,
               children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_$$_REQUIRE(_dependencyMap[12], "../../components/common/Icon").Icon, {
                 name: "skip-previous",
-                size: 22,
+                size: s.iconSize,
                 color: textColor
               })
             }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.TouchableOpacity, {
               style: [styles.playBtn, {
+                width: s.playSize,
+                height: s.playSize,
+                borderRadius: s.playSize / 2,
                 backgroundColor: textColor + '18'
               }],
               onPress: function onPress() {
@@ -175900,18 +175980,22 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
               activeOpacity: 0.6,
               children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_$$_REQUIRE(_dependencyMap[12], "../../components/common/Icon").Icon, {
                 name: isPlay ? 'pause-circle' : 'play-circle',
-                size: 38,
+                size: s.playSize * 0.7,
                 color: textColor
               })
             }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.TouchableOpacity, {
-              style: styles.btn,
+              style: [styles.btn, {
+                width: s.iconSize * 1.8,
+                height: s.iconSize * 1.8,
+                borderRadius: s.iconSize * 0.9
+              }],
               onPress: function onPress() {
                 return (0, _$$_REQUIRE(_dependencyMap[11], "../../core/player/player").playNext)();
               },
               activeOpacity: 0.6,
               children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_$$_REQUIRE(_dependencyMap[12], "../../components/common/Icon").Icon, {
                 name: "skip-next",
-                size: 22,
+                size: s.iconSize,
                 color: textColor
               })
             })]
@@ -175924,14 +176008,10 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     container: {
       width: '100%',
       height: '100%',
-      borderRadius: 28,
       overflow: 'hidden'
     },
     content: {
-      flex: 1,
-      paddingHorizontal: 16,
-      paddingVertical: 12,
-      paddingBottom: 16
+      flex: 1
     },
     topSection: {
       flex: 1,
@@ -175939,9 +176019,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       justifyContent: 'center'
     },
     coverWrap: {
-      width: 120,
-      height: 120,
-      borderRadius: 18,
+      flexShrink: 0,
       overflow: 'hidden',
       elevation: 10,
       shadowColor: '#000',
@@ -175953,14 +176031,12 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       shadowRadius: 10
     },
     cover: {
-      width: 120,
-      height: 120,
-      borderRadius: 18
+      width: '100%',
+      height: '100%'
     },
     coverPlaceholder: {
-      width: 120,
-      height: 120,
-      borderRadius: 18,
+      width: '100%',
+      height: '100%',
       justifyContent: 'center',
       alignItems: 'center'
     },
@@ -175974,38 +176050,21 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       flex: 1,
       justifyContent: 'center'
     },
-    progressWrap: {
-      width: '100%',
-      marginBottom: 14,
-      paddingHorizontal: 4
-    },
     progressBg: {
-      height: 4,
-      borderRadius: 2,
+      width: '100%',
       overflow: 'hidden'
     },
-    progressFill: {
-      height: '100%',
-      borderRadius: 2
-    },
+    progressFill: {},
     controls: {
       flexDirection: 'row',
       alignItems: 'center',
-      justifyContent: 'center',
-      gap: 16,
-      marginBottom: 4
+      justifyContent: 'center'
     },
     btn: {
-      width: 40,
-      height: 40,
-      borderRadius: 20,
       justifyContent: 'center',
       alignItems: 'center'
     },
     playBtn: {
-      width: 64,
-      height: 64,
-      borderRadius: 32,
       justifyContent: 'center',
       alignItems: 'center'
     }
