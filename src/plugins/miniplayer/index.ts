@@ -69,6 +69,18 @@ export async function hide(): Promise<boolean> {
   }
 }
 
+export async function updateCover(coverPath: string): Promise<void> {
+  if (!isAvailable || !isShowing) return
+  try { await MiniPlayerModule.updateCover(coverPath) } catch {}
+}
+
+export async function updatePlaybackInfo(
+  title: string, artist: string, playing: boolean, progress?: number, maxProgress?: number
+): Promise<void> {
+  if (!isAvailable || !isShowing) return
+  try { await MiniPlayerModule.updatePlaybackInfo(title || '', artist || '', playing, progress || 0, maxProgress || 100) } catch {}
+}
+
 export function isMiniPlayerShowing(): boolean {
   return isShowing
 }
@@ -88,6 +100,8 @@ export default {
   show,
   showVertical,
   hide,
+  updateCover,
+  updatePlaybackInfo,
   isMiniPlayerShowing,
   hasOverlayPermission,
   openOverlaySettings,

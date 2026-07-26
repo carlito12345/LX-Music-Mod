@@ -96,6 +96,18 @@ public class MiniPlayerModule extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
+  public void updateCover(String coverPath, Promise promise) {
+    if (miniPlayerView != null) miniPlayerView.updateCover(coverPath);
+    promise.resolve(true);
+  }
+
+  @ReactMethod
+  public void updatePlaybackInfo(String title, String artist, boolean playing, int progress, int maxProgress, Promise promise) {
+    if (miniPlayerView != null) miniPlayerView.updatePlaybackInfo(title, artist, playing, progress, maxProgress);
+    promise.resolve(true);
+  }
+
+  @ReactMethod
   public void hide(Promise promise) {
     try {
       if (miniPlayerView != null) {
