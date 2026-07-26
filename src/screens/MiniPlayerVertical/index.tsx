@@ -13,26 +13,20 @@ import { getContrastTextColor } from '@/utils/colorContrast'
 const useResponsive = () => {
   const { width, height } = Dimensions.get('window')
   const base = Math.min(width, height)
+  // 所有尺寸缩小1倍
   return {
-    // 封面 = 宽度的 32%
-    coverSize: base * 0.32,
-    coverRadius: base * 0.05,
-    // 图标
-    iconSize: base * 0.06,
-    playSize: base * 0.12,
-    // 内边距
-    padH: base * 0.04,
-    padV: base * 0.035,
-    // 字体
-    titleSize: base * 0.038,
-    subSize: base * 0.032,
-    lyricSize: base * 0.035,
-    // 间距
-    gap: base * 0.04,
-    // 进度条高度
-    progressHeight: base * 0.012,
-    // 圆角
-    borderRadius: base * 0.07,
+    coverSize: base * 0.16,
+    coverRadius: base * 0.025,
+    iconSize: base * 0.03,
+    playSize: base * 0.06,
+    padH: base * 0.02,
+    padV: base * 0.017,
+    titleSize: base * 0.019,
+    subSize: base * 0.016,
+    lyricSize: base * 0.017,
+    gap: base * 0.02,
+    progressHeight: base * 0.006,
+    borderRadius: base * 0.035,
   }
 }
 

@@ -14,22 +14,17 @@ import { getContrastTextColor } from '@/utils/colorContrast'
 const useResponsive = () => {
   const { width, height } = Dimensions.get('window')
   const base = Math.min(width, height)
+  // 所有尺寸缩小1倍
   return {
-    // 图标大小 = 屏幕最小边的 5%
-    iconSize: base * 0.05,
-    playSize: base * 0.085,
-    // 封面 = 屏幕最小边的 16%
-    coverSize: base * 0.16,
-    coverRadius: base * 0.035,
-    // 内边距 = 屏幕最小边的 3%
-    padH: base * 0.03,
-    // 控件间距
-    ctrlGap: base * 0.012,
-    // 字体
-    titleSize: base * 0.035,
-    subSize: base * 0.028,
-    // 容器圆角
-    borderRadius: base * 0.045,
+    iconSize: base * 0.025,
+    playSize: base * 0.042,
+    coverSize: base * 0.08,
+    coverRadius: base * 0.017,
+    padH: base * 0.015,
+    ctrlGap: base * 0.006,
+    titleSize: base * 0.017,
+    subSize: base * 0.014,
+    borderRadius: base * 0.022,
   }
 }
 
