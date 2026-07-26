@@ -42,6 +42,15 @@ public class MiniPlayerView {
   public void show(boolean isLandscape) {
     if (isShowing) return;
 
+    new android.os.Handler(android.os.Looper.getMainLooper()).post(new Runnable() {
+      @Override
+      public void run() {
+        showOnMainThread(isLandscape);
+      }
+    });
+  }
+
+  private void showOnMainThread(boolean isLandscape) {
     windowManager = (WindowManager) reactContext.getSystemService(Context.WINDOW_SERVICE);
     android.graphics.Point size = new android.graphics.Point();
     windowManager.getDefaultDisplay().getSize(size);
@@ -58,7 +67,6 @@ public class MiniPlayerView {
     int width = (int) (MINI_WIDTH_DP * reactContext.getResources().getDisplayMetrics().density);
     int height = (int) (MINI_HEIGHT_DP * reactContext.getResources().getDisplayMetrics().density);
 
-    // 适配屏幕
     if (width > screenWidth * 0.9f) width = (int) (screenWidth * 0.9f);
     if (height > screenHeight * 0.9f) height = (int) (screenHeight * 0.9f);
 
@@ -72,11 +80,9 @@ public class MiniPlayerView {
     params.x = (screenWidth - width) / 2;
     params.y = (int) (screenHeight * 0.15f);
 
-    // 外层容器
     floatingView = new FrameLayout(reactContext);
     floatingView.setBackgroundColor(0x00000000);
 
-    // 创建 ReactRootView 渲染 RN 组件
     reactRootView = new ReactRootView(reactContext);
     try {
       MainApplication app = (MainApplication) reactContext.getApplicationContext();
@@ -91,7 +97,6 @@ public class MiniPlayerView {
         FrameLayout.LayoutParams.MATCH_PARENT
     ));
 
-    // 拖拽逻辑
     floatingView.setOnTouchListener(new View.OnTouchListener() {
       private long touchStartTime;
 
@@ -116,9 +121,7 @@ public class MiniPlayerView {
             float dx = event.getRawX() - initialTouchX;
             float dy = event.getRawY() - initialTouchY;
             float distance = (float) Math.sqrt(dx * dx + dy * dy);
-            // 点击(非拖拽)时不做特殊处理
             if (distance < 10 && System.currentTimeMillis() - touchStartTime < 200) {
-              // 点击事件由 ReactRootView 内部处理
               return false;
             }
             return true;
