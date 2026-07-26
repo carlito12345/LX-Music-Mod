@@ -126544,7 +126544,8 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
         }]
       }), /*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.View, {
         style: [styles.content, {
-          paddingHorizontal: s.padH
+          paddingHorizontal: s.padH,
+          paddingRight: s.padH * 1.5
         }],
         children: [/*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.View, {
           style: [styles.coverWrap, {
@@ -126697,15 +126698,17 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       flexDirection: 'row',
       alignItems: 'center',
       flexShrink: 0,
-      marginLeft: 'auto'
+      marginLeft: 8
     },
     ctrlBtn: {
       justifyContent: 'center',
-      alignItems: 'center'
+      alignItems: 'center',
+      overflow: 'visible'
     },
     playBtn: {
       justifyContent: 'center',
-      alignItems: 'center'
+      alignItems: 'center',
+      overflow: 'hidden'
     }
   });
 },541,[1,30,62,6,542,104,543,552,689,691,692,693,697,737],"src/screens/MiniPlayer/index.tsx");
