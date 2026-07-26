@@ -30,16 +30,15 @@ export default memo(() => {
       <View style={[StyleSheet.absoluteFill, { backgroundColor: bgColor, opacity: 0.85 }]} />
 
       <View style={styles.content}>
-        {/* 左列:封面 + 信息 + 控件 + 进度 */}
+        {/* 左列 */}
         <View style={styles.leftCol}>
-          {/* 上左:封面 + 歌名 */}
           <View style={styles.topRow}>
             <View style={styles.coverWrap}>
               {pic ? (
                 <Image source={{ uri: pic }} style={styles.cover} />
               ) : (
                 <View style={[styles.coverPlaceholder, { backgroundColor: theme['c-primary'] || '#07c556' }]}>
-                  <Text size={18} color="#fff">♪</Text>
+                  <Text size={28} color="#fff">♪</Text>
                 </View>
               )}
             </View>
@@ -53,7 +52,13 @@ export default memo(() => {
             </View>
           </View>
 
-          {/* 下左:控件 + 进度条 */}
+          {/* 歌词在进度条上方 */}
+          <View style={styles.lrcRow}>
+            <Text numberOfLines={1} size={11} color={textColor} style={{ opacity: 0.6 }}>
+              {lrcLine || '♪'}
+            </Text>
+          </View>
+
           <View style={styles.bottomRow}>
             <View style={styles.controls}>
               <TouchableOpacity style={styles.ctrlBtn} onPress={() => playPrev()}>
@@ -71,13 +76,6 @@ export default memo(() => {
             </View>
           </View>
         </View>
-
-        {/* 右列:歌词(占两行) */}
-        <View style={styles.rightCol}>
-          <Text numberOfLines={4} size={12} color={textColor} style={{ opacity: 0.7, lineHeight: 18 }}>
-            {lrcLine || '♪'}
-          </Text>
-        </View>
       </View>
     </View>
   )
@@ -92,41 +90,41 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    flexDirection: 'row',
     padding: 10,
   },
-  // 左列
   leftCol: {
     flex: 1,
     justifyContent: 'space-between',
-    marginRight: 10,
   },
   topRow: {
     flexDirection: 'row',
     alignItems: 'center',
   },
   coverWrap: {
-    width: 50,
-    height: 50,
-    borderRadius: 10,
+    width: 100,
+    height: 100,
+    borderRadius: 14,
     overflow: 'hidden',
   },
   cover: {
-    width: 50,
-    height: 50,
-    borderRadius: 10,
+    width: 100,
+    height: 100,
+    borderRadius: 14,
   },
   coverPlaceholder: {
-    width: 50,
-    height: 50,
-    borderRadius: 10,
+    width: 100,
+    height: 100,
+    borderRadius: 14,
     justifyContent: 'center',
     alignItems: 'center',
   },
   infoArea: {
     flex: 1,
-    marginLeft: 8,
+    marginLeft: 10,
     justifyContent: 'center',
+  },
+  lrcRow: {
+    paddingVertical: 2,
   },
   bottomRow: {
     flexDirection: 'row',
@@ -163,13 +161,5 @@ const styles = StyleSheet.create({
     width: '30%',
     height: '100%',
     borderRadius: 1.5,
-  },
-  // 右列:歌词
-  rightCol: {
-    width: 120,
-    justifyContent: 'center',
-    paddingLeft: 8,
-    borderLeftWidth: StyleSheet.hairlineWidth,
-    borderLeftColor: 'rgba(255,255,255,0.1)',
   },
 })
