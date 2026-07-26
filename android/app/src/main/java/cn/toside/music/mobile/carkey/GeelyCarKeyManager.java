@@ -111,15 +111,12 @@ public class GeelyCarKeyManager {
   private final KeyInputManager.BaseInputListener inputListener = new KeyInputManager.BaseInputListener() {
     @Override
     public void onKeyCodeEvent(int keyCode, int event, int softKeyFunction) {
+      // event=0 = ACTION_DOWN, event=1 = ACTION_UP
+      // 只处理按下事件,忽略释放事件(避免重复)
       Log.d(TAG, "Key event: " + keyCode + " event=" + event);
       if (event == 0) handleKey(keyCode);
     }
-
-    @Override
-    public void onShortClick(int keyCode, int softKeyFunction) {
-      Log.d(TAG, "Short click: " + keyCode);
-      handleKey(keyCode);
-    }
+    // onShortClick 不处理(Geely 的 onKeyCodeEvent 已包含按下事件)
   };
 
   private void handleKey(int keyCode) {
