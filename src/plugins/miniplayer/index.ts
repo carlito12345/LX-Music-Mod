@@ -23,6 +23,21 @@ if (isAvailable) {
     const handler = ACTION_MAP[data.action]
     if (handler) handler()
   })
+
+  // 小窗打开时,立即推送当前播放状态
+  eventEmitter.addListener('onMiniPlayerReady', () => {
+    const playerState = require('@/store/player/state').default
+    const info = playerState.musicInfo
+    if (info && info.id) {
+      const title = info.name || ''
+      const artist = info.singer || ''
+      const pic = info.pic || ''
+      const duration = info.interval || 0
+      const playing = playerState.isPlay
+      updateCover(pic)
+      updatePlaybackInfo(title, artist, playing, 0, duration)
+    }
+  })
 }
 
 /**

@@ -6,6 +6,8 @@ import android.content.Intent;
 
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
+import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
@@ -56,6 +58,12 @@ public class MiniPlayerModule extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
+  public void addListener(String eventName) {}
+
+  @ReactMethod
+  public void removeListeners(Integer count) {}
+
+  @ReactMethod
   public void show(Promise promise) {
     try {
       if (miniPlayerView == null) {
@@ -63,6 +71,9 @@ public class MiniPlayerModule extends ReactContextBaseJavaModule {
       }
       miniPlayerView.show(false);
       Log.d(TAG, "MiniPlayer shown");
+      // 通知 JS 层小窗已打开,让 JS 推送当前播放状态
+      WritableMap params = Arguments.createMap();
+      miniPlayerEvent.sendEvent("onMiniPlayerReady", params);
       promise.resolve(true);
     } catch (Exception e) {
       Log.e(TAG, "Failed to show", e);

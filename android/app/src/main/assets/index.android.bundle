@@ -229227,6 +229227,21 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       var handler = ACTION_MAP[data.action];
       if (handler) handler();
     });
+
+    // 小窗打开时,立即推送当前播放状态
+    eventEmitter.addListener('onMiniPlayerReady', function () {
+      var playerState = _$$_REQUIRE(_dependencyMap[4], "../../store/player/state").default;
+      var info = playerState.musicInfo;
+      if (info && info.id) {
+        var title = info.name || '';
+        var artist = info.singer || '';
+        var pic = info.pic || '';
+        var duration = info.interval || 0;
+        var playing = playerState.isPlay;
+        updateCover(pic);
+        updatePlaybackInfo(title, artist, playing, 0, duration);
+      }
+    });
   }
 
   /**
@@ -229339,7 +229354,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     hasOverlayPermission: hasOverlayPermission,
     openOverlaySettings: openOverlaySettings
   };
-},1389,[6,13,15,983],"src/plugins/miniplayer/index.ts");
+},1389,[6,13,15,983,704],"src/plugins/miniplayer/index.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
