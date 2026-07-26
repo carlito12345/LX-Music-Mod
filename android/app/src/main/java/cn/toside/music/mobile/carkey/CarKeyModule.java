@@ -41,32 +41,16 @@ public class CarKeyModule extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public void startListening(Promise promise) {
-    // 优先使用 Geely OneOS API(只用一个通道,避免重复触发)
-    boolean geelyConnected = false;
+    // 异步连接 Geely OneOS API(不阻塞主线程)
     try {
       GeelyCarKeyManager geelyManager = GeelyCarKeyManager.getInstance(reactContext);
       geelyManager.connect();
-      // 等待 OneOS 绑定(最多 2 秒)
-      for (int i = 0; i < 4; i++) {
-        try { Thread.sleep(500); } catch (InterruptedException e) { break; }
-        if (geelyManager.isConnected()) {
-          geelyConnected = true;
-          break;
-        }
-      }
     } catch (Exception e) {
       Log.d(TAG, "Geely API not available: " + e.getMessage());
     }
 
-    // Geely 已连接时不注册 MEDIA_BUTTON(避免双重触发)
-    if (geelyConnected) {
-      Log.d(TAG, "Geely connected - skipping MEDIA_BUTTON receiver");
-      isListening = true;
-      promise.resolve(true);
-      return;
-    }
-
-    // Geely 不可用时才使用 MEDIA_BUTTON 广播
+    // MEDIA_BUTTON 始终注册(用于通知栏控制)
+    // Geely 和 AccessibilityService 通过去重逻辑避免双重触发
     if (isListening) {
       promise.resolve(true);
       return;
@@ -76,7 +60,7 @@ public class CarKeyModule extends ReactContextBaseJavaModule {
       filter.addAction("android.intent.action.MEDIA_BUTTON");
       reactContext.registerReceiver(keyReceiver, filter);
       isListening = true;
-      Log.d(TAG, "MEDIA_BUTTON receiver registered (Geely not available)");
+      Log.d(TAG, "MEDIA_BUTTON receiver registered");
       promise.resolve(true);
     } catch (Exception e) {
       promise.reject("CARKEY_ERROR", e.getMessage());
