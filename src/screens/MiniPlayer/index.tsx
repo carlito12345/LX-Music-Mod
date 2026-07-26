@@ -1,15 +1,15 @@
 import { memo, useMemo } from 'react'
 import { View, StyleSheet, TouchableOpacity, Image } from 'react-native'
 import { BlurView } from '@react-native-community/blur'
-import { usePlayerMusicInfo, useIsPlay, useThemeColors } from '@/store/player/hook'
+import { usePlayerMusicInfo, useIsPlay } from '@/store/player/hook'
 import Text from '@/components/common/Text'
 import { Icon } from '@/components/common/Icon'
 import { useTheme } from '@/store/theme/hook'
 import { playNext, playPrev, togglePlay } from '@/core/player/player'
 import { getContrastTextColor } from '@/utils/colorContrast'
 
-const ControlBtn = memo(({ icon, size, onPress, color, isPlay }: {
-  icon: string; size: number; onPress: () => void; color: string; isPlay?: boolean
+const ControlBtn = memo(({ icon, size, onPress, color }: {
+  icon: string; size: number; onPress: () => void; color: string
 }) => (
   <TouchableOpacity onPress={onPress} style={styles.ctrlBtn}>
     <Icon name={icon} size={size} color={color} />
@@ -42,7 +42,7 @@ export default memo(() => {
       {/* 背景色层 */}
       <View style={[StyleSheet.absoluteFill, { backgroundColor: bgColor, opacity: 0.85 }]} />
 
-      {/* 内容 */}
+      {/* 内容 - 水平居中分布 */}
       <View style={styles.content}>
         {/* 封面 */}
         <View style={styles.coverWrap}>
@@ -55,21 +55,26 @@ export default memo(() => {
           )}
         </View>
 
-        {/* 歌曲信息 */}
-        <View style={styles.info}>
-          <Text numberOfLines={1} size={18} color={textColor} style={{ fontWeight: '600' }}>
+        {/* 歌曲信息 + 歌词 */}
+        <View style={styles.infoArea}>
+          <Text numberOfLines={1} size={16} color={textColor} style={{ fontWeight: '600' }}>
             {name || '未播放'}
           </Text>
-          <Text numberOfLines={1} size={16} color={textColor} style={{ opacity: 0.6 }}>
+          <Text numberOfLines={1} size={13} color={textColor} style={{ opacity: 0.6 }}>
             {singer || ''}
           </Text>
         </View>
 
+        {/* 进度条 - 细条 */}
+        <View style={styles.progressBar}>
+          <View style={[styles.progressFill, { backgroundColor: controlColor + '80' }]} />
+        </View>
+
         {/* 控制按钮 */}
         <View style={styles.controls}>
-          <ControlBtn icon="prevMusic" size={20} onPress={() => playPrev()} color={controlColor} />
-          <ControlBtn icon={isPlay ? "pause" : "play"} size={24} onPress={() => togglePlay()} color={controlColor} isPlay={isPlay} />
-          <ControlBtn icon="nextMusic" size={20} onPress={() => playNext()} color={controlColor} />
+          <ControlBtn icon="prevMusic" size={22} onPress={() => playPrev()} color={controlColor} />
+          <ControlBtn icon={isPlay ? "pause" : "play"} size={28} onPress={() => togglePlay()} color={controlColor} />
+          <ControlBtn icon="nextMusic" size={22} onPress={() => playNext()} color={controlColor} />
         </View>
       </View>
     </View>
@@ -86,42 +91,55 @@ const styles = StyleSheet.create({
   content: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 20,
-    paddingHorizontal: 20,
+    justifyContent: 'space-between',
+    paddingHorizontal: 16,
     flex: 1,
   },
   coverWrap: {
-    width: 56,
-    height: 56,
-    borderRadius: 10,
+    width: 64,
+    height: 64,
+    borderRadius: 12,
     overflow: 'hidden',
-    marginRight: 10,
   },
   cover: {
-    width: 56,
-    height: 56,
-    borderRadius: 10,
+    width: 64,
+    height: 64,
+    borderRadius: 12,
   },
   coverPlaceholder: {
-    width: 96,
-    height: 96,
-    borderRadius: 16,
+    width: 64,
+    height: 64,
+    borderRadius: 12,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  info: {
+  infoArea: {
     flex: 1,
-    marginRight: 8,
+    marginHorizontal: 12,
+    justifyContent: 'center',
+  },
+  progressBar: {
+    width: 60,
+    height: 4,
+    borderRadius: 2,
+    backgroundColor: 'rgba(128,128,128,0.3)',
+    overflow: 'hidden',
+  },
+  progressFill: {
+    width: '30%',
+    height: '100%',
+    borderRadius: 2,
   },
   controls: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 2,
+    gap: 6,
+    marginLeft: 8,
   },
   ctrlBtn: {
-    width: 56,
-    height: 56,
-    borderRadius: 28,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
     justifyContent: 'center',
     alignItems: 'center',
   },
