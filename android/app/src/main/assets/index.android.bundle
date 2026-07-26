@@ -227829,60 +227829,73 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
           backgroundColor: backgroundColor
         }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_Btn.default, {
           icon: "fullscreen",
-          onPress: function onPress() {
-            void _$$_REQUIRE(_dependencyMap[17], "/data/data/com.termux/files/home/lx-music-mobile/node_modules/metro-runtime/src/modules/asyncRequire.js")(_dependencyMap[16], _dependencyMap.paths, "../../../../plugins/miniplayer").then(/*#__PURE__*/function () {
-              var _ref3 = (0, _asyncToGenerator2.default)(function* (mod) {
-                var mp = mod == null ? void 0 : mod.default;
-                if (!mp || !mp.isAvailable) {
-                  (0, _$$_REQUIRE(_dependencyMap[18], "../../../../utils/tools").toast)('小窗模式不可用');
-                  return;
-                }
-                if (!(yield mp.hasOverlayPermission())) {
-                  (0, _$$_REQUIRE(_dependencyMap[18], "../../../../utils/tools").toast)('需要悬浮窗权限');
-                  void mp.openOverlaySettings();
-                  return;
-                }
-                var showing = mp.isMiniPlayerShowing();
-                if (showing) {
-                  yield mp.hide();
-                  (0, _$$_REQUIRE(_dependencyMap[18], "../../../../utils/tools").toast)('小窗已关闭');
-                } else {
-                  yield mp.show();
-                  (0, _$$_REQUIRE(_dependencyMap[18], "../../../../utils/tools").toast)('小窗已打开(横)');
-                }
-              });
-              return function (_x) {
-                return _ref3.apply(this, arguments);
-              };
-            }());
-          },
           color: controlColor,
-          onLongPress: function onLongPress() {
-            void _$$_REQUIRE(_dependencyMap[17], "/data/data/com.termux/files/home/lx-music-mobile/node_modules/metro-runtime/src/modules/asyncRequire.js")(_dependencyMap[16], _dependencyMap.paths, "../../../../plugins/miniplayer").then(/*#__PURE__*/function () {
-              var _ref4 = (0, _asyncToGenerator2.default)(function* (mod) {
-                var mp = mod == null ? void 0 : mod.default;
-                if (!mp || !mp.isAvailable) {
-                  (0, _$$_REQUIRE(_dependencyMap[18], "../../../../utils/tools").toast)('小窗模式不可用');
-                  return;
+          onPress: function onPress() {
+            // 双击检测
+            var now = Date.now();
+            var DOUBLE_TAP_DELAY = 300;
+            if (global._miniplayerLastTap && now - global._miniplayerLastTap < DOUBLE_TAP_DELAY) {
+              // 双击打开竖屏
+              global._miniplayerLastTap = 0;
+              void _$$_REQUIRE(_dependencyMap[17], "/data/data/com.termux/files/home/lx-music-mobile/node_modules/metro-runtime/src/modules/asyncRequire.js")(_dependencyMap[16], _dependencyMap.paths, "../../../../plugins/miniplayer").then(/*#__PURE__*/function () {
+                var _ref3 = (0, _asyncToGenerator2.default)(function* (mod) {
+                  var mp = mod == null ? void 0 : mod.default;
+                  if (!mp || !mp.isAvailable) {
+                    (0, _$$_REQUIRE(_dependencyMap[18], "../../../../utils/tools").toast)('小窗模式不可用');
+                    return;
+                  }
+                  if (!(yield mp.hasOverlayPermission())) {
+                    (0, _$$_REQUIRE(_dependencyMap[18], "../../../../utils/tools").toast)('需要悬浮窗权限');
+                    void mp.openOverlaySettings();
+                    return;
+                  }
+                  var showing = mp.isMiniPlayerShowing();
+                  if (showing) {
+                    yield mp.hide();
+                    (0, _$$_REQUIRE(_dependencyMap[18], "../../../../utils/tools").toast)('小窗已关闭');
+                  } else {
+                    yield mp.showVertical();
+                    (0, _$$_REQUIRE(_dependencyMap[18], "../../../../utils/tools").toast)('小窗已打开(竖)');
+                  }
+                });
+                return function (_x) {
+                  return _ref3.apply(this, arguments);
+                };
+              }());
+            } else {
+              // 单击打开横屏
+              global._miniplayerLastTap = now;
+              setTimeout(function () {
+                if (global._miniplayerLastTap === now) {
+                  global._miniplayerLastTap = 0;
+                  void _$$_REQUIRE(_dependencyMap[17], "/data/data/com.termux/files/home/lx-music-mobile/node_modules/metro-runtime/src/modules/asyncRequire.js")(_dependencyMap[16], _dependencyMap.paths, "../../../../plugins/miniplayer").then(/*#__PURE__*/function () {
+                    var _ref4 = (0, _asyncToGenerator2.default)(function* (mod) {
+                      var mp = mod == null ? void 0 : mod.default;
+                      if (!mp || !mp.isAvailable) {
+                        (0, _$$_REQUIRE(_dependencyMap[18], "../../../../utils/tools").toast)('小窗模式不可用');
+                        return;
+                      }
+                      if (!(yield mp.hasOverlayPermission())) {
+                        (0, _$$_REQUIRE(_dependencyMap[18], "../../../../utils/tools").toast)('需要悬浮窗权限');
+                        void mp.openOverlaySettings();
+                        return;
+                      }
+                      var showing = mp.isMiniPlayerShowing();
+                      if (showing) {
+                        yield mp.hide();
+                        (0, _$$_REQUIRE(_dependencyMap[18], "../../../../utils/tools").toast)('小窗已关闭');
+                      } else {
+                        yield mp.show();
+                        (0, _$$_REQUIRE(_dependencyMap[18], "../../../../utils/tools").toast)('小窗已打开(横)');
+                      }
+                    });
+                    return function (_x2) {
+                      return _ref4.apply(this, arguments);
+                    };
+                  }());
                 }
-                if (!(yield mp.hasOverlayPermission())) {
-                  (0, _$$_REQUIRE(_dependencyMap[18], "../../../../utils/tools").toast)('需要悬浮窗权限');
-                  void mp.openOverlaySettings();
-                  return;
-                }
-                var showing = mp.isMiniPlayerShowing();
-                if (showing) {
-                  yield mp.hide();
-                  (0, _$$_REQUIRE(_dependencyMap[18], "../../../../utils/tools").toast)('小窗已关闭');
-                } else {
-                  yield mp.showVertical();
-                  (0, _$$_REQUIRE(_dependencyMap[18], "../../../../utils/tools").toast)('小窗已打开(竖)');
-                }
-              });
-              return function (_x2) {
-                return _ref4.apply(this, arguments);
-              };
-            }());
+              }, DOUBLE_TAP_DELAY);
+            }
           }
         }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_Btn.default, {
           icon: "slider",

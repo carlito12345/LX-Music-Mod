@@ -47,43 +47,57 @@ export default memo(({ backgroundColor }: HeaderProps) => {
       <View style={styles.container}>
         <Btn icon="chevron-left" onPress={back} color={controlColor} />
         <Title backgroundColor={backgroundColor} />
-        <Btn icon="fullscreen" onPress={() => {
-            void import('@/plugins/miniplayer').then(async(mod) => {
-              const mp = mod?.default
-              if (!mp || !mp.isAvailable) { toast('小窗模式不可用'); return }
-              if (!await mp.hasOverlayPermission()) {
-                toast('需要悬浮窗权限')
-                void mp.openOverlaySettings()
-                return
-              }
-              const showing = mp.isMiniPlayerShowing()
-              if (showing) {
-                await mp.hide()
-                toast('小窗已关闭')
-              } else {
-                await mp.show()
-                toast('小窗已打开(横)')
-              }
-            })
-          }} color={controlColor}
-          onLongPress={() => {
-            void import('@/plugins/miniplayer').then(async(mod) => {
-              const mp = mod?.default
-              if (!mp || !mp.isAvailable) { toast('小窗模式不可用'); return }
-              if (!await mp.hasOverlayPermission()) {
-                toast('需要悬浮窗权限')
-                void mp.openOverlaySettings()
-                return
-              }
-              const showing = mp.isMiniPlayerShowing()
-              if (showing) {
-                await mp.hide()
-                toast('小窗已关闭')
-              } else {
-                await mp.showVertical()
-                toast('小窗已打开(竖)')
-              }
-            })
+        <Btn icon="fullscreen" color={controlColor}
+          onPress={() => {
+            // 双击检测
+            const now = Date.now()
+            const DOUBLE_TAP_DELAY = 300
+            if (global._miniplayerLastTap && (now - global._miniplayerLastTap) < DOUBLE_TAP_DELAY) {
+              // 双击打开竖屏
+              global._miniplayerLastTap = 0
+              void import('@/plugins/miniplayer').then(async(mod) => {
+                const mp = mod?.default
+                if (!mp || !mp.isAvailable) { toast('小窗模式不可用'); return }
+                if (!await mp.hasOverlayPermission()) {
+                  toast('需要悬浮窗权限')
+                  void mp.openOverlaySettings()
+                  return
+                }
+                const showing = mp.isMiniPlayerShowing()
+                if (showing) {
+                  await mp.hide()
+                  toast('小窗已关闭')
+                } else {
+                  await mp.showVertical()
+                  toast('小窗已打开(竖)')
+                }
+              })
+            } else {
+              // 单击打开横屏
+              global._miniplayerLastTap = now
+              setTimeout(() => {
+                if (global._miniplayerLastTap === now) {
+                  global._miniplayerLastTap = 0
+                  void import('@/plugins/miniplayer').then(async(mod) => {
+                    const mp = mod?.default
+                    if (!mp || !mp.isAvailable) { toast('小窗模式不可用'); return }
+                    if (!await mp.hasOverlayPermission()) {
+                      toast('需要悬浮窗权限')
+                      void mp.openOverlaySettings()
+                      return
+                    }
+                    const showing = mp.isMiniPlayerShowing()
+                    if (showing) {
+                      await mp.hide()
+                      toast('小窗已关闭')
+                    } else {
+                      await mp.show()
+                      toast('小窗已打开(横)')
+                    }
+                  })
+                }
+              }, DOUBLE_TAP_DELAY)
+            }
           }} />
         <Btn icon="slider" onPress={showSetting} color={controlColor} />
       </View>
