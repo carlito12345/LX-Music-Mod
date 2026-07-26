@@ -16,6 +16,7 @@ import cn.toside.music.mobile.userApi.UserApiPackage;
 import cn.toside.music.mobile.palette.PalettePackage;
 import cn.toside.music.mobile.carkey.CarKeyPackage;
 import cn.toside.music.mobile.mediainteraction.MediaInteractionPackage;
+import cn.toside.music.mobile.miniplayer.MiniPlayerPackage;
 import cn.toside.music.mobile.usb.USBPackage;
 import cn.toside.music.mobile.utils.UtilsPackage;
 
@@ -39,6 +40,7 @@ public class MainApplication extends NavigationApplication {
           packages.add(new USBPackage());
           packages.add(new CarKeyPackage());
           packages.add(new MediaInteractionPackage());
+          packages.add(new MiniPlayerPackage());
           packages.add(new UtilsPackage());
           packages.add(new CryptoPackage());
           packages.add(new UserApiPackage());
