@@ -126474,50 +126474,65 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     value: true
   });
   exports.default = void 0;
-  var _react = _$$_REQUIRE(_dependencyMap[1], "react");
-  var _reactNative = _$$_REQUIRE(_dependencyMap[2], "react-native");
-  var _Text = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[3], "../../components/common/Text"));
-  var _jsxRuntime = _$$_REQUIRE(_dependencyMap[4], "react/jsx-runtime");
+  var _slicedToArray2 = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[1], "@babel/runtime/helpers/slicedToArray"));
+  var _react = _$$_REQUIRE(_dependencyMap[2], "react");
+  var _reactNative = _$$_REQUIRE(_dependencyMap[3], "react-native");
+  var _Text = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[4], "../../components/common/Text"));
+  var _jsxRuntime = _$$_REQUIRE(_dependencyMap[5], "react/jsx-runtime");
   var _this = this,
-    _jsxFileName = "/data/data/com.termux/files/home/lx-music-mobile/src/screens/MiniPlayer/index.tsx"; // 使用悬浮窗实际尺寸计算(从 native 端传入 props)
-  var useResponsive = function useResponsive(customBase) {
-    var base = customBase;
-    return {
-      iconSize: base * 0.05,
-      playSize: base * 0.085,
-      coverSize: base * 0.16,
-      coverRadius: base * 0.035,
-      padH: base * 0.03,
-      ctrlGap: base * 0.015,
-      titleSize: base * 0.035,
-      subSize: base * 0.028,
-      borderRadius: base * 0.045
-    };
+    _jsxFileName = "/data/data/com.termux/files/home/lx-music-mobile/src/screens/MiniPlayer/index.tsx";
+  var SIZES = {
+    // 所有数值基于容器宽度 W 的比例,确保永远不溢出
+    W_RATIO: {
+      coverSize: 0.08,
+      // 封面 = W * 0.08
+      coverRadius: 0.018,
+      iconSize: 0.025,
+      // 图标 = W * 0.025
+      playSize: 0.042,
+      // 播放键 = W * 0.042
+      padH: 0.015,
+      // 水平内边距 = W * 0.015
+      ctrlGap: 0.008,
+      titleSize: 0.018,
+      subSize: 0.014
+    }
   };
   var _default = exports.default = (0, _react.memo)(function () {
-    var props = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-    var theme = (0, _$$_REQUIRE(_dependencyMap[5], "../../store/theme/hook").useTheme)();
-    var musicInfo = (0, _$$_REQUIRE(_dependencyMap[6], "../../store/player/hook").usePlayerMusicInfo)();
-    var isPlay = (0, _$$_REQUIRE(_dependencyMap[6], "../../store/player/hook").useIsPlay)();
-    var lrcInfo = (0, _$$_REQUIRE(_dependencyMap[7], "../../plugins/lyric").useLrcPlay)();
-    var _props$windowWidth = props.windowWidth,
-      windowWidth = _props$windowWidth === void 0 ? 400 : _props$windowWidth,
-      _props$windowHeight = props.windowHeight,
-      windowHeight = _props$windowHeight === void 0 ? 160 : _props$windowHeight;
-    var base = Math.min(windowWidth, windowHeight);
-    var s = useResponsive(base);
+    var theme = (0, _$$_REQUIRE(_dependencyMap[6], "../../store/theme/hook").useTheme)();
+    var musicInfo = (0, _$$_REQUIRE(_dependencyMap[7], "../../store/player/hook").usePlayerMusicInfo)();
+    var isPlay = (0, _$$_REQUIRE(_dependencyMap[7], "../../store/player/hook").useIsPlay)();
+    var lrcInfo = (0, _$$_REQUIRE(_dependencyMap[8], "../../plugins/lyric").useLrcPlay)();
+    var _useState = (0, _react.useState)(400),
+      _useState2 = (0, _slicedToArray2.default)(_useState, 2),
+      containerW = _useState2[0],
+      setContainerW = _useState2[1];
+    var onLayout = (0, _react.useCallback)(function (e) {
+      var w = e.nativeEvent.layout.width;
+      if (w > 0) setContainerW(w);
+    }, []);
+    var W = containerW;
+    var s = {
+      coverSize: W * SIZES.W_RATIO.coverSize,
+      coverRadius: W * SIZES.W_RATIO.coverRadius,
+      iconSize: W * SIZES.W_RATIO.iconSize,
+      playSize: W * SIZES.W_RATIO.playSize,
+      padH: W * SIZES.W_RATIO.padH,
+      ctrlGap: W * SIZES.W_RATIO.ctrlGap,
+      titleSize: W * SIZES.W_RATIO.titleSize,
+      subSize: W * SIZES.W_RATIO.subSize
+    };
     var name = musicInfo.name || '';
     var singer = musicInfo.singer || '';
     var pic = musicInfo.pic || '';
     var lrcLine = lrcInfo.text || '';
-    var solidColor = (0, _$$_REQUIRE(_dependencyMap[8], "../../store/setting/hook").useSettingValue)('playDetail.background.solidColor');
+    var solidColor = (0, _$$_REQUIRE(_dependencyMap[9], "../../store/setting/hook").useSettingValue)('playDetail.background.solidColor');
     var bgColor = solidColor || theme['c-content-background'] || '#1a1a2e';
-    var textColor = (0, _$$_REQUIRE(_dependencyMap[9], "../../utils/colorContrast").getContrastTextColor)(bgColor);
+    var textColor = (0, _$$_REQUIRE(_dependencyMap[10], "../../utils/colorContrast").getContrastTextColor)(bgColor);
     return /*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.View, {
-      style: [styles.container, {
-        borderRadius: s.borderRadius
-      }],
-      children: [/*#__PURE__*/(0, _jsxRuntime.jsx)(_$$_REQUIRE(_dependencyMap[10], "@react-native-community/blur").BlurView, {
+      style: styles.container,
+      onLayout: onLayout,
+      children: [/*#__PURE__*/(0, _jsxRuntime.jsx)(_$$_REQUIRE(_dependencyMap[11], "@react-native-community/blur").BlurView, {
         style: _reactNative.StyleSheet.absoluteFill,
         blurType: "dark",
         blurAmount: 20,
@@ -126535,8 +126550,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
           style: [styles.coverWrap, {
             width: s.coverSize,
             height: s.coverSize,
-            borderRadius: s.coverRadius,
-            marginRight: s.padH
+            borderRadius: s.coverRadius
           }],
           children: pic ? /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.Image, {
             source: {
@@ -126589,21 +126603,18 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
             children: lrcLine || '♪'
           })]
         }), /*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.View, {
-          style: [styles.controls, {
-            gap: s.ctrlGap,
-            marginLeft: s.padH * 0.5
-          }],
+          style: styles.controls,
           children: [/*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.TouchableOpacity, {
             style: [styles.ctrlBtn, {
-              width: s.iconSize * 1.6,
-              height: s.iconSize * 1.6,
-              borderRadius: s.iconSize * 0.8
+              width: s.playSize * 0.9,
+              height: s.playSize * 0.9,
+              borderRadius: s.playSize * 0.45
             }],
             onPress: function onPress() {
-              return (0, _$$_REQUIRE(_dependencyMap[11], "../../core/player/player").playPrev)();
+              return (0, _$$_REQUIRE(_dependencyMap[12], "../../core/player/player").playPrev)();
             },
             activeOpacity: 0.6,
-            children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_$$_REQUIRE(_dependencyMap[12], "../../components/common/Icon").Icon, {
+            children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_$$_REQUIRE(_dependencyMap[13], "../../components/common/Icon").Icon, {
               name: "skip-previous",
               size: s.iconSize,
               color: textColor
@@ -126616,25 +126627,25 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
               backgroundColor: textColor + '18'
             }],
             onPress: function onPress() {
-              return (0, _$$_REQUIRE(_dependencyMap[11], "../../core/player/player").togglePlay)();
+              return (0, _$$_REQUIRE(_dependencyMap[12], "../../core/player/player").togglePlay)();
             },
             activeOpacity: 0.6,
-            children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_$$_REQUIRE(_dependencyMap[12], "../../components/common/Icon").Icon, {
+            children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_$$_REQUIRE(_dependencyMap[13], "../../components/common/Icon").Icon, {
               name: isPlay ? 'pause-circle' : 'play-circle',
-              size: s.playSize * 0.75,
+              size: s.playSize * 0.7,
               color: textColor
             })
           }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.TouchableOpacity, {
             style: [styles.ctrlBtn, {
-              width: s.iconSize * 1.6,
-              height: s.iconSize * 1.6,
-              borderRadius: s.iconSize * 0.8
+              width: s.playSize * 0.9,
+              height: s.playSize * 0.9,
+              borderRadius: s.playSize * 0.45
             }],
             onPress: function onPress() {
-              return (0, _$$_REQUIRE(_dependencyMap[11], "../../core/player/player").playNext)();
+              return (0, _$$_REQUIRE(_dependencyMap[12], "../../core/player/player").playNext)();
             },
             activeOpacity: 0.6,
-            children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_$$_REQUIRE(_dependencyMap[12], "../../components/common/Icon").Icon, {
+            children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_$$_REQUIRE(_dependencyMap[13], "../../components/common/Icon").Icon, {
               name: "skip-next",
               size: s.iconSize,
               color: textColor
@@ -126679,6 +126690,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     },
     midArea: {
       flex: 1,
+      marginHorizontal: 8,
       justifyContent: 'center'
     },
     controls: {
@@ -126696,7 +126708,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       alignItems: 'center'
     }
   });
-},541,[1,62,6,542,104,543,552,689,691,692,693,697,737],"src/screens/MiniPlayer/index.tsx");
+},541,[1,30,62,6,542,104,543,552,689,691,692,693,697,737],"src/screens/MiniPlayer/index.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -175798,56 +175810,57 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     value: true
   });
   exports.default = void 0;
-  var _react = _$$_REQUIRE(_dependencyMap[1], "react");
-  var _reactNative = _$$_REQUIRE(_dependencyMap[2], "react-native");
-  var _Text = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[3], "../../components/common/Text"));
-  var _jsxRuntime = _$$_REQUIRE(_dependencyMap[4], "react/jsx-runtime");
+  var _slicedToArray2 = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[1], "@babel/runtime/helpers/slicedToArray"));
+  var _react = _$$_REQUIRE(_dependencyMap[2], "react");
+  var _reactNative = _$$_REQUIRE(_dependencyMap[3], "react-native");
+  var _Text = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[4], "../../components/common/Text"));
+  var _jsxRuntime = _$$_REQUIRE(_dependencyMap[5], "react/jsx-runtime");
   var _this = this,
     _jsxFileName = "/data/data/com.termux/files/home/lx-music-mobile/src/screens/MiniPlayerVertical/index.tsx";
-  var useResponsive = function useResponsive(customBase) {
-    var base = customBase;
+  var getS = function getS(W) {
     return {
-      coverSize: base * 0.32,
-      coverRadius: base * 0.05,
-      iconSize: base * 0.06,
-      playSize: base * 0.12,
-      padH: base * 0.04,
-      padV: base * 0.035,
-      titleSize: base * 0.038,
-      subSize: base * 0.032,
-      lyricSize: base * 0.035,
-      gap: base * 0.05,
-      progressHeight: base * 0.012,
-      borderRadius: base * 0.07
+      coverSize: W * 0.28,
+      coverRadius: W * 0.045,
+      iconSize: W * 0.05,
+      playSize: W * 0.11,
+      padH: W * 0.035,
+      padV: W * 0.03,
+      titleSize: W * 0.035,
+      subSize: W * 0.03,
+      lyricSize: W * 0.032,
+      gap: W * 0.035,
+      progressHeight: W * 0.012,
+      borderRadius: W * 0.06
     };
   };
   var _default = exports.default = (0, _react.memo)(function () {
-    var props = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-    var theme = (0, _$$_REQUIRE(_dependencyMap[5], "../../store/theme/hook").useTheme)();
-    var musicInfo = (0, _$$_REQUIRE(_dependencyMap[6], "../../store/player/hook").usePlayerMusicInfo)();
-    var isPlay = (0, _$$_REQUIRE(_dependencyMap[6], "../../store/player/hook").useIsPlay)();
-    var _useProgress = (0, _$$_REQUIRE(_dependencyMap[6], "../../store/player/hook").useProgress)(),
+    var theme = (0, _$$_REQUIRE(_dependencyMap[6], "../../store/theme/hook").useTheme)();
+    var musicInfo = (0, _$$_REQUIRE(_dependencyMap[7], "../../store/player/hook").usePlayerMusicInfo)();
+    var isPlay = (0, _$$_REQUIRE(_dependencyMap[7], "../../store/player/hook").useIsPlay)();
+    var _useProgress = (0, _$$_REQUIRE(_dependencyMap[7], "../../store/player/hook").useProgress)(),
       progress = _useProgress.progress,
       maxPlayTime = _useProgress.maxPlayTime;
-    var lrcInfo = (0, _$$_REQUIRE(_dependencyMap[7], "../../plugins/lyric").useLrcPlay)();
-    var _props$windowWidth = props.windowWidth,
-      windowWidth = _props$windowWidth === void 0 ? 400 : _props$windowWidth,
-      _props$windowHeight = props.windowHeight,
-      windowHeight = _props$windowHeight === void 0 ? 700 : _props$windowHeight;
-    var base = Math.min(windowWidth, windowHeight);
-    var s = useResponsive(base);
+    var lrcInfo = (0, _$$_REQUIRE(_dependencyMap[8], "../../plugins/lyric").useLrcPlay)();
+    var _useState = (0, _react.useState)(600),
+      _useState2 = (0, _slicedToArray2.default)(_useState, 2),
+      containerH = _useState2[0],
+      setContainerH = _useState2[1];
+    var onLayout = (0, _react.useCallback)(function (e) {
+      var h = e.nativeEvent.layout.height;
+      if (h > 0) setContainerH(h);
+    }, []);
+    var s = getS(containerH * 0.55);
     var lrcLine = lrcInfo.text || '';
     var name = musicInfo.name || '';
     var singer = musicInfo.singer || '';
     var pic = musicInfo.pic || '';
-    var solidColor = (0, _$$_REQUIRE(_dependencyMap[8], "../../store/setting/hook").useSettingValue)('playDetail.background.solidColor');
+    var solidColor = (0, _$$_REQUIRE(_dependencyMap[9], "../../store/setting/hook").useSettingValue)('playDetail.background.solidColor');
     var bgColor = solidColor || theme['c-content-background'] || '#1a1a2e';
-    var textColor = (0, _$$_REQUIRE(_dependencyMap[9], "../../utils/colorContrast").getContrastTextColor)(bgColor);
+    var textColor = (0, _$$_REQUIRE(_dependencyMap[10], "../../utils/colorContrast").getContrastTextColor)(bgColor);
     return /*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.View, {
-      style: [styles.container, {
-        borderRadius: s.borderRadius
-      }],
-      children: [/*#__PURE__*/(0, _jsxRuntime.jsx)(_$$_REQUIRE(_dependencyMap[10], "@react-native-community/blur").BlurView, {
+      style: styles.container,
+      onLayout: onLayout,
+      children: [/*#__PURE__*/(0, _jsxRuntime.jsx)(_$$_REQUIRE(_dependencyMap[11], "@react-native-community/blur").BlurView, {
         style: _reactNative.StyleSheet.absoluteFill,
         blurType: "dark",
         blurAmount: 30,
@@ -175860,8 +175873,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       }), /*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.View, {
         style: [styles.content, {
           paddingHorizontal: s.padH,
-          paddingVertical: s.padV,
-          paddingBottom: s.padV * 1.2
+          paddingVertical: s.padV
         }],
         children: [/*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.View, {
           style: styles.topSection,
@@ -175884,7 +175896,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
                 backgroundColor: textColor + '20'
               }],
               children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
-                size: s.coverSize * 0.3,
+                size: s.coverSize * 0.25,
                 color: textColor,
                 style: {
                   opacity: 0.5
@@ -175898,7 +175910,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
             color: textColor,
             style: {
               fontWeight: '600',
-              marginTop: s.padV * 0.4
+              marginTop: s.padV * 0.3
             },
             children: name || '未播放'
           }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
@@ -175906,23 +175918,22 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
             size: s.subSize,
             color: textColor,
             style: {
-              opacity: 0.5,
-              marginTop: 1
+              opacity: 0.5
             },
             children: singer || ''
           })]
         }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.View, {
           style: styles.midSection,
           children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
-            numberOfLines: 4,
+            numberOfLines: 3,
             size: s.lyricSize,
             color: textColor,
             style: {
               textAlign: 'center',
               opacity: 0.7,
-              lineHeight: s.lyricSize * 1.6
+              lineHeight: s.lyricSize * 1.5
             },
-            children: lrcLine || '♪ 聆听音乐的美好 ♪'
+            children: lrcLine || '♪'
           })
         }), /*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.View, {
           style: styles.botSection,
@@ -175931,7 +175942,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
               height: s.progressHeight,
               borderRadius: s.progressHeight / 2,
               backgroundColor: textColor + '20',
-              marginBottom: s.gap * 0.8
+              marginBottom: s.gap
             }],
             children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.View, {
               style: [styles.progressFill, {
@@ -175947,15 +175958,15 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
             }],
             children: [/*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.TouchableOpacity, {
               style: [styles.btn, {
-                width: s.iconSize * 1.8,
-                height: s.iconSize * 1.8,
-                borderRadius: s.iconSize * 0.9
+                width: s.playSize * 0.8,
+                height: s.playSize * 0.8,
+                borderRadius: s.playSize * 0.4
               }],
               onPress: function onPress() {
-                return (0, _$$_REQUIRE(_dependencyMap[11], "../../core/player/player").playPrev)();
+                return (0, _$$_REQUIRE(_dependencyMap[12], "../../core/player/player").playPrev)();
               },
               activeOpacity: 0.6,
-              children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_$$_REQUIRE(_dependencyMap[12], "../../components/common/Icon").Icon, {
+              children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_$$_REQUIRE(_dependencyMap[13], "../../components/common/Icon").Icon, {
                 name: "skip-previous",
                 size: s.iconSize,
                 color: textColor
@@ -175968,25 +175979,25 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
                 backgroundColor: textColor + '18'
               }],
               onPress: function onPress() {
-                return (0, _$$_REQUIRE(_dependencyMap[11], "../../core/player/player").togglePlay)();
+                return (0, _$$_REQUIRE(_dependencyMap[12], "../../core/player/player").togglePlay)();
               },
               activeOpacity: 0.6,
-              children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_$$_REQUIRE(_dependencyMap[12], "../../components/common/Icon").Icon, {
+              children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_$$_REQUIRE(_dependencyMap[13], "../../components/common/Icon").Icon, {
                 name: isPlay ? 'pause-circle' : 'play-circle',
-                size: s.playSize * 0.7,
+                size: s.playSize * 0.65,
                 color: textColor
               })
             }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.TouchableOpacity, {
               style: [styles.btn, {
-                width: s.iconSize * 1.8,
-                height: s.iconSize * 1.8,
-                borderRadius: s.iconSize * 0.9
+                width: s.playSize * 0.8,
+                height: s.playSize * 0.8,
+                borderRadius: s.playSize * 0.4
               }],
               onPress: function onPress() {
-                return (0, _$$_REQUIRE(_dependencyMap[11], "../../core/player/player").playNext)();
+                return (0, _$$_REQUIRE(_dependencyMap[12], "../../core/player/player").playNext)();
               },
               activeOpacity: 0.6,
-              children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_$$_REQUIRE(_dependencyMap[12], "../../components/common/Icon").Icon, {
+              children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_$$_REQUIRE(_dependencyMap[13], "../../components/common/Icon").Icon, {
                 name: "skip-next",
                 size: s.iconSize,
                 color: textColor
@@ -176062,7 +176073,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       alignItems: 'center'
     }
   });
-},746,[1,62,6,542,104,543,552,689,691,692,693,697,737],"src/screens/MiniPlayerVertical/index.tsx");
+},746,[1,30,62,6,542,104,543,552,689,691,692,693,697,737],"src/screens/MiniPlayerVertical/index.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   var _slicedToArray2 = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[1], "@babel/runtime/helpers/slicedToArray"));
