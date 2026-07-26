@@ -61,7 +61,7 @@ export default memo(() => {
       <BlurView style={StyleSheet.absoluteFill} blurType="dark" blurAmount={20} reducedTransparencyFallbackColor={bgColor} />
       <View style={[StyleSheet.absoluteFill, { backgroundColor: bgColor, opacity: 0.8 }]} />
 
-      <View style={[styles.content, { paddingHorizontal: s.padH, paddingRight: s.padH * 1.5 }]}>
+      <View style={[styles.content, { paddingHorizontal: s.padH }]}>
         <View style={[styles.coverWrap, { width: s.coverSize, height: s.coverSize, borderRadius: s.coverRadius }]}>
           {pic ? (
             <Image source={{ uri: pic }} style={[styles.cover, { borderRadius: s.coverRadius }]} />
@@ -102,12 +102,12 @@ export default memo(() => {
 
 const styles = StyleSheet.create({
   container: { width: '100%', height: '100%', overflow: 'hidden' },
-  content: { flex: 1, flexDirection: 'row', alignItems: 'center' },
+  content: { flex: 1, flexDirection: 'row', alignItems: 'center', position: 'relative' },
   coverWrap: { flexShrink: 0, overflow: 'hidden', elevation: 6, shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.3, shadowRadius: 6 },
   cover: { width: '100%', height: '100%' },
   coverPlaceholder: { width: '100%', height: '100%', justifyContent: 'center', alignItems: 'center' },
   midArea: { flex: 1, marginHorizontal: 8, justifyContent: 'center' },
-  controls: { flexDirection: 'row', alignItems: 'center', flexShrink: 0, marginLeft: 8 },
+  controls: { flexDirection: 'row', alignItems: 'center', position: 'absolute', right: 12, top: 0, bottom: 0 },
   ctrlBtn: { justifyContent: 'center', alignItems: 'center', overflow: 'visible' },
   playBtn: { justifyContent: 'center', alignItems: 'center', overflow: 'hidden' },
 })

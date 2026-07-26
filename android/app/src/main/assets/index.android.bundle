@@ -126544,8 +126544,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
         }]
       }), /*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.View, {
         style: [styles.content, {
-          paddingHorizontal: s.padH,
-          paddingRight: s.padH * 1.5
+          paddingHorizontal: s.padH
         }],
         children: [/*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.View, {
           style: [styles.coverWrap, {
@@ -126665,7 +126664,8 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     content: {
       flex: 1,
       flexDirection: 'row',
-      alignItems: 'center'
+      alignItems: 'center',
+      position: 'relative'
     },
     coverWrap: {
       flexShrink: 0,
@@ -126697,8 +126697,10 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     controls: {
       flexDirection: 'row',
       alignItems: 'center',
-      flexShrink: 0,
-      marginLeft: 8
+      position: 'absolute',
+      right: 12,
+      top: 0,
+      bottom: 0
     },
     ctrlBtn: {
       justifyContent: 'center',
