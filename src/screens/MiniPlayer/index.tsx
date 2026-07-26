@@ -1,5 +1,5 @@
 import { memo, useMemo } from 'react'
-import { View, StyleSheet, TouchableOpacity, Image, Dimensions } from 'react-native'
+import { View, StyleSheet, TouchableOpacity, Image } from 'react-native'
 import { BlurView } from '@react-native-community/blur'
 import { usePlayerMusicInfo, useIsPlay } from '@/store/player/hook'
 import Text from '@/components/common/Text'
@@ -10,30 +10,35 @@ import { playNext, playPrev, togglePlay } from '@/core/player/player'
 import { useLrcPlay } from '@/plugins/lyric'
 import { getContrastTextColor } from '@/utils/colorContrast'
 
-/** 基于屏幕最小宽度计算缩放尺寸 */
-const useResponsive = () => {
-  const { width, height } = Dimensions.get('window')
-  const base = Math.min(width, height)
-  // 所有尺寸缩小1倍
+// 使用悬浮窗实际尺寸计算(从 native 端传入 props)
+const useResponsive = (customBase) => {
+  const base = customBase
   return {
-    iconSize: base * 0.025,
-    playSize: base * 0.042,
-    coverSize: base * 0.08,
-    coverRadius: base * 0.017,
-    padH: base * 0.015,
-    ctrlGap: base * 0.006,
-    titleSize: base * 0.017,
-    subSize: base * 0.014,
-    borderRadius: base * 0.022,
+    iconSize: base * 0.05,
+    playSize: base * 0.085,
+    coverSize: base * 0.16,
+    coverRadius: base * 0.035,
+    padH: base * 0.03,
+    ctrlGap: base * 0.012,
+    titleSize: base * 0.035,
+    subSize: base * 0.028,
+    borderRadius: base * 0.045,
   }
 }
 
-export default memo(() => {
+interface Props {
+  windowWidth?: number
+  windowHeight?: number
+}
+
+export default memo((props: Props = {}) => {
   const theme = useTheme()
   const musicInfo = usePlayerMusicInfo()
   const isPlay = useIsPlay()
   const lrcInfo = useLrcPlay()
-  const s = useResponsive()
+  const { windowWidth = 400, windowHeight = 160 } = props
+  const base = Math.min(windowWidth, windowHeight)
+  const s = useResponsive(base)
 
   const name = musicInfo.name || ''
   const singer = musicInfo.singer || ''
