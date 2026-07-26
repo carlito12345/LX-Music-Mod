@@ -11,6 +11,8 @@ import SettingPopup, { type SettingPopupType } from '../../components/SettingPop
 import { useStatusbarHeight } from '@/store/common/hook'
 import Btn from './Btn'
 import { getContrastTextColor, getSecondaryTextColor } from '@/utils/colorContrast'
+import { toast } from '@/utils/tools'
+import { useTheme } from '@/store/theme/hook'
 
 export const HEADER_HEIGHT = scaleSizeH(_HEADER_HEIGHT)
 
@@ -45,6 +47,24 @@ export default memo(({ backgroundColor }: HeaderProps) => {
       <View style={styles.container}>
         <Btn icon="chevron-left" onPress={back} color={controlColor} />
         <Title backgroundColor={backgroundColor} />
+        <Btn icon="fullscreen" onPress={() => {
+            void import('@/plugins/miniplayer').then(async(mod) => {
+              if (!mod.default.isAvailable) { toast('小窗模式不可用'); return }
+              if (!await mod.default.hasOverlayPermission()) {
+                toast('需要悬浮窗权限')
+                void mod.default.openOverlaySettings()
+                return
+              }
+              const showing = mod.default.isMiniPlayerShowing()
+              if (showing) {
+                await mod.default.hide()
+                toast('小窗已关闭')
+              } else {
+                await mod.default.show()
+                toast('小窗已打开')
+              }
+            })
+          }} color={controlColor} />
         <Btn icon="slider" onPress={showSetting} color={controlColor} />
       </View>
       <SettingPopup ref={popupRef} direction="vertical" />

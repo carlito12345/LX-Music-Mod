@@ -1,5 +1,6 @@
 import playerState from '@/store/player/state'
 import mediaInteraction, { SourceType } from '@/plugins/mediainteraction'
+import miniplayer from '@/plugins/miniplayer'
 
 
 let initialized = false
@@ -48,6 +49,12 @@ export default async() => {
       playing: isPlaying,
       sourceType,
     })
+    
+    // 同时更新小窗播放器
+    if (miniplayer.isMiniPlayerShowing()) {
+      await miniplayer.updateCover(artworkPath)
+      await miniplayer.updatePlaybackInfo(title, artist, isPlaying, 0, duration)
+    }
   }
 
   const updatePlayStatus = async() => {
@@ -75,6 +82,12 @@ export default async() => {
       playing: isPlaying,
       sourceType,
     })
+    
+    // 同时更新小窗播放器
+    if (miniplayer.isMiniPlayerShowing()) {
+      await miniplayer.updateCover(artworkPath)
+      await miniplayer.updatePlaybackInfo(title, artist, isPlaying, 0, duration)
+    }
   }
 
   const handleStop = async() => {
