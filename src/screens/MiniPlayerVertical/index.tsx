@@ -1,10 +1,11 @@
-import { memo, useMemo } from 'react'
+import { memo } from 'react'
 import { View, StyleSheet, Image, TouchableOpacity } from 'react-native'
 import { BlurView } from '@react-native-community/blur'
 import { usePlayerMusicInfo, useIsPlay, useProgress } from '@/store/player/hook'
 import Text from '@/components/common/Text'
 import { Icon } from '@/components/common/Icon'
 import { useTheme } from '@/store/theme/hook'
+import { useSettingValue } from '@/store/setting/hook'
 import { playNext, playPrev, togglePlay } from '@/core/player/player'
 import { useLrcPlay } from '@/plugins/lyric'
 import { getContrastTextColor } from '@/utils/colorContrast'
@@ -20,61 +21,69 @@ export default memo(() => {
   const name = musicInfo.name || ''
   const singer = musicInfo.singer || ''
   const pic = musicInfo.pic || ''
-  const bgColor = theme['c-content-background'] || '#1a1a2e'
+
+  // 跟随播放器纯色背景
+  const solidColor = useSettingValue('playDetail.background.solidColor')
+  const bgColor = solidColor || theme['c-content-background'] || '#1a1a2e'
   const textColor = getContrastTextColor(bgColor)
 
   return (
     <View style={styles.container}>
-      <BlurView style={StyleSheet.absoluteFill} blurType="dark" blurAmount={25} reducedTransparencyFallbackColor={bgColor} />
-      <View style={[StyleSheet.absoluteFill, { backgroundColor: bgColor, opacity: 0.8 }]} />
+      {/* 玻璃背景 */}
+      <BlurView style={StyleSheet.absoluteFill} blurType="dark" blurAmount={30} reducedTransparencyFallbackColor={bgColor} />
+      <View style={[StyleSheet.absoluteFill, { backgroundColor: bgColor, opacity: 0.75 }]} />
 
       <View style={styles.content}>
-        {/* 封面 - 放大并下移一点 */}
-        <View style={styles.coverWrap}>
-          {pic ? (
-            <Image source={{ uri: pic }} style={styles.cover} />
-          ) : (
-            <View style={[styles.coverPlaceholder, { backgroundColor: theme['c-primary'] || '#07c556' }]}>
-              <Text size={48} color="#fff">♪</Text>
-            </View>
-          )}
-        </View>
-
-        {/* 歌曲信息 */}
-        <View style={styles.infoArea}>
-          <Text numberOfLines={1} size={16} color={textColor} style={{ fontWeight: '600', textAlign: 'center' }}>
+        {/* 上 1/3:封面 + 信息 */}
+        <View style={styles.topSection}>
+          <View style={styles.coverWrap}>
+            {pic ? (
+              <Image source={{ uri: pic }} style={styles.cover} />
+            ) : (
+              <View style={[styles.coverPlaceholder, { backgroundColor: textColor + '20' }]}>
+                <Text size={36} color={textColor} style={{ opacity: 0.5 }}>♪</Text>
+              </View>
+            )}
+          </View>
+          <Text numberOfLines={1} size={15} color={textColor} style={{ fontWeight: '600', marginTop: 6 }}>
             {name || '未播放'}
           </Text>
-          <Text numberOfLines={1} size={13} color={textColor} style={{ textAlign: 'center', opacity: 0.5, marginTop: 1 }}>
+          <Text numberOfLines={1} size={12} color={textColor} style={{ opacity: 0.5, marginTop: 1 }}>
             {singer || ''}
           </Text>
         </View>
 
-        {/* 歌词 */}
-        <View style={styles.lyricArea}>
-          <Text numberOfLines={2} size={14} color={textColor} style={{ textAlign: 'center', opacity: 0.6 }}>
-            {lrcLine || '♪ 音乐 ♪'}
+        {/* 中 1/3:歌词 */}
+        <View style={styles.midSection}>
+          <Text numberOfLines={4} size={14} color={textColor} style={{ textAlign: 'center', opacity: 0.7, lineHeight: 22 }}>
+            {lrcLine || '♪ 聆听音乐的美好 ♪'}
           </Text>
         </View>
 
-        {/* 进度条 - 上移 */}
-        <View style={styles.progressWrap}>
-          <View style={styles.progressBar}>
-            <View style={[styles.progressFill, { width: maxPlayTime > 0 ? (progress / maxPlayTime * 100) + '%' : '0%' }]} />
+        {/* 下 1/3:进度 + 控件 */}
+        <View style={styles.botSection}>
+          {/* 进度条 */}
+          <View style={styles.progressWrap}>
+            <View style={[styles.progressBg, { backgroundColor: textColor + '20' }]}>
+              <View style={[styles.progressFill, { 
+                width: maxPlayTime > 0 ? (progress / maxPlayTime * 100) + '%' : '0%',
+                backgroundColor: textColor
+              }]} />
+            </View>
           </View>
-        </View>
 
-        {/* 控制按钮 - 上移 */}
-        <View style={styles.controls}>
-          <TouchableOpacity style={styles.btn} onPress={() => playPrev()}>
-            <Icon name="prevMusic" size={26} color={textColor} />
-          </TouchableOpacity>
-          <TouchableOpacity style={[styles.playBtn, { backgroundColor: textColor + '20' }]} onPress={() => togglePlay()}>
-            <Icon name={isPlay ? 'pause' : 'play'} size={38} color={textColor} />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.btn} onPress={() => playNext()}>
-            <Icon name="nextMusic" size={26} color={textColor} />
-          </TouchableOpacity>
+          {/* 控件 */}
+          <View style={styles.controls}>
+            <TouchableOpacity style={styles.btn} onPress={() => playPrev()} activeOpacity={0.6}>
+              <Icon name="skip-previous" size={24} color={textColor} />
+            </TouchableOpacity>
+            <TouchableOpacity style={[styles.playBtn, { backgroundColor: textColor + '18' }]} onPress={() => togglePlay()} activeOpacity={0.6}>
+              <Icon name={isPlay ? 'pause-circle' : 'play-circle'} size={44} color={textColor} />
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.btn} onPress={() => playNext()} activeOpacity={0.6}>
+              <Icon name="skip-next" size={24} color={textColor} />
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     </View>
@@ -85,82 +94,83 @@ const styles = StyleSheet.create({
   container: {
     width: '100%',
     height: '100%',
-    borderRadius: 24,
+    borderRadius: 28,
     overflow: 'hidden',
   },
   content: {
     flex: 1,
+    paddingHorizontal: 20,
+    paddingVertical: 16,
+  },
+  topSection: {
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 20,
-    paddingVertical: 20,
   },
   coverWrap: {
-    width: 200,
-    height: 200,
-    borderRadius: 22,
+    width: 140,
+    height: 140,
+    borderRadius: 20,
     overflow: 'hidden',
-    marginBottom: 6,
-    elevation: 8,
+    elevation: 10,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.35,
+    shadowRadius: 10,
   },
   cover: {
-    width: 200,
-    height: 200,
-    borderRadius: 22,
+    width: 140,
+    height: 140,
+    borderRadius: 20,
   },
   coverPlaceholder: {
-    width: 200,
-    height: 200,
-    borderRadius: 22,
+    width: 140,
+    height: 140,
+    borderRadius: 20,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  infoArea: {
-    marginBottom: 4,
+  midSection: {
+    flex: 1,
+    justifyContent: 'center',
     alignItems: 'center',
-  },
-  lyricArea: {
-    marginVertical: 4,
     paddingHorizontal: 8,
+  },
+  botSection: {
+    flex: 1,
+    justifyContent: 'center',
   },
   progressWrap: {
     width: '100%',
-    paddingHorizontal: 8,
-    marginBottom: 8,
+    marginBottom: 14,
+    paddingHorizontal: 4,
   },
-  progressBar: {
-    width: '100%',
+  progressBg: {
     height: 4,
     borderRadius: 2,
-    backgroundColor: 'rgba(128,128,128,0.3)',
     overflow: 'hidden',
   },
   progressFill: {
     height: '100%',
     borderRadius: 2,
-    backgroundColor: 'rgba(255,255,255,0.8)',
   },
   controls: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 16,
+    gap: 20,
   },
   btn: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
+    width: 44,
+    height: 44,
+    borderRadius: 22,
     justifyContent: 'center',
     alignItems: 'center',
   },
   playBtn: {
-    width: 64,
-    height: 64,
-    borderRadius: 32,
+    width: 72,
+    height: 72,
+    borderRadius: 36,
     justifyContent: 'center',
     alignItems: 'center',
   },
