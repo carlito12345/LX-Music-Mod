@@ -227199,21 +227199,22 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
           onPress: function onPress() {
             void _$$_REQUIRE(_dependencyMap[17], "/data/data/com.termux/files/home/lx-music-mobile/node_modules/metro-runtime/src/modules/asyncRequire.js")(_dependencyMap[16], _dependencyMap.paths, "../../../../plugins/miniplayer").then(/*#__PURE__*/function () {
               var _ref3 = (0, _asyncToGenerator2.default)(function* (mod) {
-                if (!mod.default.isAvailable) {
+                var mp = mod == null ? void 0 : mod.default;
+                if (!mp || !mp.isAvailable) {
                   (0, _$$_REQUIRE(_dependencyMap[18], "../../../../utils/tools").toast)('小窗模式不可用');
                   return;
                 }
-                if (!(yield mod.default.hasOverlayPermission())) {
+                if (!(yield mp.hasOverlayPermission())) {
                   (0, _$$_REQUIRE(_dependencyMap[18], "../../../../utils/tools").toast)('需要悬浮窗权限');
-                  void mod.default.openOverlaySettings();
+                  void mp.openOverlaySettings();
                   return;
                 }
-                var showing = mod.default.isMiniPlayerShowing();
+                var showing = mp.isMiniPlayerShowing();
                 if (showing) {
-                  yield mod.default.hide();
+                  yield mp.hide();
                   (0, _$$_REQUIRE(_dependencyMap[18], "../../../../utils/tools").toast)('小窗已关闭');
                 } else {
-                  yield mod.default.show();
+                  yield mp.show();
                   (0, _$$_REQUIRE(_dependencyMap[18], "../../../../utils/tools").toast)('小窗已打开');
                 }
               });
@@ -229306,8 +229307,6 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     isAvailable: isAvailable,
     show: show,
     hide: hide,
-    updateCover: updateCover,
-    updatePlaybackInfo: updatePlaybackInfo,
     isMiniPlayerShowing: isMiniPlayerShowing,
     hasOverlayPermission: hasOverlayPermission,
     openOverlaySettings: openOverlaySettings

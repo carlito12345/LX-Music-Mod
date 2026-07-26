@@ -49,18 +49,19 @@ export default memo(({ backgroundColor }: HeaderProps) => {
         <Title backgroundColor={backgroundColor} />
         <Btn icon="fullscreen" onPress={() => {
             void import('@/plugins/miniplayer').then(async(mod) => {
-              if (!mod.default.isAvailable) { toast('小窗模式不可用'); return }
-              if (!await mod.default.hasOverlayPermission()) {
+              const mp = mod?.default
+              if (!mp || !mp.isAvailable) { toast('小窗模式不可用'); return }
+              if (!await mp.hasOverlayPermission()) {
                 toast('需要悬浮窗权限')
-                void mod.default.openOverlaySettings()
+                void mp.openOverlaySettings()
                 return
               }
-              const showing = mod.default.isMiniPlayerShowing()
+              const showing = mp.isMiniPlayerShowing()
               if (showing) {
-                await mod.default.hide()
+                await mp.hide()
                 toast('小窗已关闭')
               } else {
-                await mod.default.show()
+                await mp.show()
                 toast('小窗已打开')
               }
             })

@@ -76,8 +76,6 @@ export default {
   isAvailable,
   show,
   hide,
-  updateCover,
-  updatePlaybackInfo,
   isMiniPlayerShowing,
   hasOverlayPermission,
   openOverlaySettings,
