@@ -212,29 +212,54 @@ public class MediaInteractionModule extends ReactContextBaseJavaModule {
             @Override
             public void run() {
                 try {
-                    // 使用简单的 HTTP 下载
+                    // 支持 HTTP/HTTPS 重定向
                     java.net.URL imageUrl = new java.net.URL(url);
                     java.net.HttpURLConnection connection = (java.net.HttpURLConnection) imageUrl.openConnection();
                     connection.setDoInput(true);
-                    connection.setConnectTimeout(5000);
-                    connection.setReadTimeout(5000);
+                    connection.setConnectTimeout(8000);
+                    connection.setReadTimeout(8000);
+                    connection.setInstanceFollowRedirects(true);
+                    // 清除 HTTP 明文流量限制
+                    connection.setRequestProperty("User-Agent", "Mozilla/5.0");
                     connection.connect();
-                    java.io.InputStream input = connection.getInputStream();
-                    android.graphics.Bitmap bitmap = android.graphics.BitmapFactory.decodeStream(input);
-                    input.close();
-                    connection.disconnect();
 
-                    if (bitmap != null) {
-                        // 保存到共享目录
-                        String filename = "artwork_" + System.currentTimeMillis() + ".jpg";
-                        java.io.File artworkFile = new java.io.File(artworkCacheDir, filename);
-                        java.io.FileOutputStream fos = new java.io.FileOutputStream(artworkFile);
-                        bitmap.compress(android.graphics.Bitmap.CompressFormat.JPEG, 90, fos);
-                        fos.close();
-                        
-                        Uri artworkUri = Uri.fromFile(artworkFile);
-                        Log.d(TAG, "Artwork downloaded: " + artworkUri);
-                        result[0] = artworkUri;
+                    int responseCode = connection.getResponseCode();
+                    if (responseCode == 200) {
+                        // 先读取所有字节
+                        java.io.InputStream input = connection.getInputStream();
+                        byte[] data = readAllBytes(input);
+                        input.close();
+                        connection.disconnect();
+
+                        if (data.length > 0) {
+                            android.graphics.Bitmap bitmap = android.graphics.BitmapFactory.decodeByteArray(data, 0, data.length);
+                            if (bitmap != null && bitmap.getWidth() > 0 && bitmap.getHeight() > 0) {
+                                // 清理旧封面文件
+                                cleanupOldArtwork();
+                                
+                                String filename = "artwork_" + System.currentTimeMillis() + ".jpg";
+                                java.io.File artworkFile = new java.io.File(artworkCacheDir, filename);
+                                java.io.FileOutputStream fos = new java.io.FileOutputStream(artworkFile);
+                                bitmap.compress(android.graphics.Bitmap.CompressFormat.JPEG, 90, fos);
+                                fos.flush();
+                                fos.close();
+                                
+                                // 验证文件大小
+                                if (artworkFile.length() > 0) {
+                                    Uri artworkUri = Uri.fromFile(artworkFile);
+                                    Log.d(TAG, "Artwork saved: " + artworkUri + " size=" + artworkFile.length());
+                                    result[0] = artworkUri;
+                                } else {
+                                    Log.w(TAG, "Artwork file is empty after save");
+                                    artworkFile.delete();
+                                }
+                            } else {
+                                Log.w(TAG, "Failed to decode bitmap from downloaded data");
+                            }
+                        }
+                    } else {
+                        connection.disconnect();
+                        Log.w(TAG, "HTTP error: " + responseCode + " for " + url);
                     }
                 } catch (Exception e) {
                     Log.e(TAG, "Failed to download artwork", e);
@@ -293,4 +318,34 @@ public class MediaInteractionModule extends ReactContextBaseJavaModule {
             return null;
         }
     }
+
+    private byte[] readAllBytes(java.io.InputStream input) throws java.io.IOException {
+        java.io.ByteArrayOutputStream buffer = new java.io.ByteArrayOutputStream();
+        byte[] chunk = new byte[8192];
+        int n;
+        while ((n = input.read(chunk)) != -1) {
+            buffer.write(chunk, 0, n);
+        }
+        return buffer.toByteArray();
+    }
+
+    private void cleanupOldArtwork() {
+        try {
+            java.io.File[] files = artworkCacheDir.listFiles();
+            if (files != null && files.length > 5) {
+                java.util.Arrays.sort(files, (a, b) -> Long.compare(a.lastModified(), b.lastModified()));
+                for (int i = 0; i < files.length - 5; i++) {
+                    files[i].delete();
+                }
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "cleanupOldArtwork failed", e);
+        }
+    }
+
+    @ReactMethod
+    public void addListener(String eventName) {}
+
+    @ReactMethod
+    public void removeListeners(Integer count) {}
 }
