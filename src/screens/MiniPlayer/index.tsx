@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 12,
+    paddingHorizontal: 16,
   },
   coverWrap: {
     width: 60,
@@ -117,6 +117,8 @@ const styles = StyleSheet.create({
   },
   rightArea: {
     justifyContent: 'center',
+    flexShrink: 0,
+    marginLeft: 4,
   },
   controls: {
     flexDirection: 'row',

@@ -126611,7 +126611,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       flex: 1,
       flexDirection: 'row',
       alignItems: 'center',
-      paddingHorizontal: 12
+      paddingHorizontal: 16
     },
     coverWrap: {
       width: 60,
@@ -126645,7 +126645,9 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       justifyContent: 'center'
     },
     rightArea: {
-      justifyContent: 'center'
+      justifyContent: 'center',
+      flexShrink: 0,
+      marginLeft: 4
     },
     controls: {
       flexDirection: 'row',
@@ -175928,7 +175930,8 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     content: {
       flex: 1,
       paddingHorizontal: 16,
-      paddingVertical: 12
+      paddingVertical: 12,
+      paddingBottom: 16
     },
     topSection: {
       flex: 1,
@@ -175989,7 +175992,8 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center',
-      gap: 20
+      gap: 16,
+      marginBottom: 4
     },
     btn: {
       width: 40,

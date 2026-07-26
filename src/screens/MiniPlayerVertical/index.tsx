@@ -101,6 +101,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 16,
     paddingVertical: 12,
+    paddingBottom: 16,
   },
   topSection: {
     flex: 1,
@@ -158,7 +159,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 20,
+    gap: 16,
+    marginBottom: 4,
   },
   btn: {
     width: 40,
