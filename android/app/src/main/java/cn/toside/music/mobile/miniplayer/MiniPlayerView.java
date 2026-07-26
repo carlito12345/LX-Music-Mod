@@ -72,8 +72,10 @@ public class MiniPlayerView {
     int height = (int) ((isVertical ? VERTICAL_HEIGHT_DP : MINI_HEIGHT_DP) * densityDp);
 
     // 适配屏幕(最大占屏幕 95%)
-    if (width > screenWidth * 0.95f) width = (int) (screenWidth * 0.95f);
-    if (height > screenHeight * 0.95f) height = (int) (screenHeight * 0.95f);
+    // CAP REMOVED FOR DEBUGGING
+    Log.d(TAG, "Screen=" + screenWidth + "x" + screenHeight + " density=" + densityDp + " rawW=" + width + " rawH=" + height);
+    if (width > screenWidth) width = screenWidth;
+    if (height > screenHeight) height = screenHeight;
 
     final WindowManager.LayoutParams params = new WindowManager.LayoutParams(
         width, height,

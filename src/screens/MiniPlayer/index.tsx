@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import { View, StyleSheet, TouchableOpacity, Image } from 'react-native'
-import { BlurView } from '@react-native-community/blur'
+// BlurView removed for testing
 import { usePlayerMusicInfo, useIsPlay } from '@/store/player/hook'
 import Text from '@/components/common/Text'
 import { Icon } from '@/components/common/Icon'
@@ -26,7 +26,7 @@ export default memo(() => {
 
   return (
     <View style={styles.container}>
-      <BlurView style={StyleSheet.absoluteFill} blurType="dark" blurAmount={20} reducedTransparencyFallbackColor={bg} />
+      {/* BlurView removed */}
       <View style={[StyleSheet.absoluteFill, { backgroundColor: bg, opacity: 0.8 }]} />
       <View style={styles.content}>
         <View style={styles.coverWrap}>
