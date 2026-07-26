@@ -126518,7 +126518,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
               backgroundColor: tc + '20'
             }],
             children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
-              size: 24,
+              size: 16,
               color: tc,
               style: {
                 opacity: 0.5
@@ -126530,7 +126530,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
           style: styles.infoArea,
           children: [/*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
             numberOfLines: 1,
-            size: 20,
+            size: 13,
             color: tc,
             style: {
               fontWeight: '600'
@@ -126538,7 +126538,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
             children: name || ''
           }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
             numberOfLines: 1,
-            size: 17,
+            size: 11,
             color: tc,
             style: {
               opacity: 0.5
@@ -126546,7 +126546,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
             children: singer || ''
           }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
             numberOfLines: 1,
-            size: 17,
+            size: 11,
             color: tc,
             style: {
               opacity: 0.4
@@ -126563,7 +126563,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
             activeOpacity: 0.6,
             children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_$$_REQUIRE(_dependencyMap[12], "../../components/common/Icon").Icon, {
               name: "skip-previous",
-              rawSize: 33,
+              rawSize: 22,
               color: tc
             })
           }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.TouchableOpacity, {
@@ -126576,7 +126576,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
             activeOpacity: 0.6,
             children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_$$_REQUIRE(_dependencyMap[12], "../../components/common/Icon").Icon, {
               name: isPlay ? 'pause-circle' : 'play-circle',
-              rawSize: 42,
+              rawSize: 28,
               color: tc
             })
           }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.TouchableOpacity, {
@@ -126587,7 +126587,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
             activeOpacity: 0.6,
             children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_$$_REQUIRE(_dependencyMap[12], "../../components/common/Icon").Icon, {
               name: "skip-next",
-              rawSize: 33,
+              rawSize: 22,
               color: tc
             })
           })]
@@ -126605,50 +126605,50 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       flex: 1,
       flexDirection: 'row',
       alignItems: 'center',
-      paddingLeft: 18,
-      paddingRight: 18
+      paddingLeft: 12,
+      paddingRight: 12
     },
     coverWrap: {
-      width: 84,
-      height: 84,
-      borderRadius: 18,
+      width: 56,
+      height: 56,
+      borderRadius: 12,
       overflow: 'hidden',
       flexShrink: 0
     },
     cover: {
-      width: 84,
-      height: 84,
-      borderRadius: 18
+      width: 56,
+      height: 56,
+      borderRadius: 12
     },
     coverPlaceholder: {
-      width: 84,
-      height: 84,
-      borderRadius: 18,
+      width: 56,
+      height: 56,
+      borderRadius: 12,
       justifyContent: 'center',
       alignItems: 'center'
     },
     infoArea: {
       flex: 1,
-      marginHorizontal: 15,
+      marginHorizontal: 10,
       justifyContent: 'center'
     },
     controls: {
       flexDirection: 'row',
       alignItems: 'center',
       flexShrink: 0,
-      gap: 10
+      gap: 6
     },
     btn: {
-      width: 56,
-      height: 56,
-      borderRadius: 28,
+      width: 38,
+      height: 38,
+      borderRadius: 19,
       justifyContent: 'center',
       alignItems: 'center'
     },
     playBtn: {
-      width: 66,
-      height: 66,
-      borderRadius: 33,
+      width: 44,
+      height: 44,
+      borderRadius: 22,
       justifyContent: 'center',
       alignItems: 'center'
     }
@@ -175804,7 +175804,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
                 backgroundColor: tc + '20'
               }],
               children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
-                size: 48,
+                size: 32,
                 color: tc,
                 style: {
                   opacity: 0.5
@@ -175814,16 +175814,16 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
             })
           }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
             numberOfLines: 1,
-            size: 22,
+            size: 15,
             color: tc,
             style: {
               fontWeight: '600',
-              marginTop: 12
+              marginTop: 8
             },
             children: name || ''
           }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
             numberOfLines: 1,
-            size: 20,
+            size: 13,
             color: tc,
             style: {
               opacity: 0.5
@@ -175834,12 +175834,12 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
           style: styles.midSection,
           children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
             numberOfLines: 4,
-            size: 21,
+            size: 14,
             color: tc,
             style: {
               textAlign: 'center',
               opacity: 0.7,
-              lineHeight: 33
+              lineHeight: 22
             },
             children: lrcLine || '♪'
           })
@@ -175865,7 +175865,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
               activeOpacity: 0.6,
               children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_$$_REQUIRE(_dependencyMap[12], "../../components/common/Icon").Icon, {
                 name: "skip-previous",
-                rawSize: 39,
+                rawSize: 26,
                 color: tc
               })
             }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.TouchableOpacity, {
@@ -175878,7 +175878,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
               activeOpacity: 0.6,
               children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_$$_REQUIRE(_dependencyMap[12], "../../components/common/Icon").Icon, {
                 name: isPlay ? 'pause-circle' : 'play-circle',
-                rawSize: 60,
+                rawSize: 40,
                 color: tc
               })
             }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.TouchableOpacity, {
@@ -175889,7 +175889,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
               activeOpacity: 0.6,
               children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_$$_REQUIRE(_dependencyMap[12], "../../components/common/Icon").Icon, {
                 name: "skip-next",
-                rawSize: 39,
+                rawSize: 26,
                 color: tc
               })
             })]
@@ -175906,8 +175906,8 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     },
     content: {
       flex: 1,
-      paddingHorizontal: 24,
-      paddingVertical: 18
+      paddingHorizontal: 16,
+      paddingVertical: 12
     },
     topSection: {
       flex: 1,
@@ -175915,9 +175915,9 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       justifyContent: 'center'
     },
     coverWrap: {
-      width: 195,
-      height: 195,
-      borderRadius: 30,
+      width: 130,
+      height: 130,
+      borderRadius: 20,
       overflow: 'hidden',
       elevation: 10,
       shadowColor: '#000',
@@ -175929,14 +175929,14 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       shadowRadius: 10
     },
     cover: {
-      width: 195,
-      height: 195,
-      borderRadius: 30
+      width: 130,
+      height: 130,
+      borderRadius: 20
     },
     coverPlaceholder: {
-      width: 195,
-      height: 195,
-      borderRadius: 30,
+      width: 130,
+      height: 130,
+      borderRadius: 20,
       justifyContent: 'center',
       alignItems: 'center'
     },
@@ -175952,10 +175952,10 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     },
     progressBg: {
       width: '100%',
-      height: 6,
-      borderRadius: 3,
+      height: 4,
+      borderRadius: 2,
       overflow: 'hidden',
-      marginBottom: 21
+      marginBottom: 14
     },
     progressFill: {
       height: '100%',
@@ -175965,19 +175965,19 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center',
-      gap: 24
+      gap: 16
     },
     btn: {
-      width: 69,
-      height: 69,
-      borderRadius: 35,
+      width: 46,
+      height: 46,
+      borderRadius: 23,
       justifyContent: 'center',
       alignItems: 'center'
     },
     playBtn: {
-      width: 96,
-      height: 96,
-      borderRadius: 48,
+      width: 64,
+      height: 64,
+      borderRadius: 32,
       justifyContent: 'center',
       alignItems: 'center'
     }

@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 
@@ -155,16 +156,17 @@ public class MiniPlayerView {
   public void hide() {
     if (!isShowing) return;
     try {
-      if (reactRootView != null) {
-        reactRootView.unmountReactApplication();
-        reactRootView = null;
-      }
+      // 只从窗口移除,不销毁 ReactRootView(保留供下次复用)
       if (floatingView != null) {
+        if (reactRootView != null && reactRootView.getParent() != null) {
+          ((ViewGroup) floatingView).removeView(reactRootView);
+        }
         windowManager.removeView(floatingView);
         floatingView = null;
       }
     } catch (Exception e) { Log.e(TAG, "hide error", e); }
     isShowing = false;
+    isVertical = false;
   }
 
   public boolean isShowing() { return isShowing; }
