@@ -1,5 +1,5 @@
-import { memo, useState, useCallback } from 'react'
-import { View, StyleSheet, Image, TouchableOpacity, LayoutChangeEvent } from 'react-native'
+import { memo } from 'react'
+import { View, StyleSheet, Image, TouchableOpacity } from 'react-native'
 import { BlurView } from '@react-native-community/blur'
 import { usePlayerMusicInfo, useIsPlay, useProgress } from '@/store/player/hook'
 import Text from '@/components/common/Text'
@@ -10,85 +10,54 @@ import { playNext, playPrev, togglePlay } from '@/core/player/player'
 import { useLrcPlay } from '@/plugins/lyric'
 import { getContrastTextColor } from '@/utils/colorContrast'
 
-const getS = (W: number) => ({
-  coverSize: W * 0.28,
-  coverRadius: W * 0.045,
-  iconSize: W * 0.05,
-  playSize: W * 0.11,
-  padH: W * 0.035,
-  padV: W * 0.03,
-  titleSize: W * 0.035,
-  subSize: W * 0.03,
-  lyricSize: W * 0.032,
-  gap: W * 0.035,
-  progressHeight: W * 0.012,
-  borderRadius: W * 0.06,
-})
-
 export default memo(() => {
   const theme = useTheme()
-  const musicInfo = usePlayerMusicInfo()
+  const mi = usePlayerMusicInfo()
   const isPlay = useIsPlay()
   const { progress, maxPlayTime } = useProgress()
   const lrcInfo = useLrcPlay()
-  const [containerH, setContainerH] = useState(600)
-
-  const onLayout = useCallback((e: LayoutChangeEvent) => {
-    const h = e.nativeEvent.layout.height
-    if (h > 0) setContainerH(h)
-  }, [])
-
-  const s = getS(containerH * 0.55)
-
+  const sc = useSettingValue('playDetail.background.solidColor')
+  const bg = sc || theme['c-content-background'] || '#1a1a2e'
+  const tc = getContrastTextColor(bg)
   const lrcLine = lrcInfo.text || ''
-  const name = musicInfo.name || ''
-  const singer = musicInfo.singer || ''
-  const pic = musicInfo.pic || ''
-  const solidColor = useSettingValue('playDetail.background.solidColor')
-  const bgColor = solidColor || theme['c-content-background'] || '#1a1a2e'
-  const textColor = getContrastTextColor(bgColor)
+  const name = mi.name || ''
+  const singer = mi.singer || ''
+  const pic = mi.pic || ''
 
   return (
-    <View style={styles.container} onLayout={onLayout}>
-      <BlurView style={StyleSheet.absoluteFill} blurType="dark" blurAmount={30} reducedTransparencyFallbackColor={bgColor} />
-      <View style={[StyleSheet.absoluteFill, { backgroundColor: bgColor, opacity: 0.75 }]} />
-
-      <View style={[styles.content, { paddingHorizontal: s.padH, paddingVertical: s.padV }]}>
+    <View style={styles.container}>
+      <BlurView style={StyleSheet.absoluteFill} blurType="dark" blurAmount={30} reducedTransparencyFallbackColor={bg} />
+      <View style={[StyleSheet.absoluteFill, { backgroundColor: bg, opacity: 0.75 }]} />
+      <View style={styles.content}>
         <View style={styles.topSection}>
-          <View style={[styles.coverWrap, { width: s.coverSize, height: s.coverSize, borderRadius: s.coverRadius }]}>
-            {pic ? (
-              <Image source={{ uri: pic }} style={[styles.cover, { borderRadius: s.coverRadius }]} />
-            ) : (
-              <View style={[styles.coverPlaceholder, { borderRadius: s.coverRadius, backgroundColor: textColor + '20' }]}>
-                <Text size={s.coverSize * 0.25} color={textColor} style={{ opacity: 0.5 }}>♪</Text>
+          <View style={styles.coverWrap}>
+            {pic ? <Image source={{ uri: pic }} style={styles.cover} /> : (
+              <View style={[styles.coverPlaceholder, { backgroundColor: tc + '20' }]}>
+                <Text size={32} color={tc} style={{ opacity: 0.5 }}>♪</Text>
               </View>
             )}
           </View>
-          <Text numberOfLines={1} size={s.titleSize} color={textColor} style={{ fontWeight: '600', marginTop: s.padV * 0.3 }}>
-            {name || '未播放'}
-          </Text>
-          <Text numberOfLines={1} size={s.subSize} color={textColor} style={{ opacity: 0.5 }}>{singer || ''}</Text>
+          <Text numberOfLines={1} size={15} color={tc} style={{ fontWeight: '600', marginTop: 8 }}>{name || ''}</Text>
+          <Text numberOfLines={1} size={13} color={tc} style={{ opacity: 0.5 }}>{singer || ''}</Text>
         </View>
-
         <View style={styles.midSection}>
-          <Text numberOfLines={3} size={s.lyricSize} color={textColor} style={{ textAlign: 'center', opacity: 0.7, lineHeight: s.lyricSize * 1.5 }}>
+          <Text numberOfLines={4} size={14} color={tc} style={{ textAlign: 'center', opacity: 0.7, lineHeight: 22 }}>
             {lrcLine || '♪'}
           </Text>
         </View>
-
         <View style={styles.botSection}>
-          <View style={[styles.progressBg, { height: s.progressHeight, borderRadius: s.progressHeight / 2, backgroundColor: textColor + '20', marginBottom: s.gap }]}>
-            <View style={[styles.progressFill, { height: '100%', borderRadius: s.progressHeight / 2, backgroundColor: textColor, width: maxPlayTime > 0 ? (progress / maxPlayTime * 100) + '%' : '0%' }]} />
+          <View style={[styles.progressBg, { backgroundColor: tc + '20' }]}>
+            <View style={[styles.progressFill, { backgroundColor: tc, width: maxPlayTime > 0 ? (progress / maxPlayTime * 100) + '%' : '0%' }]} />
           </View>
-          <View style={[styles.controls, { gap: s.gap * 0.5 }]}>
-            <TouchableOpacity style={[styles.btn, { width: s.playSize * 0.8, height: s.playSize * 0.8, borderRadius: s.playSize * 0.4 }]} onPress={() => playPrev()} activeOpacity={0.6}>
-              <Icon name="skip-previous" size={s.iconSize} color={textColor} />
+          <View style={styles.controls}>
+            <TouchableOpacity onPress={() => playPrev()} style={styles.btn} activeOpacity={0.6}>
+              <Icon name="skip-previous" rawSize={26} color={tc} />
             </TouchableOpacity>
-            <TouchableOpacity style={[styles.playBtn, { width: s.playSize, height: s.playSize, borderRadius: s.playSize / 2, backgroundColor: textColor + '18' }]} onPress={() => togglePlay()} activeOpacity={0.6}>
-              <Icon name={isPlay ? 'pause-circle' : 'play-circle'} size={s.playSize * 0.65} color={textColor} />
+            <TouchableOpacity onPress={() => togglePlay()} style={[styles.playBtn, { backgroundColor: tc + '18' }]} activeOpacity={0.6}>
+              <Icon name={isPlay ? 'pause-circle' : 'play-circle'} rawSize={40} color={tc} />
             </TouchableOpacity>
-            <TouchableOpacity style={[styles.btn, { width: s.playSize * 0.8, height: s.playSize * 0.8, borderRadius: s.playSize * 0.4 }]} onPress={() => playNext()} activeOpacity={0.6}>
-              <Icon name="skip-next" size={s.iconSize} color={textColor} />
+            <TouchableOpacity onPress={() => playNext()} style={styles.btn} activeOpacity={0.6}>
+              <Icon name="skip-next" rawSize={26} color={tc} />
             </TouchableOpacity>
           </View>
         </View>
@@ -99,16 +68,16 @@ export default memo(() => {
 
 const styles = StyleSheet.create({
   container: { width: '100%', height: '100%', overflow: 'hidden' },
-  content: { flex: 1 },
+  content: { flex: 1, paddingHorizontal: 16, paddingVertical: 12 },
   topSection: { flex: 1, alignItems: 'center', justifyContent: 'center' },
-  coverWrap: { flexShrink: 0, overflow: 'hidden', elevation: 10, shadowColor: '#000', shadowOffset: { width: 0, height: 6 }, shadowOpacity: 0.35, shadowRadius: 10 },
-  cover: { width: '100%', height: '100%' },
-  coverPlaceholder: { width: '100%', height: '100%', justifyContent: 'center', alignItems: 'center' },
+  coverWrap: { width: 130, height: 130, borderRadius: 20, overflow: 'hidden', elevation: 10, shadowColor: '#000', shadowOffset: { width: 0, height: 6 }, shadowOpacity: 0.35, shadowRadius: 10 },
+  cover: { width: 130, height: 130, borderRadius: 20 },
+  coverPlaceholder: { width: 130, height: 130, borderRadius: 20, justifyContent: 'center', alignItems: 'center' },
   midSection: { flex: 1, justifyContent: 'center', alignItems: 'center', paddingHorizontal: 8 },
   botSection: { flex: 1, justifyContent: 'center' },
-  progressBg: { width: '100%', overflow: 'hidden' },
-  progressFill: {},
-  controls: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center' },
-  btn: { justifyContent: 'center', alignItems: 'center' },
-  playBtn: { justifyContent: 'center', alignItems: 'center' },
+  progressBg: { width: '100%', height: 4, borderRadius: 2, overflow: 'hidden', marginBottom: 14 },
+  progressFill: { height: '100%', borderRadius: 2 },
+  controls: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 16 },
+  btn: { width: 46, height: 46, borderRadius: 23, justifyContent: 'center', alignItems: 'center' },
+  playBtn: { width: 64, height: 64, borderRadius: 32, justifyContent: 'center', alignItems: 'center' },
 })
