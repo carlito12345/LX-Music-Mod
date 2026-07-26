@@ -126647,7 +126647,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     container: {
       width: '100%',
       height: '100%',
-      overflow: 'visible'
+      overflow: 'hidden'
     },
     coverWrap: {
       position: 'absolute',

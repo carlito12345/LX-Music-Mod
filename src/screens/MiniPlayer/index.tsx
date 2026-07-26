@@ -79,7 +79,7 @@ export default memo(() => {
 })
 
 const styles = StyleSheet.create({
-  container: { width: '100%', height: '100%', overflow: 'visible' },
+  container: { width: '100%', height: '100%', overflow: 'hidden' },
   coverWrap: { position: 'absolute', overflow: 'hidden', elevation: 6, shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.3, shadowRadius: 6 },
   cover: { width: '100%', height: '100%' },
   coverPlaceholder: { width: '100%', height: '100%', justifyContent: 'center', alignItems: 'center' },
