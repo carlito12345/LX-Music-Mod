@@ -305,10 +305,7 @@ public class MiniPlayerView {
 
   public boolean isShowing() { return isShowing; }
 
-  private void sendAction(String action) {
-    WritableMap p = Arguments.createMap(); p.putString("action", action);
-    eventEmitter.sendEvent("onMiniPlayerAction", p);
-  }
+
 
   private void createCtrl(LinearLayout parent, int size, boolean isNext) {
     FrameLayout btn = new FrameLayout(context);
@@ -376,4 +373,19 @@ public class MiniPlayerView {
   }
 
   private int dp(int v) { return (int)(v * context.getResources().getDisplayMetrics().density + 0.5f); }
+  
+  public interface MiniPlayerCallback {
+    void onAction(String action);
+  }
+  
+  public void setCallback(MiniPlayerCallback cb) { this.callback = cb; }
+  private MiniPlayerCallback callback = null;
+  
+  private void sendAction(String action) {
+    if (callback != null) { callback.onAction(action); return; }
+    if (eventEmitter != null) {
+      WritableMap p = Arguments.createMap(); p.putString("action", action);
+      eventEmitter.sendEvent("onMiniPlayerAction", p);
+    }
+  }
 }

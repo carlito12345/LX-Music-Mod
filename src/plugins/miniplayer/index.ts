@@ -24,6 +24,9 @@ if (isAvailable) {
     if (handler) handler()
   })
 
+  // 监听 Service 的按钮事件(常驻小窗用)
+  try { MiniPlayerModule.startServiceButtonListener() } catch {}
+
   eventEmitter.addListener('onMiniPlayerReady', () => {
     try { NativeModules.LyricModule?.setSendLyricTextEvent?.(true) } catch {}
     pushState()

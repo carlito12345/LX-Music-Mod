@@ -229559,11 +229559,16 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       var handler = ACTION_MAP[data.action];
       if (handler) handler();
     });
+
+    // 监听 Service 的按钮事件(常驻小窗用)
+    try {
+      MiniPlayerModule.startServiceButtonListener();
+    } catch (_unused) {}
     eventEmitter.addListener('onMiniPlayerReady', function () {
       try {
         var _NativeModules$LyricM;
         (_NativeModules$LyricM = _reactNative.NativeModules.LyricModule) == null ? void 0 : _NativeModules$LyricM.setSendLyricTextEvent == null ? void 0 : _NativeModules$LyricM.setSendLyricTextEvent(true);
-      } catch (_unused) {}
+      } catch (_unused2) {}
       pushState();
       startPoll();
       // 延迟应用样式(确保 view 已就绪)
@@ -229620,9 +229625,9 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
           });
           if (lines.length >= 3) lrcText = lines.join('\n');
         }
-      } catch (_unused2) {}
+      } catch (_unused3) {}
       if (lrcText) updateLrc(lrcText);
-    } catch (_unused3) {}
+    } catch (_unused4) {}
   }
   function startPoll() {
     if (pollTimer) return;
@@ -229663,14 +229668,14 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
             var ss = _$$_REQUIRE(_dependencyMap[4], "../../store/setting/state").default;
             w = (ss == null ? void 0 : (_ss$setting = ss.setting) == null ? void 0 : _ss$setting['miniPlayer.customWidth']) || 500;
             h = (ss == null ? void 0 : (_ss$setting2 = ss.setting) == null ? void 0 : _ss$setting2['miniPlayer.customHeight']) || 800;
-          } catch (_unused4) {
+          } catch (_unused5) {
             w = 500;
             h = 800;
           }
         }
         yield MiniPlayerModule.show(w, h);
         return true;
-      } catch (_unused5) {
+      } catch (_unused6) {
         isShowing = false;
         return false;
       }
@@ -229688,7 +229693,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
         yield MiniPlayerModule.hide();
         isShowing = false;
         return true;
-      } catch (_unused6) {
+      } catch (_unused7) {
         return false;
       }
     });
@@ -229702,7 +229707,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       if (!isAvailable) return;
       try {
         yield MiniPlayerModule.updateCover(coverPath);
-      } catch (_unused7) {}
+      } catch (_unused8) {}
     });
     return _updateCover.apply(this, arguments);
   }
@@ -229714,7 +229719,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       if (!isAvailable) return;
       try {
         yield MiniPlayerModule.updatePlaybackInfo(title || '', artist || '', playing, progress || 0, maxProgress || 100);
-      } catch (_unused8) {}
+      } catch (_unused9) {}
     });
     return _updatePlaybackInfo.apply(this, arguments);
   }
@@ -229726,7 +229731,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       if (!isAvailable) return;
       try {
         yield MiniPlayerModule.setStyle(bgColor || 0xE61A1A2E, lyricLines || 3, highlightColor || '#ffffff');
-      } catch (_unused9) {}
+      } catch (_unused0) {}
     });
     return _setStyle.apply(this, arguments);
   }
@@ -229738,7 +229743,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       if (!isAvailable) return;
       try {
         yield MiniPlayerModule.updateLrc(text || '');
-      } catch (_unused0) {}
+      } catch (_unused1) {}
     });
     return _updateLrc.apply(this, arguments);
   }
@@ -229753,7 +229758,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       if (!isAvailable) return false;
       try {
         return yield MiniPlayerModule.hasOverlayPermission();
-      } catch (_unused1) {
+      } catch (_unused10) {
         return false;
       }
     });
@@ -229768,7 +229773,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       try {
         yield MiniPlayerModule.openOverlaySettings();
         return true;
-      } catch (_unused10) {
+      } catch (_unused11) {
         return false;
       }
     });
