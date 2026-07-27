@@ -64,35 +64,30 @@ public class MiniPlayerModule extends ReactContextBaseJavaModule {
   public void removeListeners(Integer count) {}
 
   @ReactMethod
-  public void showVertical(Promise promise) {
+  public void show(int width, int height, Promise promise) {
     try {
       if (miniPlayerView == null) {
         miniPlayerView = new MiniPlayerView(reactContext, miniPlayerEvent);
       }
-      miniPlayerView.showVertical();
-      promise.resolve(true);
-    } catch (Exception e) {
-      Log.e(TAG, "Failed to show vertical", e);
-      promise.reject("SHOW_ERROR", e.getMessage());
-    }
-  }
-
-  @ReactMethod
-  public void show(Promise promise) {
-    try {
-      if (miniPlayerView == null) {
-        miniPlayerView = new MiniPlayerView(reactContext, miniPlayerEvent);
-      }
-      miniPlayerView.show(false);
+      miniPlayerView.show(false, width, height);
       Log.d(TAG, "MiniPlayer shown");
-      // 通知 JS 层小窗已打开,让 JS 推送当前播放状态
-      WritableMap params = Arguments.createMap();
-      miniPlayerEvent.sendEvent("onMiniPlayerReady", params);
       promise.resolve(true);
     } catch (Exception e) {
       Log.e(TAG, "Failed to show", e);
       promise.reject("SHOW_ERROR", e.getMessage());
     }
+  }
+
+  @ReactMethod
+  public void setStyle(int bgColor, int lyricLines, String highlightColor, Promise promise) {
+    if (miniPlayerView != null) miniPlayerView.setStyle(bgColor, lyricLines, highlightColor);
+    promise.resolve(true);
+  }
+
+  @ReactMethod
+  public void updateLrc(String text, Promise promise) {
+    if (miniPlayerView != null) miniPlayerView.updateLrc(text);
+    promise.resolve(true);
   }
 
   @ReactMethod

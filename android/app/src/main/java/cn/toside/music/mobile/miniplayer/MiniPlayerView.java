@@ -1,17 +1,15 @@
 package cn.toside.music.mobile.miniplayer;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
+import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
-import android.graphics.Typeface;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.GradientDrawable;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
@@ -20,262 +18,212 @@ import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.Arguments;
-
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-
-import cn.toside.music.mobile.MainApplication;
+import com.facebook.react.bridge.WritableMap;
 
 public class MiniPlayerView {
   private static final String TAG = "[MiniPlayer]";
+  private static final int WIN_W = 500, WIN_H = 800;
   private final Context context;
   private final MiniPlayerEvent eventEmitter;
   private WindowManager windowManager;
   private FrameLayout floatingView;
   private ImageView coverView;
   private TextView titleView, artistView, lrcView;
-  private Button prevBtn, playBtn, nextBtn;
-  private View progressBar;
-
+  private View progressFill;
+  private int highlightColor = 0xFFFFFFFF;
+  private FrameLayout playBtnContainer;
+  private View isPlayView, pauseView;
   private boolean isShowing = false;
   private boolean isPlaying = false;
-  private boolean isVertical = false;
+  private int customW = 500, customH = 800;
   private int initialX, initialY;
   private float initialTouchX, initialTouchY;
-  private int screenWidth;
-
-  private static final int H_W = 980, H_H = 220;
-  private static final int V_W = 600, V_H = 1000;
-
-  // Unicode Material icons as text
-  private static final String ICON_PREV = "⏮";  // ⏮
-  private static final String ICON_PLAY = "▶";  // ▶
-  private static final String ICON_PAUSE = "⏸"; // ⏸
-  private static final String ICON_NEXT = "⏭";  // ⏭
 
   public MiniPlayerView(Context context, MiniPlayerEvent eventEmitter) {
     this.context = context;
     this.eventEmitter = eventEmitter;
-    // No ReactRootView - pure native Views = no UI freeze
   }
 
-  public void show(boolean isLandscape) {
+  public void show(boolean unused) { show(unused, 500, 800); }
+  public void show(boolean unused, int w, int h) {
     if (isShowing) return;
-    new Handler(Looper.getMainLooper()).post(() -> showOnMainThread());
-  }
-
-  public void showVertical() {
-    isVertical = true;
-    show(false);
+    this.customW = w; this.customH = h;
+    new Handler(Looper.getMainLooper()).post(this::showOnMainThread);
   }
 
   private void showOnMainThread() {
     windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
     Point size = new Point();
     windowManager.getDefaultDisplay().getSize(size);
-    int sw = Math.min(size.x, size.y);
-    int sh = Math.max(size.x, size.y);
-    screenWidth = sw;
-
+    int sw = Math.min(size.x, size.y), sh = Math.max(size.x, size.y);
     float density = context.getResources().getDisplayMetrics().density;
-    int w = (int) ((isVertical ? V_W : H_W) * density);
-    int h = (int) ((isVertical ? V_H : H_H) * density);
-    if (w > sw * 0.95f) w = (int) (sw * 0.95f);
-    if (h > sh * 0.95f) h = (int) (sh * 0.95f);
-
+    int w = (int)(customW * density), h = (int)(customH * density);
+    if (w > sw * 0.95f) w = (int)(sw * 0.95f);
+    if (h > sh * 0.95f) h = (int)(sh * 0.95f);
+    
     int flag = Build.VERSION.SDK_INT >= 26 ? WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY : WindowManager.LayoutParams.TYPE_PHONE;
-    WindowManager.LayoutParams params = new WindowManager.LayoutParams(w, h, flag,
-        WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, PixelFormat.TRANSLUCENT);
+    WindowManager.LayoutParams params = new WindowManager.LayoutParams(w, h, flag, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, PixelFormat.TRANSLUCENT);
     params.gravity = Gravity.TOP | Gravity.START;
     params.x = (sw - w) / 2;
-    params.y = (int) (sh * 0.15f);
+    params.y = (int)(sh * 0.12f);
 
     floatingView = new FrameLayout(context);
-    // Apple Design: glassmorphism background
-    floatingView.setBackgroundColor(0xE61A1A2E);
+    GradientDrawable winBg = new GradientDrawable();
+    winBg.setCornerRadius(dp(20));
+    winBg.setColor(0xE61A1A2E);
+    floatingView.setBackground(winBg);
+    floatingView.setClipToOutline(true);
 
     LinearLayout root = new LinearLayout(context);
-    root.setOrientation(isVertical ? LinearLayout.VERTICAL : LinearLayout.HORIZONTAL);
-    root.setPadding(dp(12), dp(8), dp(12), dp(8));
+    root.setOrientation(LinearLayout.VERTICAL);
+    root.setPadding(dp(16), dp(20), dp(16), dp(16));
 
     // Cover
     coverView = new ImageView(context);
-    int coverSize = isVertical ? dp(100) : dp(56);
-    LinearLayout.LayoutParams coverLp = new LinearLayout.LayoutParams(coverSize, coverSize);
-    if (!isVertical) coverLp.setMargins(0, 0, dp(10), 0);
+    int coverPx = dp(140);
+    LinearLayout.LayoutParams coverLp = new LinearLayout.LayoutParams(coverPx, coverPx);
+    coverLp.gravity = Gravity.CENTER_HORIZONTAL;
     coverView.setLayoutParams(coverLp);
     coverView.setScaleType(ImageView.ScaleType.CENTER_CROP);
     coverView.setImageResource(android.R.drawable.ic_menu_gallery);
-    // Apple Design: rounded cover with shadow
     GradientDrawable coverBg = new GradientDrawable();
-    coverBg.setCornerRadius(dp(isVertical ? 16 : 12));
+    coverBg.setCornerRadius(dp(18));
     coverView.setBackground(coverBg);
     coverView.setClipToOutline(true);
-    coverView.setElevation(dp(4));
+    coverView.setElevation(dp(8));
     root.addView(coverView);
 
-    if (isVertical) {
-      // Vertical: Cover centered, then info, lrc, progress, controls below
-      coverView.setLayoutParams(new LinearLayout.LayoutParams(coverSize, coverSize));
-      ((LinearLayout.LayoutParams) coverView.getLayoutParams()).gravity = Gravity.CENTER_HORIZONTAL;
-      coverView.setPadding(0, dp(8), 0, 0);
+    // Title
+    titleView = new TextView(context);
+    titleView.setTextColor(Color.WHITE); titleView.setTextSize(17);
+    titleView.setTypeface(null, android.graphics.Typeface.BOLD);
+    titleView.setMaxLines(1); titleView.setEllipsize(android.text.TextUtils.TruncateAt.END);
+    titleView.setGravity(Gravity.CENTER);
+    titleView.setPadding(0, dp(10), 0, 0);
+    root.addView(titleView);
 
-      root.addView(makeLiner(dp(4)));
-      root.addView(makeInfo(true));
-      root.addView(makeLiner(dp(8)));
-      root.addView(makeLrc());
-      root.addView(makeLiner(dp(8)));
-      root.addView(makeProgress());
-      root.addView(makeLiner(dp(12)));
-      root.addView(makeControls(true));
-    } else {
-      // Horizontal: Cover - Info - Controls
-      root.addView(makeInfo(false));
-      root.addView(makeLiner(dp(4)));
-      root.addView(makeLrc());
-      root.addView(makeLiner(dp(4)));
-      root.addView(makeControls(false));
-    }
+    // Artist
+    artistView = new TextView(context);
+    artistView.setTextColor(Color.argb(153, 255, 255, 255)); artistView.setTextSize(14);
+    artistView.setMaxLines(1); artistView.setEllipsize(android.text.TextUtils.TruncateAt.END);
+    artistView.setGravity(Gravity.CENTER);
+    artistView.setPadding(0, dp(2), 0, 0);
+    root.addView(artistView);
 
+    // Lyrics
+    lrcView = new TextView(context);
+    lrcView.setTextColor(Color.argb(180, 255, 255, 255)); lrcView.setTextSize(15);
+    lrcView.setMaxLines(5); lrcView.setMinLines(2);
+    lrcView.setEllipsize(android.text.TextUtils.TruncateAt.END);
+    lrcView.setGravity(Gravity.CENTER);
+    lrcView.setPadding(dp(12), dp(16), dp(12), dp(16));
+    lrcView.setLineSpacing(dp(6), 1f);
+    lrcView.setText("♪");
+    lrcView.setLayoutParams(new LinearLayout.LayoutParams(-1, 0, 1));
+    root.addView(lrcView);
+
+        // Progress bar (FrameLayout with track background + white fill)
+    FrameLayout progContainer = new FrameLayout(context);
+    progContainer.setLayoutParams(new LinearLayout.LayoutParams(-1, dp(5)));
+    GradientDrawable progBg = new GradientDrawable();
+    progBg.setCornerRadius(dp(3)); progBg.setColor(Color.argb(40, 255, 255, 255));
+    progContainer.setBackground(progBg);
+    
+    progressFill = new View(context);
+    progressFill.setLayoutParams(new FrameLayout.LayoutParams(0, -1, Gravity.START));
+    GradientDrawable progFillG = new GradientDrawable();
+    progFillG.setCornerRadius(dp(3)); progFillG.setColor(Color.WHITE);
+    progressFill.setBackground(progFillG);
+    progContainer.addView(progressFill);
+    root.addView(progContainer);
+    // Controls
+    LinearLayout controls = new LinearLayout(context);
+    controls.setOrientation(LinearLayout.HORIZONTAL);
+    controls.setGravity(Gravity.CENTER);
+    LinearLayout.LayoutParams ctrlLp = new LinearLayout.LayoutParams(-1, -2);
+    ctrlLp.topMargin = dp(12);
+    controls.setLayoutParams(ctrlLp);
+
+    int btnPx = dp(48), playPx = dp(60);
+
+    // Prev
+    createCtrl(controls, btnPx, false);
+
+    // Play/Pause
+    playBtnContainer = new FrameLayout(context);
+    playBtnContainer.setLayoutParams(new LinearLayout.LayoutParams(playPx, playPx));
+    applyCircle(playBtnContainer, playPx/2, Color.argb(30, 255, 255, 255));
+    isPlayView = createPlayIcon(playPx);
+    pauseView = createPauseIcon(playPx);
+    playBtnContainer.addView(isPlayView, new FrameLayout.LayoutParams(-1, -1, Gravity.CENTER));
+    playBtnContainer.setOnClickListener(v -> {
+      isPlaying = !isPlaying;
+      View icon = isPlaying ? pauseView : isPlayView;
+      playBtnContainer.removeAllViews();
+      playBtnContainer.addView(icon, new FrameLayout.LayoutParams(-1, -1, Gravity.CENTER));
+      sendAction("playPause");
+    });
+    controls.addView(playBtnContainer);
+
+    // Next
+    createCtrl(controls, btnPx, true);
+
+    root.addView(controls);
     floatingView.addView(root, new FrameLayout.LayoutParams(-1, -1));
 
     // Drag
-    floatingView.setOnTouchListener((v, event) -> {
-      switch (event.getAction()) {
+    floatingView.setOnTouchListener((v, ev) -> {
+      switch (ev.getAction()) {
         case MotionEvent.ACTION_DOWN:
           initialX = params.x; initialY = params.y;
-          initialTouchX = event.getRawX(); initialTouchY = event.getRawY();
+          initialTouchX = ev.getRawX(); initialTouchY = ev.getRawY();
           return true;
         case MotionEvent.ACTION_MOVE:
-          params.x = initialX + (int)(event.getRawX() - initialTouchX);
-          params.y = initialY + (int)(event.getRawY() - initialTouchY);
-          try { windowManager.updateViewLayout(floatingView, params); } catch (Exception e) {}
+          params.x = initialX + (int)(ev.getRawX() - initialTouchX);
+          params.y = initialY + (int)(ev.getRawY() - initialTouchY);
+          try { windowManager.updateViewLayout(floatingView, params); } catch (Exception ignored) {}
           return true;
       }
       return false;
     });
 
-    try { windowManager.addView(floatingView, params); isShowing = true; } 
-    catch (Exception e) { Log.e(TAG, "show error", e); }
-  }
-
-  private LinearLayout makeInfo(boolean isV) {
-    LinearLayout ll = new LinearLayout(context);
-    ll.setOrientation(LinearLayout.VERTICAL);
-    ll.setLayoutParams(new LinearLayout.LayoutParams(0, -2, 1));
-    if (isV) ll.setGravity(Gravity.CENTER_HORIZONTAL);
-
-    titleView = new TextView(context);
-    titleView.setTextColor(Color.WHITE);
-    titleView.setTextSize(isV ? 18 : 14);
-    titleView.setTypeface(Typeface.DEFAULT_BOLD);
-    titleView.setMaxLines(1);
-    titleView.setEllipsize(android.text.TextUtils.TruncateAt.END);
-    ll.addView(titleView);
-
-    artistView = new TextView(context);
-    artistView.setTextColor(Color.argb(128, 255, 255, 255));
-    artistView.setTextSize(isV ? 14 : 11);
-    artistView.setMaxLines(1);
-    artistView.setEllipsize(android.text.TextUtils.TruncateAt.END);
-    ll.addView(artistView);
-    return ll;
-  }
-
-  private LinearLayout makeLrc() {
-    LinearLayout ll = new LinearLayout(context);
-    ll.setOrientation(LinearLayout.VERTICAL);
-    LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(0, -2, 1);
-    ll.setLayoutParams(lp);
-    ll.setGravity(Gravity.CENTER);
-    lrcView = new TextView(context);
-    lrcView.setTextColor(Color.argb(102, 255, 255, 255));
-    lrcView.setTextSize(12);
-    lrcView.setMaxLines(3);
-    lrcView.setEllipsize(android.text.TextUtils.TruncateAt.END);
-    lrcView.setGravity(Gravity.CENTER);
-    lrcView.setText("♪");
-    ll.addView(lrcView);
-    return ll;
-  }
-
-  private View makeProgress() {
-    progressBar = new View(context);
-    progressBar.setBackgroundColor(Color.argb(80, 255, 255, 255));
-    progressBar.setLayoutParams(new LinearLayout.LayoutParams(-1, dp(3)));
-    return progressBar;
-  }
-
-  private View makeLiner(int dp) {
-    View v = new View(context);
-    v.setLayoutParams(new LinearLayout.LayoutParams(-1, isVertical ? dp : dp / 2));
-    return v;
-  }
-
-  private LinearLayout makeControls(boolean isV) {
-    LinearLayout ll = new LinearLayout(context);
-    ll.setOrientation(LinearLayout.HORIZONTAL);
-    ll.setGravity(Gravity.CENTER);
-    if (!isV) {
-      ll.setLayoutParams(new LinearLayout.LayoutParams(-2, -1));
-      ll.setGravity(Gravity.CENTER_VERTICAL);
-    }
-
-    int btnSize = isV ? dp(56) : dp(44);
-    int btnRadius = btnSize / 2;
-    int iconSize = isV ? 28 : 20;
-
-    prevBtn = makeBtn(ICON_PREV, iconSize, btnSize, btnRadius);
-    prevBtn.setOnClickListener(new View.OnClickListener() {
-      @Override public void onClick(View v) { sendAction("previous"); }
-    });
-    ll.addView(prevBtn);
-
-    playBtn = makeBtn(isPlaying ? ICON_PAUSE : ICON_PLAY, isV ? 36 : 26, isV ? dp(68) : dp(50), isV ? dp(34) : dp(25));
-    playBtn.setOnClickListener(new View.OnClickListener() {
-      @Override public void onClick(View v) { sendAction("playPause"); }
-    });
-    ll.addView(playBtn);
-
-    nextBtn = makeBtn(ICON_NEXT, iconSize, btnSize, btnRadius);
-    nextBtn.setOnClickListener(new View.OnClickListener() {
-      @Override public void onClick(View v) { sendAction("next"); }
-    });
-    ll.addView(nextBtn);
-
-    return ll;
-  }
-
-  private Button makeBtn(String text, int textSize, int size, int radius) {
-    Button btn = new Button(context);
-    btn.setText(text);
-    btn.setTextColor(Color.WHITE);
-    btn.setTextSize(textSize);
-    btn.setBackgroundColor(Color.argb(25, 255, 255, 255));
-    btn.setLayoutParams(new LinearLayout.LayoutParams(size, size));
-    GradientDrawable shape = new GradientDrawable();
-    shape.setCornerRadius(radius);
-    shape.setColor(Color.argb(25, 255, 255, 255));
-    btn.setBackground(shape);
-    btn.setPadding(0, 0, 0, 0);
-    return btn;
+    try {
+      windowManager.addView(floatingView, params);
+      isShowing = true;
+      WritableMap ready = Arguments.createMap();
+      eventEmitter.sendEvent("onMiniPlayerReady", ready);
+    } catch (Exception e) { Log.e(TAG, "show error", e); }
   }
 
   public void updatePlaybackInfo(String title, String artist, boolean playing, int progress, int maxProgress) {
     isPlaying = playing;
+    isShowing = true;
     new Handler(Looper.getMainLooper()).post(() -> {
       if (titleView != null) titleView.setText(title.isEmpty() ? "未播放" : title);
       if (artistView != null) artistView.setText(artist);
-      if (playBtn != null) playBtn.setText(playing ? ICON_PAUSE : ICON_PLAY);
+      if (playBtnContainer != null) {
+        View icon = isPlaying ? pauseView : isPlayView;
+        playBtnContainer.removeAllViews();
+        playBtnContainer.addView(icon, new FrameLayout.LayoutParams(-1, -1, Gravity.CENTER));
+      }
+      if (maxProgress > 0 && progressFill != null) {
+        try {
+          FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) progressFill.getLayoutParams();
+          View parent = (View) progressFill.getParent();
+          if (parent != null && parent.getWidth() > 0) {
+            lp.width = (int)((float)progress / maxProgress * parent.getWidth());
+            progressFill.requestLayout();
+          }
+        } catch (Exception e) {
+          Log.w(TAG, "progress error: " + e.getMessage());
+        }
+      }
     });
   }
 
@@ -283,40 +231,149 @@ public class MiniPlayerView {
     if (coverView == null || path == null || path.isEmpty()) return;
     new Thread(() -> {
       try {
-        Bitmap bmp = null;
+        java.io.InputStream is;
         if (path.startsWith("http")) {
-          URL url = new URL(path);
-          HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-          conn.setConnectTimeout(5000);
-          conn.setReadTimeout(5000);
-          conn.setInstanceFollowRedirects(true);
-          InputStream is = conn.getInputStream();
-          bmp = BitmapFactory.decodeStream(is);
+          java.net.URL url = new java.net.URL(path);
+          java.net.HttpURLConnection conn = (java.net.HttpURLConnection) url.openConnection();
+          conn.setConnectTimeout(5000); conn.setReadTimeout(5000); conn.setInstanceFollowRedirects(true);
+          is = conn.getInputStream();
+          android.graphics.Bitmap bmp = android.graphics.BitmapFactory.decodeStream(is);
           is.close(); conn.disconnect();
+          if (bmp != null) { final android.graphics.Bitmap fb = bmp; new Handler(Looper.getMainLooper()).post(() -> coverView.setImageBitmap(fb)); }
         } else {
-          bmp = BitmapFactory.decodeFile(path.replace("file://", ""));
+          is = new java.io.FileInputStream(path.replace("file://", ""));
+          android.graphics.Bitmap bmp = android.graphics.BitmapFactory.decodeStream(is);
+          is.close();
+          if (bmp != null) { final android.graphics.Bitmap fb = bmp; new Handler(Looper.getMainLooper()).post(() -> coverView.setImageBitmap(fb)); }
         }
-        if (bmp != null) {
-          final Bitmap fb = bmp;
-          new Handler(Looper.getMainLooper()).post(() -> coverView.setImageBitmap(fb));
-        }
-      } catch (Exception e) { Log.w(TAG, "cover error: " + e.getMessage()); }
+      } catch (Exception e) { Log.w(TAG, "cover: " + e.getMessage()); }
     }).start();
+  }
+
+  public void setStyle(int bgColor, int lyricLines, String highlightColorStr) {
+    if (highlightColorStr != null && highlightColorStr.startsWith("#")) {
+      try {
+        this.highlightColor = android.graphics.Color.parseColor(highlightColorStr);
+      } catch (Exception ignored) {}
+    }
+    if (floatingView != null) {
+      new Handler(Looper.getMainLooper()).post(() -> {
+        GradientDrawable winBg = (GradientDrawable) floatingView.getBackground();
+        if (winBg != null) winBg.setColor(bgColor);
+        if (lrcView != null) {
+          lrcView.setMaxLines(lyricLines > 0 ? lyricLines : 3);
+          lrcView.setMinLines(Math.min(lyricLines, 2));
+        }
+      });
+    }
+  }
+
+  public void updateLrc(String text) {
+    new Handler(Looper.getMainLooper()).post(() -> {
+      if (lrcView != null) {
+        if (text == null || text.isEmpty()) {
+          lrcView.setText("\u266A");
+        } else {
+          // 高亮第3行(当前行)
+          String[] lines = text.split("\\n");
+          SpannableString ss = new SpannableString(text);
+          if (lines.length >= 3) {
+            // Find the start position of the 3rd line
+            int pos = 0;
+            for (int i = 0; i < 2; i++) {
+              pos = text.indexOf('\n', pos) + 1;
+            }
+            int lineEnd = text.indexOf('\n', pos);
+            if (lineEnd < 0) lineEnd = text.length();
+            ss.setSpan(new ForegroundColorSpan(highlightColor), pos, lineEnd, 0);
+          } else if (lines.length > 0) {
+            // Only 1-2 lines: highlight the last line
+            int pos = text.lastIndexOf('\n') + 1;
+            ss.setSpan(new ForegroundColorSpan(highlightColor), pos, text.length(), 0);
+          }
+          lrcView.setText(ss);
+        }
+      }
+    });
   }
 
   public void hide() {
     if (!isShowing) return;
-    try { if (floatingView != null) windowManager.removeView(floatingView); } catch (Exception e) {}
-    floatingView = null; isShowing = false; isVertical = false;
+    try { if (floatingView != null) windowManager.removeView(floatingView); } catch (Exception ignored) {}
+    floatingView = null; isShowing = false;
   }
 
   public boolean isShowing() { return isShowing; }
 
   private void sendAction(String action) {
-    WritableMap p = Arguments.createMap();
-    p.putString("action", action);
+    WritableMap p = Arguments.createMap(); p.putString("action", action);
     eventEmitter.sendEvent("onMiniPlayerAction", p);
   }
 
-  private int dp(int v) { return (int) (v * context.getResources().getDisplayMetrics().density + 0.5f); }
+  private void createCtrl(LinearLayout parent, int size, boolean isNext) {
+    FrameLayout btn = new FrameLayout(context);
+    btn.setLayoutParams(new LinearLayout.LayoutParams(size, size));
+    applyCircle(btn, size/2, Color.argb(30, 255, 255, 255));
+    View icon = isNext ? createSkipNextIcon(size) : createSkipPrevIcon(size);
+    btn.addView(icon, new FrameLayout.LayoutParams(size/2, size/2, Gravity.CENTER));
+    btn.setOnClickListener(v -> sendAction(isNext ? "next" : "previous"));
+    parent.addView(btn);
+  }
+
+  private void applyCircle(View v, int radius, int color) {
+    GradientDrawable gd = new GradientDrawable();
+    gd.setCornerRadius(radius); gd.setColor(color); v.setBackground(gd);
+  }
+
+  private Paint whiteFill() { Paint p = new Paint(); p.setColor(0xFFFFFFFF); p.setAntiAlias(true); p.setStyle(Paint.Style.FILL); return p; }
+
+  private View createPlayIcon(int size) {
+    return new View(context) {
+      @Override protected void onDraw(Canvas c) {
+        int w = getWidth(), h = getHeight(); Paint p = whiteFill();
+        Path path = new Path(); path.moveTo(w*0.3f, h*0.15f); path.lineTo(w*0.85f, h*0.5f); path.lineTo(w*0.3f, h*0.85f); path.close();
+        c.drawPath(path, p);
+      }
+    };
+  }
+
+  private View createPauseIcon(int size) {
+    return new View(context) {
+      @Override protected void onDraw(Canvas c) {
+        int w = getWidth(), h = getHeight(); Paint p = whiteFill();
+        float totalW = w * 0.50f; // 2 bars + gap
+        float barW = totalW * 0.4f;
+        float gap = totalW * 0.2f;
+        float startX = (w - totalW) / 2f;
+        c.drawRect(startX, h*0.12f, startX+barW, h*0.88f, p);
+        c.drawRect(startX+barW+gap, h*0.12f, startX+barW*2+gap, h*0.88f, p);
+      }
+    };
+  }
+
+  private View createSkipPrevIcon(int size) {
+    return new View(context) {
+      @Override protected void onDraw(Canvas c) {
+        int w = getWidth(), h = getHeight(); Paint p = whiteFill();
+        float bw = w*0.2f;
+        c.drawRect(w*0.1f, h*0.12f, w*0.1f+bw, h*0.88f, p);
+        Path path = new Path(); path.moveTo(w*0.85f, h*0.12f); path.lineTo(w*0.25f, h*0.5f); path.lineTo(w*0.85f, h*0.88f); path.close();
+        c.drawPath(path, p);
+      }
+    };
+  }
+
+  private View createSkipNextIcon(int size) {
+    return new View(context) {
+      @Override protected void onDraw(Canvas c) {
+        int w = getWidth(), h = getHeight(); Paint p = whiteFill();
+        float bw = w*0.2f;
+        c.drawRect(w*0.9f-bw, h*0.12f, w*0.9f, h*0.88f, p);
+        Path path = new Path(); path.moveTo(w*0.15f, h*0.12f); path.lineTo(w*0.75f, h*0.5f); path.lineTo(w*0.15f, h*0.88f); path.close();
+        c.drawPath(path, p);
+      }
+    };
+  }
+
+  private int dp(int v) { return (int)(v * context.getResources().getDisplayMetrics().density + 0.5f); }
 }

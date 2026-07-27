@@ -99,6 +99,11 @@ export const pause = () => {
 }
 
 // on lyric play hook
+export const addPlayHook = (hook: PlayHook) => lrcTools.addPlayHook(hook)
+export const removePlayHook = (hook: PlayHook) => lrcTools.removePlayHook(hook)
+export const getCurrentLrcLine = () => lrcTools.currentLineData
+export const getLines = () => lrcTools.currentLines
+
 export const useLrcPlay = (autoUpdate = true) => {
   const [lrcInfo, setLrcInfo] = useState(lrcTools.currentLineData)
   useEffect(() => {

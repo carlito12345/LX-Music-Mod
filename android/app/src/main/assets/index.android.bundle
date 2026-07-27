@@ -126617,7 +126617,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       (0, _$$_REQUIRE(_dependencyMap[17], "./utils/nativeModules/utils").exitApp)();
     });
   });
-},543,[1,30,99,544,686,1457,697,684,1461,681,1462,964,1332,545,1482,620,720,668,718],"src/app.ts");
+},543,[1,30,99,544,686,1458,697,684,1462,681,1463,964,1332,545,1483,620,720,668,718],"src/app.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _reactNative = _$$_REQUIRE(_dependencyMap[0], "react-native");
   // import { exitApp } from '@/utils/common'
@@ -149666,6 +149666,13 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     'playDetail.vertical.style.lrcFontSize': 210,
     'playDetail.horizontal.style.lrcFontSize': 220,
     'playDetail.isShowLyricProgressSetting': false,
+    'miniPlayer.followBgColor': true,
+    'miniPlayer.customWidth': 500,
+    'miniPlayer.customHeight': 800,
+    'miniPlayer.lyricLines': 3,
+    'miniPlayer.lyricHighlightColor': '#ffffff',
+    'miniPlayer.coverStyle': 'follow',
+    'miniPlayer.enableParticles': false,
     'desktopLyric.enable': false,
     'desktopLyric.isLock': false,
     'desktopLyric.width': 100,
@@ -160337,7 +160344,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   global.list_event = (0, _$$_REQUIRE(_dependencyMap[2], "../event/listEvent").createListEventHub)();
   global.dislike_event = (0, _$$_REQUIRE(_dependencyMap[3], "../event/dislikeEvent").createDislikeEventHub)();
   global.state_event = (0, _$$_REQUIRE(_dependencyMap[4], "../event/stateEvent").createStateEventHub)();
-},686,[687,688,1458,1459,1460],"src/config/globalData.ts");
+},686,[687,688,1459,1460,1461],"src/config/globalData.ts");
 __d(function(global, require, _importDefaultUnused, _importAllUnused, module, exports, _dependencyMapUnused) {
   module.exports = {
   "name": "lx-music-mobile",
@@ -167255,7 +167262,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       void callback();
     });
   };
-},718,[1,719,720,965,963,1455,1456,722,691,1457],"src/navigation/index.ts");
+},718,[1,719,720,965,963,1456,1457,722,691,1458],"src/navigation/index.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
     value: true
@@ -192526,7 +192533,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   var _SonglistDetail = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[3], "./SonglistDetail"));
   var _Comment = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[4], "./Comment"));
   var _PlayQueue = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[5], "./PlayQueue"));
-},1047,[1,1048,1370,1438,1444,1454],"src/screens/index.ts");
+},1047,[1,1048,1370,1439,1445,1455],"src/screens/index.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -216306,7 +216313,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
-  exports.useLrcSet = exports.useLrcPlay = exports.toggleTranslation = exports.toggleRoma = exports.setPlaybackRate = exports.setLyric = exports.play = exports.pause = exports.init = void 0;
+  exports.useLrcSet = exports.useLrcPlay = exports.toggleTranslation = exports.toggleRoma = exports.setPlaybackRate = exports.setLyric = exports.removePlayHook = exports.play = exports.pause = exports.init = exports.getLines = exports.getCurrentLrcLine = exports.addPlayHook = void 0;
   var _slicedToArray2 = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[1], "@babel/runtime/helpers/slicedToArray"));
   var _asyncToGenerator2 = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[2], "@babel/runtime/helpers/asyncToGenerator"));
   var _react = _$$_REQUIRE(_dependencyMap[3], "react");
@@ -216412,6 +216419,18 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   };
 
   // on lyric play hook
+  var addPlayHook = exports.addPlayHook = function addPlayHook(hook) {
+    return lrcTools.addPlayHook(hook);
+  };
+  var removePlayHook = exports.removePlayHook = function removePlayHook(hook) {
+    return lrcTools.removePlayHook(hook);
+  };
+  var getCurrentLrcLine = exports.getCurrentLrcLine = function getCurrentLrcLine() {
+    return lrcTools.currentLineData;
+  };
+  var getLines = exports.getLines = function getLines() {
+    return lrcTools.currentLines;
+  };
   var useLrcPlay = exports.useLrcPlay = function useLrcPlay() {
     var autoUpdate = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
     var _useState = (0, _react.useState)(lrcTools.currentLineData),
@@ -226967,7 +226986,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       })]
     });
   };
-},1370,[1,62,1371,1421,1049,1078,104,1052,691,682],"src/screens/PlayDetail/index.tsx");
+},1370,[1,62,1371,1422,1049,1078,104,1052,691,682],"src/screens/PlayDetail/index.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -227185,7 +227204,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       flex: 1
     }
   });
-},1371,[1,30,62,6,1372,1392,1404,1405,690,104,1163,968,979,1408,668,718,1409,1410,1418,1419,1420,545],"src/screens/PlayDetail/Vertical/index.tsx");
+},1371,[1,30,62,6,1372,1393,1405,1406,690,104,1163,968,979,1409,668,718,1410,1411,1419,1420,1421,545],"src/screens/PlayDetail/Vertical/index.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -227256,71 +227275,31 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
           icon: "fullscreen",
           color: controlColor,
           onPress: function onPress() {
-            // 双击检测
-            var now = Date.now();
-            var DOUBLE_TAP_DELAY = 300;
-            if (global._miniplayerLastTap && now - global._miniplayerLastTap < DOUBLE_TAP_DELAY) {
-              // 双击打开竖屏
-              global._miniplayerLastTap = 0;
-              void _$$_REQUIRE(_dependencyMap[17], "/data/data/com.termux/files/home/lx-music-mobile/node_modules/metro-runtime/src/modules/asyncRequire.js")(_dependencyMap[16], _dependencyMap.paths, "../../../../plugins/miniplayer").then(/*#__PURE__*/function () {
-                var _ref3 = (0, _asyncToGenerator2.default)(function* (mod) {
-                  var mp = mod == null ? void 0 : mod.default;
-                  if (!mp || !mp.isAvailable) {
-                    (0, _$$_REQUIRE(_dependencyMap[18], "../../../../utils/tools").toast)('小窗模式不可用');
-                    return;
-                  }
-                  if (!(yield mp.hasOverlayPermission())) {
-                    (0, _$$_REQUIRE(_dependencyMap[18], "../../../../utils/tools").toast)('需要悬浮窗权限');
-                    void mp.openOverlaySettings();
-                    return;
-                  }
-                  var showing = mp.isMiniPlayerShowing();
-                  if (showing) {
-                    yield mp.hide();
-                    (0, _$$_REQUIRE(_dependencyMap[18], "../../../../utils/tools").toast)('小窗已关闭');
-                  } else {
-                    yield mp.showVertical();
-                    (0, _$$_REQUIRE(_dependencyMap[18], "../../../../utils/tools").toast)('小窗已打开(竖)');
-                  }
-                });
-                return function (_x) {
-                  return _ref3.apply(this, arguments);
-                };
-              }());
-            } else {
-              // 单击打开横屏
-              global._miniplayerLastTap = now;
-              setTimeout(function () {
-                if (global._miniplayerLastTap === now) {
-                  global._miniplayerLastTap = 0;
-                  void _$$_REQUIRE(_dependencyMap[17], "/data/data/com.termux/files/home/lx-music-mobile/node_modules/metro-runtime/src/modules/asyncRequire.js")(_dependencyMap[16], _dependencyMap.paths, "../../../../plugins/miniplayer").then(/*#__PURE__*/function () {
-                    var _ref4 = (0, _asyncToGenerator2.default)(function* (mod) {
-                      var mp = mod == null ? void 0 : mod.default;
-                      if (!mp || !mp.isAvailable) {
-                        (0, _$$_REQUIRE(_dependencyMap[18], "../../../../utils/tools").toast)('小窗模式不可用');
-                        return;
-                      }
-                      if (!(yield mp.hasOverlayPermission())) {
-                        (0, _$$_REQUIRE(_dependencyMap[18], "../../../../utils/tools").toast)('需要悬浮窗权限');
-                        void mp.openOverlaySettings();
-                        return;
-                      }
-                      var showing = mp.isMiniPlayerShowing();
-                      if (showing) {
-                        yield mp.hide();
-                        (0, _$$_REQUIRE(_dependencyMap[18], "../../../../utils/tools").toast)('小窗已关闭');
-                      } else {
-                        yield mp.show();
-                        (0, _$$_REQUIRE(_dependencyMap[18], "../../../../utils/tools").toast)('小窗已打开(横)');
-                      }
-                    });
-                    return function (_x2) {
-                      return _ref4.apply(this, arguments);
-                    };
-                  }());
+            void _$$_REQUIRE(_dependencyMap[17], "/data/data/com.termux/files/home/lx-music-mobile/node_modules/metro-runtime/src/modules/asyncRequire.js")(_dependencyMap[16], _dependencyMap.paths, "../../../../plugins/miniplayer").then(/*#__PURE__*/function () {
+              var _ref3 = (0, _asyncToGenerator2.default)(function* (mod) {
+                var mp = mod == null ? void 0 : mod.default;
+                if (!mp || !mp.isAvailable) {
+                  (0, _$$_REQUIRE(_dependencyMap[18], "../../../../utils/tools").toast)('小窗模式不可用');
+                  return;
                 }
-              }, DOUBLE_TAP_DELAY);
-            }
+                if (!(yield mp.hasOverlayPermission())) {
+                  (0, _$$_REQUIRE(_dependencyMap[18], "../../../../utils/tools").toast)('需要悬浮窗权限');
+                  void mp.openOverlaySettings();
+                  return;
+                }
+                var showing = mp.isMiniPlayerShowing();
+                if (showing) {
+                  yield mp.hide();
+                  (0, _$$_REQUIRE(_dependencyMap[18], "../../../../utils/tools").toast)('小窗已关闭');
+                } else {
+                  yield mp.show();
+                  (0, _$$_REQUIRE(_dependencyMap[18], "../../../../utils/tools").toast)('小窗已打开');
+                }
+              });
+              return function (_x) {
+                return _ref3.apply(this, arguments);
+              };
+            }());
           }
         }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_Btn.default, {
           icon: "slider",
@@ -227345,7 +227324,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     },
     title: {}
   });
-},1372,[1,99,62,6,1078,969,690,1373,1389,104,683,682,1163,1390,1062,718,1391,964,545],"src/screens/PlayDetail/Vertical/components/Header.tsx");
+},1372,[1,99,62,6,1078,969,690,1373,1390,104,683,682,1163,1391,1062,718,1392,964,545],"src/screens/PlayDetail/Vertical/components/Header.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -227368,7 +227347,8 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   var _SettingLrcAlign = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[14], "./settings/SettingLrcAlign"));
   var _SettingLrcLineCount = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[15], "./settings/SettingLrcLineCount"));
   var _SettingEffects = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[16], "./settings/SettingEffects"));
-  var _jsxRuntime = _$$_REQUIRE(_dependencyMap[17], "react/jsx-runtime");
+  var _SettingMiniPlayer = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[17], "./settings/SettingMiniPlayer"));
+  var _jsxRuntime = _$$_REQUIRE(_dependencyMap[18], "react/jsx-runtime");
   var _excluded = ["direction"];
   var _this = this,
     _jsxFileName = "/data/data/com.termux/files/home/lx-music-mobile/src/screens/PlayDetail/components/SettingPopup/index.tsx";
@@ -227380,7 +227360,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       visible = _useState2[0],
       setVisible = _useState2[1];
     var popupRef = (0, _react.useRef)(null);
-    var t = (0, _$$_REQUIRE(_dependencyMap[18], "../../../../lang").useI18n)();
+    var t = (0, _$$_REQUIRE(_dependencyMap[19], "../../../../lang").useI18n)();
     (0, _react.useImperativeHandle)(ref, function () {
       return {
         show: function show() {
@@ -227404,14 +227384,14 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
           onStartShouldSetResponder: function onStartShouldSetResponder() {
             return true;
           },
-          children: [/*#__PURE__*/(0, _jsxRuntime.jsx)(_SettingTimer.default, {}), /*#__PURE__*/(0, _jsxRuntime.jsx)(_SettingBackground.default, {}), /*#__PURE__*/(0, _jsxRuntime.jsx)(_SettingCover.default, {}), /*#__PURE__*/(0, _jsxRuntime.jsx)(_SettingEffects.default, {}), /*#__PURE__*/(0, _jsxRuntime.jsx)(_SettingProgressShimmer.default, {}), /*#__PURE__*/(0, _jsxRuntime.jsx)(_SettingLyricProgress.default, {}), /*#__PURE__*/(0, _jsxRuntime.jsx)(_SettingVolume.default, {}), /*#__PURE__*/(0, _jsxRuntime.jsx)(_SettingPlaybackRate.default, {}), /*#__PURE__*/(0, _jsxRuntime.jsx)(_SettingLrcFontSize.default, {
+          children: [/*#__PURE__*/(0, _jsxRuntime.jsx)(_SettingTimer.default, {}), /*#__PURE__*/(0, _jsxRuntime.jsx)(_SettingBackground.default, {}), /*#__PURE__*/(0, _jsxRuntime.jsx)(_SettingCover.default, {}), /*#__PURE__*/(0, _jsxRuntime.jsx)(_SettingEffects.default, {}), /*#__PURE__*/(0, _jsxRuntime.jsx)(_SettingMiniPlayer.default, {}), /*#__PURE__*/(0, _jsxRuntime.jsx)(_SettingProgressShimmer.default, {}), /*#__PURE__*/(0, _jsxRuntime.jsx)(_SettingLyricProgress.default, {}), /*#__PURE__*/(0, _jsxRuntime.jsx)(_SettingVolume.default, {}), /*#__PURE__*/(0, _jsxRuntime.jsx)(_SettingPlaybackRate.default, {}), /*#__PURE__*/(0, _jsxRuntime.jsx)(_SettingLrcFontSize.default, {
             direction: direction
           }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_SettingLrcAlign.default, {}), /*#__PURE__*/(0, _jsxRuntime.jsx)(_SettingLrcLineCount.default, {})]
         })
       })
     })) : null;
   });
-},1373,[1,30,164,62,6,1327,1374,1377,1378,1379,1380,1382,1384,1385,1386,1387,1388,104,700],"src/screens/PlayDetail/components/SettingPopup/index.tsx");
+},1373,[1,30,164,62,6,1327,1374,1377,1378,1379,1380,1382,1384,1385,1386,1387,1388,1389,104,700],"src/screens/PlayDetail/components/SettingPopup/index.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -229180,6 +229160,257 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   });
 },1388,[1,215,62,6,969,104,968,979,691,545],"src/screens/PlayDetail/components/SettingPopup/settings/SettingEffects.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
+  var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.default = void 0;
+  var _slicedToArray2 = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[1], "@babel/runtime/helpers/slicedToArray"));
+  var _react = _$$_REQUIRE(_dependencyMap[2], "react");
+  var _reactNative = _$$_REQUIRE(_dependencyMap[3], "react-native");
+  var _Text = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[4], "../../../../../components/common/Text"));
+  var _CheckBox = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[5], "../../../../../components/common/CheckBox"));
+  var _Slider = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[6], "../../../../../components/common/Slider"));
+  var _style = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[7], "./style"));
+  var _jsxRuntime = _$$_REQUIRE(_dependencyMap[8], "react/jsx-runtime");
+  var _this = this,
+    _jsxFileName = "/data/data/com.termux/files/home/lx-music-mobile/src/screens/PlayDetail/components/SettingPopup/settings/SettingMiniPlayer.tsx";
+  var PRESET_COLORS = [
+  // 经典色
+  {
+    name: '纯白',
+    color: '#ffffff'
+  }, {
+    name: '翠绿',
+    color: '#07c556'
+  }, {
+    name: '极光绿',
+    color: '#00e676'
+  }, {
+    name: '霓虹绿',
+    color: '#39ff14'
+  },
+  // 红粉系
+  {
+    name: '烈焰红',
+    color: '#ff1744'
+  }, {
+    name: '玫瑰红',
+    color: '#ff4081'
+  }, {
+    name: '樱花粉',
+    color: '#f48fb1'
+  }, {
+    name: '珊瑚橙',
+    color: '#ff6d00'
+  },
+  // 蓝紫系
+  {
+    name: '天空蓝',
+    color: '#00b0ff'
+  }, {
+    name: '电光蓝',
+    color: '#2979ff'
+  }, {
+    name: '深海蓝',
+    color: '#1a237e'
+  }, {
+    name: '魅惑紫',
+    color: '#d500f9'
+  }, {
+    name: '星空紫',
+    color: '#7c4dff'
+  }, {
+    name: '霓虹紫',
+    color: '#ea80fc'
+  },
+  // 暖色系
+  {
+    name: '琥珀金',
+    color: '#ffab00'
+  }, {
+    name: '日落橙',
+    color: '#e65100'
+  }, {
+    name: '柠檬黄',
+    color: '#ffea00'
+  },
+  // 冷色系
+  {
+    name: '薄荷绿',
+    color: '#1de9b6'
+  }, {
+    name: '青色',
+    color: '#00bcd4'
+  }, {
+    name: '冰雪蓝',
+    color: '#80d8ff'
+  }];
+  var MiniPlayerSetting = function MiniPlayerSetting() {
+    var theme = (0, _$$_REQUIRE(_dependencyMap[9], "../../../../../store/theme/hook").useTheme)();
+    var t = (0, _$$_REQUIRE(_dependencyMap[10], "../../../../../lang").useI18n)();
+    var _useState = (0, _react.useState)(false),
+      _useState2 = (0, _slicedToArray2.default)(_useState, 2),
+      expanded = _useState2[0],
+      setExpanded = _useState2[1];
+    var followBg = (0, _$$_REQUIRE(_dependencyMap[11], "../../../../../store/setting/hook").useSettingValue)('miniPlayer.followBgColor');
+    var lyricLines = (0, _$$_REQUIRE(_dependencyMap[11], "../../../../../store/setting/hook").useSettingValue)('miniPlayer.lyricLines');
+    var highlightColor = (0, _$$_REQUIRE(_dependencyMap[11], "../../../../../store/setting/hook").useSettingValue)('miniPlayer.lyricHighlightColor');
+    var cw = (0, _$$_REQUIRE(_dependencyMap[11], "../../../../../store/setting/hook").useSettingValue)('miniPlayer.customWidth');
+    var ch = (0, _$$_REQUIRE(_dependencyMap[11], "../../../../../store/setting/hook").useSettingValue)('miniPlayer.customHeight');
+    return /*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.View, {
+      style: _style.default.container,
+      children: [/*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.TouchableOpacity, {
+        onPress: function onPress() {
+          return setExpanded(!expanded);
+        },
+        style: {
+          flexDirection: 'row',
+          alignItems: 'center'
+        },
+        children: [/*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
+          style: {
+            marginRight: 8
+          },
+          children: "\u25B6"
+        }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
+          children: "\u8FF7\u4F60\u64AD\u653E\u5668\u8BBE\u7F6E"
+        })]
+      }), expanded && /*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.View, {
+        style: s.subContainer,
+        children: [/*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.View, {
+          style: s.row,
+          children: [/*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
+            size: 13,
+            children: "\u8DDF\u968F\u64AD\u653E\u5668\u7EAF\u8272\u80CC\u666F"
+          }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_CheckBox.default, {
+            check: !!followBg,
+            onChange: function onChange(v) {
+              return (0, _$$_REQUIRE(_dependencyMap[12], "../../../../../core/common").updateSetting)({
+                'miniPlayer.followBgColor': v
+              });
+            }
+          })]
+        }), /*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.View, {
+          style: s.row,
+          children: [/*#__PURE__*/(0, _jsxRuntime.jsxs)(_Text.default, {
+            size: 13,
+            children: ["\u5BBD\u5EA6: ", cw, "dp"]
+          }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_Slider.default, {
+            minimumValue: 300,
+            maximumValue: 900,
+            step: 10,
+            value: cw,
+            onSlidingComplete: function onSlidingComplete(v) {
+              return (0, _$$_REQUIRE(_dependencyMap[12], "../../../../../core/common").updateSetting)({
+                'miniPlayer.customWidth': Math.trunc(v)
+              });
+            },
+            style: {
+              flex: 1,
+              marginLeft: 8
+            }
+          })]
+        }), /*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.View, {
+          style: s.row,
+          children: [/*#__PURE__*/(0, _jsxRuntime.jsxs)(_Text.default, {
+            size: 13,
+            children: ["\u9AD8\u5EA6: ", ch, "dp"]
+          }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_Slider.default, {
+            minimumValue: 500,
+            maximumValue: 1400,
+            step: 10,
+            value: ch,
+            onSlidingComplete: function onSlidingComplete(v) {
+              return (0, _$$_REQUIRE(_dependencyMap[12], "../../../../../core/common").updateSetting)({
+                'miniPlayer.customHeight': Math.trunc(v)
+              });
+            },
+            style: {
+              flex: 1,
+              marginLeft: 8
+            }
+          })]
+        }), /*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.View, {
+          style: s.row,
+          children: [/*#__PURE__*/(0, _jsxRuntime.jsxs)(_Text.default, {
+            size: 13,
+            children: ["\u6B4C\u8BCD\u884C\u6570: ", lyricLines]
+          }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_Slider.default, {
+            minimumValue: 1,
+            maximumValue: 5,
+            step: 1,
+            value: lyricLines,
+            onSlidingComplete: function onSlidingComplete(v) {
+              return (0, _$$_REQUIRE(_dependencyMap[12], "../../../../../core/common").updateSetting)({
+                'miniPlayer.lyricLines': Math.trunc(v)
+              });
+            },
+            style: {
+              flex: 1,
+              marginLeft: 8
+            }
+          })]
+        }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
+          size: 13,
+          style: {
+            marginTop: 8
+          },
+          children: "\u6B4C\u8BCD\u9AD8\u4EAE\u989C\u8272"
+        }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.View, {
+          style: s.colorRow,
+          children: PRESET_COLORS.map(function (c) {
+            return /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.TouchableOpacity, {
+              onPress: function onPress() {
+                return (0, _$$_REQUIRE(_dependencyMap[12], "../../../../../core/common").updateSetting)({
+                  'miniPlayer.lyricHighlightColor': c.color
+                });
+              },
+              style: [s.colorBtn, {
+                backgroundColor: c.color,
+                borderColor: highlightColor === c.color ? '#fff' : 'transparent'
+              }],
+              children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
+                size: 9,
+                color: c.color === '#ffffff' ? '#000' : '#fff',
+                children: c.name
+              })
+            }, c.color);
+          })
+        })]
+      })]
+    });
+  };
+  var s = (0, _$$_REQUIRE(_dependencyMap[13], "../../../../../utils/tools").createStyle)({
+    subContainer: {
+      width: '100%',
+      paddingLeft: 8,
+      paddingTop: 8
+    },
+    row: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      marginTop: 6
+    },
+    colorRow: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      marginTop: 6,
+      gap: 6
+    },
+    colorBtn: {
+      width: 44,
+      height: 28,
+      borderRadius: 6,
+      borderWidth: 2,
+      justifyContent: 'center',
+      alignItems: 'center'
+    }
+  });
+  var _default = exports.default = MiniPlayerSetting;
+},1389,[1,30,62,6,969,1032,1383,1381,104,968,700,979,691,545],"src/screens/PlayDetail/components/SettingPopup/settings/SettingMiniPlayer.tsx");
+__d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
@@ -229214,7 +229445,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       flex: 0
     }
   });
-},1389,[6,104,683,682,968,1034,545],"src/screens/PlayDetail/Vertical/components/Btn.tsx");
+},1390,[6,104,683,682,968,1034,545],"src/screens/PlayDetail/Vertical/components/Btn.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
     value: true
@@ -229284,7 +229515,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     var luminance = getLuminance(backgroundColor);
     return luminance > 0.5 ? 'rgba(255,255,255,0.3)' : 'rgba(255,255,255,0.1)';
   }
-},1390,[],"src/utils/colorContrast.ts");
+},1391,[],"src/utils/colorContrast.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -229295,21 +229526,22 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   exports.hide = hide;
   exports.isMiniPlayerShowing = isMiniPlayerShowing;
   exports.openOverlaySettings = openOverlaySettings;
+  exports.setStyle = setStyle;
   exports.show = show;
-  exports.showVertical = showVertical;
   exports.updateCover = updateCover;
+  exports.updateLrc = updateLrc;
   exports.updatePlaybackInfo = updatePlaybackInfo;
   var _asyncToGenerator2 = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[1], "@babel/runtime/helpers/asyncToGenerator"));
   var _reactNative = _$$_REQUIRE(_dependencyMap[2], "react-native");
   /**
    * MiniPlayer - 小窗播放器
-   * 使用系统悬浮窗实现,可拖动,内容自适应
    */
 
   var MiniPlayerModule = _reactNative.NativeModules.MiniPlayerModule;
   var isAvailable = !!MiniPlayerModule;
   var eventEmitter = null;
   var isShowing = false;
+  var pollTimer = null;
   var ACTION_MAP = {
     next: function next() {
       return (0, _$$_REQUIRE(_dependencyMap[3], "../../core/player/player").playNext)();
@@ -229327,62 +229559,119 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       var handler = ACTION_MAP[data.action];
       if (handler) handler();
     });
-
-    // 小窗打开时,推当前播放状态到原生 View
     eventEmitter.addListener('onMiniPlayerReady', function () {
       try {
-        var playerState = _$$_REQUIRE(_dependencyMap[4], "../../store/player/state").default;
-        var lrcTools = _$$_REQUIRE(_dependencyMap[5], "../lyric");
-        var info = playerState == null ? void 0 : playerState.musicInfo;
-        if (info != null && info.id) {
-          var title = info.name || '';
-          var artist = info.singer || '';
-          var pic = info.pic || '';
-          var duration = info.interval || 0;
-          var playing = playerState.isPlay;
-          updateCover(pic);
-          updatePlaybackInfo(title, artist, playing, 0, duration);
-          console.log('[MiniPlayer] State pushed:', title);
+        var _NativeModules$LyricM;
+        (_NativeModules$LyricM = _reactNative.NativeModules.LyricModule) == null ? void 0 : _NativeModules$LyricM.setSendLyricTextEvent == null ? void 0 : _NativeModules$LyricM.setSendLyricTextEvent(true);
+      } catch (_unused) {}
+      pushState();
+      startPoll();
+      // 延迟应用样式(确保 view 已就绪)
+      setTimeout(function () {
+        try {
+          var ss = _$$_REQUIRE(_dependencyMap[4], "../../store/setting/state").default;
+          var s = ss == null ? void 0 : ss.setting;
+          if (s) {
+            var bg = 0xE61A1A2E;
+            if (s['miniPlayer.followBgColor']) {
+              var sc = s['playDetail.background.solidColor'] || '#000000';
+              bg = parseInt(sc.replace('#', ''), 16);
+              if (isNaN(bg)) bg = 0x000000;
+              bg = bg & 0xFFFFFF | 0xE6000000;
+            }
+            var lines = s['miniPlayer.lyricLines'] || 3;
+            var hc = s['miniPlayer.lyricHighlightColor'] || '#ffffff';
+            setStyle(bg, lines, hc);
+          }
+        } catch (e) {
+          console.warn('[MiniPlayer] style error:', e);
         }
-      } catch (e) {
-        console.warn('[MiniPlayer] Push state error:', e);
+      }, 200);
+    });
+    eventEmitter.addListener('onMiniPlayerSeek', function (data) {
+      if ((data == null ? void 0 : data.ratio) != null) {
+        var _require = _$$_REQUIRE(_dependencyMap[3], "../../core/player/player"),
+          seek = _require.seek;
+        seek(data.ratio);
       }
     });
   }
-
-  /**
-   * 显示小窗播放器
-   */
-  function showVertical() {
-    return _showVertical.apply(this, arguments);
-  }
-  function _showVertical() {
-    _showVertical = (0, _asyncToGenerator2.default)(function* () {
-      if (!isAvailable || isShowing) return false;
+  function pushState() {
+    try {
+      var ps = _$$_REQUIRE(_dependencyMap[5], "../../store/player/state").default;
+      var mi = ps == null ? void 0 : ps.musicInfo;
+      if (!(mi != null && mi.id)) return;
+      updateCover(mi.pic || '');
+      updatePlaybackInfo(mi.name || '', mi.singer || '', ps.isPlay, 0, mi.interval || 0);
+      // 读取多行歌词(当前行 ± 2 行)
+      var lrcText = (ps == null ? void 0 : ps.lastLyric) || '';
       try {
-        yield MiniPlayerModule.showVertical();
-        isShowing = true;
-        return true;
-      } catch (_unused) {
-        return false;
-      }
-    });
-    return _showVertical.apply(this, arguments);
+        var lyric = _$$_REQUIRE(_dependencyMap[6], "../lyric");
+        var currentLine = lyric.getCurrentLrcLine == null ? void 0 : lyric.getCurrentLrcLine();
+        if (currentLine != null && currentLine.text) lrcText = currentLine.text;
+        // 尝试获取前后歌词行
+        var allLines = lyric.getLines == null ? void 0 : lyric.getLines();
+        var lineIdx = currentLine == null ? void 0 : currentLine.line;
+        if (allLines != null && allLines.length && typeof lineIdx === 'number') {
+          var start = Math.max(0, lineIdx - 1);
+          var end = Math.min(allLines.length, lineIdx + 4);
+          var lines = allLines.slice(start, end).map(function (l) {
+            return l.text || '';
+          });
+          if (lines.length >= 3) lrcText = lines.join('\n');
+        }
+      } catch (_unused2) {}
+      if (lrcText) updateLrc(lrcText);
+    } catch (_unused3) {}
   }
-  function show() {
+  function startPoll() {
+    if (pollTimer) return;
+    var loop = /*#__PURE__*/function () {
+      var _ref = (0, _asyncToGenerator2.default)(function* () {
+        while (isShowing) {
+          pushState();
+          yield new Promise(function (r) {
+            return setTimeout(r, 1000);
+          });
+        }
+        pollTimer = null;
+      });
+      return function loop() {
+        return _ref.apply(this, arguments);
+      };
+    }();
+    loop();
+    pollTimer = true;
+  }
+  function stopPoll() {
+    pollTimer = null;
+  }
+  function show(_x, _x2) {
     return _show.apply(this, arguments);
   }
-  /**
-   * 隐藏小窗播放器
-   */
   function _show() {
-    _show = (0, _asyncToGenerator2.default)(function* () {
+    _show = (0, _asyncToGenerator2.default)(function* (width, height) {
       if (!isAvailable || isShowing) return false;
+      isShowing = true;
       try {
-        yield MiniPlayerModule.show();
-        isShowing = true;
+        // 从设置读取尺寸
+        var w = width,
+          h = height;
+        if (!w || !h) {
+          try {
+            var _ss$setting, _ss$setting2;
+            var ss = _$$_REQUIRE(_dependencyMap[4], "../../store/setting/state").default;
+            w = (ss == null ? void 0 : (_ss$setting = ss.setting) == null ? void 0 : _ss$setting['miniPlayer.customWidth']) || 500;
+            h = (ss == null ? void 0 : (_ss$setting2 = ss.setting) == null ? void 0 : _ss$setting2['miniPlayer.customHeight']) || 800;
+          } catch (_unused4) {
+            w = 500;
+            h = 800;
+          }
+        }
+        yield MiniPlayerModule.show(w, h);
         return true;
-      } catch (_unused2) {
+      } catch (_unused5) {
+        isShowing = false;
         return false;
       }
     });
@@ -229394,39 +229683,64 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   function _hide() {
     _hide = (0, _asyncToGenerator2.default)(function* () {
       if (!isAvailable || !isShowing) return false;
+      stopPoll();
       try {
         yield MiniPlayerModule.hide();
         isShowing = false;
         return true;
-      } catch (_unused3) {
+      } catch (_unused6) {
         return false;
       }
     });
     return _hide.apply(this, arguments);
   }
-  function updateCover(_x) {
+  function updateCover(_x3) {
     return _updateCover.apply(this, arguments);
   }
   function _updateCover() {
     _updateCover = (0, _asyncToGenerator2.default)(function* (coverPath) {
-      if (!isAvailable || !isShowing) return;
+      if (!isAvailable) return;
       try {
         yield MiniPlayerModule.updateCover(coverPath);
-      } catch (_unused4) {}
+      } catch (_unused7) {}
     });
     return _updateCover.apply(this, arguments);
   }
-  function updatePlaybackInfo(_x2, _x3, _x4, _x5, _x6) {
+  function updatePlaybackInfo(_x4, _x5, _x6, _x7, _x8) {
     return _updatePlaybackInfo.apply(this, arguments);
   }
   function _updatePlaybackInfo() {
     _updatePlaybackInfo = (0, _asyncToGenerator2.default)(function* (title, artist, playing, progress, maxProgress) {
-      if (!isAvailable || !isShowing) return;
+      if (!isAvailable) return;
       try {
         yield MiniPlayerModule.updatePlaybackInfo(title || '', artist || '', playing, progress || 0, maxProgress || 100);
-      } catch (_unused5) {}
+      } catch (_unused8) {}
     });
     return _updatePlaybackInfo.apply(this, arguments);
+  }
+  function setStyle(_x9, _x0, _x1) {
+    return _setStyle.apply(this, arguments);
+  }
+  function _setStyle() {
+    _setStyle = (0, _asyncToGenerator2.default)(function* (bgColor, lyricLines, highlightColor) {
+      if (!isAvailable) return;
+      try {
+        yield MiniPlayerModule.setStyle(bgColor || 0xE61A1A2E, lyricLines || 3, highlightColor || '#ffffff');
+      } catch (_unused9) {}
+    });
+    return _setStyle.apply(this, arguments);
+  }
+  function updateLrc(_x10) {
+    return _updateLrc.apply(this, arguments);
+  }
+  function _updateLrc() {
+    _updateLrc = (0, _asyncToGenerator2.default)(function* (text) {
+      if (!isAvailable) return;
+      try {
+        yield MiniPlayerModule.updateLrc(text || '');
+      } catch (_unused0) {}
+    });
+    return _updateLrc.apply(this, arguments);
   }
   function isMiniPlayerShowing() {
     return isShowing;
@@ -229439,7 +229753,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       if (!isAvailable) return false;
       try {
         return yield MiniPlayerModule.hasOverlayPermission();
-      } catch (_unused6) {
+      } catch (_unused1) {
         return false;
       }
     });
@@ -229454,7 +229768,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       try {
         yield MiniPlayerModule.openOverlaySettings();
         return true;
-      } catch (_unused7) {
+      } catch (_unused10) {
         return false;
       }
     });
@@ -229463,15 +229777,16 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   var _default = exports.default = {
     isAvailable: isAvailable,
     show: show,
-    showVertical: showVertical,
     hide: hide,
+    setStyle: setStyle,
     updateCover: updateCover,
     updatePlaybackInfo: updatePlaybackInfo,
+    updateLrc: updateLrc,
     isMiniPlayerShowing: isMiniPlayerShowing,
     hasOverlayPermission: hasOverlayPermission,
     openOverlaySettings: openOverlaySettings
   };
-},1391,[1,99,6,985,706,1260],"src/plugins/miniplayer/index.ts");
+},1392,[1,99,6,985,620,706,1260],"src/plugins/miniplayer/index.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -229517,7 +229832,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       justifyContent: 'space-evenly'
     }
   });
-},1392,[1,62,6,1393,1400,1403,104,682,545],"src/screens/PlayDetail/Vertical/Player/index.tsx");
+},1393,[1,62,6,1394,1401,1404,104,682,545],"src/screens/PlayDetail/Vertical/Player/index.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -229559,7 +229874,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       paddingHorizontal: 4
     }
   });
-},1393,[1,6,1394,1396,1397,1398,1399,104,545],"src/screens/PlayDetail/Vertical/Player/components/MoreBtn/index.tsx");
+},1394,[1,6,1395,1397,1398,1399,1400,104,545],"src/screens/PlayDetail/Vertical/Player/components/MoreBtn/index.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -229630,7 +229945,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       color: iconColor
     });
   });
-},1394,[1,62,1395,104,979,700,1390,682,691,545],"src/screens/PlayDetail/Vertical/Player/components/MoreBtn/PlayModeBtn.tsx");
+},1395,[1,62,1396,104,979,700,1391,682,691,545],"src/screens/PlayDetail/Vertical/Player/components/MoreBtn/PlayModeBtn.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
     value: true
@@ -229673,7 +229988,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       textShadowRadius: 1
     }
   });
-},1395,[6,104,683,968,1034,545],"src/screens/PlayDetail/Vertical/Player/components/MoreBtn/Btn.tsx");
+},1396,[6,104,683,968,1034,545],"src/screens/PlayDetail/Vertical/Player/components/MoreBtn/Btn.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -229711,7 +230026,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       })]
     });
   };
-},1396,[1,62,1123,706,1395,104,1390],"src/screens/PlayDetail/Vertical/Player/components/MoreBtn/MusicAddBtn.tsx");
+},1397,[1,62,1123,706,1396,104,1391],"src/screens/PlayDetail/Vertical/Player/components/MoreBtn/MusicAddBtn.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -229747,7 +230062,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       })]
     });
   });
-},1397,[1,1395,1270,62,104,979,1390,704],"src/screens/PlayDetail/Vertical/Player/components/MoreBtn/DesktopLyricBtn.tsx");
+},1398,[1,1396,1270,62,104,979,1391,704],"src/screens/PlayDetail/Vertical/Player/components/MoreBtn/DesktopLyricBtn.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -229773,7 +230088,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       color: iconColor
     });
   };
-},1398,[1,1395,690,104,1390,718],"src/screens/PlayDetail/Vertical/Player/components/MoreBtn/CommentBtn.tsx");
+},1399,[1,1396,690,104,1391,718],"src/screens/PlayDetail/Vertical/Player/components/MoreBtn/CommentBtn.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -229800,7 +230115,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       color: iconColor
     });
   };
-},1399,[1,1395,690,104,1390,718],"src/screens/PlayDetail/Vertical/Player/components/MoreBtn/PlaylistBtn.tsx");
+},1400,[1,1396,690,104,1391,718],"src/screens/PlayDetail/Vertical/Player/components/MoreBtn/PlaylistBtn.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -229884,7 +230199,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       paddingRight: 10
     }
   });
-},1400,[1,62,6,1401,1402,969,104,1163,707,1390,545],"src/screens/PlayDetail/Vertical/Player/components/PlayInfo.tsx");
+},1401,[1,62,6,1402,1403,969,104,1163,707,1391,545],"src/screens/PlayDetail/Vertical/Player/components/PlayInfo.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -230291,7 +230606,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     }
   });
   var _default = exports.default = Progress;
-},1401,[1,30,62,6,104,979,1052,968,545],"src/components/player/ProgressBar.tsx");
+},1402,[1,30,62,6,104,979,1052,968,545],"src/components/player/ProgressBar.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -230319,7 +230634,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       textAlign: 'center'
     }
   });
-},1402,[1,969,104,1163,1390,545],"src/screens/PlayDetail/Vertical/Player/components/Status.tsx");
+},1403,[1,969,104,1163,1391,545],"src/screens/PlayDetail/Vertical/Player/components/Status.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
     value: true
@@ -230532,7 +230847,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       elevation: 5
     }
   });
-},1403,[62,6,104,979,1034,1163,1390,985,1395,1052,545],"src/screens/PlayDetail/Vertical/Player/components/ControlBtn.tsx");
+},1404,[62,6,104,979,1034,1163,1391,985,1396,1052,545],"src/screens/PlayDetail/Vertical/Player/components/ControlBtn.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -230857,7 +231172,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       alignItems: 'center'
     }
   });
-},1404,[1,62,6,1063,104,1163,1052,1062,968,979,1372,985,682,545],"src/screens/PlayDetail/Vertical/Pic.tsx");
+},1405,[1,62,6,1063,104,1163,1052,1062,968,979,1372,985,682,545],"src/screens/PlayDetail/Vertical/Pic.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -231270,7 +231585,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       // paddingBottom: 5,
     }
   });
-},1405,[1,99,62,6,706,1406,104,968,979,683,1390,969,1260,1407,545],"src/screens/PlayDetail/Vertical/Lyric.tsx");
+},1406,[1,99,62,6,706,1407,104,968,979,683,1391,969,1260,1408,545],"src/screens/PlayDetail/Vertical/Lyric.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -231424,7 +231739,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       paddingRight: 15
     }
   });
-},1406,[1,30,62,6,969,104,968,574,1034,545,1064],"src/screens/PlayDetail/components/PlayLine.tsx");
+},1407,[1,30,62,6,969,104,968,574,1034,545,1064],"src/screens/PlayDetail/components/PlayLine.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -231578,7 +231893,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     }
     return cancelFn;
   };
-},1407,[1,30],"src/utils/scroll.ts");
+},1408,[1,30],"src/utils/scroll.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
     value: true
@@ -231684,7 +231999,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       };
     }, [scaleAnim, opacityAnim]);
   };
-},1408,[62,6],"src/components/cinematic/CinematicTransition.tsx");
+},1409,[62,6],"src/components/cinematic/CinematicTransition.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
     value: true
@@ -231793,7 +232108,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       })
     });
   });
-},1409,[62,6,104,968,979],"src/components/starfield/StarfieldBackground.tsx");
+},1410,[62,6,104,968,979],"src/components/starfield/StarfieldBackground.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
     value: true
@@ -231902,7 +232217,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       })
     });
   });
-},1410,[62,6,104,1163,968,979,1411],"src/components/wallpaper/WallpaperView.tsx");
+},1411,[62,6,104,1163,968,979,1412],"src/components/wallpaper/WallpaperView.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -231917,7 +232232,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   exports.default = void 0;
   var _WebView = _interopRequireDefault(_$$_REQUIRE(_dependencyMap[1], "./WebView"));
   var _default = exports.default = _WebView.default;
-},1411,[1,1412],"node_modules/react-native-webview/src/index.ts");
+},1412,[1,1413],"node_modules/react-native-webview/src/index.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -232190,7 +232505,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     isFileUploadSupported: isFileUploadSupported
   });
   var _default = exports.default = WebView;
-},1412,[1,215,30,164,62,6,36,21,28,1413,1414,1415,104,1416],"node_modules/react-native-webview/src/WebView.android.tsx");
+},1413,[1,215,30,164,62,6,36,21,28,1414,1415,1416,104,1417],"node_modules/react-native-webview/src/WebView.android.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -232377,7 +232692,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       _$$_REQUIRE(_dependencyMap[5], "react-native/Libraries/ReactNative/RendererProxy").dispatchCommand(ref, "clearHistory", []);
     }
   };
-},1413,[1,274,263,260,242,58],"node_modules/react-native-webview/src/RNCWebViewNativeComponent.ts");
+},1414,[1,274,263,260,242,58],"node_modules/react-native-webview/src/RNCWebViewNativeComponent.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
     value: true
@@ -232385,7 +232700,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   exports.default = void 0;
   var _reactNative = _$$_REQUIRE(_dependencyMap[0], "react-native");
   var _default = exports.default = _reactNative.TurboModuleRegistry.getEnforcing('RNCWebViewModule');
-},1414,[6],"node_modules/react-native-webview/src/NativeRNCWebViewModule.ts");
+},1415,[6],"node_modules/react-native-webview/src/NativeRNCWebViewModule.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
     value: true
@@ -232430,7 +232745,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     }
   });
   var _default = exports.default = styles;
-},1415,[6],"node_modules/react-native-webview/src/WebView.styles.ts");
+},1416,[6],"node_modules/react-native-webview/src/WebView.styles.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -232624,7 +232939,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       lastErrorEvent: lastErrorEvent
     };
   };
-},1416,[1,30,38,1417,62,6,1415,104],"node_modules/react-native-webview/src/WebViewShared.tsx");
+},1417,[1,30,38,1418,62,6,1416,104],"node_modules/react-native-webview/src/WebViewShared.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   'use strict';
 
@@ -232635,7 +232950,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     }
     return string.replace(matchOperatorsRegex, '\\$&');
   };
-},1417,[],"node_modules/react-native-webview/node_modules/escape-string-regexp/index.js");
+},1418,[],"node_modules/react-native-webview/node_modules/escape-string-regexp/index.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
     value: true
@@ -232699,7 +233014,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       })
     });
   });
-},1418,[62,6,104,979,1411],"src/components/slideshow/SlideshowBg.tsx");
+},1419,[62,6,104,979,1412],"src/components/slideshow/SlideshowBg.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
     value: true
@@ -232807,7 +233122,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       minHeight: 2
     }
   });
-},1419,[62,6,104,1163],"src/components/echo/SpectrumBars.tsx");
+},1420,[62,6,104,1163],"src/components/echo/SpectrumBars.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
     value: true
@@ -233088,7 +233403,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       }), /*#__PURE__*/(0, _jsxRuntime.jsx)(MeteorShower, {})]
     });
   });
-},1420,[62,6,104,1163,979],"src/components/echo/AudioEchoWallpaper.tsx");
+},1421,[62,6,104,1163,979],"src/components/echo/AudioEchoWallpaper.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -233188,7 +233503,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       // backgroundColor: '#eee',
     }
   });
-},1421,[1,62,6,1078,1422,1427,1049,690,1431,1433,1434,104,1062,691,682,668,545,1432],"src/screens/PlayDetail/Horizontal/index.tsx");
+},1422,[1,62,6,1078,1423,1428,1049,690,1432,1434,1435,104,1062,691,682,668,545,1433],"src/screens/PlayDetail/Horizontal/index.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -233223,7 +233538,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       zIndex: 1
     }
   });
-},1422,[1,6,1423,1425,1426,104,545],"src/screens/PlayDetail/Horizontal/MoreBtn/index.tsx");
+},1423,[1,6,1424,1426,1427,104,545],"src/screens/PlayDetail/Horizontal/MoreBtn/index.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -233291,7 +233606,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       onPress: toggleNextPlayMode
     });
   });
-},1423,[1,62,1424,104,979,700,682,691,545],"src/screens/PlayDetail/Horizontal/MoreBtn/PlayModeBtn.tsx");
+},1424,[1,62,1425,104,979,700,682,691,545],"src/screens/PlayDetail/Horizontal/MoreBtn/PlayModeBtn.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
     value: true
@@ -233332,7 +233647,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       textShadowRadius: 1
     }
   });
-},1424,[6,104,683,968,1034,545],"src/screens/PlayDetail/Horizontal/MoreBtn/Btn.tsx");
+},1425,[6,104,683,968,1034,545],"src/screens/PlayDetail/Horizontal/MoreBtn/Btn.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -233367,7 +233682,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       })]
     });
   };
-},1425,[1,62,1123,706,1424,104],"src/screens/PlayDetail/Horizontal/MoreBtn/MusicAddBtn.tsx");
+},1426,[1,62,1123,706,1425,104],"src/screens/PlayDetail/Horizontal/MoreBtn/MusicAddBtn.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -233400,7 +233715,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       })]
     });
   });
-},1426,[1,62,1375,1424,104,968],"src/screens/PlayDetail/Horizontal/MoreBtn/TimeoutExitBtn.tsx");
+},1427,[1,62,1375,1425,104,968],"src/screens/PlayDetail/Horizontal/MoreBtn/TimeoutExitBtn.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -233502,7 +233817,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       paddingRight: 4
     }
   });
-},1427,[1,62,6,969,690,1428,1429,1373,1430,104,683,682,968,1163,718,1034],"src/screens/PlayDetail/Horizontal/components/Header.tsx");
+},1428,[1,62,6,969,690,1429,1430,1373,1431,104,683,682,968,1163,718,1034],"src/screens/PlayDetail/Horizontal/components/Header.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -233523,7 +233838,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       onPress: handleShowCommentScreen
     });
   };
-},1428,[1,1429,690,104,718],"src/screens/PlayDetail/Horizontal/components/CommentBtn.tsx");
+},1429,[1,1430,690,104,718],"src/screens/PlayDetail/Horizontal/components/CommentBtn.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
     value: true
@@ -233567,7 +233882,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       textShadowRadius: 1
     }
   });
-},1429,[6,104,683,682,968,1034,545],"src/screens/PlayDetail/Horizontal/components/Btn.tsx");
+},1430,[6,104,683,682,968,1034,545],"src/screens/PlayDetail/Horizontal/components/Btn.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -233606,7 +233921,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       })]
     });
   });
-},1430,[1,1429,1270,62,620,104,979,704,691],"src/screens/PlayDetail/Horizontal/components/DesktopLyricBtn.tsx");
+},1431,[1,1430,1270,62,620,104,979,704,691],"src/screens/PlayDetail/Horizontal/components/DesktopLyricBtn.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -233681,7 +233996,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       borderRadius: 4
     }
   });
-},1431,[1,30,62,6,1063,690,104,1163,1052,1062,718,1432,1424,1427,682,545],"src/screens/PlayDetail/Horizontal/Pic.tsx");
+},1432,[1,30,62,6,1063,690,104,1163,1052,1062,718,1433,1425,1428,682,545],"src/screens/PlayDetail/Horizontal/Pic.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
     value: true
@@ -233689,7 +234004,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   exports.marginLeftRaw = exports.marginLeft = void 0;
   var marginLeftRaw = exports.marginLeftRaw = 15;
   var marginLeft = exports.marginLeft = (0, _$$_REQUIRE(_dependencyMap[0], "../../../utils/pixelRatio").scaleSizeW)(marginLeftRaw);
-},1432,[683],"src/screens/PlayDetail/Horizontal/constant.ts");
+},1433,[683],"src/screens/PlayDetail/Horizontal/constant.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -234029,7 +234344,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       // paddingBottom: 5,
     }
   });
-},1433,[1,99,62,6,706,1406,104,968,979,683,969,1260,1407,545],"src/screens/PlayDetail/Horizontal/Lyric.tsx");
+},1434,[1,99,62,6,706,1407,104,968,979,683,969,1260,1408,545],"src/screens/PlayDetail/Horizontal/Lyric.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -234059,7 +234374,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       // backgroundColor: 'rgba(0,0,0,0.1)',
     }
   });
-},1434,[1,62,6,1435,1437,104,682,545,1432],"src/screens/PlayDetail/Horizontal/Player/index.tsx");
+},1435,[1,62,6,1436,1438,104,682,545,1433],"src/screens/PlayDetail/Horizontal/Player/index.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -234192,7 +234507,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   //     paddingRight: 5,
   //   },
   // })
-},1435,[1,62,6,1362,1436,969,104,968,1163,707,545],"src/screens/PlayDetail/Horizontal/Player/PlayInfo.tsx");
+},1436,[1,62,6,1362,1437,969,104,968,1163,707,545],"src/screens/PlayDetail/Horizontal/Player/PlayInfo.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -234221,7 +234536,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   //     fontSize: 10,
   //   },
   // })
-},1436,[1,969,104,1163],"src/screens/PlayDetail/Horizontal/Player/Status.tsx");
+},1437,[1,969,104,1163],"src/screens/PlayDetail/Horizontal/Player/Status.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
     value: true
@@ -234332,7 +234647,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       // marginLeft: 10,
     }
   });
-},1437,[6,104,968,985,1034,1163,1424,1052,1432],"src/screens/PlayDetail/Horizontal/Player/ControlBtn.tsx");
+},1438,[6,104,968,985,1034,1163,1425,1052,1433],"src/screens/PlayDetail/Horizontal/Player/ControlBtn.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -234382,7 +234697,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   //     flex: 1,
   //   },
   // })
-},1438,[1,62,1439,1049,1078,1358,104,691,682,1442],"src/screens/SonglistDetail/index.tsx");
+},1439,[1,62,1440,1049,1078,1358,104,691,682,1443],"src/screens/SonglistDetail/index.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -234524,7 +234839,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       // progressViewOffset={}
     });
   });
-},1439,[1,99,62,1099,1012,1440,104,1442,1011,1443],"src/screens/SonglistDetail/MusicList.tsx");
+},1440,[1,99,62,1099,1012,1441,104,1443,1011,1444],"src/screens/SonglistDetail/MusicList.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -234706,7 +235021,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       borderBottomRightRadius: 4
     }
   });
-},1440,[1,30,62,6,1441,969,1063,104,683,971,1442,718,682,1062,968,545,1064],"src/screens/SonglistDetail/Header.tsx");
+},1441,[1,30,62,6,1442,969,1063,104,683,971,1443,718,682,1062,968,545,1064],"src/screens/SonglistDetail/Header.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -234817,7 +235132,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       textAlign: 'center'
     }
   });
-},1441,[1,62,6,967,690,969,1012,1128,104,968,700,1442,718,1443,1104,545],"src/screens/SonglistDetail/ActionBar.tsx");
+},1442,[1,62,6,967,690,969,1012,1128,104,968,700,1443,718,1444,1104,545],"src/screens/SonglistDetail/ActionBar.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
     value: true
@@ -234833,7 +235148,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   var useListInfo = exports.useListInfo = function useListInfo() {
     return (0, _react.useContext)(ListInfoContext);
   };
-},1442,[62],"src/screens/SonglistDetail/state.ts");
+},1443,[62],"src/screens/SonglistDetail/state.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -234907,7 +235222,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       return _ref2.apply(this, arguments);
     };
   }();
-},1443,[1,38,99,993,1018,1011,991,985,682,545],"src/screens/SonglistDetail/listAction.ts");
+},1444,[1,38,99,993,1018,1011,991,985,682,545],"src/screens/SonglistDetail/listAction.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -235178,7 +235493,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       overflow: 'hidden'
     }
   });
-},1444,[1,30,62,6,1353,1445,1446,1453,969,1049,706,104,683,968,700,691,682,545,1034,1064],"src/screens/Comment/index.tsx");
+},1445,[1,30,62,6,1353,1446,1447,1454,969,1049,706,104,683,968,700,691,682,545,1034,1064],"src/screens/Comment/index.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -235253,7 +235568,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       paddingRight: 4
     }
   });
-},1445,[1,62,6,1078,969,690,104,683,682,700,1062,718,1034,545],"src/screens/Comment/components/Header.tsx");
+},1446,[1,62,6,1078,969,690,104,683,682,700,1062,718,1034,545],"src/screens/Comment/components/Header.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -235392,7 +235707,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       onRefresh: handleListRefresh
     });
   };
-},1446,[1,38,99,62,550,1447,104,1452],"src/screens/Comment/CommentHot.tsx");
+},1447,[1,38,99,62,550,1448,104,1453],"src/screens/Comment/CommentHot.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -235538,7 +235853,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     }
   });
   var _default = exports.default = List;
-},1447,[1,30,62,6,1448,969,104,968,700,545],"src/screens/Comment/components/List.tsx");
+},1448,[1,30,62,6,1449,969,104,968,700,545],"src/screens/Comment/components/List.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -235728,7 +236043,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     }
   });
   var _default = exports.default = CommentFloor;
-},1448,[1,30,62,6,969,1063,1449,1450,104,683,968,1052,700,1034,1064,1451,545],"src/screens/Comment/components/CommentFloor.tsx");
+},1449,[1,30,62,6,969,1063,1450,1451,104,683,968,1052,700,1034,1064,1452,545],"src/screens/Comment/components/CommentFloor.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -235826,7 +236141,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       borderStyle: 'dashed'
     }
   });
-},1449,[1,30,62,6,1063,969,104,683,968,1064,545],"src/screens/Comment/components/CommentImage.tsx");
+},1450,[1,30,62,6,1063,969,104,683,968,1064,545],"src/screens/Comment/components/CommentImage.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -235907,7 +236222,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       alignSelf: 'flex-end'
     }
   });
-},1450,[1,30,62,6,969,104,968,545],"src/screens/Comment/components/CommentText.tsx");
+},1451,[1,30,62,6,969,104,968,545],"src/screens/Comment/components/CommentText.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   module.exports = _$$_REQUIRE(_dependencyMap[0], "react-native/Libraries/Image/AssetRegistry").registerAsset({
     "__packager_asset": true,
@@ -235919,7 +236234,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     "name": "defaultUser",
     "type": "jpg"
   });
-},1451,[461],"src/resources/images/defaultUser.jpg");
+},1452,[461],"src/resources/images/defaultUser.jpg");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -235971,7 +236286,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       return true;
     });
   };
-},1452,[1,99,550,574],"src/screens/Comment/utils.ts");
+},1453,[1,99,550,574],"src/screens/Comment/utils.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -236111,7 +236426,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       onRefresh: handleListRefresh
     });
   };
-},1453,[1,38,99,62,550,1447,104,1452],"src/screens/Comment/CommentNew.tsx");
+},1454,[1,38,99,62,550,1448,104,1453],"src/screens/Comment/CommentNew.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -236492,7 +236807,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       alignItems: 'center'
     }
   });
-},1454,[1,99,38,30,62,6,969,1078,706,104,968,1163,979,682,1390,718,545,696,985,983,996,991,1034],"src/screens/PlayQueue/index.tsx");
+},1455,[1,99,38,30,62,6,969,1078,706,104,968,1163,979,682,1391,718,545,696,985,983,996,991,1034],"src/screens/PlayQueue/index.tsx");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
     value: true
@@ -236513,7 +236828,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       modalDismissedListener = null;
     };
   };
-},1455,[722],"src/navigation/event.ts");
+},1456,[722],"src/navigation/event.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
     value: true
@@ -236575,7 +236890,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       };
     }, [callback, componentId]);
   };
-},1456,[62,722],"src/navigation/hooks.ts");
+},1457,[62,722],"src/navigation/hooks.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
     value: true
@@ -236600,7 +236915,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       });
     }
   };
-},1457,[722],"src/navigation/regLaunchedEvent.ts");
+},1458,[722],"src/navigation/regLaunchedEvent.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -236972,7 +237287,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   var createListEventHub = exports.createListEventHub = function createListEventHub() {
     return new ListEvent();
   };
-},1458,[1,38,9,10,14,16,19,99,689,993,697,991,682,696],"src/event/listEvent.ts");
+},1459,[1,38,9,10,14,16,19,99,689,993,697,991,682,696],"src/event/listEvent.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -237078,7 +237393,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   var createDislikeEventHub = exports.createDislikeEventHub = function createDislikeEventHub() {
     return new DislikeEvent();
   };
-},1459,[1,9,10,14,16,19,99,689,697,1007,1008],"src/event/dislikeEvent.ts");
+},1460,[1,9,10,14,16,19,99,689,697,1007,1008],"src/event/dislikeEvent.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -237245,7 +237560,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   var createStateEventHub = exports.createStateEventHub = function createStateEventHub() {
     return new StateEvent();
   };
-},1460,[1,9,10,14,16,19,689],"src/event/stateEvent.ts");
+},1461,[1,9,10,14,16,19,689],"src/event/stateEvent.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
     value: true
@@ -237263,7 +237578,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   var getBootLog = exports.getBootLog = function getBootLog() {
     return logs.join('\n');
   };
-},1461,[],"src/utils/bootLog.ts");
+},1462,[],"src/utils/bootLog.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -237336,7 +237651,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     isInited || (isInited = true);
     return handlePushedHomeScreen;
   });
-},1462,[1,99,1463,1464,1465,1466,1468,1479,1480,1481,698,620,545,975,980,691,1461,1230,1104],"src/core/init/index.ts");
+},1463,[1,99,1464,1465,1466,1467,1469,1480,1481,1482,698,620,545,975,980,691,1462,1230,1104],"src/core/init/index.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -237579,7 +237894,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     });
     global.lx.playerStatus.isRegisteredService = true;
   };
-},1463,[1,99,710,691,985,708,709],"src/plugins/player/service.ts");
+},1464,[1,99,710,691,985,708,709],"src/plugins/player/service.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -237622,7 +237937,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       return _ref.apply(this, arguments);
     };
   }();
-},1464,[1,99,620,1078,545,1218,1067],"src/core/init/theme.ts");
+},1465,[1,99,620,1078,545,1218,1067],"src/core/init/theme.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -237651,7 +237966,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       return _ref.apply(this, arguments);
     };
   }();
-},1465,[1,99,699,545,691],"src/core/init/i18n.ts");
+},1466,[1,99,699,545,691],"src/core/init/i18n.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -237953,7 +238268,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       return _ref.apply(this, arguments);
     };
   }();
-},1466,[1,30,99,620,554,1467,1029,1023,545,697],"src/core/init/userApi/index.ts");
+},1467,[1,30,99,620,554,1468,1029,1023,545,697],"src/core/init/userApi/index.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -238102,7 +238417,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       }
     };
   };
-},1467,[1,30,164,99,554],"src/core/init/userApi/request.js");
+},1468,[1,30,164,99,554],"src/core/init/userApi/request.js");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -238133,7 +238448,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       return _ref.apply(this, arguments);
     };
   }();
-},1468,[1,99,1469,1472,1473,1474,1475,1476,1477,1478],"src/core/init/player/index.ts");
+},1469,[1,99,1470,1473,1474,1475,1476,1477,1478,1479],"src/core/init/player/index.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -238201,7 +238516,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       return _ref.apply(this, arguments);
     };
   }();
-},1469,[1,99,706,620,1470,986,985,707,709,1000],"src/core/init/player/player.ts");
+},1470,[1,99,706,620,1471,986,985,707,709,1000],"src/core/init/player/player.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -238324,7 +238639,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     global.app_event.on('stop', handleStop);
     console.log('[MediaInteraction] Event listeners registered');
   });
-},1470,[1,99,706,1471,1391],"src/core/init/player/mediaInteraction.ts");
+},1471,[1,99,706,1472,1392],"src/core/init/player/mediaInteraction.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -238459,7 +238774,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     isMediaInteractionAvailable: isMediaInteractionAvailable,
     SourceType: SourceType
   };
-},1471,[1,99,6],"src/plugins/mediainteraction/index.ts");
+},1472,[1,99,6],"src/plugins/mediainteraction/index.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -238508,7 +238823,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       return _ref.apply(this, arguments);
     };
   }();
-},1472,[1,99,697,991,985],"src/core/init/player/playInfo.ts");
+},1473,[1,99,697,991,985],"src/core/init/player/playInfo.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -238595,7 +238910,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       setButtons();
     });
   };
-},1473,[1,99,706,707],"src/core/init/player/playStatus.ts");
+},1474,[1,99,706,707],"src/core/init/player/playStatus.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -238725,7 +239040,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     global.app_event.on('playerError', handleError);
     global.app_event.on('musicToggled', handleSetPlayInfo);
   };
-},1474,[1,554,706,985,986,707,999,545],"src/core/init/player/playerEvent.ts");
+},1475,[1,554,706,985,986,707,999,545],"src/core/init/player/playerEvent.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -238767,7 +239082,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     global.app_event.on('myListMusicUpdate', handleListChange);
     global.app_event.on('downloadListUpdate', handleDownloadListChange);
   };
-},1475,[1,706,545,998,985],"src/core/init/player/watchList.ts");
+},1476,[1,706,545,998,985],"src/core/init/player/watchList.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -238935,7 +239250,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     global.state_event.on('configUpdated', handleConfigUpdated);
     (0, _$$_REQUIRE(_dependencyMap[12], "../../../utils/nativeModules/utils").onScreenStateChange)(handleScreenStateChanged);
   };
-},1476,[1,99,554,706,620,6,545,697,707,999,991,577,668],"src/core/init/player/playProgress.ts");
+},1477,[1,99,554,706,620,6,545,697,707,999,991,577,668],"src/core/init/player/playProgress.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -239021,7 +239336,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     global.state_event.on('configUpdated', handleConfigUpdated);
     global.state_event.on('playProgressChanged', handlePlayProgressChanged);
   };
-},1477,[1,30,99,706,985,987,708,553],"src/core/init/player/preloadNextMusic.ts");
+},1478,[1,30,99,706,985,987,708,553],"src/core/init/player/preloadNextMusic.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -239097,7 +239412,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       return _ref2.apply(this, arguments);
     };
   }();
-},1478,[1,99,706,998,708,1259,704,691],"src/core/init/player/lyric.ts");
+},1479,[1,99,706,998,708,1259,704,691],"src/core/init/player/lyric.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -239136,7 +239451,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       return _ref.apply(this, arguments);
     };
   }();
-},1479,[1,99,550,1461,991,1007,691,697,669,545],"src/core/init/dataInit.ts");
+},1480,[1,99,550,1462,991,1007,691,697,669,545],"src/core/init/dataInit.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -239161,7 +239476,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       return _ref.apply(this, arguments);
     };
   }();
-},1480,[1,99,1325,691,1306],"src/core/init/sync.ts");
+},1481,[1,99,1325,691,1306],"src/core/init/sync.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -239241,7 +239556,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       return _ref.apply(this, arguments);
     };
   }();
-},1481,[1,99,706,1050,691],"src/core/init/common.ts");
+},1482,[1,99,706,1050,691],"src/core/init/common.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -239361,6 +239676,6 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     isAvailable: isAvailable,
     getExternalPaths: getExternalPaths
   };
-},1482,[1,99,6,545,996,991],"src/plugins/usb/index.ts");
+},1483,[1,99,6,545,996,991],"src/plugins/usb/index.ts");
 __r(66);
 __r(0);
