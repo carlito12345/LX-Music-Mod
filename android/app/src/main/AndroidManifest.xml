@@ -135,7 +135,7 @@
       </intent-filter>
     </service>
 
-      <service android:name=".miniplayer.MiniPlayerService" android:foregroundServiceType="dataSync" android:exported="false" />
+      <service android:name=".miniplayer.MiniPlayerService" android:foregroundServiceType="dataSync" android:exported="false" android:stopWithTask="false"  />
   </application>
   <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
   <uses-permission android:name="geely.oneos.permission.SERVICE" />

@@ -229601,7 +229601,26 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       }
     });
   }
+  function syncSettings() {
+    try {
+      var ss = _$$_REQUIRE(_dependencyMap[4], "../../store/setting/state").default;
+      var s = ss == null ? void 0 : ss.setting;
+      if (!s) return;
+      var bg = 0xE61A1A2E;
+      if (s['miniPlayer.followBgColor']) {
+        var sc = s['playDetail.background.solidColor'] || '#000000';
+        var parsed = parseInt(sc.replace('#', ''), 16);
+        if (!isNaN(parsed)) bg = parsed & 0xFFFFFF | 0xE6000000;
+      }
+      var lines = s['miniPlayer.lyricLines'] || 3;
+      var hc = s['miniPlayer.lyricHighlightColor'] || '#ffffff';
+      setStyle(bg, lines, hc);
+    } catch (e) {
+      console.warn('[MiniPlayer] syncSettings err:', e);
+    }
+  }
   function pushState() {
+    syncSettings();
     try {
       var ps = _$$_REQUIRE(_dependencyMap[5], "../../store/player/state").default;
       var mi = ps == null ? void 0 : ps.musicInfo;

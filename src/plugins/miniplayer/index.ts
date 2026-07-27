@@ -60,7 +60,25 @@ if (isAvailable) {
   })
 }
 
+function syncSettings() {
+  try {
+    const ss = require('@/store/setting/state').default
+    const s = ss?.setting
+    if (!s) return
+    let bg = 0xE61A1A2E
+    if (s['miniPlayer.followBgColor']) {
+      const sc = s['playDetail.background.solidColor'] || '#000000'
+      const parsed = parseInt(sc.replace('#', ''), 16)
+      if (!isNaN(parsed)) bg = (parsed & 0xFFFFFF) | 0xE6000000
+    }
+    const lines = s['miniPlayer.lyricLines'] || 3
+    const hc = s['miniPlayer.lyricHighlightColor'] || '#ffffff'
+    setStyle(bg, lines, hc)
+  } catch (e) { console.warn('[MiniPlayer] syncSettings err:', e) }
+}
+
 function pushState() {
+  syncSettings()
   try {
     const ps = require('@/store/player/state').default
     const mi = ps?.musicInfo

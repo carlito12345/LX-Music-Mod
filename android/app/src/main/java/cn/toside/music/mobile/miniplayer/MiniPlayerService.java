@@ -50,6 +50,15 @@ public class MiniPlayerService extends Service implements MiniPlayerView.MiniPla
   }
 
   @Override
+  public void onTaskRemoved(Intent rootIntent) {
+    super.onTaskRemoved(rootIntent);
+    Log.d(TAG, "Task removed, restarting service...");
+    // 重新启动前台服务(用户划掉任务时,服务继续运行)
+    ensureView();
+    if (miniPlayerView != null) miniPlayerView.show(false, initialW, initialH);
+  }
+
+  @Override
   public void onDestroy() { super.onDestroy(); hideView(); isRunning = false; }
 
   @Nullable @Override public IBinder onBind(Intent intent) { return null; }
