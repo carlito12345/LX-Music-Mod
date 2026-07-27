@@ -39,6 +39,92 @@ const PRESET_COLORS = [
   { name: '冰雪蓝', color: '#80d8ff' },
 ]
 
+
+const CUSTOM_PALETTE = [
+  '#ffffff', '#ff1744', '#ff4081', '#f48fb1', '#ff6d00', '#ffab00', '#ffea00',
+  '#00e676', '#1de9b6', '#39ff14', '#00b0ff', '#2979ff', '#80d8ff', '#00bcd4',
+  '#d500f9', '#7c4dff', '#ea80fc', '#e91e63',
+]
+
+const GRADIENT_PRESETS_LIST = [
+  { key: 'aurora', name: '极光', colors: ['#00e676', '#00b0ff', '#d500f9'] },
+  { key: 'sunset', name: '日落', colors: ['#ff9800', '#ff1744', '#d500f9'] },
+  { key: 'ocean', name: '海洋', colors: ['#00b0ff', '#1de9b6', '#00e676'] },
+  { key: 'flame', name: '烈焰', colors: ['#ffea00', '#ff6d00', '#ff1744'] },
+  { key: 'neon', name: '霓虹', colors: ['#ea80fc', '#7c4dff', '#2979ff'] },
+  { key: 'candy', name: '糖果', colors: ['#ff4081', '#f48fb1', '#ea80fc'] },
+  { key: 'gold', name: '流金', colors: ['#ffea00', '#ffab00', '#ff6d00'] },
+  { key: 'ice', name: '冰雪', colors: ['#80d8ff', '#00b0ff', '#2979ff'] },
+]
+
+export const SettingLyricGradient = () => {
+  const [expanded, setExpanded] = useState(false)
+  const enable = useSettingValue('lyricGradient.enable')
+  const preset = useSettingValue('lyricGradient.preset')
+  const customColors = useSettingValue('lyricGradient.customColors')
+
+  return (
+    <View style={styles.container}>
+      <TouchableOpacity onPress={() => setExpanded(!expanded)} style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <Text style={{ marginRight: 8 }}>▶</Text>
+        <Text>歌词渐变色</Text>
+      </TouchableOpacity>
+      {expanded && (
+        <View style={s.subContainer}>
+          <View style={s.row}>
+            <Text size={13}>启用渐变高亮</Text>
+            <CheckBox check={!!enable} onChange={v => updateSetting({ 'lyricGradient.enable': v })} />
+          </View>
+          <Text size={13} style={{ marginTop: 8 }}>渐变预设</Text>
+          <View style={s.colorRow}>
+            {GRADIENT_PRESETS_LIST.map(p => (
+              <TouchableOpacity
+                key={p.key}
+                onPress={() => updateSetting({ 'lyricGradient.preset': p.key, 'lyricGradient.customColors': '' })}
+                style={[s.colorBtn, {
+                  backgroundColor: p.colors[1],
+                  borderColor: (preset === p.key && !customColors) ? '#fff' : 'transparent',
+                }]}
+              >
+                <Text size={9} color="#fff">{p.name}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+
+          <Text size={13} style={{ marginTop: 10 }}>自定义渐变(依次选 3 色)</Text>
+          <View style={s.colorRow}>
+            {CUSTOM_PALETTE.map(color => (
+              <TouchableOpacity
+                key={color}
+                onPress={() => {
+                  const arr = customColors ? customColors.split(',') : []
+                  arr.push(color)
+                  while (arr.length > 3) arr.shift()
+                  updateSetting({ 'lyricGradient.customColors': arr.join(',') })
+                }}
+                style={[s.paletteBtn, { backgroundColor: color }]}
+              />
+            ))}
+          </View>
+          {customColors ? (
+            <View style={[s.row, { marginTop: 6 }]}>
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <Text size={12}>当前: </Text>
+                {customColors.split(',').map((cc, i) => (
+                  <View key={i} style={[s.previewDot, { backgroundColor: cc }]} />
+                ))}
+              </View>
+              <TouchableOpacity onPress={() => updateSetting({ 'lyricGradient.customColors': '' })}>
+                <Text size={12} color="#e65100">清除</Text>
+              </TouchableOpacity>
+            </View>
+          ) : null}
+        </View>
+      )}
+    </View>
+  )
+}
+
 const MiniPlayerSetting = () => {
   const theme = useTheme()
   const t = useI18n()
@@ -140,6 +226,18 @@ const s = createStyle({
     borderWidth: 2,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  paletteBtn: {
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    margin: 2,
+  },
+  previewDot: {
+    width: 18,
+    height: 18,
+    borderRadius: 9,
+    marginHorizontal: 2,
   },
 })
 

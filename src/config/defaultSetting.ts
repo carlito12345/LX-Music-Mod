@@ -81,6 +81,9 @@ const defaultSetting: LX.AppSetting = {
   'playDetail.horizontal.style.lrcFontSize': 220,
   'playDetail.isShowLyricProgressSetting': false,
 
+  'lyricGradient.enable': false,
+  'lyricGradient.preset': 'aurora',
+  'lyricGradient.customColors': '',
   'miniPlayer.followBgColor': true,
   'miniPlayer.customWidth': 500,
   'miniPlayer.customHeight': 800,

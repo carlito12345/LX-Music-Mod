@@ -310,6 +310,16 @@ declare global {
       /**
        * 桌面歌词已播放字体渐变颜色数组
        */
+      'lyricGradient.enable': boolean
+      'lyricGradient.preset': string
+      'lyricGradient.customColors': string
+      'miniPlayer.followBgColor': boolean
+      'miniPlayer.customWidth': number
+      'miniPlayer.customHeight': number
+      'miniPlayer.lyricLines': number
+      'miniPlayer.lyricHighlightColor': string
+      'miniPlayer.coverStyle': string
+      'miniPlayer.enableParticles': boolean
       'desktopLyric.style.lyricGradientColors': string[] | null
       /**
        * 桌面歌词已播放字体渐变位置数组(0~1,与颜色数组等长)

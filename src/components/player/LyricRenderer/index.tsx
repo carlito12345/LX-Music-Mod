@@ -28,6 +28,7 @@ import { useTheme } from '@/store/theme/hook'
 import { useSettingValue } from '@/store/setting/hook'
 import { setSpText } from '@/utils/pixelRatio'
 import Text from '@/components/common/Text'
+import GradientText from '@/components/common/GradientText'
 import { scrollTo } from '@/utils/scroll'
 import playerState from '@/store/player/state'
 
@@ -68,8 +69,21 @@ const LrcLine = memo(({ item, index, activeLine, onLayout, onPress, textAlign: t
     if (!item.isInterlude) onPress(item.time)
   }, [item, onPress])
 
+  const gradientEnable = useSettingValue('lyricGradient.enable')
+  const gradientPreset = useSettingValue('lyricGradient.preset')
+
   return (
     <View style={[styles.line, { opacity }]} onLayout={handleLayout}>
+      {(isActive && gradientEnable && !item.isInterlude && console.log('[Gradient] 渲染渐变行:', item.text?.substring(0, 10), 'preset:', gradientPreset)) || (isActive && gradientEnable && !item.isInterlude) ? (
+        <GradientText
+          text={item.text}
+          preset={gradientPreset}
+          size={setSpText(size)}
+          lineHeight={lineHeight}
+          textAlign={textAlign}
+          onPress={handlePress}
+        />
+      ) : (
       <Text
         style={[styles.lineText, { textAlign, lineHeight }]}
         color={color}
@@ -78,6 +92,7 @@ const LrcLine = memo(({ item, index, activeLine, onLayout, onPress, textAlign: t
       >
         {item.text}
       </Text>
+      )}
       {item.extendedLyrics?.map((lrc, i) => (
         <Text
           key={`t${index}-${i}`}

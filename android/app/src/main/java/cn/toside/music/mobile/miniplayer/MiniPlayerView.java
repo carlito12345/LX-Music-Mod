@@ -37,6 +37,7 @@ public class MiniPlayerView {
   private TextView titleView, artistView, lrcView;
   private View progressFill;
   private int highlightColor = 0xFFFFFFFF;
+  private int[] gradientColors = null; // 渐变色数组,null=不启用
   private FrameLayout playBtnContainer;
   private View isPlayView, pauseView;
   private boolean isShowing = false;
@@ -271,7 +272,18 @@ public class MiniPlayerView {
   }
 
   public void setStyle(int bgColor, int lyricLines, String highlightColorStr) {
-    if (highlightColorStr != null && highlightColorStr.startsWith("#")) {
+    if (highlightColorStr != null && highlightColorStr.contains(",")) {
+      // 逗号分隔 = 渐变色列表
+      try {
+        String[] parts = highlightColorStr.split(",");
+        int[] colors = new int[parts.length];
+        for (int i = 0; i < parts.length; i++) {
+          colors[i] = android.graphics.Color.parseColor(parts[i].trim());
+        }
+        this.gradientColors = colors.length >= 2 ? colors : null;
+      } catch (Exception ignored) { this.gradientColors = null; }
+    } else if (highlightColorStr != null && highlightColorStr.startsWith("#")) {
+      this.gradientColors = null;
       try {
         this.highlightColor = android.graphics.Color.parseColor(highlightColorStr);
       } catch (Exception ignored) {}
@@ -290,31 +302,46 @@ public class MiniPlayerView {
 
   public void updateLrc(String text) {
     new Handler(Looper.getMainLooper()).post(() -> {
-      if (lrcView != null) {
-        if (text == null || text.isEmpty()) {
-          lrcView.setText("\u266A");
-        } else {
-          // 高亮第3行(当前行)
-          String[] lines = text.split("\\n");
-          SpannableString ss = new SpannableString(text);
-          if (lines.length >= 3) {
-            // Find the start position of the 3rd line
-            int pos = 0;
-            for (int i = 0; i < 2; i++) {
-              pos = text.indexOf('\n', pos) + 1;
-            }
-            int lineEnd = text.indexOf('\n', pos);
-            if (lineEnd < 0) lineEnd = text.length();
-            ss.setSpan(new ForegroundColorSpan(highlightColor), pos, lineEnd, 0);
-          } else if (lines.length > 0) {
-            // Only 1-2 lines: highlight the last line
-            int pos = text.lastIndexOf('\n') + 1;
-            ss.setSpan(new ForegroundColorSpan(highlightColor), pos, text.length(), 0);
-          }
-          lrcView.setText(ss);
-        }
+      if (lrcView == null) return;
+      if (text == null || text.isEmpty()) {
+        lrcView.setText("\u266A");
+        lrcView.getPaint().setShader(null);
+        return;
       }
+      String[] lines = text.split("\\n");
+      SpannableString ss = new SpannableString(text);
+      int hlStart = 0, hlEnd = text.length();
+      if (lines.length >= 3) {
+        int pos = 0;
+        for (int i = 0; i < 2; i++) pos = text.indexOf('\n', pos) + 1;
+        int lineEnd = text.indexOf('\n', pos);
+        if (lineEnd < 0) lineEnd = text.length();
+        hlStart = pos; hlEnd = lineEnd;
+      } else if (lines.length > 0) {
+        hlStart = text.lastIndexOf('\n') + 1;
+        hlEnd = text.length();
+      }
+      if (gradientColors != null && gradientColors.length >= 2) {
+        // 渐变模式:当前行用渐变 span
+        ss.setSpan(new GradientSpan(gradientColors), hlStart, hlEnd, 0);
+      } else {
+        ss.setSpan(new ForegroundColorSpan(highlightColor), hlStart, hlEnd, 0);
+      }
+      lrcView.setText(ss);
     });
+  }
+
+  // 字符级渐变着色 Span
+  private static class GradientSpan extends android.text.style.CharacterStyle
+      implements android.text.style.UpdateAppearance {
+    private final int[] colors;
+    GradientSpan(int[] colors) { this.colors = colors; }
+    @Override
+    public void updateDrawState(android.text.TextPaint paint) {
+      android.graphics.LinearGradient lg = new android.graphics.LinearGradient(
+          0, 0, 600, 0, colors, null, android.graphics.Shader.TileMode.CLAMP);
+      paint.setShader(lg);
+    }
   }
 
   public void hide() {

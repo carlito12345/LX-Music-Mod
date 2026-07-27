@@ -82,6 +82,17 @@ if (isAvailable) {
   })
 }
 
+const GRADIENT_PRESET_COLORS: Record<string, string> = {
+  aurora: '#00e676,#00b0ff,#d500f9',
+  sunset: '#ff9800,#ff1744,#d500f9',
+  ocean: '#00b0ff,#1de9b6,#00e676',
+  flame: '#ffea00,#ff6d00,#ff1744',
+  neon: '#ea80fc,#7c4dff,#2979ff',
+  candy: '#ff4081,#f48fb1,#ea80fc',
+  gold: '#ffea00,#ffab00,#ff6d00',
+  ice: '#80d8ff,#00b0ff,#2979ff',
+}
+
 function syncSettings() {
   try {
     const ss = require('@/store/setting/state').default
@@ -94,7 +105,16 @@ function syncSettings() {
       if (!isNaN(parsed)) bg = (parsed & 0xFFFFFF) | 0xE6000000
     }
     const lines = s['miniPlayer.lyricLines'] || 3
-    const hc = s['miniPlayer.lyricHighlightColor'] || '#ffffff'
+    // 渐变优先:启用渐变时传逗号分隔色列表,否则传单色
+    let hc = s['miniPlayer.lyricHighlightColor'] || '#ffffff'
+    if (s['lyricGradient.enable']) {
+      const custom = s['lyricGradient.customColors']
+      if (custom && custom.includes(',')) {
+        hc = custom
+      } else {
+        hc = GRADIENT_PRESET_COLORS[s['lyricGradient.preset']] || GRADIENT_PRESET_COLORS.aurora
+      }
+    }
     setStyle(bg, lines, hc)
   } catch (e) { console.warn('[MiniPlayer] syncSettings err:', e) }
 }

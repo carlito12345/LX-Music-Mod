@@ -14,7 +14,7 @@ import SettingLrcFontSize from './settings/SettingLrcFontSize'
 import SettingLrcAlign from './settings/SettingLrcAlign'
 import SettingLrcLineCount from './settings/SettingLrcLineCount'
 import SettingEffects from './settings/SettingEffects'
-import SettingMiniPlayer from './settings/SettingMiniPlayer'
+import SettingMiniPlayer, { SettingLyricGradient } from './settings/SettingMiniPlayer'
 
 export interface SettingPopupProps extends Omit<PopupProps, 'children'> {
   direction: 'vertical' | 'horizontal'
@@ -49,6 +49,7 @@ export default forwardRef<SettingPopupType, SettingPopupProps>(({ direction, ...
             <SettingCover />
             <SettingEffects />
             <SettingMiniPlayer />
+            <SettingLyricGradient />
             <SettingProgressShimmer />
             <SettingLyricProgress />
             <SettingVolume />

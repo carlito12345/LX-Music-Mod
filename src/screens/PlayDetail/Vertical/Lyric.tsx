@@ -8,6 +8,7 @@ import { useTheme } from '@/store/theme/hook'
 import { getContrastTextColor, getSecondaryTextColor } from '@/utils/colorContrast'
 import { useSettingValue } from '@/store/setting/hook'
 import { AnimatedColorText } from '@/components/common/Text'
+import GradientText from '@/components/common/GradientText'
 import { setSpText } from '@/utils/pixelRatio'
 import playerState from '@/store/player/state'
 import { scrollTo } from '@/utils/scroll'
@@ -102,10 +103,30 @@ const LrcLine = memo(({ line, lineNum, activeLine, onLayout, backgroundColor }: 
   }
 
 
+  const gradientEnable = useSettingValue('lyricGradient.enable')
+  const gradientPreset = useSettingValue('lyricGradient.preset')
+  const gradientCustom = useSettingValue('lyricGradient.customColors')
+  const customColors = useMemo(() => {
+    if (!gradientCustom) return undefined
+    const arr = gradientCustom.split(',').map(s => s.trim()).filter(s => /^#[0-9a-fA-F]{6}$/.test(s))
+    return arr.length >= 2 ? arr : undefined
+  }, [gradientCustom])
+  const isActiveLine = activeLine === lineNum
+
   // textBreakStrategy="simple" 用于解决某些设备上字体被截断的问题
   // https://stackoverflow.com/a/72822360
   return (
     <View style={styles.line} onLayout={handleLayout}>
+      {isActiveLine && gradientEnable ? (
+        <GradientText
+          text={line.text}
+          preset={gradientPreset}
+          colors={customColors}
+          size={setSpText(size)}
+          lineHeight={lineHeight}
+          textAlign={textAlign}
+        />
+      ) : (
       <AnimatedColorText style={{
         ...styles.lineText,
         textAlign,
@@ -121,6 +142,7 @@ const LrcLine = memo(({ line, lineNum, activeLine, onLayout, backgroundColor }: 
           textShadowRadius: 3,
         }),
       }} textBreakStrategy="simple" color={colors[0]} opacity={colors[2]} size={size}>{line.text}</AnimatedColorText>
+      )}
       {
         line.extendedLyrics.map((lrc, index) => {
           return (<AnimatedColorText style={{
