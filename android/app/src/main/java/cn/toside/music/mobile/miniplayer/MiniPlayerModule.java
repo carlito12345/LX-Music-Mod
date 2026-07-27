@@ -1,22 +1,23 @@
 package cn.toside.music.mobile.miniplayer;
 
-import android.util.Log;
-import android.provider.Settings;
 import android.content.Intent;
+import android.provider.Settings;
+import android.util.Log;
 
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
-import com.facebook.react.bridge.WritableMap;
-import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
-import com.facebook.react.bridge.ReadableMap;
 
+/**
+ * 迷你播放器 RN 桥接模块
+ * 架构:唯一的窗口管理者是 MiniPlayerService,本模块只做转发
+ */
 public class MiniPlayerModule extends ReactContextBaseJavaModule {
   private static final String TAG = "[MiniPlayer]";
   private final ReactApplicationContext reactContext;
-  private MiniPlayerView miniPlayerView;
-  private MiniPlayerEvent miniPlayerEvent;
+  private final MiniPlayerEvent miniPlayerEvent;
+  private android.content.BroadcastReceiver serviceBtnReceiver = null;
 
   public MiniPlayerModule(ReactApplicationContext reactContext) {
     super(reactContext);
@@ -25,21 +26,21 @@ public class MiniPlayerModule extends ReactContextBaseJavaModule {
   }
 
   @Override
-  public String getName() {
-    return "MiniPlayerModule";
-  }
+  public String getName() { return "MiniPlayerModule"; }
+
+  @ReactMethod
+  public void addListener(String eventName) {}
+
+  @ReactMethod
+  public void removeListeners(Integer count) {}
+
+  // ===== 权限 =====
 
   @ReactMethod
   public void hasOverlayPermission(Promise promise) {
     try {
-      if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-        promise.resolve(Settings.canDrawOverlays(reactContext));
-      } else {
-        promise.resolve(true);
-      }
-    } catch (Exception e) {
-      promise.resolve(false);
-    }
+      promise.resolve(Settings.canDrawOverlays(reactContext));
+    } catch (Exception e) { promise.resolve(false); }
   }
 
   @ReactMethod
@@ -52,69 +53,69 @@ public class MiniPlayerModule extends ReactContextBaseJavaModule {
       intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
       reactContext.startActivity(intent);
       promise.resolve(true);
-    } catch (Exception e) {
-      promise.reject("PERMISSION_ERROR", e.getMessage());
-    }
+    } catch (Exception e) { promise.reject("ERROR", e.getMessage()); }
   }
 
-  @ReactMethod
-  public void addListener(String eventName) {}
-
-  @ReactMethod
-  public void removeListeners(Integer count) {}
+  // ===== 窗口控制(全部委托 Service)=====
 
   @ReactMethod
   public void show(int width, int height, Promise promise) {
     try {
-      if (miniPlayerView == null) {
-        miniPlayerView = new MiniPlayerView(reactContext, miniPlayerEvent);
+      if (MiniPlayerService.isRunning && MiniPlayerService.hasView()) {
+        Log.d(TAG, "Service已运行且窗口存在,仅刷新");
+        promise.resolve(true);
+        return;
       }
-      miniPlayerView.show(false, width, height);
-      Log.d(TAG, "MiniPlayer shown");
+      MiniPlayerService.start(reactContext, width, height);
+      Log.d(TAG, "已启动Service");
       promise.resolve(true);
     } catch (Exception e) {
-      Log.e(TAG, "Failed to show", e);
+      Log.e(TAG, "show失败", e);
       promise.reject("SHOW_ERROR", e.getMessage());
     }
-  }
-
-  @ReactMethod
-  public void setStyle(int bgColor, int lyricLines, String highlightColor, Promise promise) {
-    if (miniPlayerView != null) miniPlayerView.setStyle(bgColor, lyricLines, highlightColor);
-    promise.resolve(true);
-  }
-
-  @ReactMethod
-  public void updateLrc(String text, Promise promise) {
-    if (miniPlayerView != null) miniPlayerView.updateLrc(text);
-    promise.resolve(true);
-  }
-
-  @ReactMethod
-  public void updateCover(String coverPath, Promise promise) {
-    if (miniPlayerView != null) miniPlayerView.updateCover(coverPath);
-    promise.resolve(true);
-  }
-
-  @ReactMethod
-  public void updatePlaybackInfo(String title, String artist, boolean playing, int progress, int maxProgress, Promise promise) {
-    if (miniPlayerView != null) miniPlayerView.updatePlaybackInfo(title, artist, playing, progress, maxProgress);
-    promise.resolve(true);
   }
 
   @ReactMethod
   public void hide(Promise promise) {
     try {
       MiniPlayerService.stop(reactContext);
-      if (miniPlayerView != null) { miniPlayerView.hide(); miniPlayerView = null; }
       promise.resolve(true);
-    } catch (Exception e) {
-      if (miniPlayerView != null) { miniPlayerView.hide(); miniPlayerView = null; }
-      promise.resolve(true);
-    }
+    } catch (Exception e) { promise.resolve(true); }
   }
-  
-  private android.content.BroadcastReceiver serviceBtnReceiver = null;
+
+  @ReactMethod
+  public void isServiceRunning(Promise promise) {
+    boolean running = MiniPlayerService.isRunning && MiniPlayerService.hasView();
+    promise.resolve(running);
+  }
+
+  // ===== 数据更新(全部委托 Service)=====
+
+  @ReactMethod
+  public void updateCover(String coverPath, Promise promise) {
+    MiniPlayerService.updateCover(coverPath);
+    promise.resolve(true);
+  }
+
+  @ReactMethod
+  public void updatePlaybackInfo(String title, String artist, boolean playing, int progress, int maxProgress, Promise promise) {
+    MiniPlayerService.updatePlaybackInfo(title, artist, playing, progress, maxProgress);
+    promise.resolve(true);
+  }
+
+  @ReactMethod
+  public void updateLrc(String text, Promise promise) {
+    MiniPlayerService.updateLrc(text);
+    promise.resolve(true);
+  }
+
+  @ReactMethod
+  public void setStyle(int bgColor, int lyricLines, String highlightColor, Promise promise) {
+    MiniPlayerService.setStyle(bgColor, lyricLines, highlightColor);
+    promise.resolve(true);
+  }
+
+  // ===== Service 按钮事件监听 =====
 
   @ReactMethod
   public void startServiceButtonListener(Promise promise) {
@@ -122,7 +123,7 @@ public class MiniPlayerModule extends ReactContextBaseJavaModule {
       if (serviceBtnReceiver == null) {
         serviceBtnReceiver = new android.content.BroadcastReceiver() {
           @Override
-          public void onReceive(android.content.Context context, android.content.Intent intent) {
+          public void onReceive(android.content.Context context, Intent intent) {
             String action = intent.getStringExtra(MiniPlayerService.EXTRA_ACTION);
             if (action != null && miniPlayerEvent != null) {
               com.facebook.react.bridge.WritableMap p = com.facebook.react.bridge.Arguments.createMap();
@@ -132,12 +133,14 @@ public class MiniPlayerModule extends ReactContextBaseJavaModule {
           }
         };
         android.content.IntentFilter filter = new android.content.IntentFilter(MiniPlayerService.ACTION_BUTTON);
-        reactContext.registerReceiver(serviceBtnReceiver, filter, android.content.Context.RECEIVER_EXPORTED);
+        if (android.os.Build.VERSION.SDK_INT >= 33) {
+          reactContext.registerReceiver(serviceBtnReceiver, filter, android.content.Context.RECEIVER_EXPORTED);
+        } else {
+          reactContext.registerReceiver(serviceBtnReceiver, filter);
+        }
       }
       promise.resolve(true);
-    } catch (Exception e) {
-      promise.reject("ERROR", e.getMessage());
-    }
+    } catch (Exception e) { promise.reject("ERROR", e.getMessage()); }
   }
 
   @ReactMethod
@@ -148,9 +151,6 @@ public class MiniPlayerModule extends ReactContextBaseJavaModule {
         serviceBtnReceiver = null;
       }
       promise.resolve(true);
-    } catch (Exception e) {
-      promise.reject("ERROR", e.getMessage());
-    }
+    } catch (Exception e) { promise.resolve(true); }
   }
-
 }

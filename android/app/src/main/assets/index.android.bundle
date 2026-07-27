@@ -227287,14 +227287,9 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
                   void mp.openOverlaySettings();
                   return;
                 }
-                var showing = mp.isMiniPlayerShowing();
-                if (showing) {
-                  yield mp.hide();
-                  (0, _$$_REQUIRE(_dependencyMap[18], "../../../../utils/tools").toast)('小窗已关闭');
-                } else {
-                  yield mp.show();
-                  (0, _$$_REQUIRE(_dependencyMap[18], "../../../../utils/tools").toast)('小窗已打开');
-                }
+                var running = yield mp.isServiceRunning();
+                yield mp.show();
+                (0, _$$_REQUIRE(_dependencyMap[18], "../../../../utils/tools").toast)(running ? '小窗已刷新' : '小窗已打开');
               });
               return function (_x) {
                 return _ref3.apply(this, arguments);
@@ -229525,6 +229520,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   exports.hasOverlayPermission = hasOverlayPermission;
   exports.hide = hide;
   exports.isMiniPlayerShowing = isMiniPlayerShowing;
+  exports.isServiceRunning = isServiceRunning;
   exports.openOverlaySettings = openOverlaySettings;
   exports.setStyle = setStyle;
   exports.show = show;
@@ -229553,6 +229549,31 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       return (0, _$$_REQUIRE(_dependencyMap[3], "../../core/player/player").togglePlay)();
     }
   };
+
+  // 应用启动时检查服务是否已在运行(开机自启场景)
+  // 多次重试:App 初始化时序不确定,播放器数据可能延迟就绪
+  function checkAndRefreshService() {
+    var attempt = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
+    if (!isAvailable || attempt > 5) return;
+    setTimeout(/*#__PURE__*/(0, _asyncToGenerator2.default)(function* () {
+      try {
+        var running = yield MiniPlayerModule.isServiceRunning();
+        console.log(`[MiniPlayer] 开机检查#${attempt} 服务运行:`, running);
+        if (running) {
+          isShowing = true;
+          pushState();
+          startPoll();
+        } else if (attempt < 5) {
+          checkAndRefreshService(attempt + 1);
+        }
+      } catch (e) {
+        if (attempt < 5) checkAndRefreshService(attempt + 1);
+      }
+    }), 2000 + attempt * 2000);
+  }
+  try {
+    checkAndRefreshService();
+  } catch (_unused) {}
   if (isAvailable) {
     eventEmitter = new _reactNative.NativeEventEmitter(MiniPlayerModule);
     eventEmitter.addListener('onMiniPlayerAction', function (data) {
@@ -229563,12 +229584,12 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     // 监听 Service 的按钮事件(常驻小窗用)
     try {
       MiniPlayerModule.startServiceButtonListener();
-    } catch (_unused) {}
+    } catch (_unused2) {}
     eventEmitter.addListener('onMiniPlayerReady', function () {
       try {
         var _NativeModules$LyricM;
         (_NativeModules$LyricM = _reactNative.NativeModules.LyricModule) == null ? void 0 : _NativeModules$LyricM.setSendLyricTextEvent == null ? void 0 : _NativeModules$LyricM.setSendLyricTextEvent(true);
-      } catch (_unused2) {}
+      } catch (_unused3) {}
       pushState();
       startPoll();
       // 延迟应用样式(确保 view 已就绪)
@@ -229644,14 +229665,14 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
           });
           if (lines.length >= 3) lrcText = lines.join('\n');
         }
-      } catch (_unused3) {}
+      } catch (_unused4) {}
       if (lrcText) updateLrc(lrcText);
-    } catch (_unused4) {}
+    } catch (_unused5) {}
   }
   function startPoll() {
     if (pollTimer) return;
     var loop = /*#__PURE__*/function () {
-      var _ref = (0, _asyncToGenerator2.default)(function* () {
+      var _ref2 = (0, _asyncToGenerator2.default)(function* () {
         while (isShowing) {
           pushState();
           yield new Promise(function (r) {
@@ -229661,7 +229682,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
         pollTimer = null;
       });
       return function loop() {
-        return _ref.apply(this, arguments);
+        return _ref2.apply(this, arguments);
       };
     }();
     loop();
@@ -229675,10 +229696,20 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   }
   function _show() {
     _show = (0, _asyncToGenerator2.default)(function* (width, height) {
-      if (!isAvailable || isShowing) return false;
-      isShowing = true;
+      if (!isAvailable) return false;
       try {
-        // 从设置读取尺寸
+        var running = yield MiniPlayerModule.isServiceRunning();
+        if (running) {
+          // 服务已在运行 → 刷新数据(不创建新窗口)
+          console.log('[MiniPlayer] 服务已运行,刷新数据');
+          isShowing = true;
+          pushState();
+          startPoll();
+          return true;
+        }
+        // 服务未运行 → 启动新服务
+        console.log('[MiniPlayer] 启动新服务');
+        isShowing = true;
         var w = width,
           h = height;
         if (!w || !h) {
@@ -229687,14 +229718,20 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
             var ss = _$$_REQUIRE(_dependencyMap[4], "../../store/setting/state").default;
             w = (ss == null ? void 0 : (_ss$setting = ss.setting) == null ? void 0 : _ss$setting['miniPlayer.customWidth']) || 500;
             h = (ss == null ? void 0 : (_ss$setting2 = ss.setting) == null ? void 0 : _ss$setting2['miniPlayer.customHeight']) || 800;
-          } catch (_unused5) {
+          } catch (_unused6) {
             w = 500;
             h = 800;
           }
         }
         yield MiniPlayerModule.show(w, h);
+        // 等待服务窗口创建完成后推送数据
+        setTimeout(function () {
+          pushState();
+          startPoll();
+        }, 800);
         return true;
-      } catch (_unused6) {
+      } catch (e) {
+        console.warn('[MiniPlayer] show err:', e);
         isShowing = false;
         return false;
       }
@@ -229706,11 +229743,11 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   }
   function _hide() {
     _hide = (0, _asyncToGenerator2.default)(function* () {
-      if (!isAvailable || !isShowing) return false;
+      if (!isAvailable) return false;
       stopPoll();
+      isShowing = false;
       try {
         yield MiniPlayerModule.hide();
-        isShowing = false;
         return true;
       } catch (_unused7) {
         return false;
@@ -229769,6 +229806,20 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   function isMiniPlayerShowing() {
     return isShowing;
   }
+  function isServiceRunning() {
+    return _isServiceRunning.apply(this, arguments);
+  }
+  function _isServiceRunning() {
+    _isServiceRunning = (0, _asyncToGenerator2.default)(function* () {
+      if (!isAvailable) return false;
+      try {
+        return yield MiniPlayerModule.isServiceRunning();
+      } catch (_unused10) {
+        return false;
+      }
+    });
+    return _isServiceRunning.apply(this, arguments);
+  }
   function hasOverlayPermission() {
     return _hasOverlayPermission.apply(this, arguments);
   }
@@ -229777,7 +229828,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       if (!isAvailable) return false;
       try {
         return yield MiniPlayerModule.hasOverlayPermission();
-      } catch (_unused10) {
+      } catch (_unused11) {
         return false;
       }
     });
@@ -229792,7 +229843,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       try {
         yield MiniPlayerModule.openOverlaySettings();
         return true;
-      } catch (_unused11) {
+      } catch (_unused12) {
         return false;
       }
     });
@@ -229807,6 +229858,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     updatePlaybackInfo: updatePlaybackInfo,
     updateLrc: updateLrc,
     isMiniPlayerShowing: isMiniPlayerShowing,
+    isServiceRunning: isServiceRunning,
     hasOverlayPermission: hasOverlayPermission,
     openOverlaySettings: openOverlaySettings
   };

@@ -40,6 +40,7 @@ public class MiniPlayerView {
   private FrameLayout playBtnContainer;
   private View isPlayView, pauseView;
   private boolean isShowing = false;
+  private volatile boolean isPending = false;
   private boolean isPlaying = false;
   private int customW = 500, customH = 800;
   private int initialX, initialY;
@@ -52,12 +53,15 @@ public class MiniPlayerView {
 
   public void show(boolean unused) { show(unused, 500, 800); }
   public void show(boolean unused, int w, int h) {
-    if (isShowing) return;
+    if (isShowing || isPending) return;
     this.customW = w; this.customH = h;
+    isPending = true;
     new Handler(Looper.getMainLooper()).post(this::showOnMainThread);
   }
 
   private void showOnMainThread() {
+    isPending = false;
+    if (isShowing) { Log.d(TAG, "already showing, skip duplicate"); return; }
     windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
     Point size = new Point();
     windowManager.getDefaultDisplay().getSize(size);
@@ -83,6 +87,20 @@ public class MiniPlayerView {
     LinearLayout root = new LinearLayout(context);
     root.setOrientation(LinearLayout.VERTICAL);
     root.setPadding(dp(16), dp(20), dp(16), dp(16));
+
+    // 右上角扩展按钮(关闭service并返回App)
+    TextView expandBtn = new TextView(context);
+    expandBtn.setText("\u2715"); // ✕
+    expandBtn.setTextColor(Color.argb(150, 255, 255, 255));
+    expandBtn.setTextSize(16);
+    expandBtn.setGravity(Gravity.CENTER);
+    FrameLayout.LayoutParams expandLp = new FrameLayout.LayoutParams(dp(36), dp(36), Gravity.TOP | Gravity.END);
+    expandLp.topMargin = dp(8);
+    expandLp.rightMargin = dp(8);
+    expandBtn.setLayoutParams(expandLp);
+    expandBtn.setOnClickListener(v -> {
+      if (callback != null) callback.onExpand();
+    });
 
     // Cover
     coverView = new ImageView(context);
@@ -176,6 +194,7 @@ public class MiniPlayerView {
 
     root.addView(controls);
     floatingView.addView(root, new FrameLayout.LayoutParams(-1, -1));
+    floatingView.addView(expandBtn);
 
     // Drag
     floatingView.setOnTouchListener((v, ev) -> {
@@ -196,14 +215,15 @@ public class MiniPlayerView {
     try {
       windowManager.addView(floatingView, params);
       isShowing = true;
-      WritableMap ready = Arguments.createMap();
-      eventEmitter.sendEvent("onMiniPlayerReady", ready);
+      if (eventEmitter != null) {
+        WritableMap ready = Arguments.createMap();
+        eventEmitter.sendEvent("onMiniPlayerReady", ready);
+      }
     } catch (Exception e) { Log.e(TAG, "show error", e); }
   }
 
   public void updatePlaybackInfo(String title, String artist, boolean playing, int progress, int maxProgress) {
     isPlaying = playing;
-    isShowing = true;
     new Handler(Looper.getMainLooper()).post(() -> {
       if (titleView != null) titleView.setText(title.isEmpty() ? "未播放" : title);
       if (artistView != null) artistView.setText(artist);
@@ -298,12 +318,22 @@ public class MiniPlayerView {
   }
 
   public void hide() {
-    if (!isShowing) return;
-    try { if (floatingView != null) windowManager.removeView(floatingView); } catch (Exception ignored) {}
+    try { if (floatingView != null && windowManager != null) windowManager.removeView(floatingView); } catch (Exception ignored) {}
     floatingView = null; isShowing = false;
   }
 
   public boolean isShowing() { return isShowing; }
+
+  // 检查窗口是否真实挂载到屏幕(而不仅是内部标志)
+  public boolean isReallyShowing() {
+    return isShowing && floatingView != null && floatingView.isAttachedToWindow();
+  }
+
+  // 窗口是否可用:真实挂载 或 正在创建(post等待中)
+  public boolean isAlive() {
+    if (isPending) return true;
+    return isShowing && floatingView != null && floatingView.isAttachedToWindow();
+  }
 
 
 
@@ -376,6 +406,7 @@ public class MiniPlayerView {
   
   public interface MiniPlayerCallback {
     void onAction(String action);
+    void onExpand();
   }
   
   public void setCallback(MiniPlayerCallback cb) { this.callback = cb; }

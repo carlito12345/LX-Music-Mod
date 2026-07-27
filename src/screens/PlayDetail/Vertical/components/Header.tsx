@@ -57,14 +57,9 @@ export default memo(({ backgroundColor }: HeaderProps) => {
                 void mp.openOverlaySettings()
                 return
               }
-              const showing = mp.isMiniPlayerShowing()
-              if (showing) {
-                await mp.hide()
-                toast('小窗已关闭')
-              } else {
-                await mp.show()
-                toast('小窗已打开')
-              }
+              const running = await mp.isServiceRunning()
+              await mp.show()
+              toast(running ? '小窗已刷新' : '小窗已打开')
             })
           }} />
         <Btn icon="slider" onPress={showSetting} color={controlColor} />

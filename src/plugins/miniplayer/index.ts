@@ -17,6 +17,28 @@ const ACTION_MAP: Record<string, () => void> = {
   playPause: () => togglePlay(),
 }
 
+// 应用启动时检查服务是否已在运行(开机自启场景)
+// 多次重试:App 初始化时序不确定,播放器数据可能延迟就绪
+function checkAndRefreshService(attempt: number = 0) {
+  if (!isAvailable || attempt > 5) return
+  setTimeout(async () => {
+    try {
+      const running = await MiniPlayerModule.isServiceRunning()
+      console.log(`[MiniPlayer] 开机检查#${attempt} 服务运行:`, running)
+      if (running) {
+        isShowing = true
+        pushState()
+        startPoll()
+      } else if (attempt < 5) {
+        checkAndRefreshService(attempt + 1)
+      }
+    } catch (e) {
+      if (attempt < 5) checkAndRefreshService(attempt + 1)
+    }
+  }, 2000 + attempt * 2000)
+}
+try { checkAndRefreshService() } catch {}
+
 if (isAvailable) {
   eventEmitter = new NativeEventEmitter(MiniPlayerModule)
   eventEmitter.addListener('onMiniPlayerAction', (data: { action: string }) => {
@@ -123,10 +145,20 @@ function stopPoll() {
 }
 
 export async function show(width?: number, height?: number): Promise<boolean> {
-  if (!isAvailable || isShowing) return false
-  isShowing = true
+  if (!isAvailable) return false
   try {
-    // 从设置读取尺寸
+    const running = await MiniPlayerModule.isServiceRunning()
+    if (running) {
+      // 服务已在运行 → 刷新数据(不创建新窗口)
+      console.log('[MiniPlayer] 服务已运行,刷新数据')
+      isShowing = true
+      pushState()
+      startPoll()
+      return true
+    }
+    // 服务未运行 → 启动新服务
+    console.log('[MiniPlayer] 启动新服务')
+    isShowing = true
     let w = width, h = height
     if (!w || !h) {
       try {
@@ -136,16 +168,18 @@ export async function show(width?: number, height?: number): Promise<boolean> {
       } catch { w = 500; h = 800 }
     }
     await MiniPlayerModule.show(w, h)
+    // 等待服务窗口创建完成后推送数据
+    setTimeout(() => { pushState(); startPoll() }, 800)
     return true
-  } catch { isShowing = false; return false }
+  } catch (e) { console.warn('[MiniPlayer] show err:', e); isShowing = false; return false }
 }
 
 export async function hide(): Promise<boolean> {
-  if (!isAvailable || !isShowing) return false
+  if (!isAvailable) return false
   stopPoll()
+  isShowing = false
   try {
     await MiniPlayerModule.hide()
-    isShowing = false
     return true
   } catch { return false }
 }
@@ -174,6 +208,11 @@ export async function updateLrc(text: string): Promise<void> {
 
 export function isMiniPlayerShowing(): boolean { return isShowing }
 
+export async function isServiceRunning(): Promise<boolean> {
+  if (!isAvailable) return false
+  try { return await MiniPlayerModule.isServiceRunning() } catch { return false }
+}
+
 export async function hasOverlayPermission(): Promise<boolean> {
   if (!isAvailable) return false
   try { return await MiniPlayerModule.hasOverlayPermission() } catch { return false }
@@ -186,5 +225,5 @@ export async function openOverlaySettings(): Promise<boolean> {
 
 export default {
   isAvailable, show, hide, setStyle, updateCover, updatePlaybackInfo, updateLrc,
-  isMiniPlayerShowing, hasOverlayPermission, openOverlaySettings,
+  isMiniPlayerShowing, isServiceRunning, hasOverlayPermission, openOverlaySettings,
 }

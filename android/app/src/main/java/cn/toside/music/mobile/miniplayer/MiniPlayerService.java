@@ -26,24 +26,39 @@ public class MiniPlayerService extends Service implements MiniPlayerView.MiniPla
   @Override
   public void onCreate() {
     super.onCreate();
-    Log.d(TAG, "Service created");
-    createNotificationChannel();
-    startForeground(NOTIFY_ID, buildNotification());
+    Log.d(TAG, "Service onCreate");
+    try {
+      createNotificationChannel();
+      startForeground(NOTIFY_ID, buildNotification());
+    } catch (Exception e) {
+      Log.e(TAG, "startForeground FAILED: " + e.getMessage());
+    }
     isRunning = true;
-    ensureView();
-    if (miniPlayerView != null) miniPlayerView.show(false, initialW, initialH);
+    // 窗口创建统一由 onStartCommand("SHOW") 处理,避免竞态产生孤儿窗口
   }
 
   @Override
   public int onStartCommand(Intent intent, int flags, int startId) {
     if (intent != null) {
       String action = intent.getAction();
-      if ("HIDE".equals(action)) { hideView(); stopSelf(); }
+      if ("HIDE".equals(action)) { hideView(); stopForeground(true); stopSelf(); }
+      else if ("REFRESH".equals(action)) {
+        // App 请求刷新:小窗已存在则保持,等待App推送数据
+        Log.d(TAG, "Refresh requested");
+      }
       else if ("SHOW".equals(action)) {
         initialW = intent.getIntExtra("width", 500);
         initialH = intent.getIntExtra("height", 800);
-        ensureView();
-        if (miniPlayerView != null) miniPlayerView.show(false, initialW, initialH);
+        if (miniPlayerView != null && miniPlayerView.isAlive()) {
+          Log.d(TAG, "窗口存活(已显示或创建中),跳过");
+        } else {
+          // 无窗口 或 死对象 → 清理重建
+          Log.d(TAG, "重建窗口 (view=" + (miniPlayerView != null ? "dead" : "null") + ")");
+          if (miniPlayerView != null) { miniPlayerView.hide(); miniPlayerView = null; }
+          ensureView();
+          miniPlayerView.show(false, initialW, initialH);
+          miniPlayerView.updatePlaybackInfo("加载中...", "等待数据同步", false, 0, 0);
+        }
       }
     }
     return START_STICKY;
@@ -71,6 +86,20 @@ public class MiniPlayerService extends Service implements MiniPlayerView.MiniPla
     sendBroadcast(i);
   }
 
+  @Override
+  public void onExpand() {
+    // 关闭小窗service,拉起App主页
+    Log.d(TAG, "Expand: closing service, launching app");
+    Intent launchIntent = getPackageManager().getLaunchIntentForPackage(getPackageName());
+    if (launchIntent != null) {
+      launchIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+      startActivity(launchIntent);
+    }
+    hideView();
+    stopForeground(true);
+    stopSelf();
+  }
+
   private void ensureView() {
     if (miniPlayerView == null) {
       miniPlayerView = new MiniPlayerView(this, null);
@@ -79,6 +108,10 @@ public class MiniPlayerService extends Service implements MiniPlayerView.MiniPla
   }
 
   private void hideView() { if (miniPlayerView != null) { miniPlayerView.hide(); miniPlayerView = null; } }
+
+  public static boolean hasView() {
+    return miniPlayerView != null && miniPlayerView.isAlive();
+  }
 
   public static void updatePlaybackInfo(String t, String a, boolean p, int progress, int maxP) {
     if (miniPlayerView != null) miniPlayerView.updatePlaybackInfo(t, a, p, progress, maxP);
