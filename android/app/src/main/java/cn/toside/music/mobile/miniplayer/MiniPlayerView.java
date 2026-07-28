@@ -141,13 +141,13 @@ public class MiniPlayerView {
     // Lyrics
     lrcView = new TextView(context);
     lrcView.setTextColor(Color.argb(180, 255, 255, 255)); lrcView.setTextSize(15);
-    lrcView.setLines(5);
+    lrcView.setMaxLines(5); lrcView.setMinLines(2);
     // lrcView.setEllipsize(null);
     lrcView.setGravity(Gravity.CENTER);
     lrcView.setPadding(dp(12), dp(10), dp(12), dp(10));
     lrcView.setLineSpacing(dp(6), 1f);
     lrcView.setText("♪");
-    lrcView.setLayoutParams(new LinearLayout.LayoutParams(-1, dp(180)));
+    lrcView.setLayoutParams(new LinearLayout.LayoutParams(-1, 0, 1));
     root.addView(lrcView);
 
         // Progress bar (FrameLayout with track background + white fill)
