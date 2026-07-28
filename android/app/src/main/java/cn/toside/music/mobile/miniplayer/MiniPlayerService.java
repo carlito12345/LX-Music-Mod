@@ -87,6 +87,15 @@ public class MiniPlayerService extends Service implements MiniPlayerView.MiniPla
   }
 
   @Override
+  public void onSeek(double ratio) {
+    Intent i = new Intent(ACTION_BUTTON);
+    i.putExtra(EXTRA_ACTION, "seek");
+    i.putExtra("ratio", ratio);
+    i.setPackage(getPackageName());
+    sendBroadcast(i);
+  }
+
+  @Override
   public void onExpand() {
     // 关闭小窗service,拉起App主页
     Log.d(TAG, "Expand: closing service, launching app");

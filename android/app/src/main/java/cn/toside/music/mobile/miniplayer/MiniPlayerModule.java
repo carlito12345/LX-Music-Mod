@@ -128,6 +128,9 @@ public class MiniPlayerModule extends ReactContextBaseJavaModule {
             if (action != null && miniPlayerEvent != null) {
               com.facebook.react.bridge.WritableMap p = com.facebook.react.bridge.Arguments.createMap();
               p.putString("action", action);
+              if ("seek".equals(action) && intent.hasExtra("ratio")) {
+                p.putDouble("ratio", intent.getDoubleExtra("ratio", 0));
+              }
               miniPlayerEvent.sendEvent("onMiniPlayerAction", p);
             }
           }

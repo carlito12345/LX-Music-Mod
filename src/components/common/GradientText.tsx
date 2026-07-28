@@ -1,13 +1,11 @@
 /**
  * GradientText - 渐变色文字组件
- * 使用 MaskedView + LinearGradient 实现真正的文字渐变
+ * SVG Text 实现,无 MaskedView 闪烁问题
  */
-import { memo } from 'react'
-import { Text as RNText, type TextStyle, View } from 'react-native'
-import LinearGradient from 'react-native-linear-gradient'
-import MaskedView from '@react-native-masked-view/masked-view'
+import { memo, useRef, useState } from 'react'
+import { type TextStyle, View, TouchableOpacity, LayoutChangeEvent } from 'react-native'
+import Svg, { Defs, LinearGradient, Stop, Text as SvgText } from 'react-native-svg'
 
-// 内置渐变预设(流行配色)
 export const GRADIENT_PRESETS: Record<string, { name: string, colors: string[] }> = {
   aurora: { name: '极光', colors: ['#00e676', '#00b0ff', '#d500f9'] },
   sunset: { name: '日落', colors: ['#ff9800', '#ff1744', '#d500f9'] },
@@ -31,23 +29,49 @@ interface GradientTextProps {
 }
 
 export default memo(({ text, colors, preset = 'aurora', style, size = 16, lineHeight, textAlign = 'center', onPress }: GradientTextProps) => {
+  const [w, setW] = useState(200)
   const gradientColors = colors || GRADIENT_PRESETS[preset]?.colors || GRADIENT_PRESETS.aurora.colors
-  const textStyle: TextStyle = {
-    fontSize: size,
-    lineHeight: lineHeight || size * 1.3,
-    textAlign,
-    fontWeight: 'bold',
+  const fontSize = size || 16
+  const lh = lineHeight || fontSize * 1.3
+
+  const onLayout = (e: LayoutChangeEvent) => {
+    const width = e.nativeEvent.layout.width
+    if (width > 0) setW(width)
   }
+
+  const content = (
+    <Svg width={w} height={lh + 4}>
+      <Defs>
+        <LinearGradient id="g" x1="0" y1="0" x2="1" y2="0">
+          {gradientColors.map((c, i) => (
+            <Stop key={i} offset={`${(i / Math.max(gradientColors.length - 1, 1)) * 100}%`} stopColor={c} />
+          ))}
+        </LinearGradient>
+      </Defs>
+      <SvgText
+        x={textAlign === 'center' ? w / 2 : textAlign === 'right' ? w : 0}
+        y={lh * 0.82}
+        fontSize={fontSize}
+        fontWeight="bold"
+        fill="url(#g)"
+        textAnchor={textAlign === 'center' ? 'middle' : textAlign === 'right' ? 'end' : 'start'}
+      >
+        {text}
+      </SvgText>
+    </Svg>
+  )
+
+  if (onPress) {
+    return (
+      <TouchableOpacity onPress={onPress} onLayout={onLayout} style={{ width: '100%', height: lh + 4 }}>
+        {content}
+      </TouchableOpacity>
+    )
+  }
+
   return (
-    <MaskedView
-      androidRenderingMode="software"
-      maskElement={
-        <RNText style={[textStyle, style]} onPress={onPress}>{text}</RNText>
-      }
-    >
-      <LinearGradient colors={gradientColors} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}>
-        <RNText style={[textStyle, style, { opacity: 0 }]}>{text}</RNText>
-      </LinearGradient>
-    </MaskedView>
+    <View onLayout={onLayout} style={{ width: '100%', height: lh + 4 }}>
+      {content}
+    </View>
   )
 })

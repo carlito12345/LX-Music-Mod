@@ -11,10 +11,16 @@ let eventEmitter: NativeEventEmitter | null = null
 let isShowing = false
 let pollTimer: any = null
 
-const ACTION_MAP: Record<string, () => void> = {
+const ACTION_MAP: Record<string, (data?: any) => void> = {
   next: () => playNext(),
   previous: () => playPrev(),
   playPause: () => togglePlay(),
+  seek: (data) => {
+    if (data?.ratio != null) {
+      const { seek } = require('@/core/player/player')
+      seek(data.ratio)
+    }
+  },
 }
 
 // 应用启动时检查服务是否已在运行(开机自启场景)
@@ -41,9 +47,9 @@ try { checkAndRefreshService() } catch {}
 
 if (isAvailable) {
   eventEmitter = new NativeEventEmitter(MiniPlayerModule)
-  eventEmitter.addListener('onMiniPlayerAction', (data: { action: string }) => {
+  eventEmitter.addListener('onMiniPlayerAction', (data: { action: string, ratio?: number }) => {
     const handler = ACTION_MAP[data.action]
-    if (handler) handler()
+    if (handler) handler(data)
   })
 
   // 监听 Service 的按钮事件(常驻小窗用)

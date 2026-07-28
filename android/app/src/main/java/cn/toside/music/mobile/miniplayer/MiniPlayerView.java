@@ -116,6 +116,9 @@ public class MiniPlayerView {
     coverView.setBackground(coverBg);
     coverView.setClipToOutline(true);
     coverView.setElevation(dp(8));
+    coverView.setOnClickListener(v -> {
+      if (callback != null) callback.onExpand();
+    });
     root.addView(coverView);
 
     // Title
@@ -160,6 +163,40 @@ public class MiniPlayerView {
     progFillG.setCornerRadius(dp(3)); progFillG.setColor(Color.WHITE);
     progressFill.setBackground(progFillG);
     progContainer.addView(progressFill);
+    
+    // 进度条触摸拖动跳转
+    progContainer.setOnTouchListener(new View.OnTouchListener() {
+      private boolean seeking = false;
+      @Override public boolean onTouch(View v, MotionEvent ev) {
+        switch (ev.getAction()) {
+          case MotionEvent.ACTION_DOWN:
+            seeking = true;
+            // 不拦截事件,让父视图也能处理
+          case MotionEvent.ACTION_MOVE: {
+            float ratio = Math.max(0, Math.min(1, ev.getX() / v.getWidth()));
+            if (progressFill != null) {
+              FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) progressFill.getLayoutParams();
+              lp.width = (int)(ratio * v.getWidth());
+              progressFill.requestLayout();
+            }
+            if (ev.getAction() == MotionEvent.ACTION_UP && seeking) {
+              seeking = false;
+              // 发送跳转事件
+              if (callback != null) {
+                callback.onSeek(ratio);
+              } else if (eventEmitter != null) {
+                com.facebook.react.bridge.WritableMap p = com.facebook.react.bridge.Arguments.createMap();
+                p.putDouble("ratio", ratio);
+                eventEmitter.sendEvent("onMiniPlayerSeek", p);
+              }
+            }
+            return true;
+          }
+        }
+        return false;
+      }
+    });
+    
     root.addView(progContainer);
     // Controls
     LinearLayout controls = new LinearLayout(context);
@@ -434,6 +471,7 @@ public class MiniPlayerView {
   public interface MiniPlayerCallback {
     void onAction(String action);
     void onExpand();
+    void onSeek(double ratio);
   }
   
   public void setCallback(MiniPlayerCallback cb) { this.callback = cb; }
