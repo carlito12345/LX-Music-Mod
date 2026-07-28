@@ -42,14 +42,18 @@ export async function initialize(): Promise<boolean> {
     return false
   }
 
-  try {
-    const result = await MediaInteraction.initialize()
-    console.log('[MediaInteraction] Initialized:', result)
-    return result
-  } catch (e) {
-    console.warn('[MediaInteraction] Init failed:', String(e).substring(0, 80))
-    return false
+  // 带重试的初始化
+  for (let retry = 0; retry < 3; retry++) {
+    try {
+      const result = await MediaInteraction.initialize()
+      console.log('[MediaInteraction] Initialized attempt', retry + 1, ':', result)
+      if (result) return true
+    } catch (e) {
+      console.warn('[MediaInteraction] Init attempt', retry + 1, 'failed:', String(e).substring(0, 80))
+    }
+    if (retry < 2) await new Promise(r => setTimeout(r, 2000))
   }
+  return false
 }
 
 /**

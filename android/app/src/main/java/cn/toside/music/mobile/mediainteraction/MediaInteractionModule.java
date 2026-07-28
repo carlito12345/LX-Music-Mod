@@ -83,12 +83,21 @@ public class MediaInteractionModule extends ReactContextBaseJavaModule {
         }
     }
 
+    private android.media.session.MediaSession mMediaSession;
+
     private void initMediaSessionManager() {
         try {
             Context context = getReactApplicationContext();
             mMediaSessionManager = (MediaSessionManager) context.getSystemService(Context.MEDIA_SESSION_SERVICE);
             mComponentName = new android.content.ComponentName(context, MediaInteractionNotificationService.class);
-            Log.d(TAG, "MediaSessionManager initialized");
+            
+            // 创建 MediaSession 并独占媒体按钮
+            mMediaSession = new android.media.session.MediaSession(context, "LXMusicMediaSession");
+            mMediaSession.setFlags(android.media.session.MediaSession.FLAG_HANDLES_MEDIA_BUTTONS | 
+                                   android.media.session.MediaSession.FLAG_HANDLES_TRANSPORT_CONTROLS);
+            mMediaSession.setMediaButtonReceiver(null); // null = 我们的 app 独占
+            mMediaSession.setActive(true);
+            Log.d(TAG, "MediaSessionManager initialized, media buttons locked");
         } catch (Exception e) {
             Log.e(TAG, "Failed to initialize MediaSessionManager", e);
         }
@@ -111,6 +120,21 @@ public class MediaInteractionModule extends ReactContextBaseJavaModule {
                     this.currentArtwork = downloadArtwork(artworkPath);
                 } else {
                     this.currentArtwork = Uri.parse(artworkPath);
+                }
+            }
+
+            // 根据播放状态动态控制 MediaSession 独占
+            if (mMediaSession != null) {
+                if (playing) {
+                    if (!mMediaSession.isActive()) {
+                        mMediaSession.setActive(true);
+                        Log.d(TAG, "MediaSession activated (playing)");
+                    }
+                } else {
+                    if (mMediaSession.isActive()) {
+                        mMediaSession.setActive(false);
+                        Log.d(TAG, "MediaSession deactivated (paused)");
+                    }
                 }
             }
 
@@ -246,6 +270,21 @@ public class MediaInteractionModule extends ReactContextBaseJavaModule {
                                 
                                 // 验证文件大小
                                 if (artworkFile.length() > 0) {
+                                    // 同时复制到系统 Music 目录(OneOS 读取该目录)
+                                    try {
+                                        java.io.File musicThumbDir = new java.io.File(
+                                            android.os.Environment.getExternalStoragePublicDirectory(
+                                                android.os.Environment.DIRECTORY_MUSIC), ".thumbnails");
+                                        if (!musicThumbDir.exists()) musicThumbDir.mkdirs();
+                                        java.io.File thumbFile = new java.io.File(musicThumbDir, filename);
+                                        java.io.FileOutputStream fos2 = new java.io.FileOutputStream(thumbFile);
+                                        bitmap.compress(android.graphics.Bitmap.CompressFormat.JPEG, 90, fos2);
+                                        fos2.flush();
+                                        fos2.close();
+                                        Log.d(TAG, "Also saved to Music/.thumbnails: " + thumbFile.getAbsolutePath());
+                                    } catch (Exception e) {
+                                        Log.w(TAG, "Failed to save to Music/.thumbnails: " + e.getMessage());
+                                    }
                                     Uri artworkUri = Uri.fromFile(artworkFile);
                                     Log.d(TAG, "Artwork saved: " + artworkUri + " size=" + artworkFile.length());
                                     result[0] = artworkUri;

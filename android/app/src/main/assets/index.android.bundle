@@ -273798,14 +273798,21 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
         console.log('[MediaInteraction] Module not available');
         return false;
       }
-      try {
-        var result = yield MediaInteraction.initialize();
-        console.log('[MediaInteraction] Initialized:', result);
-        return result;
-      } catch (e) {
-        console.warn('[MediaInteraction] Init failed:', String(e).substring(0, 80));
-        return false;
+
+      // 带重试的初始化
+      for (var retry = 0; retry < 3; retry++) {
+        try {
+          var result = yield MediaInteraction.initialize();
+          console.log('[MediaInteraction] Initialized attempt', retry + 1, ':', result);
+          if (result) return true;
+        } catch (e) {
+          console.warn('[MediaInteraction] Init attempt', retry + 1, 'failed:', String(e).substring(0, 80));
+        }
+        if (retry < 2) yield new Promise(function (r) {
+          return setTimeout(r, 2000);
+        });
       }
+      return false;
     });
     return _initialize.apply(this, arguments);
   }

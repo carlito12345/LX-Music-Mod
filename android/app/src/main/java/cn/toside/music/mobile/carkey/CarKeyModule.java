@@ -58,6 +58,7 @@ public class CarKeyModule extends ReactContextBaseJavaModule {
     try {
       IntentFilter filter = new IntentFilter();
       filter.addAction("android.intent.action.MEDIA_BUTTON");
+      filter.setPriority(999);
       reactContext.registerReceiver(keyReceiver, filter);
       isListening = true;
       Log.d(TAG, "MEDIA_BUTTON receiver registered");
