@@ -21,7 +21,7 @@ public class MiniPlayerService extends Service implements MiniPlayerView.MiniPla
 
   private static MiniPlayerView miniPlayerView = null;
   public static boolean isRunning = false;
-  private int initialW = 500, initialH = 800;
+  private int initialW = 500, initialH = 900;
 
   @Override
   public void onCreate() {
@@ -128,7 +128,10 @@ public class MiniPlayerService extends Service implements MiniPlayerView.MiniPla
   public static void updateCover(String path) { if (miniPlayerView != null) miniPlayerView.updateCover(path); }
   public static void updateLrc(String text) { if (miniPlayerView != null) miniPlayerView.updateLrc(text); }
   public static void setStyle(int bg, int lines, String hc) {
-    if (miniPlayerView != null) miniPlayerView.setStyle(bg, lines, hc);
+    if (miniPlayerView != null) miniPlayerView.setStyle(bg, lines, hc, 15, 6);
+  }
+  public static void setStyle(int bg, int lines, String hc, int fontSize, int lineSpacing) {
+    if (miniPlayerView != null) miniPlayerView.setStyle(bg, lines, hc, fontSize, lineSpacing);
   }
 
   private void createNotificationChannel() {

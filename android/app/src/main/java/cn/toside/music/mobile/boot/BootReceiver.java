@@ -12,7 +12,7 @@ public class BootReceiver extends BroadcastReceiver {
       Log.d("[Boot]", "Boot completed, starting mini player + app...");
       // 先启动小窗服务(显示加载中状态)
       try {
-        Class.forName("cn.toside.music.mobile.miniplayer.MiniPlayerService").getMethod("start", Context.class, int.class, int.class).invoke(null, context, 500, 800);
+        Class.forName("cn.toside.music.mobile.miniplayer.MiniPlayerService").getMethod("start", Context.class, int.class, int.class).invoke(null, context, 500, 900);
       } catch (Exception e) { Log.w("[Boot]", "Svc start failed: " + e.getMessage()); }
       // 再启动 App
       Intent launchIntent = context.getPackageManager().getLaunchIntentForPackage(context.getPackageName());

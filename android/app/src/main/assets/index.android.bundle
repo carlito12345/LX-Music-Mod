@@ -149671,8 +149671,10 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     'lyricGradient.customColors': '',
     'miniPlayer.followBgColor': true,
     'miniPlayer.customWidth': 500,
-    'miniPlayer.customHeight': 800,
+    'miniPlayer.customHeight': 900,
     'miniPlayer.lyricLines': 3,
+    'miniPlayer.lyricFontSize': 15,
+    'miniPlayer.lyricLineSpacing': 6,
     'miniPlayer.lyricHighlightColor': '#ffffff',
     'miniPlayer.coverStyle': 'follow',
     'miniPlayer.enableParticles': false,
@@ -229571,6 +229573,8 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       setExpanded = _useState4[1];
     var followBg = (0, _$$_REQUIRE(_dependencyMap[9], "../../../../../store/setting/hook").useSettingValue)('miniPlayer.followBgColor');
     var lyricLines = (0, _$$_REQUIRE(_dependencyMap[9], "../../../../../store/setting/hook").useSettingValue)('miniPlayer.lyricLines');
+    var lyricFontSize = (0, _$$_REQUIRE(_dependencyMap[9], "../../../../../store/setting/hook").useSettingValue)('miniPlayer.lyricFontSize');
+    var lyricLineSpacing = (0, _$$_REQUIRE(_dependencyMap[9], "../../../../../store/setting/hook").useSettingValue)('miniPlayer.lyricLineSpacing');
     var highlightColor = (0, _$$_REQUIRE(_dependencyMap[9], "../../../../../store/setting/hook").useSettingValue)('miniPlayer.lyricHighlightColor');
     var cw = (0, _$$_REQUIRE(_dependencyMap[9], "../../../../../store/setting/hook").useSettingValue)('miniPlayer.customWidth');
     var ch = (0, _$$_REQUIRE(_dependencyMap[9], "../../../../../store/setting/hook").useSettingValue)('miniPlayer.customHeight');
@@ -229660,6 +229664,46 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
             onSlidingComplete: function onSlidingComplete(v) {
               return (0, _$$_REQUIRE(_dependencyMap[10], "../../../../../core/common").updateSetting)({
                 'miniPlayer.lyricLines': Math.trunc(v)
+              });
+            },
+            style: {
+              flex: 1,
+              marginLeft: 8
+            }
+          })]
+        }), /*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.View, {
+          style: s.row,
+          children: [/*#__PURE__*/(0, _jsxRuntime.jsxs)(_Text.default, {
+            size: 13,
+            children: ["\u6B4C\u8BCD\u5B57\u53F7: ", lyricFontSize]
+          }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_Slider.default, {
+            minimumValue: 11,
+            maximumValue: 24,
+            step: 1,
+            value: lyricFontSize,
+            onSlidingComplete: function onSlidingComplete(v) {
+              return (0, _$$_REQUIRE(_dependencyMap[10], "../../../../../core/common").updateSetting)({
+                'miniPlayer.lyricFontSize': Math.trunc(v)
+              });
+            },
+            style: {
+              flex: 1,
+              marginLeft: 8
+            }
+          })]
+        }), /*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.View, {
+          style: s.row,
+          children: [/*#__PURE__*/(0, _jsxRuntime.jsxs)(_Text.default, {
+            size: 13,
+            children: ["\u884C\u8DDD: ", lyricLineSpacing, "dp"]
+          }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_Slider.default, {
+            minimumValue: 2,
+            maximumValue: 16,
+            step: 1,
+            value: lyricLineSpacing,
+            onSlidingComplete: function onSlidingComplete(v) {
+              return (0, _$$_REQUIRE(_dependencyMap[10], "../../../../../core/common").updateSetting)({
+                'miniPlayer.lyricLineSpacing': Math.trunc(v)
               });
             },
             style: {
@@ -229984,6 +230028,8 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
         if (!isNaN(parsed)) bg = parsed & 0xFFFFFF | 0xE6000000;
       }
       var lines = s['miniPlayer.lyricLines'] || 3;
+      var fontSize = s['miniPlayer.lyricFontSize'] || 15;
+      var lineSpacing = s['miniPlayer.lyricLineSpacing'] || 6;
       // 渐变优先:启用渐变时传逗号分隔色列表,否则传单色
       var hc = s['miniPlayer.lyricHighlightColor'] || '#ffffff';
       if (s['lyricGradient.enable']) {
@@ -229994,9 +230040,108 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
           hc = GRADIENT_PRESET_COLORS[s['lyricGradient.preset']] || GRADIENT_PRESET_COLORS.aurora;
         }
       }
-      setStyle(bg, lines, hc);
+      setStyle(bg, lines, hc, fontSize, lineSpacing);
     } catch (e) {
       console.warn('[MiniPlayer] syncSettings err:', e);
+    }
+  }
+
+  // 双通道歌词:
+  // 通道1: 原生 lyric-line-play 事件(离开播放界面也工作)
+  // 通道2: LRC 时间戳解析(精度高,作为补充)
+  var lrcTimer = null;
+  var lrcListener = null;
+  var lastLrc = '';
+  function parseLrc(lrcText) {
+    var lines = [];
+    var regex = /\[(\d+):(\d+(?:\.\d+)?)\](.*)/g;
+    var match;
+    while ((match = regex.exec(lrcText)) !== null) {
+      var minutes = parseInt(match[1]);
+      var seconds = parseFloat(match[2]);
+      var text = match[3].trim();
+      if (text) lines.push({
+        time: minutes * 60 + seconds,
+        text: text
+      });
+    }
+    return lines.sort(function (a, b) {
+      return a.time - b.time;
+    });
+  }
+  function tickLrc() {
+    if (!isShowing) {
+      stopLrcTimer();
+      return;
+    }
+    try {
+      var _ps$progress;
+      var ps = _$$_REQUIRE(_dependencyMap[5], "../../store/player/state").default;
+      var mi = ps == null ? void 0 : ps.musicInfo;
+      if (!(mi != null && mi.id)) return;
+      var rawLrc = mi.lrc || mi.rawlrc || '';
+      var nowTime = (ps == null ? void 0 : (_ps$progress = ps.progress) == null ? void 0 : _ps$progress.nowPlayTime) || 0;
+      var parsed = parseLrc(rawLrc);
+      if (parsed.length > 0) {
+        var currentIdx = 0;
+        for (var i = parsed.length - 1; i >= 0; i--) {
+          if (nowTime >= parsed[i].time) {
+            currentIdx = i;
+            break;
+          }
+        }
+        var start = Math.max(0, currentIdx - 1);
+        var end = Math.min(parsed.length, currentIdx + 4);
+        var multiLine = parsed.slice(start, end).map(function (l) {
+          return l.text;
+        }).join('\n');
+        if (multiLine !== lastLrc) {
+          lastLrc = multiLine;
+          updateLrc(multiLine);
+        }
+      } else if (ps != null && ps.lastLyric && ps.lastLyric !== lastLrc) {
+        lastLrc = ps.lastLyric;
+        updateLrc(ps.lastLyric);
+      }
+    } catch (_unused4) {}
+  }
+  function startLrcEvent() {
+    if (lrcTimer) return;
+    lastLrc = '';
+
+    // 通道1: 原生歌词事件(离开界面也工作)
+    try {
+      var _require3 = _$$_REQUIRE(_dependencyMap[2], "react-native"),
+        _NativeModules = _require3.NativeModules,
+        _NativeEventEmitter = _require3.NativeEventEmitter;
+      var LyricModule = _NativeModules.LyricModule;
+      if (LyricModule) {
+        LyricModule.setSendLyricTextEvent(true);
+        var emitter = new _NativeEventEmitter(LyricModule);
+        lrcListener = emitter.addListener('lyric-line-play', function (event) {
+          if (event != null && event.text && event.text !== lastLrc) {
+            lastLrc = event.text;
+            updateLrc(event.text);
+          }
+        });
+      }
+    } catch (_unused5) {}
+
+    // 通道2: LRC 时间戳轮询(精度补充)
+    tickLrc();
+    lrcTimer = setInterval(tickLrc, 500);
+  }
+  function stopLrcTimer() {
+    if (lrcTimer) {
+      clearInterval(lrcTimer);
+      lrcTimer = null;
+    }
+    if (lrcListener) {
+      try {
+        lrcListener.remove();
+      } catch (_unused6) {}
+      ;
+      lrcListener = null;
     }
   }
   function pushState() {
@@ -230007,29 +230152,13 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       if (!(mi != null && mi.id)) return;
       updateCover(mi.pic || '');
       updatePlaybackInfo(mi.name || '', mi.singer || '', ps.isPlay, 0, mi.interval || 0);
-      // 读取多行歌词(当前行 ± 2 行)
-      var lrcText = (ps == null ? void 0 : ps.lastLyric) || '';
-      try {
-        var lyric = _$$_REQUIRE(_dependencyMap[6], "../lyric");
-        var currentLine = lyric.getCurrentLrcLine == null ? void 0 : lyric.getCurrentLrcLine();
-        if (currentLine != null && currentLine.text) lrcText = currentLine.text;
-        // 尝试获取前后歌词行
-        var allLines = lyric.getLines == null ? void 0 : lyric.getLines();
-        var lineIdx = currentLine == null ? void 0 : currentLine.line;
-        if (allLines != null && allLines.length && typeof lineIdx === 'number') {
-          var start = Math.max(0, lineIdx - 1);
-          var end = Math.min(allLines.length, lineIdx + 4);
-          var lines = allLines.slice(start, end).map(function (l) {
-            return l.text || '';
-          });
-          if (lines.length >= 3) lrcText = lines.join('\n');
-        }
-      } catch (_unused4) {}
-      if (lrcText) updateLrc(lrcText);
-    } catch (_unused5) {}
+      // 同步更新歌词(作为 setInterval 的 fallback)
+      tickLrc();
+    } catch (_unused7) {}
   }
   function startPoll() {
     if (pollTimer) return;
+    startLrcEvent();
     var loop = /*#__PURE__*/function () {
       var _ref2 = (0, _asyncToGenerator2.default)(function* () {
         while (isShowing) {
@@ -230049,6 +230178,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   }
   function stopPoll() {
     pollTimer = null;
+    stopLrcTimer();
   }
   function show(_x, _x2) {
     return _show.apply(this, arguments);
@@ -230076,10 +230206,10 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
             var _ss$setting, _ss$setting2;
             var ss = _$$_REQUIRE(_dependencyMap[4], "../../store/setting/state").default;
             w = (ss == null ? void 0 : (_ss$setting = ss.setting) == null ? void 0 : _ss$setting['miniPlayer.customWidth']) || 500;
-            h = (ss == null ? void 0 : (_ss$setting2 = ss.setting) == null ? void 0 : _ss$setting2['miniPlayer.customHeight']) || 800;
-          } catch (_unused6) {
+            h = (ss == null ? void 0 : (_ss$setting2 = ss.setting) == null ? void 0 : _ss$setting2['miniPlayer.customHeight']) || 900;
+          } catch (_unused8) {
             w = 500;
-            h = 800;
+            h = 900;
           }
         }
         yield MiniPlayerModule.show(w, h);
@@ -230108,7 +230238,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       try {
         yield MiniPlayerModule.hide();
         return true;
-      } catch (_unused7) {
+      } catch (_unused9) {
         return false;
       }
     });
@@ -230122,7 +230252,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       if (!isAvailable) return;
       try {
         yield MiniPlayerModule.updateCover(coverPath);
-      } catch (_unused8) {}
+      } catch (_unused0) {}
     });
     return _updateCover.apply(this, arguments);
   }
@@ -230134,23 +230264,23 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       if (!isAvailable) return;
       try {
         yield MiniPlayerModule.updatePlaybackInfo(title || '', artist || '', playing, progress || 0, maxProgress || 100);
-      } catch (_unused9) {}
+      } catch (_unused1) {}
     });
     return _updatePlaybackInfo.apply(this, arguments);
   }
-  function setStyle(_x9, _x0, _x1) {
+  function setStyle(_x9, _x0, _x1, _x10, _x11) {
     return _setStyle.apply(this, arguments);
   }
   function _setStyle() {
-    _setStyle = (0, _asyncToGenerator2.default)(function* (bgColor, lyricLines, highlightColor) {
+    _setStyle = (0, _asyncToGenerator2.default)(function* (bgColor, lyricLines, highlightColor, fontSize, lineSpacing) {
       if (!isAvailable) return;
       try {
-        yield MiniPlayerModule.setStyle(bgColor || 0xE61A1A2E, lyricLines || 3, highlightColor || '#ffffff');
-      } catch (_unused0) {}
+        yield MiniPlayerModule.setStyle(bgColor || 0xE61A1A2E, lyricLines || 3, highlightColor || '#ffffff', fontSize || 15, lineSpacing || 6);
+      } catch (_unused10) {}
     });
     return _setStyle.apply(this, arguments);
   }
-  function updateLrc(_x10) {
+  function updateLrc(_x12) {
     return _updateLrc.apply(this, arguments);
   }
   function _updateLrc() {
@@ -230158,7 +230288,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       if (!isAvailable) return;
       try {
         yield MiniPlayerModule.updateLrc(text || '');
-      } catch (_unused1) {}
+      } catch (_unused11) {}
     });
     return _updateLrc.apply(this, arguments);
   }
@@ -230173,7 +230303,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       if (!isAvailable) return false;
       try {
         return yield MiniPlayerModule.isServiceRunning();
-      } catch (_unused10) {
+      } catch (_unused12) {
         return false;
       }
     });
@@ -230187,7 +230317,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       if (!isAvailable) return false;
       try {
         return yield MiniPlayerModule.hasOverlayPermission();
-      } catch (_unused11) {
+      } catch (_unused13) {
         return false;
       }
     });
@@ -230202,7 +230332,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       try {
         yield MiniPlayerModule.openOverlaySettings();
         return true;
-      } catch (_unused12) {
+      } catch (_unused14) {
         return false;
       }
     });
@@ -230221,7 +230351,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     hasOverlayPermission: hasOverlayPermission,
     openOverlaySettings: openOverlaySettings
   };
-},1394,[1,99,6,985,620,706,1262],"src/plugins/miniplayer/index.ts");
+},1394,[1,99,6,985,620,706],"src/plugins/miniplayer/index.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -268091,13 +268221,12 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       height: 55,
       flexDirection: 'row',
       alignItems: 'flex-end',
-      justifyContent: 'center',
-      gap: 3,
-      paddingHorizontal: 10
+      justifyContent: 'space-evenly',
+      paddingHorizontal: 4
     },
     bar: {
       width: 6,
-      borderRadius: 3
+      borderRadius: 1.5
     }
   });
 },1658,[62,6,104,1165],"src/components/echo/SpectrumBars.tsx");

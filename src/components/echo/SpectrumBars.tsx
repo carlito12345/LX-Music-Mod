@@ -75,12 +75,11 @@ const styles = StyleSheet.create({
     height: 55,
     flexDirection: 'row',
     alignItems: 'flex-end',
-    justifyContent: 'center',
-    gap: 3,
-    paddingHorizontal: 10,
+    justifyContent: 'space-evenly',
+    paddingHorizontal: 4,
   },
   bar: {
     width: 6,
-    borderRadius: 3,
+    borderRadius: 1.5,
   },
 })

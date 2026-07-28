@@ -111,6 +111,8 @@ function syncSettings() {
       if (!isNaN(parsed)) bg = (parsed & 0xFFFFFF) | 0xE6000000
     }
     const lines = s['miniPlayer.lyricLines'] || 3
+    const fontSize = s['miniPlayer.lyricFontSize'] || 15
+    const lineSpacing = s['miniPlayer.lyricLineSpacing'] || 6
     // 渐变优先:启用渐变时传逗号分隔色列表,否则传单色
     let hc = s['miniPlayer.lyricHighlightColor'] || '#ffffff'
     if (s['lyricGradient.enable']) {
@@ -121,8 +123,88 @@ function syncSettings() {
         hc = GRADIENT_PRESET_COLORS[s['lyricGradient.preset']] || GRADIENT_PRESET_COLORS.aurora
       }
     }
-    setStyle(bg, lines, hc)
+    setStyle(bg, lines, hc, fontSize, lineSpacing)
   } catch (e) { console.warn('[MiniPlayer] syncSettings err:', e) }
+}
+
+// 双通道歌词:
+// 通道1: 原生 lyric-line-play 事件(离开播放界面也工作)
+// 通道2: LRC 时间戳解析(精度高,作为补充)
+let lrcTimer: ReturnType<typeof setInterval> | null = null
+let lrcListener: any = null
+let lastLrc = ''
+
+function parseLrc(lrcText: string): { time: number; text: string }[] {
+  const lines: { time: number; text: string }[] = []
+  const regex = /\[(\d+):(\d+(?:\.\d+)?)\](.*)/g
+  let match
+  while ((match = regex.exec(lrcText)) !== null) {
+    const minutes = parseInt(match[1])
+    const seconds = parseFloat(match[2])
+    const text = match[3].trim()
+    if (text) lines.push({ time: minutes * 60 + seconds, text })
+  }
+  return lines.sort((a, b) => a.time - b.time)
+}
+
+function tickLrc() {
+  if (!isShowing) { stopLrcTimer(); return }
+  try {
+    const ps = require('@/store/player/state').default
+    const mi = ps?.musicInfo
+    if (!mi?.id) return
+    
+    const rawLrc = mi.lrc || mi.rawlrc || ''
+    const nowTime = ps?.progress?.nowPlayTime || 0
+    const parsed = parseLrc(rawLrc)
+    
+    if (parsed.length > 0) {
+      let currentIdx = 0
+      for (let i = parsed.length - 1; i >= 0; i--) {
+        if (nowTime >= parsed[i].time) { currentIdx = i; break }
+      }
+      const start = Math.max(0, currentIdx - 1)
+      const end = Math.min(parsed.length, currentIdx + 4)
+      const multiLine = parsed.slice(start, end).map(l => l.text).join('\n')
+      if (multiLine !== lastLrc) {
+        lastLrc = multiLine
+        updateLrc(multiLine)
+      }
+    } else if (ps?.lastLyric && ps.lastLyric !== lastLrc) {
+      lastLrc = ps.lastLyric
+      updateLrc(ps.lastLyric)
+    }
+  } catch {}
+}
+
+function startLrcEvent() {
+  if (lrcTimer) return
+  lastLrc = ''
+  
+  // 通道1: 原生歌词事件(离开界面也工作)
+  try {
+    const { NativeModules, NativeEventEmitter } = require('react-native')
+    const LyricModule = NativeModules.LyricModule
+    if (LyricModule) {
+      LyricModule.setSendLyricTextEvent(true)
+      const emitter = new NativeEventEmitter(LyricModule)
+      lrcListener = emitter.addListener('lyric-line-play', (event: any) => {
+        if (event?.text && event.text !== lastLrc) {
+          lastLrc = event.text
+          updateLrc(event.text)
+        }
+      })
+    }
+  } catch {}
+  
+  // 通道2: LRC 时间戳轮询(精度补充)
+  tickLrc()
+  lrcTimer = setInterval(tickLrc, 500)
+}
+
+function stopLrcTimer() {
+  if (lrcTimer) { clearInterval(lrcTimer); lrcTimer = null }
+  if (lrcListener) { try { lrcListener.remove() } catch {}; lrcListener = null }
 }
 
 function pushState() {
@@ -133,28 +215,14 @@ function pushState() {
     if (!mi?.id) return
     updateCover(mi.pic || '')
     updatePlaybackInfo(mi.name || '', mi.singer || '', ps.isPlay, 0, mi.interval || 0)
-    // 读取多行歌词(当前行 ± 2 行)
-    let lrcText = ps?.lastLyric || ''
-    try {
-      const lyric = require('@/plugins/lyric')
-      const currentLine = lyric.getCurrentLrcLine?.()
-      if (currentLine?.text) lrcText = currentLine.text
-      // 尝试获取前后歌词行
-      const allLines = lyric.getLines?.()
-      const lineIdx = currentLine?.line
-      if (allLines?.length && typeof lineIdx === 'number') {
-        const start = Math.max(0, lineIdx - 1)
-        const end = Math.min(allLines.length, lineIdx + 4)
-        const lines = allLines.slice(start, end).map((l: any) => l.text || '')
-        if (lines.length >= 3) lrcText = lines.join('\n')
-      }
-    } catch {}
-    if (lrcText) updateLrc(lrcText)
+    // 同步更新歌词(作为 setInterval 的 fallback)
+    tickLrc()
   } catch {}
 }
 
 function startPoll() {
   if (pollTimer) return
+  startLrcEvent()
   const loop = async () => {
     while (isShowing) {
       pushState()
@@ -168,6 +236,7 @@ function startPoll() {
 
 function stopPoll() {
   pollTimer = null
+  stopLrcTimer()
 }
 
 export async function show(width?: number, height?: number): Promise<boolean> {
@@ -190,8 +259,8 @@ export async function show(width?: number, height?: number): Promise<boolean> {
       try {
         const ss = require('@/store/setting/state').default
         w = ss?.setting?.['miniPlayer.customWidth'] || 500
-        h = ss?.setting?.['miniPlayer.customHeight'] || 800
-      } catch { w = 500; h = 800 }
+        h = ss?.setting?.['miniPlayer.customHeight'] || 900
+      } catch { w = 500; h = 900 }
     }
     await MiniPlayerModule.show(w, h)
     // 等待服务窗口创建完成后推送数据
@@ -222,9 +291,9 @@ export async function updatePlaybackInfo(
   try { await MiniPlayerModule.updatePlaybackInfo(title || '', artist || '', playing, progress || 0, maxProgress || 100) } catch {}
 }
 
-export async function setStyle(bgColor?: number, lyricLines?: number, highlightColor?: string): Promise<void> {
+export async function setStyle(bgColor?: number, lyricLines?: number, highlightColor?: string, fontSize?: number, lineSpacing?: number): Promise<void> {
   if (!isAvailable) return
-  try { await MiniPlayerModule.setStyle(bgColor || 0xE61A1A2E, lyricLines || 3, highlightColor || '#ffffff') } catch {}
+  try { await MiniPlayerModule.setStyle(bgColor || 0xE61A1A2E, lyricLines || 3, highlightColor || '#ffffff', fontSize || 15, lineSpacing || 6) } catch {}
 }
 
 export async function updateLrc(text: string): Promise<void> {

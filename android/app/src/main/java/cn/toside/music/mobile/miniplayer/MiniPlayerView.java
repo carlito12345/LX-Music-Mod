@@ -28,7 +28,7 @@ import com.facebook.react.bridge.WritableMap;
 
 public class MiniPlayerView {
   private static final String TAG = "[MiniPlayer]";
-  private static final int WIN_W = 500, WIN_H = 800;
+  private static final int WIN_W = 500, WIN_H = 900;
   private final Context context;
   private final MiniPlayerEvent eventEmitter;
   private WindowManager windowManager;
@@ -105,7 +105,7 @@ public class MiniPlayerView {
 
     // Cover
     coverView = new ImageView(context);
-    int coverPx = dp(140);
+    int coverPx = dp(120);
     LinearLayout.LayoutParams coverLp = new LinearLayout.LayoutParams(coverPx, coverPx);
     coverLp.gravity = Gravity.CENTER_HORIZONTAL;
     coverView.setLayoutParams(coverLp);
@@ -127,7 +127,7 @@ public class MiniPlayerView {
     titleView.setTypeface(null, android.graphics.Typeface.BOLD);
     titleView.setMaxLines(1); titleView.setEllipsize(android.text.TextUtils.TruncateAt.END);
     titleView.setGravity(Gravity.CENTER);
-    titleView.setPadding(0, dp(10), 0, 0);
+    titleView.setPadding(0, dp(6), 0, 0);
     root.addView(titleView);
 
     // Artist
@@ -141,13 +141,13 @@ public class MiniPlayerView {
     // Lyrics
     lrcView = new TextView(context);
     lrcView.setTextColor(Color.argb(180, 255, 255, 255)); lrcView.setTextSize(15);
-    lrcView.setMaxLines(5); lrcView.setMinLines(2);
-    lrcView.setEllipsize(android.text.TextUtils.TruncateAt.END);
+    lrcView.setLines(5);
+    // lrcView.setEllipsize(null);
     lrcView.setGravity(Gravity.CENTER);
-    lrcView.setPadding(dp(12), dp(16), dp(12), dp(16));
+    lrcView.setPadding(dp(12), dp(10), dp(12), dp(10));
     lrcView.setLineSpacing(dp(6), 1f);
     lrcView.setText("♪");
-    lrcView.setLayoutParams(new LinearLayout.LayoutParams(-1, 0, 1));
+    lrcView.setLayoutParams(new LinearLayout.LayoutParams(-1, dp(180)));
     root.addView(lrcView);
 
         // Progress bar (FrameLayout with track background + white fill)
@@ -203,7 +203,7 @@ public class MiniPlayerView {
     controls.setOrientation(LinearLayout.HORIZONTAL);
     controls.setGravity(Gravity.CENTER);
     LinearLayout.LayoutParams ctrlLp = new LinearLayout.LayoutParams(-1, -2);
-    ctrlLp.topMargin = dp(12);
+    ctrlLp.topMargin = dp(8);
     controls.setLayoutParams(ctrlLp);
 
     int btnPx = dp(48), playPx = dp(60);
@@ -309,6 +309,10 @@ public class MiniPlayerView {
   }
 
   public void setStyle(int bgColor, int lyricLines, String highlightColorStr) {
+    setStyle(bgColor, lyricLines, highlightColorStr, 15, 6);
+  }
+
+  public void setStyle(int bgColor, int lyricLines, String highlightColorStr, int fontSize, int lineSpacing) {
     if (highlightColorStr != null && highlightColorStr.contains(",")) {
       // 逗号分隔 = 渐变色列表
       try {
@@ -332,14 +336,18 @@ public class MiniPlayerView {
         if (lrcView != null) {
           lrcView.setMaxLines(lyricLines > 0 ? lyricLines : 3);
           lrcView.setMinLines(Math.min(lyricLines, 2));
+          if (fontSize > 0) lrcView.setTextSize(fontSize);
+          if (lineSpacing > 0) lrcView.setLineSpacing(dp(lineSpacing), 1f);
         }
       });
     }
   }
 
   public void updateLrc(String text) {
+    Log.d(TAG, "updateLrc called: " + (text != null ? text.substring(0, Math.min(text.length(), 20)) : "null"));
     new Handler(Looper.getMainLooper()).post(() -> {
-      if (lrcView == null) return;
+      if (lrcView == null) { Log.w(TAG, "lrcView is NULL"); return; }
+      Log.d(TAG, "lrcView attached=" + lrcView.isAttachedToWindow() + " text=" + (text != null && text.length() > 15 ? text.substring(0, 15) : text));
       if (text == null || text.isEmpty()) {
         lrcView.setText("\u266A");
         lrcView.getPaint().setShader(null);
@@ -364,7 +372,7 @@ public class MiniPlayerView {
       } else {
         ss.setSpan(new ForegroundColorSpan(highlightColor), hlStart, hlEnd, 0);
       }
-      lrcView.setText(ss);
+      lrcView.setText(ss); lrcView.invalidate(); lrcView.requestLayout();
     });
   }
 

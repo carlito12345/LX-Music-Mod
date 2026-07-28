@@ -132,6 +132,8 @@ const MiniPlayerSetting = () => {
 
   const followBg = useSettingValue('miniPlayer.followBgColor')
   const lyricLines = useSettingValue('miniPlayer.lyricLines')
+  const lyricFontSize = useSettingValue('miniPlayer.lyricFontSize')
+  const lyricLineSpacing = useSettingValue('miniPlayer.lyricLineSpacing')
   const highlightColor = useSettingValue('miniPlayer.lyricHighlightColor')
   const cw = useSettingValue('miniPlayer.customWidth')
   const ch = useSettingValue('miniPlayer.customHeight')
@@ -178,6 +180,28 @@ const MiniPlayerSetting = () => {
               minimumValue={1} maximumValue={5} step={1}
               value={lyricLines}
               onSlidingComplete={v => updateSetting({ 'miniPlayer.lyricLines': Math.trunc(v) })}
+              style={{ flex: 1, marginLeft: 8 }}
+            />
+          </View>
+
+          {/* 歌词字体大小 */}
+          <View style={s.row}>
+            <Text size={13}>歌词字号: {lyricFontSize}</Text>
+            <Slider
+              minimumValue={11} maximumValue={24} step={1}
+              value={lyricFontSize}
+              onSlidingComplete={v => updateSetting({ 'miniPlayer.lyricFontSize': Math.trunc(v) })}
+              style={{ flex: 1, marginLeft: 8 }}
+            />
+          </View>
+
+          {/* 歌词行距 */}
+          <View style={s.row}>
+            <Text size={13}>行距: {lyricLineSpacing}dp</Text>
+            <Slider
+              minimumValue={2} maximumValue={16} step={1}
+              value={lyricLineSpacing}
+              onSlidingComplete={v => updateSetting({ 'miniPlayer.lyricLineSpacing': Math.trunc(v) })}
               style={{ flex: 1, marginLeft: 8 }}
             />
           </View>
