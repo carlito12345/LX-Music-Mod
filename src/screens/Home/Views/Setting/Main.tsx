@@ -12,6 +12,8 @@ import CarKey from './settings/CarKey'
 import Other from './settings/Other'
 import Version from './settings/Version'
 import About from './settings/About'
+import Debug from './settings/Debug'
+import Permission from './settings/Permission'
 
 export const SETTING_SCREENS = [
   'basic',
@@ -22,6 +24,8 @@ export const SETTING_SCREENS = [
   'sync',
   'backup',
   'carKey',
+  'debug',
+  'permission',
   'other',
   'version',
   'about',
@@ -59,6 +63,8 @@ const Main = forwardRef<MainType, {}>((props, ref) => {
       case 'backup': return <Backup />
       case 'download': return <Download />
       case 'carKey': return <CarKey />
+      case 'debug': return <Debug />
+      case 'permission': return <Permission />
       case 'other': return <Other />
       case 'version': return <Version />
       case 'about': return <About />
