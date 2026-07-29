@@ -295,6 +295,42 @@ const defaultThemes = [
       'c-badge-tertiary': 'var(c-primary-light-100)',
     },
   },
+  {
+    id: 'musicfree',
+    name: 'MusicFree 风格',
+    isDark: false,
+    config: {
+      primary: 'rgb(91, 106, 191)',
+      font: 'rgb(33, 33, 33)',
+      'c-app-background': 'var(c-primary-light-600-alpha-700)',
+      'c-main-background': 'rgba(255, 255, 255, 1)',
+      'bg-image': '',
+      'bg-image-position': 'center',
+      'bg-image-size': 'cover',
+
+      'c-badge-primary': 'var(c-primary)',
+      'c-badge-secondary': '#818cf8',
+      'c-badge-tertiary': '#6366f1',
+    },
+  },
+  {
+    id: 'musicfree_dark',
+    name: 'MusicFree 暗夜',
+    isDark: true,
+    config: {
+      primary: 'rgb(129, 140, 248)',
+      font: 'rgb(255, 255, 255)',
+      'c-app-background': 'rgba(0, 0, 0, 0)',
+      'c-main-background': 'rgba(15, 15, 25, 0.95)',
+      'bg-image': '',
+      'bg-image-position': 'center',
+      'bg-image-size': 'cover',
+
+      'c-badge-primary': 'var(c-primary)',
+      'c-badge-secondary': '#818cf8',
+      'c-badge-tertiary': '#6366f1',
+    },
+  },
 ]
 
 const themes = defaultThemes.map(({ config: { primary, font, ...extInfo }, ...themeInfo }) => {
