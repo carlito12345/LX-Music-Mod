@@ -65,18 +65,22 @@ public class MediaInteractionModule extends ReactContextBaseJavaModule {
                 mMediaInteraction = mDimInteraction.getMediaInteraction();
                 if (mMediaInteraction != null) {
                     Log.d(TAG, "MediaInteraction initialized successfully"); write("MediaI", "INFO", "Module initialized");
-                    
-                    // 初始化 MediaSessionManager
-                    initMediaSessionManager();
-                    
                     promise.resolve(true);
                 } else {
                     Log.w(TAG, "MediaInteraction is null"); write("MediaI", "INFO", "DimInteraction null - car API not available");
                     promise.resolve(false);
                 }
             } else {
-                Log.w(TAG, "DimInteraction is null");
+                write("MediaI", "INFO", "DimInteraction.create() returned null");
                 promise.resolve(false);
+            }
+            
+            // MediaSession 始终初始化(不依赖 DimInteraction),用于独占方控
+            try {
+                initMediaSessionManager();
+                write("MediaI", "INFO", "MediaSessionManager always init");
+            } catch (Exception e) {
+                Log.e(TAG, "MediaSession init failed", e);
             }
         } catch (Exception e) {
             Log.e(TAG, "Failed to initialize MediaInteraction", e);
@@ -124,23 +128,14 @@ public class MediaInteractionModule extends ReactContextBaseJavaModule {
                 }
             }
 
-            // 根据播放状态动态控制 MediaSession 独占
-            if (mMediaSession != null) {
-                if (playing) {
-                    if (!mMediaSession.isActive()) {
-                        mMediaSession.setActive(true);
-                        Log.d(TAG, "MediaSession activated (playing)"); write("MediaI", "INFO", "MediaSession activated (playing)");
-                    }
-                } else {
-                    if (mMediaSession.isActive()) {
-                        mMediaSession.setActive(false);
-                        Log.d(TAG, "MediaSession deactivated (paused)"); write("MediaI", "INFO", "MediaSession deactivated (paused)");
-                    }
-                }
+            // MediaSession 始终保持激活,防止系统音乐抢方控
+            if (mMediaSession != null && !mMediaSession.isActive()) {
+                mMediaSession.setActive(true);
+                Log.d(TAG, "MediaSession kept active"); write("MediaI", "INFO", "MediaSession kept active");
             }
 
+            write("MediaI", "INFO", "push title=" + currentTitle + " artist=" + currentArtist + " playing=" + playing + " artwork=" + (currentArtwork != null));
             if (mMediaInteraction != null) {
-                write("MediaI", "INFO", "push title=" + currentTitle + " artist=" + currentArtist + " playing=" + playing + " artwork=" + (currentArtwork != null));
                 mMediaInteraction.updatePlaybackInfo(new IMediaInteraction.IPlaybackInfo() {
                     @Override
                     public String getAlbum() { return currentAlbum; }
@@ -218,6 +213,7 @@ public class MediaInteractionModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void updateProgress(double position, Promise promise) {
+    write("MediaI", "INFO", "progress: " + (int)(position));
         try {
             this.currentPosition = (long) position;
             if (mMediaInteraction != null) {

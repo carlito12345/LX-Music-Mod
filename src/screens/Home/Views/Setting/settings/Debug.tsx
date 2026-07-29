@@ -49,16 +49,16 @@ export default memo(() => {
       const { setFileLoggerEnabled } = require('@/utils/log')
       setFileLoggerEnabled(v)
     } catch {}
-    // 启用/禁用原生日志
+    // 原生日志路径确认
     try {
       if (NativeModules.NativeLogger) {
-        const result = await NativeModules.NativeLogger.setEnabled(v)
-        console.log('[Debug] NativeLogger.setEnabled(' + v + ') =', result)
+        const path = await NativeModules.NativeLogger.getLogPath()
+        console.log('[Debug] NativeLogger path:', path)
       } else {
         console.warn('[Debug] NativeLogger module not found')
       }
     } catch (e) {
-      console.warn('[Debug] NativeLogger error:', String(e))
+      console.warn('[Debug] NativeLogger path error:', String(e))
     }
     if (v) {
       const ok = await logger.test()

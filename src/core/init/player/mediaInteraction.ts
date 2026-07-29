@@ -7,23 +7,20 @@ let initialized = false
 let lastMusicId = ''
 
 export default async() => {
-  // 初始化 MediaInteraction 模块
+  // 初始化 MediaInteraction 模块(可能失败,但不影响 MediaSession)
   const isAvailable = await mediaInteraction.initialize()
-  if (!isAvailable) {
-    console.log('[MediaInteraction] Not available on this device')
-    return
+  if (isAvailable) {
+    initialized = true
+    console.log('[MediaInteraction] Initialized successfully')
+  } else {
+    console.log('[MediaInteraction] DimInteraction not available, MediaSession still active')
   }
-  initialized = true
-  console.log('[MediaInteraction] Initialized successfully')
 
-  const updateMediaInfo = async() => {
-    if (!initialized) return
-
+  const doUpdate = async(force: boolean) => {
     const musicInfo = playerState.musicInfo
     if (!musicInfo || !musicInfo.id) return
 
-    // 避免重复更新同一首歌
-    if (musicInfo.id === lastMusicId) return
+    if (!force && musicInfo.id === lastMusicId) return
     lastMusicId = musicInfo.id
 
     const title = musicInfo.name || ''
@@ -32,61 +29,25 @@ export default async() => {
     let artworkPath = musicInfo.pic || ''
     const duration = musicInfo.interval || 0
     const isPlaying = playerState.isPlay
-
-    // 根据音乐来源确定 sourceType
     const sourceType = musicInfo.source === 'local' ? SourceType.LOCAL : SourceType.ONLINE
 
-    // 原生模块会处理网络图片下载
-
-
-
-    await mediaInteraction.updateMediaInfo({
-      title,
-      artist,
-      album,
-      artworkPath,
-      duration,
-      playing: isPlaying,
-      sourceType,
-    })
+    // 始终调用原生模块(即使 DimInteraction 不可用,MediaSession 也需要激活)
+    try {
+      await mediaInteraction.updateMediaInfo({ title, artist, album, artworkPath, duration, playing: isPlaying, sourceType })
+    } catch (e) {
+      console.warn('[MediaInteraction] update failed:', String(e).substring(0, 60))
+    }
     
     if (miniplayer.isMiniPlayerShowing()) {
-      await miniplayer.updateCover(artworkPath)
-      await miniplayer.updatePlaybackInfo(title, artist, isPlaying, 0, duration)
+      try {
+        await miniplayer.updateCover(artworkPath)
+        await miniplayer.updatePlaybackInfo(title, artist, isPlaying, 0, duration)
+      } catch {}
     }
   }
 
-  const updatePlayStatus = async() => {
-    if (!initialized) return
-
-    const musicInfo = playerState.musicInfo
-    if (!musicInfo || !musicInfo.id) return
-
-    const title = musicInfo.name || ''
-    const artist = musicInfo.singer || ''
-    const album = musicInfo.albumName || ''
-    let artworkPath = musicInfo.pic || ''
-    const duration = musicInfo.interval || 0
-    const isPlaying = playerState.isPlay
-    const sourceType = musicInfo.source === 'local' ? SourceType.LOCAL : SourceType.ONLINE
-
-    // 原生模块会处理网络图片下载
-
-    await mediaInteraction.updateMediaInfo({
-      title,
-      artist,
-      album,
-      artworkPath,
-      duration,
-      playing: isPlaying,
-      sourceType,
-    })
-    
-    if (miniplayer.isMiniPlayerShowing()) {
-      await miniplayer.updateCover(artworkPath)
-      await miniplayer.updatePlaybackInfo(title, artist, isPlaying, 0, duration)
-    }
-  }
+  const updateMediaInfo = () => doUpdate(false)
+  const updatePlayStatus = () => doUpdate(true)
 
   const handleStop = async() => {
     if (!initialized) return
