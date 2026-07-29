@@ -224093,6 +224093,17 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
             setFileLoggerEnabled = _require.setFileLoggerEnabled;
           setFileLoggerEnabled(v);
         } catch (_unused) {}
+        // 原生日志路径确认
+        try {
+          if (_reactNative.NativeModules.NativeLogger) {
+            var path = yield _reactNative.NativeModules.NativeLogger.getLogPath();
+            console.log('[Debug] NativeLogger path:', path);
+          } else {
+            console.warn('[Debug] NativeLogger module not found');
+          }
+        } catch (e) {
+          console.warn('[Debug] NativeLogger path error:', String(e));
+        }
         if (v) {
           var ok = yield _logger.default.test();
           (0, _$$_REQUIRE(_dependencyMap[14], "../../../../../utils/tools").toast)(ok ? '日志记录已开启 (Download/LXMusic_Logs/)' : '日志启动失败');
@@ -228866,15 +228877,49 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       ref: popupRef,
       title: t('play_detail_setting_title')
     }, props, {
-      children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.ScrollView, {
-        children: /*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.View, {
+      children: /*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.ScrollView, {
+        children: [/*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.View, {
           onStartShouldSetResponder: function onStartShouldSetResponder() {
             return true;
           },
           children: [/*#__PURE__*/(0, _jsxRuntime.jsx)(_SettingTimer.default, {}), /*#__PURE__*/(0, _jsxRuntime.jsx)(_SettingBackground.default, {}), /*#__PURE__*/(0, _jsxRuntime.jsx)(_SettingCover.default, {}), /*#__PURE__*/(0, _jsxRuntime.jsx)(_SettingEffects.default, {}), /*#__PURE__*/(0, _jsxRuntime.jsx)(_SettingMiniPlayer.default, {}), /*#__PURE__*/(0, _jsxRuntime.jsx)(_SettingMiniPlayer.SettingLyricGradient, {}), /*#__PURE__*/(0, _jsxRuntime.jsx)(_SettingProgressShimmer.default, {}), /*#__PURE__*/(0, _jsxRuntime.jsx)(_SettingLyricProgress.default, {}), /*#__PURE__*/(0, _jsxRuntime.jsx)(_SettingVolume.default, {}), /*#__PURE__*/(0, _jsxRuntime.jsx)(_SettingPlaybackRate.default, {}), /*#__PURE__*/(0, _jsxRuntime.jsx)(_SettingLrcFontSize.default, {
             direction: direction
           }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_SettingLrcAlign.default, {}), /*#__PURE__*/(0, _jsxRuntime.jsx)(_SettingLrcLineCount.default, {})]
-        })
+        }), /*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.View, {
+          style: {
+            paddingHorizontal: 12,
+            paddingVertical: 8
+          },
+          children: [/*#__PURE__*/(0, _jsxRuntime.jsx)(Text, {
+            size: 14,
+            children: "\u64AD\u653E\u5668\u5E03\u5C40"
+          }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.View, {
+            style: {
+              flexDirection: 'row',
+              gap: 8,
+              marginTop: 6
+            },
+            children: ['default', 'musicfree'].map(function (layout) {
+              return /*#__PURE__*/(0, _jsxRuntime.jsx)(TouchableOpacity, {
+                onPress: function onPress() {
+                  return updateSetting({
+                    'playDetail.layout': layout
+                  });
+                },
+                style: {
+                  paddingHorizontal: 16,
+                  paddingVertical: 8,
+                  borderRadius: 8,
+                  backgroundColor: setting['playDetail.layout'] === layout ? '#5B6ABF' : 'rgba(128,128,128,0.2)'
+                },
+                children: /*#__PURE__*/(0, _jsxRuntime.jsx)(Text, {
+                  color: setting['playDetail.layout'] === layout ? '#fff' : undefined,
+                  children: layout === 'default' ? '经典' : 'MusicFree 风格'
+                })
+              }, layout);
+            })
+          })]
+        })]
       })
     })) : null;
   });
@@ -274967,22 +275012,19 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   var initialized = false;
   var lastMusicId = '';
   var _default = exports.default = /*#__PURE__*/(0, _asyncToGenerator2.default)(function* () {
-    // 初始化 MediaInteraction 模块
+    // 初始化 MediaInteraction 模块(可能失败,但不影响 MediaSession)
     var isAvailable = yield _mediainteraction.default.initialize();
-    if (!isAvailable) {
-      console.log('[MediaInteraction] Not available on this device');
-      return;
+    if (isAvailable) {
+      initialized = true;
+      console.log('[MediaInteraction] Initialized successfully');
+    } else {
+      console.log('[MediaInteraction] DimInteraction not available, MediaSession still active');
     }
-    initialized = true;
-    console.log('[MediaInteraction] Initialized successfully');
-    var updateMediaInfo = /*#__PURE__*/function () {
-      var _ref2 = (0, _asyncToGenerator2.default)(function* () {
-        if (!initialized) return;
+    var doUpdate = /*#__PURE__*/function () {
+      var _ref2 = (0, _asyncToGenerator2.default)(function* (force) {
         var musicInfo = _state.default.musicInfo;
         if (!musicInfo || !musicInfo.id) return;
-
-        // 避免重复更新同一首歌
-        if (musicInfo.id === lastMusicId) return;
+        if (!force && musicInfo.id === lastMusicId) return;
         lastMusicId = musicInfo.id;
         var title = musicInfo.name || '';
         var artist = musicInfo.singer || '';
@@ -274990,65 +275032,41 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
         var artworkPath = musicInfo.pic || '';
         var duration = musicInfo.interval || 0;
         var isPlaying = _state.default.isPlay;
-
-        // 根据音乐来源确定 sourceType
         var sourceType = musicInfo.source === 'local' ? _mediainteraction.SourceType.LOCAL : _mediainteraction.SourceType.ONLINE;
 
-        // 原生模块会处理网络图片下载
-
-        yield _mediainteraction.default.updateMediaInfo({
-          title: title,
-          artist: artist,
-          album: album,
-          artworkPath: artworkPath,
-          duration: duration,
-          playing: isPlaying,
-          sourceType: sourceType
-        });
+        // 始终调用原生模块(即使 DimInteraction 不可用,MediaSession 也需要激活)
+        try {
+          yield _mediainteraction.default.updateMediaInfo({
+            title: title,
+            artist: artist,
+            album: album,
+            artworkPath: artworkPath,
+            duration: duration,
+            playing: isPlaying,
+            sourceType: sourceType
+          });
+        } catch (e) {
+          console.warn('[MediaInteraction] update failed:', String(e).substring(0, 60));
+        }
         if (_miniplayer.default.isMiniPlayerShowing()) {
-          yield _miniplayer.default.updateCover(artworkPath);
-          yield _miniplayer.default.updatePlaybackInfo(title, artist, isPlaying, 0, duration);
+          try {
+            yield _miniplayer.default.updateCover(artworkPath);
+            yield _miniplayer.default.updatePlaybackInfo(title, artist, isPlaying, 0, duration);
+          } catch (_unused) {}
         }
       });
-      return function updateMediaInfo() {
+      return function doUpdate(_x) {
         return _ref2.apply(this, arguments);
       };
     }();
-    var updatePlayStatus = /*#__PURE__*/function () {
-      var _ref3 = (0, _asyncToGenerator2.default)(function* () {
-        if (!initialized) return;
-        var musicInfo = _state.default.musicInfo;
-        if (!musicInfo || !musicInfo.id) return;
-        var title = musicInfo.name || '';
-        var artist = musicInfo.singer || '';
-        var album = musicInfo.albumName || '';
-        var artworkPath = musicInfo.pic || '';
-        var duration = musicInfo.interval || 0;
-        var isPlaying = _state.default.isPlay;
-        var sourceType = musicInfo.source === 'local' ? _mediainteraction.SourceType.LOCAL : _mediainteraction.SourceType.ONLINE;
-
-        // 原生模块会处理网络图片下载
-
-        yield _mediainteraction.default.updateMediaInfo({
-          title: title,
-          artist: artist,
-          album: album,
-          artworkPath: artworkPath,
-          duration: duration,
-          playing: isPlaying,
-          sourceType: sourceType
-        });
-        if (_miniplayer.default.isMiniPlayerShowing()) {
-          yield _miniplayer.default.updateCover(artworkPath);
-          yield _miniplayer.default.updatePlaybackInfo(title, artist, isPlaying, 0, duration);
-        }
-      });
-      return function updatePlayStatus() {
-        return _ref3.apply(this, arguments);
-      };
-    }();
+    var updateMediaInfo = function updateMediaInfo() {
+      return doUpdate(false);
+    };
+    var updatePlayStatus = function updatePlayStatus() {
+      return doUpdate(true);
+    };
     var handleStop = /*#__PURE__*/function () {
-      var _ref4 = (0, _asyncToGenerator2.default)(function* () {
+      var _ref3 = (0, _asyncToGenerator2.default)(function* () {
         if (!initialized) return;
         lastMusicId = '';
         // 停止时清空媒体信息
@@ -275063,7 +275081,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
         });
       });
       return function handleStop() {
-        return _ref4.apply(this, arguments);
+        return _ref3.apply(this, arguments);
       };
     }();
 

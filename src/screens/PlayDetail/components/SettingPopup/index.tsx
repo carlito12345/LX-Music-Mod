@@ -58,7 +58,27 @@ export default forwardRef<SettingPopupType, SettingPopupProps>(({ direction, ...
             <SettingLrcAlign />
             <SettingLrcLineCount />
           </View>
-        </ScrollView>
+              <View style={{ paddingHorizontal: 12, paddingVertical: 8 }}>
+        <Text size={14}>播放器布局</Text>
+        <View style={{ flexDirection: 'row', gap: 8, marginTop: 6 }}>
+          {['default', 'musicfree'].map(layout => (
+            <TouchableOpacity
+              key={layout}
+              onPress={() => updateSetting({ 'playDetail.layout': layout })}
+              style={{
+                paddingHorizontal: 16, paddingVertical: 8,
+                borderRadius: 8,
+                backgroundColor: setting['playDetail.layout'] === layout ? '#5B6ABF' : 'rgba(128,128,128,0.2)',
+              }}
+            >
+              <Text color={setting['playDetail.layout'] === layout ? '#fff' : undefined}>
+                {layout === 'default' ? '经典' : 'MusicFree 风格'}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+      </View>
+    </ScrollView>
       </Popup>
     ) : null
   )
