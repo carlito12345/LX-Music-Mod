@@ -11,6 +11,7 @@ import java.util.List;
 
 import cn.toside.music.mobile.cache.CachePackage;
 import cn.toside.music.mobile.crypto.CryptoPackage;
+import cn.toside.music.mobile.logger.NativeLoggerPackage;
 import cn.toside.music.mobile.lyric.LyricPackage;
 import cn.toside.music.mobile.userApi.UserApiPackage;
 import cn.toside.music.mobile.palette.PalettePackage;
@@ -43,6 +44,7 @@ public class MainApplication extends NavigationApplication {
           packages.add(new MiniPlayerPackage());
           packages.add(new UtilsPackage());
           packages.add(new CryptoPackage());
+          packages.add(new NativeLoggerPackage());
           packages.add(new UserApiPackage());
       packages.add(new PalettePackage());
           return packages;

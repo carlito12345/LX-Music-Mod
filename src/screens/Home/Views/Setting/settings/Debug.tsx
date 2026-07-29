@@ -12,6 +12,7 @@ import Text from '@/components/common/Text'
 import { useI18n } from '@/lang'
 import ConfirmAlert, { type ConfirmAlertType } from '@/components/common/ConfirmAlert'
 import logger, { getLogContent, clearLogs, setEnabled, setLevel, type LogLevel } from '@/plugins/logger'
+import { NativeModules } from 'react-native'
 
 const LEVELS: { key: LogLevel; label: string }[] = [
   { key: 'DEBUG', label: '详细(DEBUG)' },
@@ -41,10 +42,30 @@ export default memo(() => {
     }
   }
 
-  const handleToggleLog = (v: boolean) => {
+  const handleToggleLog = async (v: boolean) => {
     setLogEnabled(v)
     setEnabled(v)
-    toast(v ? '日志记录已开启' : '日志记录已关闭')
+    try {
+      const { setFileLoggerEnabled } = require('@/utils/log')
+      setFileLoggerEnabled(v)
+    } catch {}
+    // 启用/禁用原生日志
+    try {
+      if (NativeModules.NativeLogger) {
+        const result = await NativeModules.NativeLogger.setEnabled(v)
+        console.log('[Debug] NativeLogger.setEnabled(' + v + ') =', result)
+      } else {
+        console.warn('[Debug] NativeLogger module not found')
+      }
+    } catch (e) {
+      console.warn('[Debug] NativeLogger error:', String(e))
+    }
+    if (v) {
+      const ok = await logger.test()
+      toast(ok ? '日志记录已开启 (Download/LXMusic_Logs/)' : '日志启动失败')
+    } else {
+      toast('日志记录已关闭')
+    }
   }
 
   const handleSetLevel = (level: LogLevel) => {

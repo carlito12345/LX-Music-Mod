@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import static cn.toside.music.mobile.logger.NativeLoggerModule.write;
 
 /**
  * 吉利/亿咖通 OneOS API 方控直连模块
@@ -48,7 +49,7 @@ public class GeelyCarKeyManager {
     try {
       // Step 1: Init OneOSApiManager (same as GIB)
       OneOSApiManager.getInstance(context).init();
-      Log.d(TAG, "OneOSApiManager.init() called");
+      Log.d(TAG, "OneOSApiManager.init() called"); write("GeelyKey", "INFO", "init started");
       
       // Step 2: Retry with isAlive check (same as GIB's launchDynamicRetry)
       retryWithIsAlive();
@@ -135,6 +136,7 @@ public class GeelyCarKeyManager {
       case KeyCode.KEYCODE_R_VOLUME_DOWN: action = "volumeDown"; break;
       default: return;
     }
+    write("GeelyKey", "INFO", "Hardware key=" + keyCode + " action=" + action + " bound=" + connected);
     CarKeyBridge.sendKeyEvent(keyCode, action, "GeelyCarKeyManager");
   }
 }

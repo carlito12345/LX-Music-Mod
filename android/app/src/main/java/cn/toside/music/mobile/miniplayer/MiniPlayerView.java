@@ -14,6 +14,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import static cn.toside.music.mobile.logger.NativeLoggerModule.write;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -60,7 +61,7 @@ public class MiniPlayerView {
     new Handler(Looper.getMainLooper()).post(this::showOnMainThread);
   }
 
-  private void showOnMainThread() {
+  private void showOnMainThread() { write("MiniView", "INFO", "showOnMainThread");
     isPending = false;
     if (isShowing) { Log.d(TAG, "already showing, skip duplicate"); return; }
     windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
@@ -260,7 +261,7 @@ public class MiniPlayerView {
     } catch (Exception e) { Log.e(TAG, "show error", e); }
   }
 
-  public void updatePlaybackInfo(String title, String artist, boolean playing, int progress, int maxProgress) {
+  public void updatePlaybackInfo(String title, String artist, boolean playing, int progress, int maxProgress) { write("MiniView", "INFO", "updateInfo: " + title + " - " + artist + " playing=" + playing);
     isPlaying = playing;
     new Handler(Looper.getMainLooper()).post(() -> {
       if (titleView != null) titleView.setText(title.isEmpty() ? "未播放" : title);
@@ -285,7 +286,7 @@ public class MiniPlayerView {
     });
   }
 
-  public void updateCover(String path) {
+  public void updateCover(String path) { write("MiniView", "INFO", "updateCover: " + (path != null ? path.substring(Math.max(0, path.length()-30)) : "null"));
     if (coverView == null || path == null || path.isEmpty()) return;
     new Thread(() -> {
       try {
@@ -389,7 +390,7 @@ public class MiniPlayerView {
     }
   }
 
-  public void hide() {
+  public void hide() { write("MiniView", "INFO", "hide");
     try { if (floatingView != null && windowManager != null) windowManager.removeView(floatingView); } catch (Exception ignored) {}
     floatingView = null; isShowing = false;
   }

@@ -9,6 +9,7 @@ import android.media.session.PlaybackState;
 import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
+import static cn.toside.music.mobile.logger.NativeLoggerModule.write;
 
 import com.ecarx.xui.adaptapi.diminteraction.DimInteraction;
 import com.ecarx.xui.adaptapi.diminteraction.IMediaInteraction;
@@ -63,14 +64,14 @@ public class MediaInteractionModule extends ReactContextBaseJavaModule {
             if (mDimInteraction != null) {
                 mMediaInteraction = mDimInteraction.getMediaInteraction();
                 if (mMediaInteraction != null) {
-                    Log.d(TAG, "MediaInteraction initialized successfully");
+                    Log.d(TAG, "MediaInteraction initialized successfully"); write("MediaI", "INFO", "Module initialized");
                     
                     // 初始化 MediaSessionManager
                     initMediaSessionManager();
                     
                     promise.resolve(true);
                 } else {
-                    Log.w(TAG, "MediaInteraction is null");
+                    Log.w(TAG, "MediaInteraction is null"); write("MediaI", "INFO", "DimInteraction null - car API not available");
                     promise.resolve(false);
                 }
             } else {
@@ -97,7 +98,7 @@ public class MediaInteractionModule extends ReactContextBaseJavaModule {
                                    android.media.session.MediaSession.FLAG_HANDLES_TRANSPORT_CONTROLS);
             mMediaSession.setMediaButtonReceiver(null); // null = 我们的 app 独占
             mMediaSession.setActive(true);
-            Log.d(TAG, "MediaSessionManager initialized, media buttons locked");
+            Log.d(TAG, "MediaSessionManager initialized, media buttons locked"); write("MediaI", "INFO", "MediaSession active (exclusive)");
         } catch (Exception e) {
             Log.e(TAG, "Failed to initialize MediaSessionManager", e);
         }
@@ -128,17 +129,18 @@ public class MediaInteractionModule extends ReactContextBaseJavaModule {
                 if (playing) {
                     if (!mMediaSession.isActive()) {
                         mMediaSession.setActive(true);
-                        Log.d(TAG, "MediaSession activated (playing)");
+                        Log.d(TAG, "MediaSession activated (playing)"); write("MediaI", "INFO", "MediaSession activated (playing)");
                     }
                 } else {
                     if (mMediaSession.isActive()) {
                         mMediaSession.setActive(false);
-                        Log.d(TAG, "MediaSession deactivated (paused)");
+                        Log.d(TAG, "MediaSession deactivated (paused)"); write("MediaI", "INFO", "MediaSession deactivated (paused)");
                     }
                 }
             }
 
             if (mMediaInteraction != null) {
+                write("MediaI", "INFO", "push title=" + currentTitle + " artist=" + currentArtist + " playing=" + playing + " artwork=" + (currentArtwork != null));
                 mMediaInteraction.updatePlaybackInfo(new IMediaInteraction.IPlaybackInfo() {
                     @Override
                     public String getAlbum() { return currentAlbum; }

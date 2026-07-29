@@ -8,6 +8,14 @@ const logTools = {
   writeLog(msg: string) {
     console.log(msg)
     void appendFile(logPath, '\n----lx log----\n' + msg)
+    // 同时写入文件日志(如果启用)
+    try {
+      const { isEnabled, writeNow } = require('@/plugins/logger')
+      if (isEnabled()) {
+        const lvl = msg.includes('ERROR') ? 'ERROR' : msg.includes('WARN') ? 'WARN' : 'INFO'
+        writeNow('APP', msg, lvl)
+      }
+    } catch {}
   },
   async initLogFile() {
     try {

@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
+import static cn.toside.music.mobile.logger.NativeLoggerModule.write;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
@@ -26,7 +27,7 @@ public class MiniPlayerService extends Service implements MiniPlayerView.MiniPla
   @Override
   public void onCreate() {
     super.onCreate();
-    Log.d(TAG, "Service onCreate");
+    Log.d(TAG, "Service onCreate"); write("MiniSvc", "INFO", "Service onCreate");
     try {
       createNotificationChannel();
       startForeground(NOTIFY_ID, buildNotification());
@@ -41,12 +42,12 @@ public class MiniPlayerService extends Service implements MiniPlayerView.MiniPla
   public int onStartCommand(Intent intent, int flags, int startId) {
     if (intent != null) {
       String action = intent.getAction();
-      if ("HIDE".equals(action)) { hideView(); stopForeground(true); stopSelf(); }
+      if ("HIDE".equals(action)) { write("MiniSvc", "INFO", "Action: HIDE"); hideView(); stopForeground(true); stopSelf(); }
       else if ("REFRESH".equals(action)) {
         // App 请求刷新:小窗已存在则保持,等待App推送数据
         Log.d(TAG, "Refresh requested");
       }
-      else if ("SHOW".equals(action)) {
+      else if ("SHOW".equals(action)) { write("MiniSvc", "INFO", "Action: SHOW");
         initialW = intent.getIntExtra("width", 500);
         initialH = intent.getIntExtra("height", 800);
         if (miniPlayerView != null && miniPlayerView.isAlive()) {
@@ -67,7 +68,7 @@ public class MiniPlayerService extends Service implements MiniPlayerView.MiniPla
   @Override
   public void onTaskRemoved(Intent rootIntent) {
     super.onTaskRemoved(rootIntent);
-    Log.d(TAG, "Task removed, restarting service...");
+    Log.d(TAG, "Task removed, restarting service..."); write("MiniSvc", "INFO", "Task removed - restarting");
     // 重新启动前台服务(用户划掉任务时,服务继续运行)
     ensureView();
     if (miniPlayerView != null) miniPlayerView.show(false, initialW, initialH);

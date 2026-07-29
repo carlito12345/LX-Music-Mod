@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.view.KeyEvent;
 import android.util.Log;
 import cn.toside.music.mobile.carkey.GeelyCarKeyManager;
+import static cn.toside.music.mobile.logger.NativeLoggerModule.write;
 import android.provider.Settings;
 import android.accessibilityservice.AccessibilityServiceInfo;
 import android.content.pm.PackageManager;
