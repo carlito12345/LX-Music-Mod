@@ -102,9 +102,29 @@ public class MediaInteractionModule extends ReactContextBaseJavaModule {
                                    android.media.session.MediaSession.FLAG_HANDLES_TRANSPORT_CONTROLS);
             mMediaSession.setMediaButtonReceiver(null); // null = 我们的 app 独占
             mMediaSession.setActive(true);
+            mMediaSession.setCallback(new android.media.session.MediaSession.Callback() {
+                public void onPlay() { sendButtonAction("play"); }
+                public void onPause() { sendButtonAction("pause"); }
+                public void onPlayPause() { sendButtonAction("playPause"); }
+                public void onSkipToNext() { sendButtonAction("next"); }
+                public void onSkipToPrevious() { sendButtonAction("previous"); }
+                public void onStop() { sendButtonAction("pause"); }
+            });
             Log.d(TAG, "MediaSessionManager initialized, media buttons locked"); write("MediaI", "INFO", "MediaSession active (exclusive)");
         } catch (Exception e) {
             Log.e(TAG, "Failed to initialize MediaSessionManager", e);
+        }
+    }
+
+    private void sendButtonAction(String action) {
+        try {
+            android.content.Intent i = new android.content.Intent("cn.toside.music.mobile.MINI_PLAYER_BUTTON");
+            i.putExtra("button_action", action);
+            i.setPackage(getReactApplicationContext().getPackageName());
+            getReactApplicationContext().sendBroadcast(i);
+            Log.d(TAG, "Sent button action: " + action);
+        } catch (Exception e) {
+            Log.e(TAG, "sendButtonAction error: " + e.getMessage());
         }
     }
 
@@ -118,11 +138,17 @@ public class MediaInteractionModule extends ReactContextBaseJavaModule {
             this.isPlaying = playing;
             this.sourceType = sourceType;
 
-            // 处理封面路径:如果是网络URL,下载到本地
+            // 封面:先查缓存(按歌命名),命中秒显;未命中异步下载补推
             this.currentArtwork = null;
             if (artworkPath != null && !artworkPath.isEmpty()) {
                 if (artworkPath.startsWith("http://") || artworkPath.startsWith("https://")) {
-                    this.currentArtwork = downloadArtwork(artworkPath);
+                    java.io.File cachedFile = new java.io.File(artworkCacheDir, artworkKey(currentTitle, currentArtist));
+                    if (cachedFile.exists() && cachedFile.length() > 0) {
+                        this.currentArtwork = Uri.fromFile(cachedFile);
+                    } else {
+                        this.currentArtwork = null; // 先推无封面
+                        downloadAndCacheAsync(artworkPath, currentTitle, currentArtist); // 下完补推
+                    }
                 } else {
                     this.currentArtwork = Uri.parse(artworkPath);
                 }
@@ -135,70 +161,40 @@ public class MediaInteractionModule extends ReactContextBaseJavaModule {
             }
 
             write("MediaI", "INFO", "push title=" + currentTitle + " artist=" + currentArtist + " playing=" + playing + " artwork=" + (currentArtwork != null));
+            // 播放时抢占车机在线音源 + 防反抢(解决方控冲突:收音机/USB/蓝牙)
+            if (playing) {
+              try {
+                final android.os.Handler h = new android.os.Handler(android.os.Looper.getMainLooper());
+                // 延迟 800ms 确保 OneOS 服务就绪后首次抢占
+                h.postDelayed(new Runnable() { @Override public void run() {
+                  try {
+                    cn.toside.music.mobile.carkey.OneOSApiManager osm = cn.toside.music.mobile.carkey.OneOSApiManager.getInstance(getReactApplicationContext());
+                    cn.toside.music.mobile.carkey.MediaCenterHelper.requestOnlineSource(osm);
+                  } catch (Exception ignore) {}
+                  // 持续抢占(每10秒),防止 USB/BT/Radio 反抢
+                  if (isPlaying) h.postDelayed(this, 10000);
+                }}, 800);
+              } catch (Exception ignore) {}
+            }
+            // 补全 MediaSession 元数据(GMediaProxy/车机读取)
+            if (mMediaSession != null) {
+                MediaMetadata.Builder mb = new MediaMetadata.Builder();
+                fillMetadata(mb);
+                if (currentDuration > 0) {
+                    mb.putLong(MediaMetadata.METADATA_KEY_DURATION, currentDuration);
+                }
+                mMediaSession.setMetadata(mb.build());
+                PlaybackState.Builder pb = new PlaybackState.Builder()
+                    .setActions(PlaybackState.ACTION_PLAY | PlaybackState.ACTION_PAUSE
+                        | PlaybackState.ACTION_SKIP_TO_NEXT | PlaybackState.ACTION_SKIP_TO_PREVIOUS
+                        | PlaybackState.ACTION_SEEK_TO)
+                    .setState(isPlaying ? PlaybackState.STATE_PLAYING : PlaybackState.STATE_PAUSED,
+                              currentPosition, isPlaying ? 1.0f : 0.0f);
+                mMediaSession.setPlaybackState(pb.build());
+            }
             if (mMediaInteraction != null) {
-                mMediaInteraction.updatePlaybackInfo(new IMediaInteraction.IPlaybackInfo() {
-                    @Override
-                    public String getAlbum() { return currentAlbum; }
-
-                    @Override
-                    public String getArtist() { return currentArtist; }
-
-                    @Override
-                    public Uri getArtwork() { return currentArtwork; }
-
-                    @Override
-                    public String getCurrentLyricSentence() { return ""; }
-
-                    @Override
-                    public long getDuration() { return currentDuration; }
-
-                    @Override
-                    public int getFavoriteState() { return 0; }
-
-                    @Override
-                    public int getLoopMode() { return LOOP_MODE_ALL; }
-
-                    @Override
-                    public Uri getLyric() { return null; }
-
-                    @Override
-                    public String getLyricContent() { return ""; }
-
-                    @Override
-                    public Uri getMediaPath() { return null; }
-
-                    @Override
-                    public Uri getNextArtwork() { return null; }
-
-                    @Override
-                    public int getPlaybackStatus() {
-                        return isPlaying ? PLAYBACK_STATUS_PLAYING : PLAYBACK_STATUS_PAUSED;
-                    }
-
-                    @Override
-                    public int getPlayingItemPositionInQueue() { return 0; }
-
-                    @Override
-                    public Uri getPreviousArtwork() { return null; }
-
-                    @Override
-                    public String getRadioFrequency() { return ""; }
-
-                    @Override
-                    public int getRadioMode() { return RADIO_MODE_PLAYING; }
-
-                    @Override
-                    public String getRadioStationName() { return ""; }
-
-                    @Override
-                    public int getSourceType() { return sourceType; }
-
-                    @Override
-                    public String getTitle() { return currentTitle; }
-
-                    @Override
-                    public String getUUID() { return ""; }
-                });
+                IMediaInteraction.IPlaybackInfo pi = buildPlaybackInfo();
+                if (pi != null) mMediaInteraction.updatePlaybackInfo(pi);
                 Log.d(TAG, "Media info updated: " + title);
                 promise.resolve(true);
             } else {
@@ -216,6 +212,16 @@ public class MediaInteractionModule extends ReactContextBaseJavaModule {
     write("MediaI", "INFO", "progress: " + (int)(position));
         try {
             this.currentPosition = (long) position;
+            // 同步 MediaSession 位置
+            if (mMediaSession != null) {
+                PlaybackState.Builder pb = new PlaybackState.Builder()
+                    .setActions(PlaybackState.ACTION_PLAY | PlaybackState.ACTION_PAUSE
+                        | PlaybackState.ACTION_SKIP_TO_NEXT | PlaybackState.ACTION_SKIP_TO_PREVIOUS
+                        | PlaybackState.ACTION_SEEK_TO)
+                    .setState(isPlaying ? PlaybackState.STATE_PLAYING : PlaybackState.STATE_PAUSED,
+                              currentPosition, isPlaying ? 1.0f : 0.0f);
+                mMediaSession.setPlaybackState(pb.build());
+            }
             if (mMediaInteraction != null) {
                 mMediaInteraction.updateCurrentProgress(currentPosition);
                 promise.resolve(true);
@@ -228,88 +234,75 @@ public class MediaInteractionModule extends ReactContextBaseJavaModule {
         }
     }
 
-    private Uri downloadArtwork(final String url) {
-        final Uri[] result = new Uri[1];
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
+// 下载封面到本地(异步,用完回调补推)
+    private void downloadAndCacheAsync(final String url, final String title, final String artist) {
+        final String key = artworkKey(title, artist);
+        final java.io.File file = new java.io.File(artworkCacheDir, key);
+        new Thread(new Runnable() {
+            @Override public void run() {
                 try {
-                    // 支持 HTTP/HTTPS 重定向
                     java.net.URL imageUrl = new java.net.URL(url);
-                    java.net.HttpURLConnection connection = (java.net.HttpURLConnection) imageUrl.openConnection();
-                    connection.setDoInput(true);
-                    connection.setConnectTimeout(8000);
-                    connection.setReadTimeout(8000);
-                    connection.setInstanceFollowRedirects(true);
-                    // 清除 HTTP 明文流量限制
-                    connection.setRequestProperty("User-Agent", "Mozilla/5.0");
-                    connection.connect();
+                    java.net.HttpURLConnection conn = (java.net.HttpURLConnection) imageUrl.openConnection();
+                    conn.setDoInput(true); conn.setConnectTimeout(10000); conn.setReadTimeout(10000);
+                    conn.setInstanceFollowRedirects(true);
+                    conn.setRequestProperty("User-Agent", "Mozilla/5.0");
+                    conn.connect();
+                    if (conn.getResponseCode() != 200) { conn.disconnect(); return; }
+                    java.io.InputStream in = conn.getInputStream();
+                    byte[] data = readAllBytes(in); in.close(); conn.disconnect();
+                    if (data.length == 0) return;
+                    Bitmap bmp = android.graphics.BitmapFactory.decodeByteArray(data, 0, data.length);
+                    if (bmp == null || bmp.getWidth() == 0) return;
+                    // 存本地 + 清理 + 复制到 Music/.thumbnails
+                    cleanupOldArtwork();
+                    java.io.FileOutputStream fos = new java.io.FileOutputStream(file);
+                    bmp.compress(Bitmap.CompressFormat.JPEG, 90, fos);
+                    fos.flush(); fos.close();
+                    try {
+                        java.io.File musicDir = new java.io.File(android.os.Environment.getExternalStoragePublicDirectory(android.os.Environment.DIRECTORY_MUSIC), ".thumbnails");
+                        if (!musicDir.exists()) musicDir.mkdirs();
+                        java.io.File thumbFile = new java.io.File(musicDir, key);
+                        java.io.FileOutputStream fos2 = new java.io.FileOutputStream(thumbFile);
+                        bmp.compress(Bitmap.CompressFormat.JPEG, 90, fos2);
+                        fos2.flush(); fos2.close();
+                    } catch(Exception e) { Log.w(TAG, "thumb copy fail: " + e.getMessage()); }
 
-                    int responseCode = connection.getResponseCode();
-                    if (responseCode == 200) {
-                        // 先读取所有字节
-                        java.io.InputStream input = connection.getInputStream();
-                        byte[] data = readAllBytes(input);
-                        input.close();
-                        connection.disconnect();
-
-                        if (data.length > 0) {
-                            android.graphics.Bitmap bitmap = android.graphics.BitmapFactory.decodeByteArray(data, 0, data.length);
-                            if (bitmap != null && bitmap.getWidth() > 0 && bitmap.getHeight() > 0) {
-                                // 清理旧封面文件
-                                cleanupOldArtwork();
-                                
-                                String filename = "artwork_" + System.currentTimeMillis() + ".jpg";
-                                java.io.File artworkFile = new java.io.File(artworkCacheDir, filename);
-                                java.io.FileOutputStream fos = new java.io.FileOutputStream(artworkFile);
-                                bitmap.compress(android.graphics.Bitmap.CompressFormat.JPEG, 90, fos);
-                                fos.flush();
-                                fos.close();
-                                
-                                // 验证文件大小
-                                if (artworkFile.length() > 0) {
-                                    // 同时复制到系统 Music 目录(OneOS 读取该目录)
-                                    try {
-                                        java.io.File musicThumbDir = new java.io.File(
-                                            android.os.Environment.getExternalStoragePublicDirectory(
-                                                android.os.Environment.DIRECTORY_MUSIC), ".thumbnails");
-                                        if (!musicThumbDir.exists()) musicThumbDir.mkdirs();
-                                        java.io.File thumbFile = new java.io.File(musicThumbDir, filename);
-                                        java.io.FileOutputStream fos2 = new java.io.FileOutputStream(thumbFile);
-                                        bitmap.compress(android.graphics.Bitmap.CompressFormat.JPEG, 90, fos2);
-                                        fos2.flush();
-                                        fos2.close();
-                                        Log.d(TAG, "Also saved to Music/.thumbnails: " + thumbFile.getAbsolutePath());
-                                    } catch (Exception e) {
-                                        Log.w(TAG, "Failed to save to Music/.thumbnails: " + e.getMessage());
-                                    }
-                                    Uri artworkUri = Uri.fromFile(artworkFile);
-                                    Log.d(TAG, "Artwork saved: " + artworkUri + " size=" + artworkFile.length());
-                                    result[0] = artworkUri;
-                                } else {
-                                    Log.w(TAG, "Artwork file is empty after save");
-                                    artworkFile.delete();
+                    // 回调主线程:确认还是这首歌才推
+                    final Uri uri = Uri.fromFile(file);
+                    new android.os.Handler(android.os.Looper.getMainLooper()).post(new Runnable() {
+                        @Override public void run() {
+                            if (currentTitle != null && currentArtist != null
+                                && currentTitle.equals(nvl(title))
+                                && currentArtist.equals(nvl(artist))) {
+                                currentArtwork = uri;
+                                if (mMediaInteraction != null) {
+                                    write("MediaI", "INFO", "artwork async done: " + nvl(title));
+                                    IMediaInteraction.IPlaybackInfo pi = buildPlaybackInfo();
+                                    if (pi != null) mMediaInteraction.updatePlaybackInfo(pi);
                                 }
-                            } else {
-                                Log.w(TAG, "Failed to decode bitmap from downloaded data");
+                                // 同时更新 MediaSession 封面
+                                if (mMediaSession != null) {
+                                    MediaMetadata.Builder mb = new MediaMetadata.Builder();
+                                    fillMetadata(mb);
+                                    try {
+                                        Bitmap b = android.provider.MediaStore.Images.Media.getBitmap(
+                                            getReactApplicationContext().getContentResolver(), uri);
+                                        if (b != null) mb.putBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART, b);
+                                    } catch(Exception ignored) {}
+                                    mMediaSession.setMetadata(mb.build());
+                                }
                             }
                         }
-                    } else {
-                        connection.disconnect();
-                        Log.w(TAG, "HTTP error: " + responseCode + " for " + url);
-                    }
-                } catch (Exception e) {
-                    Log.e(TAG, "Failed to download artwork", e);
-                }
+                    });
+                } catch (Exception e) { Log.e(TAG, "download fail: " + e.getMessage()); }
             }
-        });
-        thread.start();
-        try {
-            thread.join(3000); // 最多等待3秒
-        } catch (InterruptedException e) {
-            Log.e(TAG, "Download interrupted", e);
-        }
-        return result[0];
+        }).start();
+    }
+
+    // 旧的同步 downloadArtwork 替换为查缓存 + 异步下载
+    private Uri downloadArtwork(final String url) {
+        // 不再使用,保留兼容
+        return null;
     }
 
     @ReactMethod
@@ -325,6 +318,46 @@ public class MediaInteractionModule extends ReactContextBaseJavaModule {
             Log.e(TAG, "Failed to release MediaInteraction", e);
             promise.reject("RELEASE_ERROR", e.getMessage());
         }
+    }
+
+    // 填 MediaSession 元数据
+    private void fillMetadata(MediaMetadata.Builder mb) {
+        mb.putString(MediaMetadata.METADATA_KEY_TITLE, nvl(currentTitle));
+        mb.putString(MediaMetadata.METADATA_KEY_ARTIST, nvl(currentArtist));
+        mb.putString(MediaMetadata.METADATA_KEY_ALBUM, nvl(currentAlbum));
+        if (currentArtwork != null) {
+            try {
+                Bitmap bmp = android.provider.MediaStore.Images.Media.getBitmap(
+                    getReactApplicationContext().getContentResolver(), currentArtwork);
+                if (bmp != null) mb.putBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART, bmp);
+            } catch (Exception e) {}
+        }
+    }
+    // 复用 PlaybackInfo 构建
+    private IMediaInteraction.IPlaybackInfo buildPlaybackInfo() {
+        if (mMediaInteraction == null) return null;
+        return new IMediaInteraction.IPlaybackInfo() {
+            @Override public String getAlbum() { return currentAlbum; }
+            @Override public String getArtist() { return currentArtist; }
+            @Override public Uri getArtwork() { return currentArtwork; }
+            @Override public String getCurrentLyricSentence() { return ""; }
+            @Override public long getDuration() { return currentDuration; }
+            @Override public int getFavoriteState() { return 0; }
+            @Override public int getLoopMode() { return LOOP_MODE_ALL; }
+            @Override public Uri getLyric() { return null; }
+            @Override public String getLyricContent() { return ""; }
+            @Override public Uri getMediaPath() { return null; }
+            @Override public Uri getNextArtwork() { return null; }
+            @Override public int getPlaybackStatus() { return isPlaying ? PLAYBACK_STATUS_PLAYING : PLAYBACK_STATUS_PAUSED; }
+            @Override public int getPlayingItemPositionInQueue() { return 0; }
+            @Override public Uri getPreviousArtwork() { return null; }
+            @Override public String getRadioFrequency() { return ""; }
+            @Override public int getRadioMode() { return RADIO_MODE_PLAYING; }
+            @Override public String getRadioStationName() { return ""; }
+            @Override public int getSourceType() { return sourceType; }
+            @Override public String getTitle() { return currentTitle; }
+            @Override public String getUUID() { return ""; }
+        };
     }
 
     // 从 MediaSession 提取封面并保存到本地文件
@@ -366,12 +399,16 @@ public class MediaInteractionModule extends ReactContextBaseJavaModule {
         return buffer.toByteArray();
     }
 
-    private void cleanupOldArtwork() {
+    private String artworkKey(String title, String artist) {
+    return "art_" + java.lang.Integer.toHexString((nvl(title) + "|" + nvl(artist)).hashCode()) + ".jpg";
+  }
+  private String nvl(String s) { return s != null ? s : ""; }
+  private void cleanupOldArtwork() {
         try {
             java.io.File[] files = artworkCacheDir.listFiles();
-            if (files != null && files.length > 5) {
+            if (files != null && files.length > 30) {
                 java.util.Arrays.sort(files, (a, b) -> Long.compare(a.lastModified(), b.lastModified()));
-                for (int i = 0; i < files.length - 5; i++) {
+                for (int i = 0; i < files.length - 30; i++) {
                     files[i].delete();
                 }
             }

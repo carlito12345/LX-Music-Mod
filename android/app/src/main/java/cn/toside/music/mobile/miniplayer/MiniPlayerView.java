@@ -37,6 +37,7 @@ public class MiniPlayerView {
   private ImageView coverView;
   private TextView titleView, artistView, lrcView;
   private View progressFill;
+  private android.widget.TextView timeText;
   private int highlightColor = 0xFFFFFFFF;
   private int[] gradientColors = null; // 渐变色数组,null=不启用
   private FrameLayout playBtnContainer;
@@ -165,6 +166,18 @@ public class MiniPlayerView {
     progressFill.setBackground(progFillG);
     progContainer.addView(progressFill);
     
+    // 时间文字
+    timeText = new android.widget.TextView(context);
+    timeText.setTextColor(Color.argb(180, 255, 255, 255));
+    timeText.setTextSize(10);
+    timeText.setGravity(Gravity.END);
+    timeText.setText("0:00 / 0:00");
+    FrameLayout.LayoutParams tl = new FrameLayout.LayoutParams(-1, -2);
+    tl.topMargin = dp(22);
+    tl.leftMargin = dp(4);
+    timeText.setLayoutParams(tl);
+    root.addView(timeText);
+    
     // 进度条触摸拖动跳转
     progContainer.setOnTouchListener(new View.OnTouchListener() {
       private boolean seeking = false;
@@ -261,7 +274,7 @@ public class MiniPlayerView {
     } catch (Exception e) { Log.e(TAG, "show error", e); }
   }
 
-  public void updatePlaybackInfo(String title, String artist, boolean playing, int progress, int maxProgress) { write("MiniView", "INFO", "updateInfo: " + title + " - " + artist + " playing=" + playing);
+  public void updatePlaybackInfo(String title, String artist, boolean playing, int progress, int maxProgress) { write("MiniView", "INFO", "updateInfo: " + title + " - " + artist + " playing=" + playing + " prog=" + progress + " max=" + maxProgress);
     isPlaying = playing;
     new Handler(Looper.getMainLooper()).post(() -> {
       if (titleView != null) titleView.setText(title.isEmpty() ? "未播放" : title);
@@ -271,17 +284,32 @@ public class MiniPlayerView {
         playBtnContainer.removeAllViews();
         playBtnContainer.addView(icon, new FrameLayout.LayoutParams(-1, -1, Gravity.CENTER));
       }
-      if (maxProgress > 0 && progressFill != null) {
+      if (progressFill != null) {
         try {
-          FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) progressFill.getLayoutParams();
           View parent = (View) progressFill.getParent();
           if (parent != null && parent.getWidth() > 0) {
-            lp.width = (int)((float)progress / maxProgress * parent.getWidth());
+            int pw = parent.getWidth();
+            int fw = 0;
+            if (maxProgress > 0) {
+              fw = (int)((float)progress / maxProgress * pw);
+            } else if (progress > 0) {
+              fw = pw; // 没有总时长时占满
+            }
+            FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) progressFill.getLayoutParams();
+            lp.width = Math.min(fw, pw);
             progressFill.requestLayout();
           }
         } catch (Exception e) {
           Log.w(TAG, "progress error: " + e.getMessage());
         }
+      }
+      // 更新时间显示(即使无总时长也显示当前时间)
+      if (timeText != null) {
+        int nowS = (int)(progress / 1000);
+        int maxS = (int)(maxProgress / 1000);
+        String t = (nowS / 60) + ":" + String.format("%02d", nowS % 60);
+        if (maxS > 0) t += " / " + (maxS / 60) + ":" + String.format("%02d", maxS % 60);
+        timeText.setText(t);
       }
     });
   }

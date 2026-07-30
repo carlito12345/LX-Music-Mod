@@ -1,8 +1,8 @@
 /**
  * MusicFree 风格播放器布局 - 完整版
  */
-import { memo, useState, useMemo } from 'react'
-import { View, StyleSheet, Dimensions, Image, Pressable } from 'react-native'
+import { memo, useState, useMemo, useRef } from 'react'
+import { View, StyleSheet, Dimensions, Image, Pressable, PanResponder } from 'react-native'
 import { useTheme } from '@/store/theme/hook'
 import { useSettingValue } from '@/store/setting/hook'
 import { usePlayerMusicInfo } from '@/store/player/hook'
@@ -11,6 +11,7 @@ import AppImage from '@/components/common/Image'
 import Header from '../components/Header'
 import Lyric from '../Lyric'
 import MusicFreePlayer from './MusicFreePlayer'
+import { playNext, playPrev } from '@/core/player/player'
 import { getContrastTextColor, getSecondaryTextColor } from '@/utils/colorContrast'
 import { StarfieldBackground } from '@/components/starfield/StarfieldBackground'
 import { AudioEchoWallpaper } from '@/components/echo/AudioEchoWallpaper'
@@ -49,6 +50,19 @@ export default memo(({ componentId }: Props) => {
   const textColor = getContrastTextColor(bgColor)
   const secondaryColor = getSecondaryTextColor(bgColor)
 
+  // 左右滑动切歌
+  const swipeRef = useRef({ startX: 0 }).current
+  const swipePan = useRef(PanResponder.create({
+    onStartShouldSetPanResponder: () => true,
+    onMoveShouldSetPanResponder: () => true,
+    onPanResponderGrant: (e) => { swipeRef.startX = e.nativeEvent.pageX },
+    onPanResponderRelease: (e) => {
+      const dx = e.nativeEvent.pageX - swipeRef.startX
+      if (dx > 60) playPrev()
+      else if (dx < -60) playNext()
+    },
+  })).current
+
   // 全屏歌词
   if (showLyrics) {
     return (
@@ -82,7 +96,7 @@ export default memo(({ componentId }: Props) => {
       <Header backgroundColor={bgColor} />
 
       {/* 封面(点击切换歌词) */}
-      <Pressable style={styles.body} onPress={() => setShowLyrics(true)}>
+      <Pressable style={styles.body} onPress={() => setShowLyrics(true)} {...swipePan.panHandlers}>
         <View style={styles.coverWrapper}>
           {coverUrl ? (
             <AppImage url={coverUrl} style={styles.cover} resizeMode="cover" />

@@ -2,6 +2,7 @@ package cn.toside.music.mobile.carkey;
 
 import android.content.Context;
 import android.os.IBinder;
+import com.geely.lib.oneosapi.mediacenter.MediaCenterManager;
 import android.os.RemoteException;
 import android.util.Log;
 
@@ -9,9 +10,10 @@ public class OneOSApiManager {
   private static final String TAG = "[OneOS]";
   private static volatile OneOSApiManager sInstance;
   private final Context mContext;
-  private ServiceConnectionManager mServiceConnectionManager;
+  ServiceConnectionManager mServiceConnectionManager;
   private KeyInputManager mKeyInputManager;
-  private String mDiagnostic = "";
+  private MediaCenterManager mMediaCenterManager;
+  String mDiagnostic = "";
 
   public static OneOSApiManager getInstance(Context context) {
     if (sInstance == null) {
@@ -37,10 +39,25 @@ public class OneOSApiManager {
   public void release() {
     mServiceConnectionManager.release();
     mKeyInputManager = null;
+    mMediaCenterManager = null;
   }
 
   public boolean isServiceBound() {
     return mServiceConnectionManager != null && mServiceConnectionManager.isServiceBound();
+  }
+
+  public MediaCenterManager getMediaCenterManager() {
+    if (mMediaCenterManager == null && mServiceConnectionManager.isServiceBound()) {
+      try {
+        IServiceManager sm = mServiceConnectionManager.getServiceManager();
+        if (sm != null) {
+          mMediaCenterManager = new MediaCenterManager(mContext, sm.getService(3));
+        }
+      } catch (android.os.RemoteException e) {
+        mDiagnostic = "MediaCenter: " + e.getMessage();
+      }
+    }
+    return mMediaCenterManager;
   }
 
   public KeyInputManager getKeyInputManager() {
@@ -72,6 +89,9 @@ public class OneOSApiManager {
     return mKeyInputManager;
   }
 
+  public IServiceManager getServiceManager() {
+    return mServiceConnectionManager.getServiceManager();
+  }
   public String getDiagnostic() {
     return mDiagnostic;
   }
