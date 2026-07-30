@@ -1,133 +1,132 @@
 /**
- * MusicFree 风格播放器布局
+ * MusicFree 风格播放器布局 - 完整版
  */
-import { memo } from 'react'
-import { View, StyleSheet, Dimensions, Image } from 'react-native'
+import { memo, useState, useMemo } from 'react'
+import { View, StyleSheet, Dimensions, Image, Pressable } from 'react-native'
 import { useTheme } from '@/store/theme/hook'
 import { useSettingValue } from '@/store/setting/hook'
 import { usePlayerMusicInfo } from '@/store/player/hook'
 import Text from '@/components/common/Text'
+import AppImage from '@/components/common/Image'
 import Header from '../components/Header'
-import Player from '../Player'
 import Lyric from '../Lyric'
-import FastImage from 'react-native-fast-image'
+import MusicFreePlayer from './MusicFreePlayer'
+import { getContrastTextColor, getSecondaryTextColor } from '@/utils/colorContrast'
+import { StarfieldBackground } from '@/components/starfield/StarfieldBackground'
+import { AudioEchoWallpaper } from '@/components/echo/AudioEchoWallpaper'
+import { SpectrumBars } from '@/components/echo/SpectrumBars'
+import { WallpaperView } from '@/components/wallpaper/WallpaperView'
+import { SlideshowBg } from '@/components/slideshow/SlideshowBg'
 
-const { width: SCREEN_W } = Dimensions.get('window')
+const { width: SW, height: SH } = Dimensions.get('window')
+const COVER_SIZE = Math.min(SW * 0.6, SH * 0.35)
+const PADDING_H = Math.min(SW * 0.04, 60)
 
-export default memo(({ componentId }: { componentId: string }) => {
+interface Props { componentId: string }
+
+export default memo(({ componentId }: Props) => {
   const theme = useTheme()
   const mi = usePlayerMusicInfo()
-  const bgColor = useSettingValue('playDetail.background.solidColor') || '#1a1a2e'
+  const [showLyrics, setShowLyrics] = useState(false)
+  const bgType = useSettingValue('playDetail.background.type')
+  const solidColor = useSettingValue('playDetail.background.solidColor') || '#1a1a2e'
+  const wallpaperEnabled = useSettingValue('playDetail.effect.wallpaper.enabled')
+  const echoEnabled = useSettingValue('playDetail.effect.echo.enabled')
+  const spectrumEnabled = useSettingValue('playDetail.effect.spectrum.enabled')
+  const starfieldEnabled = useSettingValue('playDetail.effect.starfield.enabled')
+  const slideshowEnabled = useSettingValue('playDetail.effect.slideshow.enabled')
 
-  const coverUrl = mi?.pic || ''
+  const coverUrl = mi?.pic
   const title = mi?.name || ''
   const artist = mi?.singer || ''
 
+  const bgColor = useMemo(() => {
+    if (wallpaperEnabled || slideshowEnabled) return '#1a1a2e'
+    if (bgType === 'solid') return solidColor
+    return theme['c-app-background']
+  }, [bgType, solidColor, wallpaperEnabled, slideshowEnabled, theme])
+
+  const textColor = getContrastTextColor(bgColor)
+  const secondaryColor = getSecondaryTextColor(bgColor)
+
+  // 全屏歌词
+  if (showLyrics) {
+    return (
+      <View style={[styles.container, { backgroundColor: '#1a1a2e' }]}>
+        <Header backgroundColor={'#1a1a2e'} />
+        <Pressable style={styles.lyricFull} onPress={() => setShowLyrics(false)}>
+          <Lyric />
+        </Pressable>
+      </View>
+    )
+  }
+
   return (
-    <View style={[styles.container, { backgroundColor: bgColor }]}>
-      {/* 模糊背景 */}
-      {coverUrl ? (
-        <Image
-          source={{ uri: coverUrl }}
-          style={StyleSheet.absoluteFill}
-          blurRadius={80}
-          opacity={0.3}
-        />
+    <View style={[styles.container, { backgroundColor: bgColor, paddingHorizontal: PADDING_H }]}>
+      {/* 特效层 */}
+      {starfieldEnabled && <StarfieldBackground />}
+      {echoEnabled && <AudioEchoWallpaper />}
+      {spectrumEnabled && <SpectrumBars primaryColor={theme['c-primary']} />}
+      {wallpaperEnabled && <WallpaperView />}
+      {slideshowEnabled && <SlideshowBg />}
+
+      {/* 模糊封面背景 */}
+      {!wallpaperEnabled && !slideshowEnabled && coverUrl ? (
+        <View style={StyleSheet.absoluteFill} pointerEvents="none">
+          <Image source={{ uri: coverUrl }} style={[StyleSheet.absoluteFill]} resizeMode="cover" blurRadius={50} />
+          <View style={[StyleSheet.absoluteFill, { backgroundColor: 'rgba(0,0,0,0.35)' }]} />
+        </View>
       ) : null}
 
-      <Header componentId={componentId} />
+      {/* Header */}
+      <Header backgroundColor={bgColor} />
 
-      <View style={styles.body}>
-        {/* 封面区域 */}
-        <View style={styles.coverArea}>
-          <View style={styles.coverWrapper}>
-            {coverUrl ? (
-              <FastImage
-                source={{ uri: coverUrl, priority: FastImage.priority.high }}
-                style={styles.cover}
-              />
-            ) : (
-              <View style={[styles.cover, styles.coverPlaceholder, { backgroundColor: theme['c-primary-alpha-300'] }]}>
-                <Text size={40} color={theme['c-primary']}>♪</Text>
-              </View>
-            )}
-          </View>
+      {/* 封面(点击切换歌词) */}
+      <Pressable style={styles.body} onPress={() => setShowLyrics(true)}>
+        <View style={styles.coverWrapper}>
+          {coverUrl ? (
+            <AppImage url={coverUrl} style={styles.cover} resizeMode="cover" />
+          ) : (
+            <View style={[styles.cover, styles.coverPlaceholder]}>
+              <Text size={50} color={theme['c-primary']}>♪</Text>
+            </View>
+          )}
         </View>
+      </Pressable>
 
-        {/* 歌曲信息 */}
-        <View style={styles.infoArea}>
-          <Text size={18} numberOfLines={1} style={styles.title}>{title || '未在播放'}</Text>
-          <Text size={14} color="#aaa" numberOfLines={1} style={styles.artist}>{artist}</Text>
-        </View>
-
-        {/* 播放进度 + 控制 */}
-        <View style={styles.playerArea}>
-          <Player />
-        </View>
-      </View>
-
-      {/* 底部歌词 */}
-      <View style={styles.lyricArea}>
-        <Lyric />
-      </View>
+      {/* 控件 */}
+      <MusicFreePlayer backgroundColor={bgColor} />
     </View>
   )
 })
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
+  container: { flex: 1, flexDirection: 'column' },
   body: {
-    flex: 1,
-    alignItems: 'center',
+    flexGrow: 1,
     justifyContent: 'center',
-    paddingHorizontal: 20,
-  },
-  coverArea: {
     alignItems: 'center',
-    marginBottom: 24,
   },
   coverWrapper: {
-    width: SCREEN_W * 0.65,
-    height: SCREEN_W * 0.65,
-    borderRadius: SCREEN_W * 0.325,
+    width: COVER_SIZE,
+    height: COVER_SIZE,
+    borderRadius: 12,
     overflow: 'hidden',
-    elevation: 16,
+    elevation: 10,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.4,
-    shadowRadius: 16,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 10,
   },
-  cover: {
-    width: '100%',
-    height: '100%',
-  },
+  cover: { width: '100%', height: '100%' },
   coverPlaceholder: {
+    backgroundColor: 'rgba(128,128,128,0.15)',
     justifyContent: 'center',
     alignItems: 'center',
   },
-  infoArea: {
-    alignItems: 'center',
-    marginBottom: 20,
-    width: '100%',
-    paddingHorizontal: 20,
-  },
-  title: {
-    textAlign: 'center',
-    marginBottom: 4,
-    fontWeight: '600',
-  },
-  artist: {
-    textAlign: 'center',
-  },
-  playerArea: {
-    width: '100%',
-    maxHeight: 120,
-  },
-  lyricArea: {
-    height: 160,
+  lyricFull: {
+    flex: 1,
+    justifyContent: 'center',
     paddingHorizontal: 16,
-    paddingBottom: 8,
   },
 })

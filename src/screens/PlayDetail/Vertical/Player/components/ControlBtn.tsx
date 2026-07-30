@@ -56,86 +56,21 @@ const PressBtn = memo(({ icon, size, onPress, controlColor }: { icon: string; si
   )
 })
 
-const PlayBtn = memo(({ size, backgroundColor }: { size: number; backgroundColor: string }) => {
+// InstantPlayBtn - 无圆底纯图标
+const InstantPlayBtn = ({ size, backgroundColor }: { size: number; backgroundColor: string }) => {
   const isPlay = useIsPlay()
-  const controlBtnEnabled = useSettingValue('playDetail.effect.controlBtn.enabled')
-  const scale = useRef(new Animated.Value(1)).current
-  const glowAnim = useRef(new Animated.Value(0)).current
-  
-  const controlColor = getContrastTextColor(backgroundColor)
-  const buttonBg = controlColor // Use contrast color for button bg
-
-  // Breathing glow animation when playing
-  useEffect(() => {
-    if (!controlBtnEnabled || !isPlay) {
-      glowAnim.setValue(0)
-      return
-    }
-    Animated.loop(
-      Animated.sequence([
-        Animated.timing(glowAnim, { toValue: 1, duration: 1500, useNativeDriver: false }),
-        Animated.timing(glowAnim, { toValue: 0, duration: 1500, useNativeDriver: false }),
-      ])
-    ).start()
-    return () => glowAnim.stopAnimation()
-  }, [isPlay, controlBtnEnabled])
-
-  const handlePressIn = () => {
-    if (!controlBtnEnabled) return
-    Animated.spring(scale, {
-      toValue: 0.88,
-      tension: 300,
-      friction: 12,
-      useNativeDriver: false,
-    }).start()
-  }
-
-  const handlePressOut = () => {
-    if (!controlBtnEnabled) return
-    Animated.spring(scale, {
-      toValue: 1,
-      tension: 200,
-      friction: 15,
-      useNativeDriver: false,
-    }).start()
-  }
-
-  const glowOpacity = glowAnim.interpolate({
-    inputRange: [0, 1],
-    outputRange: [0, 0.6],
-  })
+  const color = getContrastTextColor(backgroundColor)
 
   return (
-    <View style={{ justifyContent: 'center', alignItems: 'center', width: size * 1.5, height: size * 1.5 }}>
-      {/* Breathing glow ring */}
-      {controlBtnEnabled && isPlay && (
-        <Animated.View
-          style={{
-            position: 'absolute',
-            width: size * 1.4,
-            height: size * 1.4,
-            borderRadius: size * 0.7,
-            backgroundColor: buttonBg,
-            opacity: glowOpacity,
-          }}
-        />
-      )}
-      <Animated.View style={{ transform: [{ scale }] }}>
-        <View style={[styles.playButton, { backgroundColor: buttonBg }]}>
-          <TouchableOpacity
-            activeOpacity={0.6}
-            onPress={togglePlay}
-            onPressIn={handlePressIn}
-            onPressOut={handlePressOut}
-            style={{ width: size * 1.1, height: size * 1.1, justifyContent: 'center', alignItems: 'center' }}
-          >
-            <Icon name={isPlay ? 'pause' : 'play'} color={backgroundColor} rawSize={size * 0.75} />
-          </TouchableOpacity>
-        </View>
-      </Animated.View>
-    </View>
+    <TouchableOpacity
+      activeOpacity={0.6}
+      onPress={togglePlay}
+      style={{ width: size, height: size, justifyContent: 'center', alignItems: 'center' }}
+    >
+      <Icon name={isPlay ? 'pause' : 'play'} color={color} rawSize={size * 0.85} />
+    </TouchableOpacity>
   )
-})
+}
 
 const MAX_SIZE = BTN_WIDTH * 1.6
 const MIN_SIZE = BTN_WIDTH * 1.2
@@ -150,7 +85,7 @@ export default memo(({ backgroundColor }: ControlBtnProps) => {
   return (
     <View style={styles.container}>
       <PressBtn icon="prevMusic" size={size} onPress={() => playPrev()} controlColor={controlColor} />
-      <PlayBtn size={size} backgroundColor={backgroundColor} />
+      <InstantPlayBtn size={size} backgroundColor={backgroundColor} />
       <PressBtn icon="nextMusic" size={size} onPress={() => playNext()} controlColor={controlColor} />
     </View>
   )
@@ -163,12 +98,5 @@ const styles = createStyle({
     alignItems: 'center',
     paddingVertical: 12,
   },
-  playButton: {
-    borderRadius: 999,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
-    elevation: 5,
-  },
+
 })

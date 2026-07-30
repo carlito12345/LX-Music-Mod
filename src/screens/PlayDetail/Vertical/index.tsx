@@ -9,6 +9,7 @@ import Header from './components/Header'
 import Player from './Player'
 import Pic from './Pic'
 import Lyric from './Lyric'
+// MusicFreeLayout loaded dynamically
 import { screenkeepAwake, screenUnkeepAwake } from '@/utils/nativeModules/utils'
 import commonState, { type InitState as CommonState } from '@/store/common/state'
 import { createStyle } from '@/utils/tools'
@@ -150,6 +151,20 @@ export default memo(({ componentId }: { componentId: string }) => {
     })
   ).current
 
+  // 布局切换
+  const [layoutVer, setLayoutVer] = useState(0)
+  useEffect(() => {
+    try {
+      const lm = require('@/plugins/layoutManager')
+      return lm.onLayoutChange(() => setLayoutVer(v => v + 1))
+    } catch {}
+  }, [])
+  const layoutType = (() => { try { return require('@/plugins/layoutManager').getLayout() } catch { return 'default' } })()
+  console.log('[PlayDetail] layout:', layoutType, 'ver:', layoutVer)
+  if (layoutType === 'musicfree') {
+    const MFL = require('./layouts/MusicFree').default
+    return <MFL key={'m' + layoutVer} componentId={componentId} />
+  }
   return (
     <View style={[styles.wrapper, backgroundStyle]} {...panResponder.panHandlers}>
       {/* 高斯模糊背景层 */}

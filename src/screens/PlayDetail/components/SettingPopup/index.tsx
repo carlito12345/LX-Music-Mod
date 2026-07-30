@@ -1,7 +1,10 @@
 import { forwardRef, useImperativeHandle, useRef, useState } from 'react'
-import { ScrollView, View } from 'react-native'
+import { ScrollView, View, TouchableOpacity } from 'react-native'
+import Text from '@/components/common/Text'
 import Popup, { type PopupType, type PopupProps } from '@/components/common/Popup'
 import { useI18n } from '@/lang'
+import { useSetting } from '@/store/setting/hook'
+import { updateSetting } from '@/core/common'
 
 import SettingTimer from './settings/SettingTimer'
 import SettingBackground from './settings/SettingBackground'
@@ -15,6 +18,7 @@ import SettingLrcAlign from './settings/SettingLrcAlign'
 import SettingLrcLineCount from './settings/SettingLrcLineCount'
 import SettingEffects from './settings/SettingEffects'
 import SettingMiniPlayer, { SettingLyricGradient } from './settings/SettingMiniPlayer'
+import SettingLayout from './settings/SettingLayout'
 
 export interface SettingPopupProps extends Omit<PopupProps, 'children'> {
   direction: 'vertical' | 'horizontal'
@@ -28,6 +32,7 @@ export default forwardRef<SettingPopupType, SettingPopupProps>(({ direction, ...
   const [visible, setVisible] = useState(false)
   const popupRef = useRef<PopupType>(null)
   const t = useI18n()
+  const setting = useSetting()
 
   useImperativeHandle(ref, () => ({
     show() {
@@ -57,28 +62,10 @@ export default forwardRef<SettingPopupType, SettingPopupProps>(({ direction, ...
             <SettingLrcFontSize direction={direction} />
             <SettingLrcAlign />
             <SettingLrcLineCount />
+          
+          <SettingLayout />
           </View>
-              <View style={{ paddingHorizontal: 12, paddingVertical: 8 }}>
-        <Text size={14}>播放器布局</Text>
-        <View style={{ flexDirection: 'row', gap: 8, marginTop: 6 }}>
-          {['default', 'musicfree'].map(layout => (
-            <TouchableOpacity
-              key={layout}
-              onPress={() => updateSetting({ 'playDetail.layout': layout })}
-              style={{
-                paddingHorizontal: 16, paddingVertical: 8,
-                borderRadius: 8,
-                backgroundColor: setting['playDetail.layout'] === layout ? '#5B6ABF' : 'rgba(128,128,128,0.2)',
-              }}
-            >
-              <Text color={setting['playDetail.layout'] === layout ? '#fff' : undefined}>
-                {layout === 'default' ? '经典' : 'MusicFree 风格'}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </View>
-      </View>
-    </ScrollView>
+        </ScrollView>
       </Popup>
     ) : null
   )

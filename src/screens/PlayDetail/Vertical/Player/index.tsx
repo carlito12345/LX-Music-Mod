@@ -27,8 +27,8 @@ const styles = createStyle({
     flex: 0,
     width: '100%',
     paddingHorizontal: 15,
-    paddingBottom: 15,
-    paddingTop: 5,
+    paddingBottom: 8,
+    paddingTop: 2,
     flexDirection: 'column',
   },
   status: {

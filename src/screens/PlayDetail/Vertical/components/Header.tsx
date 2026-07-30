@@ -26,7 +26,7 @@ const Title = ({ backgroundColor }: HeaderProps) => {
   const secondaryColor = getSecondaryTextColor(backgroundColor)
   
   return (
-    <View style={styles.titleContent}>
+    <View style={styles.titleContent} pointerEvents="none">
       <Text numberOfLines={1} style={styles.title} color={textColor}>{musicInfo.name}</Text>
       <Text numberOfLines={1} style={styles.title} size={12} color={secondaryColor}>{musicInfo.singer}</Text>
     </View>
@@ -45,8 +45,9 @@ export default memo(({ backgroundColor }: HeaderProps) => {
     <View style={{ height: HEADER_HEIGHT + statusBarHeight, paddingTop: statusBarHeight, backgroundColor: 'transparent' }} nativeID={NAV_SHEAR_NATIVE_IDS.playDetail_header}>
       <StatusBar />
       <View style={styles.container}>
-        <Btn icon="chevron-left" onPress={back} color={controlColor} />
+        <Btn icon="back-2" onPress={back} color={controlColor} />
         <Title backgroundColor={backgroundColor} />
+        <View style={{ flex: 1 }} />
         <Btn icon="fullscreen" color={controlColor}
           onPress={() => {
             void import('@/plugins/miniplayer').then(async(mod) => {
@@ -71,6 +72,12 @@ export default memo(({ backgroundColor }: HeaderProps) => {
 
 const styles = StyleSheet.create({
   container: { flexDirection: 'row', height: '100%' },
-  titleContent: { flex: 1, paddingHorizontal: 5, justifyContent: 'center' },
+  titleContent: {
+    position: 'absolute',
+    left: 0, right: 0, top: 0, bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 80,
+  },
   title: {},
 })
