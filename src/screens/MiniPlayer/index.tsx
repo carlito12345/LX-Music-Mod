@@ -1,16 +1,17 @@
 /**
- * MiniPlayer - 原生悬浮窗里的纯 RN 播放器
- * - 直接读 store,不依赖原生传参
- * - 响应式尺寸适配窗口
+ * MiniPlayer — Neri风格毛玻璃
+ * - AdvancedGlass 毛玻璃背景
+ * - 封面 + 歌名歌手 + 进度条 + 控制按钮
+ * - 左右滑动切歌(弹簧回弹)
+ * - 自适应屏幕尺寸
  */
 import React, { useEffect, useRef, useState } from 'react'
-import { View, Text, Image, TouchableOpacity, StyleSheet, PanResponder, Dimensions } from 'react-native'
-import { getContrastTextColor } from '@/utils/colorContrast'
+import { View, Text, Image, TouchableOpacity, StyleSheet, PanResponder, Animated, Dimensions } from 'react-native'
 import { playNext, playPrev, togglePlay } from '@/core/player/player'
 
 const { width: W, height: H } = Dimensions.get('window')
+const COVER_SZ = Math.min(W * 0.42, H * 0.28, 240)
 const PAD = 14
-const COVER_SZ = Math.min(W * 0.5, H * 0.35, 280)
 
 const formatTime = (ms: number) => {
   const s = Math.floor(Math.max(0, ms) / 1000)
@@ -19,43 +20,41 @@ const formatTime = (ms: number) => {
 
 export default function MiniPlayer() {
   const [state, setState] = useState<any>({})
+  const swipeAnim = useRef(new Animated.Value(0)).current
+  const scaleAnim = useRef(new Animated.Value(1)).current
   const mountedRef = useRef(true)
 
-  // 使用 BackgroundTimer (后台不卡顿) + 仅变化时更新
+  // 轮询 store(仅变化时更新)
   useEffect(() => {
     let prev = ''
-    const update = () => {
+    const tick = () => {
       if (!mountedRef.current) return
       try {
         const ps = require('@/store/player/state').default
         const mi = ps?.musicInfo
         if (!mi?.id) return
-        const s = JSON.stringify({ n: mi.name, s: mi.singer, c: mi.pic, p: ps.isPlay, t: ps.progress.nowPlayTime, m: ps.progress.maxPlayTime || mi.interval, l: ps.lastLyric || '' })
+        const s = JSON.stringify({ n: mi.name, s: mi.singer, c: mi.pic, p: ps.isPlay, t: ps.progress.nowPlayTime, m: ps.progress.maxPlayTime || mi.interval })
         if (s === prev) return
         prev = s
-        setState({ name: mi.name, singer: mi.singer, cover: mi.pic, isPlay: ps.isPlay, progress: ps.progress.nowPlayTime, maxProgress: ps.progress.maxPlayTime || mi.interval, currentLrc: ps.lastLyric || '' })
+        setState({ name: mi.name, singer: mi.singer, cover: mi.pic, isPlay: ps.isPlay, progress: ps.progress.nowPlayTime, maxProgress: ps.progress.maxPlayTime || mi.interval })
       } catch {}
     }
-    update()
-    const timer = setInterval(update, 1500)
-    return () => { mountedRef.current = false; clearInterval(timer) }
+    tick()
+    const t = setInterval(tick, 1500)
+    return () => { mountedRef.current = false; clearInterval(t) }
   }, [])
 
-  const { name, singer, cover, isPlay, progress, maxProgress, currentLrc } = state
+  const { name, singer, cover, isPlay, progress, maxProgress } = state
   const ratio = maxProgress > 0 ? Math.min(progress / maxProgress, 1) : 0
   const bgColor = '#1a1a2e'
-  const textColor = '#ffffff'
 
-  // Progress bar seek
+  // 进度条 seek
   const trackRef = useRef<View>(null)
   const doSeek = (x: number) => {
-    trackRef.current?.measureInWindow((lx, ly, tw) => {
-      if (tw <= 0) { trackRef.current?.measure((_x, _y, _w) => {
-          const r = Math.max(0, Math.min(1, x / (_w || 1)))
-          const dur = maxProgress || 0; if (dur > 0) try { require('@/plugins/player').setCurrentTime(r * dur) } catch {}
-        }); return }
-      const r = Math.max(0, Math.min(1, x / tw))
-      const dur = maxProgress || 0; if (dur > 0) try { require('@/plugins/player').setCurrentTime(r * dur) } catch {}
+    trackRef.current?.measure((_x, _y, tw) => {
+      const r = Math.max(0, Math.min(1, x / (tw || 1)))
+      const dur = maxProgress || 0
+      if (dur > 0) try { require('@/plugins/player').setCurrentTime(r * dur) } catch {}
     })
   }
   const seekPan = PanResponder.create({
@@ -65,15 +64,51 @@ export default function MiniPlayer() {
     onPanResponderMove: (e) => doSeek(e.nativeEvent.locationX),
   })
 
+  // 左右滑切歌(Neri风格弹簧动画)
+  let dragX = 0
+  const swipePan = PanResponder.create({
+    onStartShouldSetPanResponder: () => true,
+    onMoveShouldSetPanResponder: () => true,
+    onPanResponderGrant: () => { dragX = 0 },
+    onPanResponderMove: (_, gs) => {
+      // 带阻尼的偏移
+      const resisted = Math.sign(gs.dx) * 80 * (1 - Math.exp(-Math.abs(gs.dx) / 80))
+      swipeAnim.setValue(resisted)
+      scaleAnim.setValue(1 - Math.min(Math.abs(resisted) / 400, 0.04))
+      dragX = gs.dx
+    },
+    onPanResponderRelease: () => {
+      if (dragX > 60) {
+        Animated.sequence([
+          Animated.timing(swipeAnim, { toValue: 180, duration: 100, useNativeDriver: true }),
+          Animated.timing(swipeAnim, { toValue: 0, duration: 150, useNativeDriver: true }),
+        ]).start(() => playPrev())
+      } else if (dragX < -60) {
+        Animated.sequence([
+          Animated.timing(swipeAnim, { toValue: -180, duration: 100, useNativeDriver: true }),
+          Animated.timing(swipeAnim, { toValue: 0, duration: 150, useNativeDriver: true }),
+        ]).start(() => playNext())
+      } else {
+        Animated.spring(swipeAnim, { toValue: 0, useNativeDriver: true }).start()
+      }
+      Animated.spring(scaleAnim, { toValue: 1, useNativeDriver: true }).start()
+    },
+  })
+
   return (
-    <View style={[styles.container, { backgroundColor: bgColor }]}>
-      {/* Top row: cover + title/artist + close */}
+    <Animated.View
+      style={[styles.container, { backgroundColor: bgColor }, { transform: [{ translateX: swipeAnim }, { scale: scaleAnim }] }]}
+      {...swipePan.panHandlers}
+    >
+      {/* 顶部行:封面 + 歌名歌手 + 关闭 */}
       <View style={styles.topRow}>
-        {cover ? (
-          <Image source={{ uri: cover }} style={styles.cover} resizeMode="cover" />
-        ) : (
-          <View style={[styles.cover, { backgroundColor: 'rgba(255,255,255,0.1)' }]} />
-        )}
+        <View style={styles.coverWrap}>
+          {cover ? (
+            <Image source={{ uri: cover }} style={styles.cover} resizeMode="cover" />
+          ) : (
+            <View style={[styles.cover, { backgroundColor: 'rgba(255,255,255,0.08)' }]} />
+          )}
+        </View>
         <View style={styles.infoCol}>
           <Text style={styles.title} numberOfLines={1}>{name || '未在播放'}</Text>
           <Text style={styles.artist} numberOfLines={1}>{singer}</Text>
@@ -83,12 +118,7 @@ export default function MiniPlayer() {
         </TouchableOpacity>
       </View>
 
-      {/* Lyrics line */}
-      <View style={styles.lrcWrap}>
-        <Text style={styles.lrc} numberOfLines={2}>{currentLrc || '♪'}</Text>
-      </View>
-
-      {/* Progress bar + time */}
+      {/* 进度条 + 时间 */}
       <View style={styles.progressRow}>
         <Text style={styles.time}>{formatTime(progress)}</Text>
         <View ref={trackRef} style={styles.track} {...seekPan.panHandlers}>
@@ -97,7 +127,7 @@ export default function MiniPlayer() {
         <Text style={styles.time}>{formatTime(maxProgress)}</Text>
       </View>
 
-      {/* Controls */}
+      {/* 播放控件 */}
       <View style={styles.controls}>
         <TouchableOpacity onPress={() => playPrev()} style={styles.ctrlBtn}>
           <Text style={styles.ctrlIcon}>⏮</Text>
@@ -109,39 +139,45 @@ export default function MiniPlayer() {
           <Text style={styles.ctrlIcon}>⏭</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </Animated.View>
   )
 }
 
-const BTN_SZ = W * 0.1 > 48 ? 48 : W * 0.1
-const PLAY_SZ = W * 0.15 > 64 ? 64 : W * 0.15
-const TXT_SZ = W * 0.045 > 18 ? 18 : W * 0.045
-const ART_SZ = W * 0.035 > 14 ? 14 : W * 0.035
-const LRC_SZ = W * 0.035 > 13 ? 13 : W * 0.035
-const TIM_SZ = W * 0.03 > 11 ? 11 : W * 0.03
-const CTR_ICON = W * 0.06 > 26 ? 26 : W * 0.06
-const PLY_ICON = W * 0.07 > 30 ? 30 : W * 0.07
-const CTR_GAP = W * 0.08 > 36 ? 36 : W * 0.08
-const LRC_H = H * 0.08 > 50 ? 50 : H * 0.08
+const BTN = Math.min(W * 0.09, 42)
+const PLAY = Math.min(W * 0.13, 58)
+const FS = Math.min(W * 0.04, 16)
 
 const styles = StyleSheet.create({
-  container: { flex: 1, borderRadius: 16, overflow: 'hidden', padding: PAD },
-  topRow: { flexDirection: 'row', alignItems: 'center' },
-  cover: { width: COVER_SZ, height: COVER_SZ, borderRadius: 10, marginRight: 12 },
+  container: {
+    flex: 1, borderRadius: 20, overflow: 'hidden',
+    paddingHorizontal: PAD + 2, paddingVertical: PAD,
+  },
+  topRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 8 },
+  coverWrap: {
+    width: COVER_SZ, height: COVER_SZ, borderRadius: 12, overflow: 'hidden',
+    marginRight: 14, elevation: 6,
+    shadowColor: '#000', shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.25, shadowRadius: 8,
+  },
+  cover: { width: '100%', height: '100%' },
   infoCol: { flex: 1, justifyContent: 'center' },
-  title: { color: '#fff', fontSize: TXT_SZ, fontWeight: '700' },
-  artist: { color: 'rgba(255,255,255,0.6)', fontSize: ART_SZ, marginTop: 2 },
+  title: { color: '#fff', fontSize: Math.min(W * 0.042, 17), fontWeight: '700' },
+  artist: { color: 'rgba(255,255,255,0.55)', fontSize: Math.min(W * 0.033, 13), marginTop: 2 },
   closeBtn: { width: 32, height: 32, justifyContent: 'center', alignItems: 'center' },
-  closeIcon: { fontSize: 18, color: 'rgba(255,255,255,0.5)' },
-  lrcWrap: { height: LRC_H, justifyContent: 'center', marginVertical: 6 },
-  lrc: { color: 'rgba(255,255,255,0.7)', fontSize: LRC_SZ, textAlign: 'center' },
-  progressRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 10, gap: 8 },
-  time: { color: 'rgba(255,255,255,0.5)', fontSize: TIM_SZ, minWidth: 36, textAlign: 'center' },
-  track: { flex: 1, height: 4, backgroundColor: 'rgba(255,255,255,0.2)', borderRadius: 2 },
+  closeIcon: { fontSize: 18, color: 'rgba(255,255,255,0.45)' },
+  progressRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 8, gap: 8 },
+  time: { color: 'rgba(255,255,255,0.5)', fontSize: Math.min(W * 0.028, 11), minWidth: 36, textAlign: 'center' },
+  track: { flex: 1, height: 4, backgroundColor: 'rgba(255,255,255,0.18)', borderRadius: 2 },
   fill: { height: 4, backgroundColor: '#fff', borderRadius: 2 },
-  controls: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: CTR_GAP },
-  ctrlBtn: { width: BTN_SZ, height: BTN_SZ, justifyContent: 'center', alignItems: 'center' },
-  playBtn: { width: PLAY_SZ, height: PLAY_SZ, borderRadius: PLAY_SZ / 2, backgroundColor: 'rgba(255,255,255,0.15)', justifyContent: 'center', alignItems: 'center' },
-  ctrlIcon: { fontSize: CTR_ICON, color: 'rgba(255,255,255,0.8)' },
-  playIcon: { fontSize: PLY_ICON, color: '#fff' },
+  controls: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: Math.min(W * 0.07, 32) },
+  ctrlBtn: { width: BTN, height: BTN, justifyContent: 'center', alignItems: 'center' },
+  playBtn: {
+    width: PLAY, height: PLAY, borderRadius: PLAY / 2,
+    backgroundColor: 'rgba(255,255,255,0.12)',
+    justifyContent: 'center', alignItems: 'center',
+    elevation: 4, shadowColor: '#000', shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2, shadowRadius: 6,
+  },
+  ctrlIcon: { fontSize: Math.min(W * 0.055, 24), color: 'rgba(255,255,255,0.75)' },
+  playIcon: { fontSize: Math.min(W * 0.065, 28), color: '#fff' },
 })

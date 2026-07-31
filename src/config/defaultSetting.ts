@@ -90,6 +90,7 @@ const defaultSetting: LX.AppSetting = {
   'miniPlayer.lyricLines': 3,
   'miniPlayer.lyricFontSize': 15,
   'miniPlayer.lyricLineSpacing': 6,
+  'miniPlayer.lyricOffsetMs': 0,
   'miniPlayer.lyricHighlightColor': '#ffffff',
   'miniPlayer.coverStyle': 'follow',
   'miniPlayer.enableParticles': false,

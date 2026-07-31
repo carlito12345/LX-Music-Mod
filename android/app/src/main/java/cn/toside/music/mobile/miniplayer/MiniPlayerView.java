@@ -34,9 +34,20 @@ public class MiniPlayerView {
   private final MiniPlayerEvent eventEmitter;
   private WindowManager windowManager;
   private FrameLayout floatingView;
+  private ImageView bgImage;   // Neri毛玻璃背景
+  private View bgOverlay;      // 暗色遮罩
   private ImageView coverView;
   private TextView titleView, artistView, lrcView;
   private View progressFill;
+  // LRC 解析相关
+  private String rawLrc = "";
+  private int currentLyricProgress = 0;
+  private int lyricOffsetMs = 0;
+  private int lyricFontSize = 13;
+  private int lyricLineSpacing = 6;
+  private int lyricMaxLines = 3;
+  private int currentLyricMax = 0;
+  private Runnable lrcUpdateTask;
   private android.widget.TextView timeText;
   private int highlightColor = 0xFFFFFFFF;
   private int[] gradientColors = null; // 渐变色数组,null=不启用
@@ -83,13 +94,13 @@ public class MiniPlayerView {
     floatingView = new FrameLayout(context);
     GradientDrawable winBg = new GradientDrawable();
     winBg.setCornerRadius(dp(20));
-    winBg.setColor(0xE61A1A2E);
+    winBg.setColor(0xB3000000); // 半透明黑,让模糊背景透出
     floatingView.setBackground(winBg);
     floatingView.setClipToOutline(true);
 
     LinearLayout root = new LinearLayout(context);
     root.setOrientation(LinearLayout.VERTICAL);
-    root.setPadding(dp(16), dp(20), dp(16), dp(16));
+    root.setPadding(dp(12), dp(14), dp(12), dp(10));
 
     // 右上角扩展按钮(关闭service并返回App)
     TextView expandBtn = new TextView(context);
@@ -105,71 +116,59 @@ public class MiniPlayerView {
       if (callback != null) callback.onExpand();
     });
 
-    // Cover
+// Neri竖屏布局: 封面居中 → 歌名歌手 → 进度条 → 时间 → 歌词 → 控件
+    // === 封面 140dp 圆角 14dp 居中 ===
     coverView = new ImageView(context);
-    int coverPx = dp(120);
+    int coverPx = dp(140);
     LinearLayout.LayoutParams coverLp = new LinearLayout.LayoutParams(coverPx, coverPx);
     coverLp.gravity = Gravity.CENTER_HORIZONTAL;
+    coverLp.topMargin = dp(4);
     coverView.setLayoutParams(coverLp);
     coverView.setScaleType(ImageView.ScaleType.CENTER_CROP);
     coverView.setImageResource(android.R.drawable.ic_menu_gallery);
     GradientDrawable coverBg = new GradientDrawable();
-    coverBg.setCornerRadius(dp(18));
+    coverBg.setCornerRadius(dp(14));
     coverView.setBackground(coverBg);
     coverView.setClipToOutline(true);
     coverView.setElevation(dp(8));
-    coverView.setOnClickListener(v -> {
-      if (callback != null) callback.onExpand();
-    });
+    coverView.setOnClickListener(v -> { sendAction("expand"); });
     root.addView(coverView);
-
-    // Title
+    
+    // === 歌名 + 歌手(居中)===
     titleView = new TextView(context);
     titleView.setTextColor(Color.WHITE); titleView.setTextSize(17);
     titleView.setTypeface(null, android.graphics.Typeface.BOLD);
-    titleView.setMaxLines(1); titleView.setEllipsize(android.text.TextUtils.TruncateAt.END);
+    titleView.setMaxLines(2); titleView.setEllipsize(android.text.TextUtils.TruncateAt.END);
     titleView.setGravity(Gravity.CENTER);
-    titleView.setPadding(0, dp(6), 0, 0);
+    titleView.setPadding(0, dp(8), 0, 0);
     root.addView(titleView);
-
-    // Artist
+    
     artistView = new TextView(context);
-    artistView.setTextColor(Color.argb(153, 255, 255, 255)); artistView.setTextSize(14);
+    artistView.setTextColor(Color.argb(140, 255, 255, 255)); artistView.setTextSize(14);
     artistView.setMaxLines(1); artistView.setEllipsize(android.text.TextUtils.TruncateAt.END);
     artistView.setGravity(Gravity.CENTER);
-    artistView.setPadding(0, dp(2), 0, 0);
+    artistView.setPadding(0, dp(3), 0, 0);
     root.addView(artistView);
-
-    // Lyrics
-    lrcView = new TextView(context);
-    lrcView.setTextColor(Color.argb(180, 255, 255, 255)); lrcView.setTextSize(15);
-    lrcView.setMaxLines(5); lrcView.setMinLines(2);
-    // lrcView.setEllipsize(null);
-    lrcView.setGravity(Gravity.CENTER);
-    lrcView.setPadding(dp(12), dp(10), dp(12), dp(10));
-    lrcView.setLineSpacing(dp(6), 1f);
-    lrcView.setText("♪");
-    lrcView.setLayoutParams(new LinearLayout.LayoutParams(-1, 0, 1));
-    root.addView(lrcView);
-
-        // Progress bar (FrameLayout with track background + white fill)
-    FrameLayout progContainer = new FrameLayout(context);
-    progContainer.setLayoutParams(new LinearLayout.LayoutParams(-1, dp(5)));
-    GradientDrawable progBg = new GradientDrawable();
-    progBg.setCornerRadius(dp(3)); progBg.setColor(Color.argb(40, 255, 255, 255));
-    progContainer.setBackground(progBg);
     
+    // === 进度条 (细线) ===
+    FrameLayout progContainer = new FrameLayout(context);
+    LinearLayout.LayoutParams progLp = new LinearLayout.LayoutParams(-1, dp(3));
+    progLp.topMargin = dp(14);
+    progContainer.setLayoutParams(progLp);
+    GradientDrawable progBg = new GradientDrawable();
+    progBg.setCornerRadius(dp(2)); progBg.setColor(Color.argb(25, 255, 255, 255));
+    progContainer.setBackground(progBg);
     progressFill = new View(context);
     progressFill.setLayoutParams(new FrameLayout.LayoutParams(0, -1, Gravity.START));
     GradientDrawable progFillG = new GradientDrawable();
-    progFillG.setCornerRadius(dp(3)); progFillG.setColor(Color.WHITE);
+    progFillG.setCornerRadius(dp(2)); progFillG.setColor(Color.argb(240, 255, 255, 255));
     progressFill.setBackground(progFillG);
     progContainer.addView(progressFill);
     
     // 时间文字
     timeText = new android.widget.TextView(context);
     timeText.setTextColor(Color.argb(180, 255, 255, 255));
-    timeText.setTextSize(10);
+    timeText.setTextSize(11);
     timeText.setGravity(Gravity.END);
     timeText.setText("0:00 / 0:00");
     FrameLayout.LayoutParams tl = new FrameLayout.LayoutParams(-1, -2);
@@ -177,6 +176,16 @@ public class MiniPlayerView {
     tl.leftMargin = dp(4);
     timeText.setLayoutParams(tl);
     root.addView(timeText);
+    
+    // 歌词 - 占满中间剩余空间(weight=1),控件固定在底部
+    lrcView = new TextView(context);
+    lrcView.setTextColor(Color.argb(140, 255, 255, 255)); lrcView.setTextSize(13);
+    lrcView.setMaxLines(3); lrcView.setMinLines(1);
+    lrcView.setGravity(Gravity.CENTER);
+    lrcView.setPadding(0, dp(6), 0, 0);
+    lrcView.setText("♪");
+    lrcView.setLayoutParams(new LinearLayout.LayoutParams(-1, 0, 1));
+    root.addView(lrcView);
     
     // 进度条触摸拖动跳转
     progContainer.setOnTouchListener(new View.OnTouchListener() {
@@ -222,6 +231,16 @@ public class MiniPlayerView {
 
     int btnPx = dp(48), playPx = dp(60);
 
+    // Like (喜欢)
+    TextView likeBtn = new TextView(context);
+    likeBtn.setText("♡"); // ♡
+    likeBtn.setTextColor(Color.argb(140, 255, 255, 255));
+    likeBtn.setTextSize(22);
+    likeBtn.setGravity(Gravity.CENTER);
+    likeBtn.setPadding(dp(4), 0, dp(4), 0);
+    likeBtn.setOnClickListener(v -> { sendAction("like"); });
+    controls.addView(likeBtn);
+
     // Prev
     createCtrl(controls, btnPx, false);
 
@@ -244,22 +263,51 @@ public class MiniPlayerView {
     // Next
     createCtrl(controls, btnPx, true);
 
+    // Mode button
+    TextView modeBtn = new TextView(context);
+    modeBtn.setText("\u21BB");
+    modeBtn.setTextColor(Color.argb(140, 255, 255, 255));
+    modeBtn.setTextSize(20);
+    modeBtn.setGravity(Gravity.CENTER);
+    modeBtn.setPadding(dp(4), 0, dp(4), 0);
+    modeBtn.setOnClickListener(v -> { sendAction("changePlayMode"); });
+    controls.addView(modeBtn);
+
     root.addView(controls);
+    // Neri毛玻璃背景层: 模糊封面 + 暗色遮罩
+    bgImage = new ImageView(context);
+    bgImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
+    floatingView.addView(bgImage, new FrameLayout.LayoutParams(-1, -1));
+    bgOverlay = new View(context);
+    bgOverlay.setBackgroundColor(0x99000000); // 60% 暗色
+    floatingView.addView(bgOverlay, new FrameLayout.LayoutParams(-1, -1));
+    
     floatingView.addView(root, new FrameLayout.LayoutParams(-1, -1));
     floatingView.addView(expandBtn);
 
-    // Drag
+    // Drag - 仅顶部区域拖动窗口,进度条/按钮区域让子 View 处理
     floatingView.setOnTouchListener((v, ev) -> {
       switch (ev.getAction()) {
         case MotionEvent.ACTION_DOWN:
-          initialX = params.x; initialY = params.y;
-          initialTouchX = ev.getRawX(); initialTouchY = ev.getRawY();
-          return true;
+          // 只在窗口顶部 45% 区域(封面+歌名区)响应拖拽
+          if (ev.getY() < v.getHeight() * 0.45f) {
+            initialX = params.x; initialY = params.y;
+            initialTouchX = ev.getRawX(); initialTouchY = ev.getRawY();
+            return true;
+          }
+          return false; // 不拦截,让进度条/按钮处理
         case MotionEvent.ACTION_MOVE:
-          params.x = initialX + (int)(ev.getRawX() - initialTouchX);
-          params.y = initialY + (int)(ev.getRawY() - initialTouchY);
-          try { windowManager.updateViewLayout(floatingView, params); } catch (Exception ignored) {}
-          return true;
+          if (initialTouchX > 0) {
+            params.x = initialX + (int)(ev.getRawX() - initialTouchX);
+            params.y = initialY + (int)(ev.getRawY() - initialTouchY);
+            try { windowManager.updateViewLayout(floatingView, params); } catch (Exception ignored) {}
+            return true;
+          }
+          return false;
+        case MotionEvent.ACTION_UP:
+        case MotionEvent.ACTION_CANCEL:
+          initialTouchX = 0; initialTouchY = 0;
+          return false;
       }
       return false;
     });
@@ -267,6 +315,20 @@ public class MiniPlayerView {
     try {
       windowManager.addView(floatingView, params);
       isShowing = true;
+      // 启动原生 LRC 更新定时器(后台不卡)
+      if (lrcUpdateTask == null) {
+        lrcUpdateTask = new Runnable() {
+          @Override public void run() {
+            // 播放中自推进时间(app后台 JS 冻结时歌词继续走)
+            if (isPlaying) {
+              currentLyricProgress += 500;
+              updateLrcNow();
+            }
+            new Handler(Looper.getMainLooper()).postDelayed(this, 500);
+          }
+        };
+      }
+      new Handler(Looper.getMainLooper()).postDelayed(lrcUpdateTask, 500);
       if (eventEmitter != null) {
         WritableMap ready = Arguments.createMap();
         eventEmitter.sendEvent("onMiniPlayerReady", ready);
@@ -274,7 +336,8 @@ public class MiniPlayerView {
     } catch (Exception e) { Log.e(TAG, "show error", e); }
   }
 
-  public void updatePlaybackInfo(String title, String artist, boolean playing, int progress, int maxProgress) { write("MiniView", "INFO", "updateInfo: " + title + " - " + artist + " playing=" + playing + " prog=" + progress + " max=" + maxProgress);
+  public void updatePlaybackInfo(String title, String artist, boolean playing, int progress, int maxProgress) { Log.d(TAG, "updateInfo prog=" + progress + " max=" + maxProgress + " title=" + title);
+    write("MiniView", "INFO", "updateInfo: " + title + " - " + artist + " playing=" + playing + " prog=" + progress + " max=" + maxProgress);
     isPlaying = playing;
     new Handler(Looper.getMainLooper()).post(() -> {
       if (titleView != null) titleView.setText(title.isEmpty() ? "未播放" : title);
@@ -304,6 +367,12 @@ public class MiniPlayerView {
         }
       }
       // 更新时间显示(即使无总时长也显示当前时间)
+      // 同步歌词进度(关键:否则歌词从0开始只靠定时器推进)
+      if (progress > 0 && progress != currentLyricProgress) {
+        currentLyricProgress = progress;
+        if (!rawLrc.isEmpty()) updateLrcNow();
+      }
+      // 更新时间显示(即使无总时长也显示当前时间)
       if (timeText != null) {
         int nowS = (int)(progress / 1000);
         int maxS = (int)(maxProgress / 1000);
@@ -326,15 +395,25 @@ public class MiniPlayerView {
           is = conn.getInputStream();
           android.graphics.Bitmap bmp = android.graphics.BitmapFactory.decodeStream(is);
           is.close(); conn.disconnect();
-          if (bmp != null) { final android.graphics.Bitmap fb = bmp; new Handler(Looper.getMainLooper()).post(() -> coverView.setImageBitmap(fb)); }
+          if (bmp != null) { final android.graphics.Bitmap fb = bmp; new Handler(Looper.getMainLooper()).post(() -> {
+            coverView.setImageBitmap(fb);
+            setBlurredBackground(fb);
+          }); }
         } else {
           is = new java.io.FileInputStream(path.replace("file://", ""));
           android.graphics.Bitmap bmp = android.graphics.BitmapFactory.decodeStream(is);
           is.close();
-          if (bmp != null) { final android.graphics.Bitmap fb = bmp; new Handler(Looper.getMainLooper()).post(() -> coverView.setImageBitmap(fb)); }
+          if (bmp != null) { final android.graphics.Bitmap fb = bmp; new Handler(Looper.getMainLooper()).post(() -> {
+            coverView.setImageBitmap(fb);
+            setBlurredBackground(fb);
+          }); }
         }
       } catch (Exception e) { Log.w(TAG, "cover: " + e.getMessage()); }
     }).start();
+  }
+
+  public void setLyricOffset(int offsetMs) {
+    this.lyricOffsetMs = offsetMs;
   }
 
   public void setStyle(int bgColor, int lyricLines, String highlightColorStr) {
@@ -342,6 +421,17 @@ public class MiniPlayerView {
   }
 
   public void setStyle(int bgColor, int lyricLines, String highlightColorStr, int fontSize, int lineSpacing) {
+    write("MiniView", "INFO", "setStyle lines=" + lyricLines + " fs=" + fontSize + " ls=" + lineSpacing);
+    this.lyricMaxLines = lyricLines > 0 ? lyricLines : 3;
+    this.lyricFontSize = fontSize > 0 ? fontSize : 13;
+    this.lyricLineSpacing = lineSpacing > 0 ? lineSpacing : 6;
+    new Handler(Looper.getMainLooper()).post(() -> {
+      if (lrcView != null) {
+        lrcView.setTextSize(lyricFontSize);
+        lrcView.setMaxLines(lyricMaxLines);
+        lrcView.setLineSpacing(dp(lyricLineSpacing), 1f);
+      }
+    });
     if (highlightColorStr != null && highlightColorStr.contains(",")) {
       // 逗号分隔 = 渐变色列表
       try {
@@ -360,48 +450,104 @@ public class MiniPlayerView {
     }
     if (floatingView != null) {
       new Handler(Looper.getMainLooper()).post(() -> {
-        GradientDrawable winBg = (GradientDrawable) floatingView.getBackground();
-        if (winBg != null) winBg.setColor(bgColor);
-        if (lrcView != null) {
-          lrcView.setMaxLines(lyricLines > 0 ? lyricLines : 3);
-          lrcView.setMinLines(Math.min(lyricLines, 2));
-          if (fontSize > 0) lrcView.setTextSize(fontSize);
-          if (lineSpacing > 0) lrcView.setLineSpacing(dp(lineSpacing), 1f);
+        // 背景改为模糊封面+暗遮罩,不再用纯色
+        if (bgOverlay != null) {
+          bgOverlay.setBackgroundColor(0x99000000);
         }
       });
     }
   }
 
-  public void updateLrc(String text) {
-    Log.d(TAG, "updateLrc called: " + (text != null ? text.substring(0, Math.min(text.length(), 20)) : "null"));
-    new Handler(Looper.getMainLooper()).post(() -> {
-      if (lrcView == null) { Log.w(TAG, "lrcView is NULL"); return; }
-      Log.d(TAG, "lrcView attached=" + lrcView.isAttachedToWindow() + " text=" + (text != null && text.length() > 15 ? text.substring(0, 15) : text));
-      if (text == null || text.isEmpty()) {
-        lrcView.setText("\u266A");
-        lrcView.getPaint().setShader(null);
-        return;
+  // 原生 LRC 解析(后台不卡)
+  private void updateLrcNow() {
+    if (lrcView == null || rawLrc.isEmpty()) return;
+    int timeSec = (currentLyricProgress + lyricOffsetMs) / 1000;
+    String[] lines = rawLrc.split("\n");
+    if (lines.length == 0) return;
+    
+    // 定位当前行
+    int currentIdx = 0;
+    for (int i = lines.length - 1; i >= 0; i--) {
+      String line = lines[i];
+      if (line.length() < 4 || line.charAt(0) != '[') continue;
+      int p1 = line.indexOf(':');
+      if (p1 < 3) continue;
+      try {
+        int min = Integer.parseInt(line.substring(1, p1));
+        float sec = Float.parseFloat(line.substring(p1 + 1, p1 + 3));
+        if ((min * 60 + (int)sec) <= timeSec) { currentIdx = i; break; }
+      } catch (Exception ignored) {}
+    }
+    
+    // 提取显示范围(当前行前后各2行)
+    int start = Math.max(0, currentIdx - 2);
+    int end = Math.min(lines.length, currentIdx + 3);
+    java.util.List<String> texts = new java.util.ArrayList<>();
+    java.util.List<Integer> lineStart = new java.util.ArrayList<>();
+    StringBuilder sb = new StringBuilder();
+    for (int i = start; i < end; i++) {
+      String line = lines[i];
+      int p = line.indexOf(']');
+      if (p > 0 && line.charAt(0) == '[') {
+        if (sb.length() > 0) sb.append("\n");
+        lineStart.add(sb.length());
+        texts.add(line.substring(p + 1).trim());
+        sb.append(line.substring(p + 1).trim());
       }
-      String[] lines = text.split("\\n");
-      SpannableString ss = new SpannableString(text);
-      int hlStart = 0, hlEnd = text.length();
-      if (lines.length >= 3) {
-        int pos = 0;
-        for (int i = 0; i < 2; i++) pos = text.indexOf('\n', pos) + 1;
-        int lineEnd = text.indexOf('\n', pos);
-        if (lineEnd < 0) lineEnd = text.length();
-        hlStart = pos; hlEnd = lineEnd;
-      } else if (lines.length > 0) {
-        hlStart = text.lastIndexOf('\n') + 1;
-        hlEnd = text.length();
-      }
+    }
+    if (sb.length() == 0) return;
+    
+    // 每次渲染应用样式设置(防止被覆盖)
+    lrcView.setTextSize(lyricFontSize > 0 ? lyricFontSize : 13);
+    lrcView.setMaxLines(lyricMaxLines > 0 ? lyricMaxLines : 3);
+    lrcView.setLineSpacing(dp(lyricLineSpacing > 0 ? lyricLineSpacing : 6), 1f);
+    
+    // 高亮当前行
+    String full = sb.toString();
+    android.text.SpannableString ss = new android.text.SpannableString(full);
+    int currentDisplayIdx = currentIdx - start;
+    try {
+      int hlStart = currentDisplayIdx >= 0 && currentDisplayIdx < lineStart.size() ? lineStart.get(currentDisplayIdx) : 0;
+      int hlEnd = currentDisplayIdx >= 0 && currentDisplayIdx < lineStart.size()
+        ? (currentDisplayIdx + 1 < lineStart.size() ? lineStart.get(currentDisplayIdx + 1) : full.length())
+        : 0;
       if (gradientColors != null && gradientColors.length >= 2) {
-        // 渐变模式:当前行用渐变 span
+        // 渐变高亮
         ss.setSpan(new GradientSpan(gradientColors), hlStart, hlEnd, 0);
       } else {
-        ss.setSpan(new ForegroundColorSpan(highlightColor), hlStart, hlEnd, 0);
+        ss.setSpan(new android.text.style.ForegroundColorSpan(highlightColor), hlStart, hlEnd, 0);
       }
-      lrcView.setText(ss); lrcView.invalidate(); lrcView.requestLayout();
+      // 非当前行半透明
+      for (int i = 0; i < lineStart.size(); i++) {
+        if (i == currentDisplayIdx) continue;
+        int s2 = lineStart.get(i);
+        int e2 = i + 1 < lineStart.size() ? lineStart.get(i + 1) : full.length();
+        ss.setSpan(new android.text.style.ForegroundColorSpan(0x99FFFFFF), s2, e2, 0);
+      }
+    } catch (Exception ignored) {}
+    lrcView.setText(ss);
+    lrcView.invalidate();
+  }
+  // 下采样放大实现自然模糊(Neri毛玻璃)
+  private void setBlurredBackground(android.graphics.Bitmap src) {
+    try {
+      int w = src.getWidth(), h = src.getHeight();
+      if (w <= 0 || h <= 0) return;
+      android.graphics.Bitmap small = android.graphics.Bitmap.createScaledBitmap(src, Math.max(1, w/12), Math.max(1, h/12), true);
+      android.graphics.Bitmap blurred = android.graphics.Bitmap.createScaledBitmap(small, w, h, true);
+      if (blurred != null && bgImage != null) bgImage.setImageBitmap(blurred);
+    } catch (Exception e) { Log.w(TAG, "blur bg: " + e.getMessage()); }
+  }
+  public void updateLrc(String text) {
+    // 存储原始 LRC(带时间戳),由原生解析器定位歌词行并应用偏移
+    this.rawLrc = text != null ? text : "";
+    new Handler(Looper.getMainLooper()).post(() -> {
+      if (lrcView == null) return;
+      if (rawLrc.isEmpty()) {
+        lrcView.setText("\u266A");
+        return;
+      }
+      updateLrcNow();
     });
   }
 

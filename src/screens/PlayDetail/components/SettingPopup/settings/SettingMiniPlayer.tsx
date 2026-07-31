@@ -134,6 +134,7 @@ const MiniPlayerSetting = () => {
   const lyricLines = useSettingValue('miniPlayer.lyricLines')
   const lyricFontSize = useSettingValue('miniPlayer.lyricFontSize')
   const lyricLineSpacing = useSettingValue('miniPlayer.lyricLineSpacing')
+  const lyricOffsetMs = useSettingValue('miniPlayer.lyricOffsetMs')
   const highlightColor = useSettingValue('miniPlayer.lyricHighlightColor')
   const cw = useSettingValue('miniPlayer.customWidth')
   const ch = useSettingValue('miniPlayer.customHeight')
@@ -206,6 +207,19 @@ const MiniPlayerSetting = () => {
             />
           </View>
 
+          {/* 歌词时间偏移 */}
+          <View style={s.row}>
+            <Text size={13}>歌词偏移: {lyricOffsetMs || 0}ms</Text>
+            <Slider
+              minimumValue={-3000} maximumValue={3000} step={100}
+              value={lyricOffsetMs || 0}
+              onSlidingComplete={v => updateSetting({ 'miniPlayer.lyricOffsetMs': Math.trunc(v) })}
+              style={{ flex: 1, marginLeft: 8 }}
+            />
+          </View>
+          <Text size={11} color="rgba(255,255,255,0.4)" style={{ marginTop: 2 }}>
+            正数=歌词提前, 负数=歌词延后 (±3秒)
+          </Text>
           {/* 歌词高亮色 */}
           <Text size={13} style={{ marginTop: 8 }}>歌词高亮颜色</Text>
           <View style={s.colorRow}>

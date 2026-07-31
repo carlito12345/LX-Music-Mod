@@ -110,6 +110,12 @@ public class MiniPlayerModule extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
+  public void setLyricOffset(int offsetMs, Promise promise) {
+    MiniPlayerService.setLyricOffset(offsetMs);
+    promise.resolve(true);
+  }
+
+  @ReactMethod
   public void setStyle(int bgColor, int lyricLines, String highlightColor, int fontSize, int lineSpacing, Promise promise) {
     MiniPlayerService.setStyle(bgColor, lyricLines, highlightColor, fontSize, lineSpacing);
     promise.resolve(true);

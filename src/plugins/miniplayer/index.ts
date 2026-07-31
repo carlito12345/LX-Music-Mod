@@ -2,6 +2,7 @@
  * MiniPlayer - 小窗播放器
  */
 import { NativeModules, NativeEventEmitter } from 'react-native'
+import BackgroundTimer from 'react-native-background-timer'
 import { playNext, playPrev, togglePlay } from '@/core/player/player'
 
 const { MiniPlayerModule } = NativeModules
@@ -10,6 +11,13 @@ const isAvailable = !!MiniPlayerModule
 let eventEmitter: NativeEventEmitter | null = null
 let isShowing = false
 let pollTimer: any = null
+// 设置缓存: configUpdated 事件实时更新(避免 require 读 store 为空)
+let cachedMiniSettings: any = null
+try {
+  global.state_event?.on('configUpdated', (keys: any, setting: any) => {
+    if (setting) cachedMiniSettings = { ...(cachedMiniSettings || {}), ...setting }
+  })
+} catch {}
 
 const ACTION_MAP: Record<string, (data?: any) => void> = {
   next: () => playNext(),
@@ -17,9 +25,31 @@ const ACTION_MAP: Record<string, (data?: any) => void> = {
   playPause: () => togglePlay(),
   seek: (data) => {
     if (data?.ratio != null) {
-      const { seek } = require('@/core/player/player')
-      seek(data.ratio)
+      const { setCurrentTime } = require('@/plugins/player')
+      const dur = require('@/store/player/state').default?.progress?.maxPlayTime || 0
+      if (dur > 0) setCurrentTime(data.ratio * dur)
     }
+  },
+  like: () => {
+    try {
+      require('@/core/player/player').collectMusic()
+      const { toast } = require('@/utils/tools')
+      toast('已添加到我喜欢')
+    } catch {}
+  },
+  changePlayMode: () => {
+    try {
+      const { updateSetting } = require('@/core/common')
+      const { MUSIC_TOGGLE_MODE_LIST } = require('@/config/constant')
+      const current = require('@/store/setting/state').default?.setting?.['player.togglePlayMethod']
+      let idx = MUSIC_TOGGLE_MODE_LIST.indexOf(current)
+      if (++idx >= MUSIC_TOGGLE_MODE_LIST.length) idx = 0
+      const mode = MUSIC_TOGGLE_MODE_LIST[idx]
+      updateSetting({ 'player.togglePlayMethod': mode })
+      const names: Record<string, string> = { listLoop: '列表循环', random: '随机播放', list: '顺序播放', singleLoop: '单曲循环' }
+      const { toast } = require('@/utils/tools')
+      toast(names[mode] || mode)
+    } catch {}
   },
 }
 
@@ -27,7 +57,7 @@ const ACTION_MAP: Record<string, (data?: any) => void> = {
 // 多次重试:App 初始化时序不确定,播放器数据可能延迟就绪
 function checkAndRefreshService(attempt: number = 0) {
   if (!isAvailable || attempt > 5) return
-  setTimeout(async () => {
+  BackgroundTimer.setTimeout(async () => {
     try {
       const running = await MiniPlayerModule.isServiceRunning()
       console.log(`[MiniPlayer] 开机检查#${attempt} 服务运行:`, running)
@@ -60,7 +90,7 @@ if (isAvailable) {
     pushState()
     startPoll()
     // 延迟应用样式(确保 view 已就绪)
-    setTimeout(() => {
+    BackgroundTimer.setTimeout(() => {
       try {
         const ss = require('@/store/setting/state').default
         const s = ss?.setting
@@ -74,7 +104,9 @@ if (isAvailable) {
           }
           const lines = s['miniPlayer.lyricLines'] || 3
           const hc = s['miniPlayer.lyricHighlightColor'] || '#ffffff'
+          const offs = s['miniPlayer.lyricOffsetMs'] || 0
           setStyle(bg, lines, hc)
+          setLyricOffset(offs)
         }
       } catch (e) { console.warn('[MiniPlayer] style error:', e) }
     }, 200)
@@ -101,8 +133,10 @@ const GRADIENT_PRESET_COLORS: Record<string, string> = {
 
 function syncSettings() {
   try {
+    // 优先用事件缓存,其次 require(双保险)
     const ss = require('@/store/setting/state').default
-    const s = ss?.setting
+    if (!cachedMiniSettings && ss?.setting) cachedMiniSettings = ss.setting
+    const s = cachedMiniSettings || ss?.setting
     if (!s) return
     let bg = 0xE61A1A2E
     if (s['miniPlayer.followBgColor']) {
@@ -124,6 +158,7 @@ function syncSettings() {
       }
     }
     setStyle(bg, lines, hc, fontSize, lineSpacing)
+    setLyricOffset(s['miniPlayer.lyricOffsetMs'] || 0)
   } catch (e) { console.warn('[MiniPlayer] syncSettings err:', e) }
 }
 
@@ -163,12 +198,10 @@ function tickLrc() {
       for (let i = parsed.length - 1; i >= 0; i--) {
         if (nowTime >= parsed[i].time) { currentIdx = i; break }
       }
-      const start = Math.max(0, currentIdx - 1)
-      const end = Math.min(parsed.length, currentIdx + 4)
-      const multiLine = parsed.slice(start, end).map(l => l.text).join('\n')
-      if (multiLine !== lastLrc) {
-        lastLrc = multiLine
-        updateLrc(multiLine)
+      // 发送原始 LRC(带时间戳),让原生解析器自己定位 + 应用偏移
+      if (rawLrc !== lastLrc) {
+        lastLrc = rawLrc
+        updateLrc(rawLrc)
       }
     } else if (ps?.lastLyric && ps.lastLyric !== lastLrc) {
       lastLrc = ps.lastLyric
@@ -199,11 +232,11 @@ function startLrcEvent() {
   
   // 通道2: LRC 时间戳轮询(精度补充)
   tickLrc()
-  lrcTimer = setInterval(tickLrc, 500)
+  lrcTimer = BackgroundTimer.setInterval(tickLrc, 500)
 }
 
 function stopLrcTimer() {
-  if (lrcTimer) { clearInterval(lrcTimer); lrcTimer = null }
+  if (lrcTimer) { BackgroundTimer.clearInterval(lrcTimer); lrcTimer = null }
   if (lrcListener) { try { lrcListener.remove() } catch {}; lrcListener = null }
 }
 
@@ -214,7 +247,7 @@ function pushState() {
     const mi = ps?.musicInfo
     if (!mi?.id) return
     updateCover(mi.pic || '')
-    updatePlaybackInfo(mi.name || '', mi.singer || '', ps.isPlay, 0, mi.interval || 0)
+    updatePlaybackInfo(mi.name || '', mi.singer || '', ps.isPlay, (ps?.progress?.nowPlayTime || 0) * 1000, (ps?.progress?.maxPlayTime || mi.interval || 0) * 1000)
     // 同步更新歌词(作为 setInterval 的 fallback)
     tickLrc()
   } catch {}
@@ -226,7 +259,7 @@ function startPoll() {
   const loop = async () => {
     while (isShowing) {
       pushState()
-      await new Promise(r => setTimeout(r, 1000))
+      await new Promise(r => BackgroundTimer.setTimeout(r, 1000))
     }
     pollTimer = null
   }
@@ -264,7 +297,7 @@ export async function show(width?: number, height?: number): Promise<boolean> {
     }
     await MiniPlayerModule.show(w, h)
     // 等待服务窗口创建完成后推送数据
-    setTimeout(() => { pushState(); startPoll() }, 800)
+    BackgroundTimer.setTimeout(() => { pushState(); startPoll() }, 800)
     return true
   } catch (e) { console.warn('[MiniPlayer] show err:', e); isShowing = false; return false }
 }
@@ -289,6 +322,11 @@ export async function updatePlaybackInfo(
 ): Promise<void> {
   if (!isAvailable) return
   try { await MiniPlayerModule.updatePlaybackInfo(title || '', artist || '', playing, progress || 0, maxProgress || 100) } catch {}
+}
+
+export async function setLyricOffset(offsetMs: number): Promise<void> {
+  if (!isAvailable) return
+  try { await MiniPlayerModule.setLyricOffset(offsetMs) } catch {}
 }
 
 export async function setStyle(bgColor?: number, lyricLines?: number, highlightColor?: string, fontSize?: number, lineSpacing?: number): Promise<void> {

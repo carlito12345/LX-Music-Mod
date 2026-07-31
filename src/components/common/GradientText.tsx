@@ -29,7 +29,7 @@ interface GradientTextProps {
 }
 
 export default memo(({ text, colors, preset = 'aurora', style, size = 16, lineHeight, textAlign = 'center', onPress }: GradientTextProps) => {
-  const [w, setW] = useState(200)
+  const [w, setW] = useState(0)
   const gradientColors = colors || GRADIENT_PRESETS[preset]?.colors || GRADIENT_PRESETS.aurora.colors
   const fontSize = size || 16
   const lh = lineHeight || fontSize * 1.3
@@ -37,6 +37,15 @@ export default memo(({ text, colors, preset = 'aurora', style, size = 16, lineHe
   const onLayout = (e: LayoutChangeEvent) => {
     const width = e.nativeEvent.layout.width
     if (width > 0) setW(width)
+  }
+
+  // 宽度未测量前渲染空白,避免先左后中的跳动
+  if (w === 0) {
+    const placeholder = (
+      <View onLayout={onLayout} style={{ width: '100%', height: lh + 4 }} />
+    )
+    if (onPress) return <TouchableOpacity onPress={onPress} style={{ width: '100%', height: lh + 4 }}>{placeholder}</TouchableOpacity>
+    return placeholder
   }
 
   const content = (
