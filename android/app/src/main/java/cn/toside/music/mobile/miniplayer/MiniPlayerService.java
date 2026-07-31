@@ -134,6 +134,13 @@ public class MiniPlayerService extends Service implements MiniPlayerView.MiniPla
   public static void setStyle(int bg, int lines, String hc, int fontSize, int lineSpacing) {
     if (miniPlayerView != null) miniPlayerView.setStyle(bg, lines, hc, fontSize, lineSpacing);
   }
+  public static void setLiked(boolean liked) {
+    if (miniPlayerView != null) miniPlayerView.setLiked(liked);
+  }
+  public static int getNativeModeIdx() {
+    if (miniPlayerView != null) return miniPlayerView.getNativeModeIdx();
+    return -1;
+  }
   public static void setLyricOffset(int offsetMs) {
     if (miniPlayerView != null) miniPlayerView.setLyricOffset(offsetMs);
   }

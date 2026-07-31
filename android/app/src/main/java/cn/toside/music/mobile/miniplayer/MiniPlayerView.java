@@ -1,6 +1,9 @@
 package cn.toside.music.mobile.miniplayer;
 
+import cn.toside.music.mobile.R;
+
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
@@ -43,6 +46,12 @@ public class MiniPlayerView {
   private String rawLrc = "";
   private int currentLyricProgress = 0;
   private int lyricOffsetMs = 0;
+  private int nativeModeIdx = -1;
+  private android.widget.ImageButton modeBtn;
+  private boolean isLiked = false;
+  private android.widget.ImageButton likeBtn; // -1=未初始化,从存储读取
+  private static final String PREFS = "miniplayer_mod";
+  private static final String KEY_MODE = "playModeIdx";
   private int lyricFontSize = 13;
   private int lyricLineSpacing = 6;
   private int lyricMaxLines = 3;
@@ -232,13 +241,18 @@ public class MiniPlayerView {
     int btnPx = dp(48), playPx = dp(60);
 
     // Like (喜欢)
-    TextView likeBtn = new TextView(context);
-    likeBtn.setText("♡"); // ♡
-    likeBtn.setTextColor(Color.argb(140, 255, 255, 255));
-    likeBtn.setTextSize(22);
-    likeBtn.setGravity(Gravity.CENTER);
+    likeBtn = new android.widget.ImageButton(context);
+    likeBtn.setBackgroundResource(android.R.drawable.ic_menu_myplaces); // 透明背景占位
+    likeBtn.setBackgroundColor(0x00000000);
+    likeBtn.setImageResource(R.drawable.ic_heart_outline);
+    likeBtn.setColorFilter(0x8CFFFFFF);
     likeBtn.setPadding(dp(4), 0, dp(4), 0);
-    likeBtn.setOnClickListener(v -> { sendAction("like"); });
+    likeBtn.setScaleType(android.widget.ImageView.ScaleType.FIT_CENTER);
+    likeBtn.setOnClickListener(v -> {
+      isLiked = !isLiked;
+      updateLikeIcon();
+      sendAction(isLiked ? "like" : "unlike");
+    });
     controls.addView(likeBtn);
 
     // Prev
@@ -264,13 +278,13 @@ public class MiniPlayerView {
     createCtrl(controls, btnPx, true);
 
     // Mode button
-    TextView modeBtn = new TextView(context);
-    modeBtn.setText("\u21BB");
-    modeBtn.setTextColor(Color.argb(140, 255, 255, 255));
-    modeBtn.setTextSize(20);
-    modeBtn.setGravity(Gravity.CENTER);
+    modeBtn = new android.widget.ImageButton(context);
+    modeBtn.setBackgroundColor(0x00000000);
+    modeBtn.setImageResource(R.drawable.ic_mode_repeat);
+    modeBtn.setColorFilter(0x8CFFFFFF);
     modeBtn.setPadding(dp(4), 0, dp(4), 0);
-    modeBtn.setOnClickListener(v -> { sendAction("changePlayMode"); });
+    modeBtn.setScaleType(android.widget.ImageView.ScaleType.FIT_CENTER);
+    modeBtn.setOnClickListener(v -> { cyclePlayMode(); updateModeIcon(); });
     controls.addView(modeBtn);
 
     root.addView(controls);
@@ -528,6 +542,63 @@ public class MiniPlayerView {
     lrcView.setText(ss);
     lrcView.invalidate();
   }
+  // 模式图标(Material)
+  private int getModeIconRes(int idx) {
+    switch (idx % 5) {
+      case 0: return R.drawable.ic_mode_repeat;     // 列表循环
+      case 1: return R.drawable.ic_mode_shuffle;    // 随机
+      case 2: return R.drawable.ic_mode_list;       // 顺序
+      case 3: return R.drawable.ic_mode_repeat_one; // 单曲循环
+      default: return R.drawable.ic_mode_off;       // 禁用
+    }
+  }
+  public void setLiked(boolean liked) {
+    this.isLiked = liked;
+    new Handler(Looper.getMainLooper()).post(() -> updateLikeIcon());
+  }
+  private void updateLikeIcon() {
+    if (likeBtn != null) {
+      likeBtn.setImageResource(isLiked ? R.drawable.ic_heart_filled : R.drawable.ic_heart_outline);
+      likeBtn.setColorFilter(isLiked ? 0xFFE91E63 : 0x8CFFFFFF);
+    }
+  }
+  private void updateModeIcon() {
+    if (modeBtn != null) {
+      modeBtn.setImageResource(getModeIconRes(nativeModeIdx));
+      modeBtn.setColorFilter(0x8CFFFFFF);
+    }
+  }
+
+  // 原生播放模式循环(后台 JS 冻结也能用)
+  public void cyclePlayMode() {
+    final String[] MODES = {"listLoop", "random", "list", "singleLoop", "none"};
+    try {
+      android.content.SharedPreferences sp = context.getSharedPreferences(PREFS, 0);
+      if (nativeModeIdx < 0) nativeModeIdx = sp.getInt(KEY_MODE, 0);
+      nativeModeIdx = (nativeModeIdx + 1) % MODES.length;
+      sp.edit().putInt(KEY_MODE, nativeModeIdx).commit();
+      final String mode = MODES[nativeModeIdx];
+      String[] NAMES = {"列表循环", "随机播放", "顺序播放", "单曲循环", "禁用"};
+      new Handler(Looper.getMainLooper()).post(() -> {
+        android.widget.Toast.makeText(context, "播放模式: " + NAMES[nativeModeIdx % NAMES.length], android.widget.Toast.LENGTH_SHORT).show();
+        updateModeIcon();
+      });
+      // 广播给 JS(前台时应用)
+      Intent i = new Intent("cn.toside.music.mobile.MINI_PLAYER_BUTTON");
+      i.putExtra("button_action", "nativePlayMode");
+      i.putExtra("mode", mode);
+      i.setPackage(context.getPackageName());
+      context.sendBroadcast(i);
+    } catch (Exception e) { Log.w(TAG, "cyclePlayMode: " + e.getMessage()); }
+  }
+  public int getNativeModeIdx() {
+    if (nativeModeIdx < 0) {
+      android.content.SharedPreferences sp = context.getSharedPreferences(PREFS, 0);
+      nativeModeIdx = sp.getInt(KEY_MODE, 0);
+    }
+    return nativeModeIdx;
+  }
+
   // 下采样放大实现自然模糊(Neri毛玻璃)
   private void setBlurredBackground(android.graphics.Bitmap src) {
     try {

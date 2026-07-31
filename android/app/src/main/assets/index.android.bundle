@@ -167649,6 +167649,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   exports.isMiniPlayerShowing = isMiniPlayerShowing;
   exports.isServiceRunning = isServiceRunning;
   exports.openOverlaySettings = openOverlaySettings;
+  exports.setLikedState = setLikedState;
   exports.setLyricOffset = setLyricOffset;
   exports.setStyle = setStyle;
   exports.show = show;
@@ -167669,9 +167670,13 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   var pollTimer = null;
   // 设置缓存: configUpdated 事件实时更新(避免 require 读 store 为空)
   var cachedMiniSettings = null;
+  var playModeIdx = 0;
   try {
-    var _global$state_event;
-    (_global$state_event = global.state_event) == null ? void 0 : _global$state_event.on('configUpdated', function (keys, setting) {
+    var _global$state_event, _global$state_event2;
+    (_global$state_event = global.state_event) == null ? void 0 : _global$state_event.on('mylistUpdated', function () {
+      syncLikedState();
+    });
+    (_global$state_event2 = global.state_event) == null ? void 0 : _global$state_event2.on('configUpdated', function (keys, setting) {
       if (setting) cachedMiniSettings = Object.assign({}, cachedMiniSettings || {}, setting);
     });
   } catch (_unused) {}
@@ -167694,38 +167699,88 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
         if (dur > 0) setCurrentTime(data.ratio * dur);
       }
     },
+    nativePlayMode: function nativePlayMode(data) {
+      try {
+        if (data != null && data.mode) {
+          var _require2 = _$$_REQUIRE(_dependencyMap[7], "../../core/common"),
+            updateSetting = _require2.updateSetting;
+          updateSetting({
+            'player.togglePlayMethod': data.mode
+          });
+          if (cachedMiniSettings) cachedMiniSettings['player.togglePlayMethod'] = data.mode;
+        }
+      } catch (_unused2) {}
+    },
     like: function like() {
       try {
-        _$$_REQUIRE(_dependencyMap[4], "../../core/player/player").collectMusic();
-        var _require2 = _$$_REQUIRE(_dependencyMap[7], "../../utils/tools"),
-          toast = _require2.toast;
+        var _ps$playMusicInfo, _ss$setting;
+        var ps = _$$_REQUIRE(_dependencyMap[6], "../../store/player/state").default;
+        // 用完整播放信息结构(和 collectMusic 一致),避免缺 source 导致列表渲染崩溃
+        var full = ps == null ? void 0 : (_ps$playMusicInfo = ps.playMusicInfo) == null ? void 0 : _ps$playMusicInfo.musicInfo;
+        var music = full && 'progress' in full ? full.metadata.musicInfo : full || (ps == null ? void 0 : ps.musicInfo);
+        var _require3 = _$$_REQUIRE(_dependencyMap[8], "../../utils/tools"),
+          toast = _require3.toast;
+        if (!(music != null && music.id)) {
+          toast('无歌曲');
+          return;
+        }
+        // 兜底 source,防止列表渲染 item.source.toUpperCase() 崩溃
+        var safeMusic = Object.assign({}, music, {
+          source: music.source || 'unknown'
+        });
+        var _require4 = _$$_REQUIRE(_dependencyMap[9], "../../core/list"),
+          addListMusics = _require4.addListMusics;
+        var _require5 = _$$_REQUIRE(_dependencyMap[10], "../../config/constant"),
+          LIST_IDS = _require5.LIST_IDS;
+        var ss = _$$_REQUIRE(_dependencyMap[11], "../../store/setting/state").default;
+        addListMusics(LIST_IDS.LOVE, [safeMusic], ss == null ? void 0 : (_ss$setting = ss.setting) == null ? void 0 : _ss$setting['list.addMusicLocationType']);
         toast('已添加到我喜欢');
-      } catch (_unused2) {}
+      } catch (_unused3) {}
+    },
+    unlike: function unlike() {
+      try {
+        var _ps$playMusicInfo2;
+        var ps = _$$_REQUIRE(_dependencyMap[6], "../../store/player/state").default;
+        var full = ps == null ? void 0 : (_ps$playMusicInfo2 = ps.playMusicInfo) == null ? void 0 : _ps$playMusicInfo2.musicInfo;
+        var music = full && 'progress' in full ? full.metadata.musicInfo : full || (ps == null ? void 0 : ps.musicInfo);
+        var _require6 = _$$_REQUIRE(_dependencyMap[8], "../../utils/tools"),
+          toast = _require6.toast;
+        if (!(music != null && music.id)) {
+          toast('无歌曲');
+          return;
+        }
+        var _require7 = _$$_REQUIRE(_dependencyMap[9], "../../core/list"),
+          removeListMusics = _require7.removeListMusics;
+        var _require8 = _$$_REQUIRE(_dependencyMap[10], "../../config/constant"),
+          LIST_IDS = _require8.LIST_IDS;
+        removeListMusics(LIST_IDS.LOVE, [music.id]);
+        toast('已取消收藏');
+      } catch (_unused4) {}
     },
     changePlayMode: function changePlayMode() {
       try {
-        var _require$default2, _require$default2$set;
-        var _require3 = _$$_REQUIRE(_dependencyMap[8], "../../core/common"),
-          updateSetting = _require3.updateSetting;
-        var _require4 = _$$_REQUIRE(_dependencyMap[9], "../../config/constant"),
-          MUSIC_TOGGLE_MODE_LIST = _require4.MUSIC_TOGGLE_MODE_LIST;
-        var current = (_require$default2 = _$$_REQUIRE(_dependencyMap[10], "../../store/setting/state").default) == null ? void 0 : (_require$default2$set = _require$default2.setting) == null ? void 0 : _require$default2$set['player.togglePlayMethod'];
-        var idx = MUSIC_TOGGLE_MODE_LIST.indexOf(current);
-        if (++idx >= MUSIC_TOGGLE_MODE_LIST.length) idx = 0;
-        var mode = MUSIC_TOGGLE_MODE_LIST[idx];
+        var _require9 = _$$_REQUIRE(_dependencyMap[7], "../../core/common"),
+          updateSetting = _require9.updateSetting;
+        var _require0 = _$$_REQUIRE(_dependencyMap[10], "../../config/constant"),
+          MUSIC_TOGGLE_MODE_LIST = _require0.MUSIC_TOGGLE_MODE_LIST;
+        // 5个模式循环(listLoop→random→list→singleLoop→none→回第一个)
+        playModeIdx = (playModeIdx + 1) % MUSIC_TOGGLE_MODE_LIST.length;
+        var mode = MUSIC_TOGGLE_MODE_LIST[playModeIdx];
         updateSetting({
           'player.togglePlayMethod': mode
         });
+        if (cachedMiniSettings) cachedMiniSettings['player.togglePlayMethod'] = mode;
         var names = {
           listLoop: '列表循环',
           random: '随机播放',
           list: '顺序播放',
-          singleLoop: '单曲循环'
+          singleLoop: '单曲循环',
+          none: '禁用'
         };
-        var _require5 = _$$_REQUIRE(_dependencyMap[7], "../../utils/tools"),
-          toast = _require5.toast;
+        var _require1 = _$$_REQUIRE(_dependencyMap[8], "../../utils/tools"),
+          toast = _require1.toast;
         toast(names[mode] || mode);
-      } catch (_unused3) {}
+      } catch (_unused5) {}
     }
   };
 
@@ -167752,7 +167807,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   }
   try {
     checkAndRefreshService();
-  } catch (_unused4) {}
+  } catch (_unused6) {}
   if (isAvailable) {
     eventEmitter = new _reactNative.NativeEventEmitter(MiniPlayerModule);
     eventEmitter.addListener('onMiniPlayerAction', function (data) {
@@ -167763,18 +167818,31 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     // 监听 Service 的按钮事件(常驻小窗用)
     try {
       MiniPlayerModule.startServiceButtonListener();
-    } catch (_unused5) {}
+    } catch (_unused7) {}
     eventEmitter.addListener('onMiniPlayerReady', function () {
       try {
         var _NativeModules$LyricM;
         (_NativeModules$LyricM = _reactNative.NativeModules.LyricModule) == null ? void 0 : _NativeModules$LyricM.setSendLyricTextEvent == null ? void 0 : _NativeModules$LyricM.setSendLyricTextEvent(true);
-      } catch (_unused6) {}
+      } catch (_unused8) {}
       pushState();
       startPoll();
+      // 同步原生播放模式
+      try {
+        MiniPlayerModule.getNativePlayMode().then(function (mode) {
+          if (mode) {
+            var _require10 = _$$_REQUIRE(_dependencyMap[7], "../../core/common"),
+              updateSetting = _require10.updateSetting;
+            updateSetting({
+              'player.togglePlayMethod': mode
+            });
+            if (cachedMiniSettings) cachedMiniSettings['player.togglePlayMethod'] = mode;
+          }
+        }).catch(function () {});
+      } catch (_unused9) {}
       // 延迟应用样式(确保 view 已就绪)
       _reactNativeBackgroundTimer.default.setTimeout(function () {
         try {
-          var ss = _$$_REQUIRE(_dependencyMap[10], "../../store/setting/state").default;
+          var ss = _$$_REQUIRE(_dependencyMap[11], "../../store/setting/state").default;
           var s = ss == null ? void 0 : ss.setting;
           if (s) {
             var bg = 0xE61A1A2E;
@@ -167797,8 +167865,8 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     });
     eventEmitter.addListener('onMiniPlayerSeek', function (data) {
       if ((data == null ? void 0 : data.ratio) != null) {
-        var _require6 = _$$_REQUIRE(_dependencyMap[4], "../../core/player/player"),
-          seek = _require6.seek;
+        var _require11 = _$$_REQUIRE(_dependencyMap[4], "../../core/player/player"),
+          seek = _require11.seek;
         seek(data.ratio);
       }
     });
@@ -167816,7 +167884,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
   function syncSettings() {
     try {
       // 优先用事件缓存,其次 require(双保险)
-      var ss = _$$_REQUIRE(_dependencyMap[10], "../../store/setting/state").default;
+      var ss = _$$_REQUIRE(_dependencyMap[11], "../../store/setting/state").default;
       if (!cachedMiniSettings && ss != null && ss.setting) cachedMiniSettings = ss.setting;
       var s = cachedMiniSettings || (ss == null ? void 0 : ss.setting);
       if (!s) return;
@@ -167899,7 +167967,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
         lastLrc = ps.lastLyric;
         updateLrc(ps.lastLyric);
       }
-    } catch (_unused7) {}
+    } catch (_unused0) {}
   }
   function startLrcEvent() {
     if (lrcTimer) return;
@@ -167907,9 +167975,9 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
 
     // 通道1: 原生歌词事件(离开界面也工作)
     try {
-      var _require7 = _$$_REQUIRE(_dependencyMap[2], "react-native"),
-        _NativeModules = _require7.NativeModules,
-        _NativeEventEmitter = _require7.NativeEventEmitter;
+      var _require12 = _$$_REQUIRE(_dependencyMap[2], "react-native"),
+        _NativeModules = _require12.NativeModules,
+        _NativeEventEmitter = _require12.NativeEventEmitter;
       var LyricModule = _NativeModules.LyricModule;
       if (LyricModule) {
         LyricModule.setSendLyricTextEvent(true);
@@ -167921,7 +167989,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
           }
         });
       }
-    } catch (_unused8) {}
+    } catch (_unused1) {}
 
     // 通道2: LRC 时间戳轮询(精度补充)
     tickLrc();
@@ -167935,10 +168003,43 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     if (lrcListener) {
       try {
         lrcListener.remove();
-      } catch (_unused9) {}
+      } catch (_unused10) {}
       ;
       lrcListener = null;
     }
+  }
+
+  // 判断当前歌曲是否已喜欢(读 listManage 的实时 allMusicList Map)
+  function checkIsLiked(mi) {
+    try {
+      if (!(mi != null && mi.id)) return false;
+      // allMusicList 是实时 Map 引用, 不经过 store 响应式
+      var aml = _$$_REQUIRE(_dependencyMap[12], "../../utils/listManage").allMusicList;
+      var loveSongs = (aml == null ? void 0 : aml.get == null ? void 0 : aml.get('love')) || [];
+      if (!Array.isArray(loveSongs)) return false;
+      return loveSongs.some(function (s) {
+        var _ref2, _s$id, _s$metadata, _s$metadata$musicInfo, _mi$id;
+        var sid = (_ref2 = (_s$id = s == null ? void 0 : s.id) != null ? _s$id : s == null ? void 0 : s.songmid) != null ? _ref2 : s == null ? void 0 : (_s$metadata = s.metadata) == null ? void 0 : (_s$metadata$musicInfo = _s$metadata.musicInfo) == null ? void 0 : _s$metadata$musicInfo.id;
+        var mid = (_mi$id = mi == null ? void 0 : mi.id) != null ? _mi$id : mi == null ? void 0 : mi.songmid;
+        return sid === mid || (s == null ? void 0 : s.songmid) && s.songmid === (mi == null ? void 0 : mi.songmid);
+      }) === true;
+    } catch (_unused11) {
+      return false;
+    }
+  }
+
+  // 列表变化时刷新红心状态
+  var lastLikedSync = 0;
+  function syncLikedState() {
+    try {
+      var ps = _$$_REQUIRE(_dependencyMap[6], "../../store/player/state").default;
+      var mi = ps == null ? void 0 : ps.musicInfo;
+      if (!(mi != null && mi.id)) return;
+      var now = Date.now();
+      if (now - lastLikedSync < 1500) return; // 防抖
+      lastLikedSync = now;
+      setLikedState(checkIsLiked(mi));
+    } catch (_unused12) {}
   }
   function pushState() {
     syncSettings();
@@ -167949,15 +168050,17 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       if (!(mi != null && mi.id)) return;
       updateCover(mi.pic || '');
       updatePlaybackInfo(mi.name || '', mi.singer || '', ps.isPlay, ((ps == null ? void 0 : (_ps$progress2 = ps.progress) == null ? void 0 : _ps$progress2.nowPlayTime) || 0) * 1000, ((ps == null ? void 0 : (_ps$progress3 = ps.progress) == null ? void 0 : _ps$progress3.maxPlayTime) || mi.interval || 0) * 1000);
+      // 同步喜欢状态(防抖)
+      syncLikedState();
       // 同步更新歌词(作为 setInterval 的 fallback)
       tickLrc();
-    } catch (_unused0) {}
+    } catch (_unused13) {}
   }
   function startPoll() {
     if (pollTimer) return;
     startLrcEvent();
     var loop = /*#__PURE__*/function () {
-      var _ref2 = (0, _asyncToGenerator2.default)(function* () {
+      var _ref3 = (0, _asyncToGenerator2.default)(function* () {
         while (isShowing) {
           pushState();
           yield new Promise(function (r) {
@@ -167967,7 +168070,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
         pollTimer = null;
       });
       return function loop() {
-        return _ref2.apply(this, arguments);
+        return _ref3.apply(this, arguments);
       };
     }();
     loop();
@@ -168000,11 +168103,11 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
           h = height;
         if (!w || !h) {
           try {
-            var _ss$setting, _ss$setting2;
-            var ss = _$$_REQUIRE(_dependencyMap[10], "../../store/setting/state").default;
-            w = (ss == null ? void 0 : (_ss$setting = ss.setting) == null ? void 0 : _ss$setting['miniPlayer.customWidth']) || 500;
-            h = (ss == null ? void 0 : (_ss$setting2 = ss.setting) == null ? void 0 : _ss$setting2['miniPlayer.customHeight']) || 900;
-          } catch (_unused1) {
+            var _ss$setting2, _ss$setting3;
+            var ss = _$$_REQUIRE(_dependencyMap[11], "../../store/setting/state").default;
+            w = (ss == null ? void 0 : (_ss$setting2 = ss.setting) == null ? void 0 : _ss$setting2['miniPlayer.customWidth']) || 500;
+            h = (ss == null ? void 0 : (_ss$setting3 = ss.setting) == null ? void 0 : _ss$setting3['miniPlayer.customHeight']) || 900;
+          } catch (_unused14) {
             w = 500;
             h = 900;
           }
@@ -168035,7 +168138,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       try {
         yield MiniPlayerModule.hide();
         return true;
-      } catch (_unused10) {
+      } catch (_unused15) {
         return false;
       }
     });
@@ -168049,7 +168152,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       if (!isAvailable) return;
       try {
         yield MiniPlayerModule.updateCover(coverPath);
-      } catch (_unused11) {}
+      } catch (_unused16) {}
     });
     return _updateCover.apply(this, arguments);
   }
@@ -168061,11 +168164,23 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       if (!isAvailable) return;
       try {
         yield MiniPlayerModule.updatePlaybackInfo(title || '', artist || '', playing, progress || 0, maxProgress || 100);
-      } catch (_unused12) {}
+      } catch (_unused17) {}
     });
     return _updatePlaybackInfo.apply(this, arguments);
   }
-  function setLyricOffset(_x9) {
+  function setLikedState(_x9) {
+    return _setLikedState.apply(this, arguments);
+  }
+  function _setLikedState() {
+    _setLikedState = (0, _asyncToGenerator2.default)(function* (liked) {
+      if (!isAvailable) return;
+      try {
+        yield MiniPlayerModule.setLiked(!!liked);
+      } catch (_unused18) {}
+    });
+    return _setLikedState.apply(this, arguments);
+  }
+  function setLyricOffset(_x0) {
     return _setLyricOffset.apply(this, arguments);
   }
   function _setLyricOffset() {
@@ -168073,11 +168188,11 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       if (!isAvailable) return;
       try {
         yield MiniPlayerModule.setLyricOffset(offsetMs);
-      } catch (_unused13) {}
+      } catch (_unused19) {}
     });
     return _setLyricOffset.apply(this, arguments);
   }
-  function setStyle(_x0, _x1, _x10, _x11, _x12) {
+  function setStyle(_x1, _x10, _x11, _x12, _x13) {
     return _setStyle.apply(this, arguments);
   }
   function _setStyle() {
@@ -168085,11 +168200,11 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       if (!isAvailable) return;
       try {
         yield MiniPlayerModule.setStyle(bgColor || 0xE61A1A2E, lyricLines || 3, highlightColor || '#ffffff', fontSize || 15, lineSpacing || 6);
-      } catch (_unused14) {}
+      } catch (_unused20) {}
     });
     return _setStyle.apply(this, arguments);
   }
-  function updateLrc(_x13) {
+  function updateLrc(_x14) {
     return _updateLrc.apply(this, arguments);
   }
   function _updateLrc() {
@@ -168097,7 +168212,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       if (!isAvailable) return;
       try {
         yield MiniPlayerModule.updateLrc(text || '');
-      } catch (_unused15) {}
+      } catch (_unused21) {}
     });
     return _updateLrc.apply(this, arguments);
   }
@@ -168112,7 +168227,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       if (!isAvailable) return false;
       try {
         return yield MiniPlayerModule.isServiceRunning();
-      } catch (_unused16) {
+      } catch (_unused22) {
         return false;
       }
     });
@@ -168126,7 +168241,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       if (!isAvailable) return false;
       try {
         return yield MiniPlayerModule.hasOverlayPermission();
-      } catch (_unused17) {
+      } catch (_unused23) {
         return false;
       }
     });
@@ -168141,7 +168256,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       try {
         yield MiniPlayerModule.openOverlaySettings();
         return true;
-      } catch (_unused18) {
+      } catch (_unused24) {
         return false;
       }
     });
@@ -168160,7 +168275,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     hasOverlayPermission: hasOverlayPermission,
     openOverlaySettings: openOverlaySettings
   };
-},724,[1,99,6,550,695,543,542,562,725,692,551],"src/plugins/miniplayer/index.ts");
+},724,[1,99,6,550,695,543,542,725,562,703,692,551,704],"src/plugins/miniplayer/index.ts");
 __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {
   var _interopRequireDefault = _$$_REQUIRE(_dependencyMap[0], "@babel/runtime/helpers/interopRequireDefault");
   Object.defineProperty(exports, "__esModule", {
@@ -170717,8 +170832,8 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
         textSize: getTextSize(textSize),
         lyricViewX: positionX,
         lyricViewY: positionY,
-        textX: textPositionX.toUpperCase(),
-        textY: textPositionY.toUpperCase(),
+        textX: (textPositionX || 'CENTER').toUpperCase(),
+        textY: (textPositionY || 'CENTER').toUpperCase(),
         width: width,
         maxLineNum: maxLineNum
       });
@@ -170915,7 +171030,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
 
   var setLyricTextPosition = exports.setLyricTextPosition = /*#__PURE__*/function () {
     var _ref18 = (0, _asyncToGenerator2.default)(function* (textX, textY) {
-      return LyricModule.setLyricTextPosition(textX.toUpperCase(), textY.toUpperCase());
+      return LyricModule.setLyricTextPosition((textX || 'CENTER').toUpperCase(), (textY || 'CENTER').toUpperCase());
     });
     return function setLyricTextPosition(_x20, _x21) {
       return _ref18.apply(this, arguments);
@@ -205696,7 +205811,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
             children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
               size: 8,
               color: theme['c-button-font'],
-              children: item.source.toUpperCase()
+              children: (item.source || 'unknown').toUpperCase()
             })
           }) : null, item.play_count ? /*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
             style: styles.playCount,
@@ -208096,7 +208211,7 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
           }), /*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.View, {
             style: styles.listItemSingle,
             children: [/*#__PURE__*/(0, _jsxRuntime.jsx)(_Badge.default, {
-              children: item.source.toUpperCase()
+              children: (item.source || 'unknown').toUpperCase()
             }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
               style: styles.listItemSingleText,
               size: 11,

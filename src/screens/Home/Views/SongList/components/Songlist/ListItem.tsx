@@ -29,7 +29,7 @@ export default memo(({ item, index, width, showSource, onPress }: {
                 <Image url={item.img} nativeID={`${NAV_SHEAR_NATIVE_IDS.songlistDetail_pic}_from_${item.id}`} style={{ width: itemWidth, height: itemWidth, borderRadius: 4 }} />
                 { showSource
                   ? <View style={[styles.tagBadge, { backgroundColor: theme['c-primary'] }]}>
-                      <Text size={8} color={theme['c-button-font']}>{item.source.toUpperCase()}</Text>
+                      <Text size={8} color={theme['c-button-font']}>{(item.source || 'unknown').toUpperCase()}</Text>
                     </View>
                   : null
                 }

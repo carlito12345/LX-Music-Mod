@@ -4,6 +4,7 @@
 import { NativeModules, NativeEventEmitter } from 'react-native'
 import BackgroundTimer from 'react-native-background-timer'
 import { playNext, playPrev, togglePlay } from '@/core/player/player'
+import { LIST_IDS } from '@/config/constant'
 
 const { MiniPlayerModule } = NativeModules
 const isAvailable = !!MiniPlayerModule
@@ -13,7 +14,11 @@ let isShowing = false
 let pollTimer: any = null
 // 设置缓存: configUpdated 事件实时更新(避免 require 读 store 为空)
 let cachedMiniSettings: any = null
+let playModeIdx = 0
 try {
+  global.state_event?.on('mylistUpdated', () => {
+    syncLikedState()
+  })
   global.state_event?.on('configUpdated', (keys: any, setting: any) => {
     if (setting) cachedMiniSettings = { ...(cachedMiniSettings || {}), ...setting }
   })
@@ -30,23 +35,55 @@ const ACTION_MAP: Record<string, (data?: any) => void> = {
       if (dur > 0) setCurrentTime(data.ratio * dur)
     }
   },
+  nativePlayMode: (data) => {
+    try {
+      if (data?.mode) {
+        const { updateSetting } = require('@/core/common')
+        updateSetting({ 'player.togglePlayMethod': data.mode })
+        if (cachedMiniSettings) cachedMiniSettings['player.togglePlayMethod'] = data.mode
+      }
+    } catch {}
+  },
   like: () => {
     try {
-      require('@/core/player/player').collectMusic()
+      const ps = require('@/store/player/state').default
+      // 用完整播放信息结构(和 collectMusic 一致),避免缺 source 导致列表渲染崩溃
+      const full = ps?.playMusicInfo?.musicInfo
+      const music = full && 'progress' in full ? full.metadata.musicInfo : (full || ps?.musicInfo)
       const { toast } = require('@/utils/tools')
+      if (!music?.id) { toast('无歌曲'); return }
+      // 兜底 source,防止列表渲染 item.source.toUpperCase() 崩溃
+      const safeMusic = { ...music, source: music.source || 'unknown' }
+      const { addListMusics } = require('@/core/list')
+      const { LIST_IDS } = require('@/config/constant')
+      const ss = require('@/store/setting/state').default
+      addListMusics(LIST_IDS.LOVE, [safeMusic], ss?.setting?.['list.addMusicLocationType'])
       toast('已添加到我喜欢')
+    } catch {}
+  },
+  unlike: () => {
+    try {
+      const ps = require('@/store/player/state').default
+      const full = ps?.playMusicInfo?.musicInfo
+      const music = full && 'progress' in full ? full.metadata.musicInfo : (full || ps?.musicInfo)
+      const { toast } = require('@/utils/tools')
+      if (!music?.id) { toast('无歌曲'); return }
+      const { removeListMusics } = require('@/core/list')
+      const { LIST_IDS } = require('@/config/constant')
+      removeListMusics(LIST_IDS.LOVE, [music.id])
+      toast('已取消收藏')
     } catch {}
   },
   changePlayMode: () => {
     try {
       const { updateSetting } = require('@/core/common')
       const { MUSIC_TOGGLE_MODE_LIST } = require('@/config/constant')
-      const current = require('@/store/setting/state').default?.setting?.['player.togglePlayMethod']
-      let idx = MUSIC_TOGGLE_MODE_LIST.indexOf(current)
-      if (++idx >= MUSIC_TOGGLE_MODE_LIST.length) idx = 0
-      const mode = MUSIC_TOGGLE_MODE_LIST[idx]
+      // 5个模式循环(listLoop→random→list→singleLoop→none→回第一个)
+      playModeIdx = (playModeIdx + 1) % MUSIC_TOGGLE_MODE_LIST.length
+      const mode = MUSIC_TOGGLE_MODE_LIST[playModeIdx]
       updateSetting({ 'player.togglePlayMethod': mode })
-      const names: Record<string, string> = { listLoop: '列表循环', random: '随机播放', list: '顺序播放', singleLoop: '单曲循环' }
+      if (cachedMiniSettings) cachedMiniSettings['player.togglePlayMethod'] = mode
+      const names: Record<string, string> = { listLoop: '列表循环', random: '随机播放', list: '顺序播放', singleLoop: '单曲循环', none: '禁用' }
       const { toast } = require('@/utils/tools')
       toast(names[mode] || mode)
     } catch {}
@@ -89,6 +126,16 @@ if (isAvailable) {
     try { NativeModules.LyricModule?.setSendLyricTextEvent?.(true) } catch {}
     pushState()
     startPoll()
+    // 同步原生播放模式
+    try {
+      MiniPlayerModule.getNativePlayMode().then((mode: string) => {
+        if (mode) {
+          const { updateSetting } = require('@/core/common')
+          updateSetting({ 'player.togglePlayMethod': mode })
+          if (cachedMiniSettings) cachedMiniSettings['player.togglePlayMethod'] = mode
+        }
+      }).catch(() => {})
+    } catch {}
     // 延迟应用样式(确保 view 已就绪)
     BackgroundTimer.setTimeout(() => {
       try {
@@ -240,6 +287,36 @@ function stopLrcTimer() {
   if (lrcListener) { try { lrcListener.remove() } catch {}; lrcListener = null }
 }
 
+// 判断当前歌曲是否已喜欢(读 listManage 的实时 allMusicList Map)
+function checkIsLiked(mi: any): boolean {
+  try {
+    if (!mi?.id) return false
+    // allMusicList 是实时 Map 引用, 不经过 store 响应式
+    const aml = require('@/utils/listManage').allMusicList
+    const loveSongs = aml?.get?.('love') || []
+    if (!Array.isArray(loveSongs)) return false
+    return loveSongs.some((s: any) => {
+      const sid = s?.id ?? s?.songmid ?? s?.metadata?.musicInfo?.id
+      const mid = mi?.id ?? mi?.songmid
+      return sid === mid || (s?.songmid && s.songmid === mi?.songmid)
+    }) === true
+  } catch { return false }
+}
+
+// 列表变化时刷新红心状态
+let lastLikedSync = 0
+function syncLikedState() {
+  try {
+    const ps = require('@/store/player/state').default
+    const mi = ps?.musicInfo
+    if (!mi?.id) return
+    const now = Date.now()
+    if (now - lastLikedSync < 1500) return // 防抖
+    lastLikedSync = now
+    setLikedState(checkIsLiked(mi))
+  } catch {}
+}
+
 function pushState() {
   syncSettings()
   try {
@@ -248,6 +325,8 @@ function pushState() {
     if (!mi?.id) return
     updateCover(mi.pic || '')
     updatePlaybackInfo(mi.name || '', mi.singer || '', ps.isPlay, (ps?.progress?.nowPlayTime || 0) * 1000, (ps?.progress?.maxPlayTime || mi.interval || 0) * 1000)
+    // 同步喜欢状态(防抖)
+    syncLikedState()
     // 同步更新歌词(作为 setInterval 的 fallback)
     tickLrc()
   } catch {}
@@ -322,6 +401,11 @@ export async function updatePlaybackInfo(
 ): Promise<void> {
   if (!isAvailable) return
   try { await MiniPlayerModule.updatePlaybackInfo(title || '', artist || '', playing, progress || 0, maxProgress || 100) } catch {}
+}
+
+export async function setLikedState(liked: boolean): Promise<void> {
+  if (!isAvailable) return
+  try { await MiniPlayerModule.setLiked(!!liked) } catch {}
 }
 
 export async function setLyricOffset(offsetMs: number): Promise<void> {

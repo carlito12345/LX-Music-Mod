@@ -114,6 +114,22 @@ public class MiniPlayerModule extends ReactContextBaseJavaModule {
     MiniPlayerService.setLyricOffset(offsetMs);
     promise.resolve(true);
   }
+  @ReactMethod
+  public void setLiked(boolean liked, Promise promise) {
+    MiniPlayerService.setLiked(liked);
+    promise.resolve(true);
+  }
+
+  @ReactMethod
+  public void getNativePlayMode(Promise promise) {
+    try {
+      int idx = MiniPlayerService.getNativeModeIdx();
+      String[] MODES = {"listLoop", "random", "list", "singleLoop", "none"};
+      promise.resolve(idx >= 0 && idx < MODES.length ? MODES[idx] : "listLoop");
+    } catch (Exception e) {
+      promise.resolve("listLoop");
+    }
+  }
 
   @ReactMethod
   public void setStyle(int bgColor, int lyricLines, String highlightColor, int fontSize, int lineSpacing, Promise promise) {
@@ -136,6 +152,9 @@ public class MiniPlayerModule extends ReactContextBaseJavaModule {
               p.putString("action", action);
               if ("seek".equals(action) && intent.hasExtra("ratio")) {
                 p.putDouble("ratio", intent.getDoubleExtra("ratio", 0));
+              }
+              if ("nativePlayMode".equals(action) && intent.hasExtra("mode")) {
+                p.putString("mode", intent.getStringExtra("mode"));
               }
               miniPlayerEvent.sendEvent("onMiniPlayerAction", p);
             }
