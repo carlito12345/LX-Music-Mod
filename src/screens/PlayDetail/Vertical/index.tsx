@@ -83,9 +83,9 @@ export default memo(({ componentId }: { componentId: string }) => {
 
   // 根据背景类型决定背景样式
   const wallpaperEnabled = useSettingValue('playDetail.effect.wallpaper.enabled')
-  const auroraEnabled = useSettingValue('playDetail.effect.aurora.enabled') || useSettingValue('app.background.aurora.enabled')
-  const auroraPreset = useSettingValue('playDetail.effect.aurora.preset')
-  const auroraIntensity = useSettingValue('playDetail.effect.aurora.intensity')
+  const auroraEnabled = useSettingValue('app.background.aurora.enabled')
+  const auroraPreset = useSettingValue('app.background.aurora.preset')
+  const auroraIntensity = useSettingValue('app.background.aurora.intensity')
   const backgroundStyle = useMemo(() => {
     if (wallpaperEnabled) {
       return { backgroundColor: 'transparent' }

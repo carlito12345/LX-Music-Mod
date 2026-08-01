@@ -15,7 +15,6 @@ const MAIN_EFFECTS = [
   { key: 'spectrum', label: '📊 频谱', setting: 'playDetail.effect.spectrum.enabled' },
   { key: 'echo', label: '🔊 音域回响', setting: 'playDetail.effect.echo.enabled' },
   { key: 'slideshow', label: '🖼️ 幻灯片', setting: 'playDetail.effect.slideshow.enabled' },
-  { key: 'aurora', label: '🌌 极光背景', setting: 'playDetail.effect.aurora.enabled' },
   { key: 'magicRings', label: '💫 点击涟漪', setting: 'playDetail.effect.magicRings.enabled' },
   { key: 'shinyText', label: '✨ 歌名闪光', setting: 'playDetail.effect.shinyText.enabled' },
   { key: 'lyricProximity', label: '🔍 歌词聚焦', setting: 'playDetail.effect.lyricProximity.enabled' },
@@ -57,9 +56,6 @@ export default memo(() => {
   const spectrum = useSettingValue('playDetail.effect.spectrum.enabled')
   const echo = useSettingValue('playDetail.effect.echo.enabled')
   const slideshow = useSettingValue('playDetail.effect.slideshow.enabled')
-  const aurora = useSettingValue('playDetail.effect.aurora.enabled')
-  const auroraPreset = useSettingValue('playDetail.effect.aurora.preset')
-  const auroraIntensity = useSettingValue('playDetail.effect.aurora.intensity')
   const magicRings = useSettingValue('playDetail.effect.magicRings.enabled')
   const shinyText = useSettingValue('playDetail.effect.shinyText.enabled')
   const lyricProximity = useSettingValue('playDetail.effect.lyricProximity.enabled')
@@ -78,7 +74,7 @@ export default memo(() => {
   const speed = useSettingValue('playDetail.effect.starfield.speed')
   const pattern = useSettingValue('playDetail.effect.starfield.pattern')
 
-  const effectMap: Record<string, boolean> = { starfield, lyricStage, cinematic, controlBtn, spectrum, echo, slideshow, aurora, magicRings, shinyText, lyricProximity, elasticSlider }
+  const effectMap: Record<string, boolean> = { starfield, lyricStage, cinematic, controlBtn, spectrum, echo, slideshow, magicRings, shinyText, lyricProximity, elasticSlider }
 
   const getSettingKey = (key: string) => {
     const found = MAIN_EFFECTS.find(e => e.key === key)
@@ -244,34 +240,6 @@ export default memo(() => {
                 onPress={() => updateSetting({ 'playDetail.effect.echo.amplitude': v } as any)}
               >
                 <Text size={11} color={echoAmplitude === v ? '#fff' : theme['c-font']}>{v}x</Text>
-              </TouchableOpacity>
-            ))}
-          </View>
-        </View>
-      )}
-      {aurora && (
-        <View style={styles.subSection}>
-          <Text size={13} color={theme['c-font-label']} style={{ marginBottom: 6 }}>极光配色</Text>
-          <View style={styles.row}>
-            {AURORA_PRESETS_UI.map(p => (
-              <TouchableOpacity
-                key={p.value}
-                style={[styles.chip, auroraPreset === p.value && { backgroundColor: theme['c-primary'] }]}
-                onPress={() => updateSetting({ 'playDetail.effect.aurora.preset': p.value } as any)}
-              >
-                <Text size={12} color={auroraPreset === p.value ? '#fff' : theme['c-font']}>{p.label}</Text>
-              </TouchableOpacity>
-            ))}
-          </View>
-          <Text size={13} color={theme['c-font-label']} style={{ marginBottom: 6 }}>动画强度</Text>
-          <View style={styles.row}>
-            {[0.3, 0.5, 0.75, 1].map(v => (
-              <TouchableOpacity
-                key={v}
-                style={[styles.chip, auroraIntensity === v && { backgroundColor: theme['c-primary'] }]}
-                onPress={() => updateSetting({ 'playDetail.effect.aurora.intensity': v } as any)}
-              >
-                <Text size={12} color={auroraIntensity === v ? '#fff' : theme['c-font']}>{v}x</Text>
               </TouchableOpacity>
             ))}
           </View>

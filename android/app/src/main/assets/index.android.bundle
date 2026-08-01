@@ -129004,12 +129004,9 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     'playDetail.effect.controlBtn.enabled': false,
     'playDetail.effect.echo.enabled': false,
     'playDetail.effect.wallpaper.enabled': false,
-    'playDetail.effect.aurora.enabled': false,
     'app.background.aurora.enabled': false,
     'app.background.aurora.preset': 'aurora',
     'app.background.aurora.intensity': 1,
-    'playDetail.effect.aurora.preset': 'aurora',
-    'playDetail.effect.aurora.intensity': 1,
     'playDetail.effect.magicRings.enabled': false,
     'playDetail.effect.magicRings.radius': 34,
     'playDetail.effect.shinyText.enabled': false,
@@ -263574,9 +263571,9 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
 
     // 根据背景类型决定背景样式
     var wallpaperEnabled = (0, _$$_REQUIRE(_dependencyMap[13], "../../../store/setting/hook").useSettingValue)('playDetail.effect.wallpaper.enabled');
-    var auroraEnabled = (0, _$$_REQUIRE(_dependencyMap[13], "../../../store/setting/hook").useSettingValue)('playDetail.effect.aurora.enabled') || (0, _$$_REQUIRE(_dependencyMap[13], "../../../store/setting/hook").useSettingValue)('app.background.aurora.enabled');
-    var auroraPreset = (0, _$$_REQUIRE(_dependencyMap[13], "../../../store/setting/hook").useSettingValue)('playDetail.effect.aurora.preset');
-    var auroraIntensity = (0, _$$_REQUIRE(_dependencyMap[13], "../../../store/setting/hook").useSettingValue)('playDetail.effect.aurora.intensity');
+    var auroraEnabled = (0, _$$_REQUIRE(_dependencyMap[13], "../../../store/setting/hook").useSettingValue)('app.background.aurora.enabled');
+    var auroraPreset = (0, _$$_REQUIRE(_dependencyMap[13], "../../../store/setting/hook").useSettingValue)('app.background.aurora.preset');
+    var auroraIntensity = (0, _$$_REQUIRE(_dependencyMap[13], "../../../store/setting/hook").useSettingValue)('app.background.aurora.intensity');
     var backgroundStyle = (0, _react.useMemo)(function () {
       if (wallpaperEnabled) {
         return {
@@ -265419,10 +265416,6 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     label: '🖼️ 幻灯片',
     setting: 'playDetail.effect.slideshow.enabled'
   }, {
-    key: 'aurora',
-    label: '🌌 极光背景',
-    setting: 'playDetail.effect.aurora.enabled'
-  }, {
     key: 'magicRings',
     label: '💫 点击涟漪',
     setting: 'playDetail.effect.magicRings.enabled'
@@ -265500,9 +265493,6 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
     var spectrum = (0, _$$_REQUIRE(_dependencyMap[7], "../../../../../store/setting/hook").useSettingValue)('playDetail.effect.spectrum.enabled');
     var echo = (0, _$$_REQUIRE(_dependencyMap[7], "../../../../../store/setting/hook").useSettingValue)('playDetail.effect.echo.enabled');
     var slideshow = (0, _$$_REQUIRE(_dependencyMap[7], "../../../../../store/setting/hook").useSettingValue)('playDetail.effect.slideshow.enabled');
-    var aurora = (0, _$$_REQUIRE(_dependencyMap[7], "../../../../../store/setting/hook").useSettingValue)('playDetail.effect.aurora.enabled');
-    var auroraPreset = (0, _$$_REQUIRE(_dependencyMap[7], "../../../../../store/setting/hook").useSettingValue)('playDetail.effect.aurora.preset');
-    var auroraIntensity = (0, _$$_REQUIRE(_dependencyMap[7], "../../../../../store/setting/hook").useSettingValue)('playDetail.effect.aurora.intensity');
     var magicRings = (0, _$$_REQUIRE(_dependencyMap[7], "../../../../../store/setting/hook").useSettingValue)('playDetail.effect.magicRings.enabled');
     var shinyText = (0, _$$_REQUIRE(_dependencyMap[7], "../../../../../store/setting/hook").useSettingValue)('playDetail.effect.shinyText.enabled');
     var lyricProximity = (0, _$$_REQUIRE(_dependencyMap[7], "../../../../../store/setting/hook").useSettingValue)('playDetail.effect.lyricProximity.enabled');
@@ -265527,7 +265517,6 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
       spectrum: spectrum,
       echo: echo,
       slideshow: slideshow,
-      aurora: aurora,
       magicRings: magicRings,
       shinyText: shinyText,
       lyricProximity: lyricProximity,
@@ -265843,61 +265832,6 @@ __d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, e
               })
             }, v);
           })]
-        })]
-      }), aurora && /*#__PURE__*/(0, _jsxRuntime.jsxs)(_reactNative.View, {
-        style: styles.subSection,
-        children: [/*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
-          size: 13,
-          color: theme['c-font-label'],
-          style: {
-            marginBottom: 6
-          },
-          children: "\u6781\u5149\u914D\u8272"
-        }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.View, {
-          style: styles.row,
-          children: AURORA_PRESETS_UI.map(function (p) {
-            return /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.TouchableOpacity, {
-              style: [styles.chip, auroraPreset === p.value && {
-                backgroundColor: theme['c-primary']
-              }],
-              onPress: function onPress() {
-                return (0, _$$_REQUIRE(_dependencyMap[8], "../../../../../core/common").updateSetting)({
-                  'playDetail.effect.aurora.preset': p.value
-                });
-              },
-              children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
-                size: 12,
-                color: auroraPreset === p.value ? '#fff' : theme['c-font'],
-                children: p.label
-              })
-            }, p.value);
-          })
-        }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_Text.default, {
-          size: 13,
-          color: theme['c-font-label'],
-          style: {
-            marginBottom: 6
-          },
-          children: "\u52A8\u753B\u5F3A\u5EA6"
-        }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.View, {
-          style: styles.row,
-          children: [0.3, 0.5, 0.75, 1].map(function (v) {
-            return /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.TouchableOpacity, {
-              style: [styles.chip, auroraIntensity === v && {
-                backgroundColor: theme['c-primary']
-              }],
-              onPress: function onPress() {
-                return (0, _$$_REQUIRE(_dependencyMap[8], "../../../../../core/common").updateSetting)({
-                  'playDetail.effect.aurora.intensity': v
-                });
-              },
-              children: /*#__PURE__*/(0, _jsxRuntime.jsxs)(_Text.default, {
-                size: 12,
-                color: auroraIntensity === v ? '#fff' : theme['c-font'],
-                children: [v, "x"]
-              })
-            }, v);
-          })
         })]
       })]
     });
