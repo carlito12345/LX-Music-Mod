@@ -1,10 +1,11 @@
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { View, PanResponder } from 'react-native'
+import { View, PanResponder, Animated, Easing } from 'react-native'
 import { createStyle } from '@/utils/tools'
 import { scaleSizeW, scaleSizeH } from '@/utils/pixelRatio'
 import { useDrag } from '@/utils/hooks'
 import { Icon } from '@/components/common/Icon'
 import { getContrastTextColor } from '@/utils/colorContrast'
+import { useSettingValue } from '@/store/setting/hook'
 // import { AppColors } from '@/theme'
 
 
@@ -30,6 +31,8 @@ const PreassBar = memo(({ onDragState, setDragProgress, onSetProgress }: {
     PanResponder.create({
       onStartShouldSetPanResponderCapture: (evt, gestureState) => true,
       onMoveShouldSetPanResponderCapture: (evt, gestureState) => true,
+      // 关键: 拒绝被父级(wrapper 滑动手势)抢占,否则拖动超过30px会被抢走
+      onPanResponderTerminationRequest: () => false,
 
       // onMoveShouldSetPanResponder: () => true,
       onPanResponderMove: (evt, gestureState) => {
@@ -62,11 +65,33 @@ const Progress = ({ progress, duration, buffered, backgroundColor }: {
   const [dragProgress, setDragProgress] = useState(0)
   const progressStr: `${number}%` = `${progress * 100}%`
   
-  // 自适应黑白
-  const trackColor = 'rgba(255,255,255,0.2)'
-  const bufferedColor = 'rgba(255,255,255,0.25)'
-  const fillColor = 'rgba(255,255,255,0.85)'
-  const dotColor = '#ffffff'
+  // ElasticSlider: 按下快速放大,松手用 Easing.back 过冲回弹(稳定可控)
+  const elasticEnabled = useSettingValue('playDetail.effect.elasticSlider.enabled')
+  const dotScale = useRef(new Animated.Value(1)).current
+  useEffect(() => {
+    if (!elasticEnabled) return
+    if (draging) {
+      Animated.timing(dotScale, {
+        toValue: 1.7,
+        duration: 140,
+        useNativeDriver: true,
+      }).start()
+    } else {
+      Animated.timing(dotScale, {
+        toValue: 1,
+        duration: 380,
+        easing: Easing.out(Easing.back(2.5)),
+        useNativeDriver: true,
+      }).start()
+    }
+  }, [draging, elasticEnabled])
+  
+  // 自适应黑白: 深色背景用白进度条, 浅色背景用深进度条
+  const isLight = getContrastTextColor(backgroundColor || '#1a1a2e') === '#000000'
+  const trackColor = isLight ? 'rgba(0,0,0,0.15)' : 'rgba(255,255,255,0.2)'
+  const bufferedColor = isLight ? 'rgba(0,0,0,0.2)' : 'rgba(255,255,255,0.25)'
+  const fillColor = isLight ? 'rgba(0,0,0,0.75)' : 'rgba(255,255,255,0.85)'
+  const dotColor = isLight ? '#000000' : '#ffffff'
 
   const bigDotSize = progressDotSize * 3.2
   const progressDotStyle = useMemo(() => {
@@ -93,8 +118,20 @@ const Progress = ({ progress, duration, buffered, backgroundColor }: {
       <View>
         <View style={{ ...styles.progressBar, backgroundColor: trackColor, position: 'absolute', width: '100%', left: 0, top: 0 }} />
         <View style={{ ...styles.progressBar, backgroundColor: bufferedColor, position: 'absolute', width: `${buffered * 100}%`, left: 0, top: 0 }} />
-        <View style={{ ...styles.progressBar, backgroundColor: fillColor, width: currentPct, position: 'absolute', left: 0, top: 0 }}>
-          <Icon name="full_stop" color={dotColor} rawSize={bigDotSize} style={progressDotStyle} />
+        <View style={{
+          ...styles.progressBar,
+          backgroundColor: fillColor,
+          width: currentPct,
+          position: 'absolute',
+          left: 0,
+          top: 0,
+        }}>
+          <Animated.View style={{
+            ...progressDotStyle,
+            transform: [{ scale: dotScale }],
+          }}>
+            <Icon name="full_stop" color={dotColor} rawSize={bigDotSize} />
+          </Animated.View>
         </View>
       </View>
       <PreassBar onDragState={setDraging} setDragProgress={setDragProgress} onSetProgress={onSetProgress} />

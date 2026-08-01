@@ -39,6 +39,7 @@ public class MiniPlayerView {
   private FrameLayout floatingView;
   private ImageView bgImage;   // Neri毛玻璃背景
   private View bgOverlay;      // 暗色遮罩
+  private AuroraView auroraView; // 极光背景层
   private ImageView coverView;
   private TextView titleView, artistView, lrcView;
   private View progressFill;
@@ -106,6 +107,15 @@ public class MiniPlayerView {
     winBg.setColor(0xB3000000); // 半透明黑,让模糊背景透出
     floatingView.setBackground(winBg);
     floatingView.setClipToOutline(true);
+    // 边缘阴影(立体感): elevation + outline
+    if (Build.VERSION.SDK_INT >= 21) {
+      floatingView.setElevation(dp(16));
+      floatingView.setOutlineProvider(new android.view.ViewOutlineProvider() {
+        @Override public void getOutline(android.view.View view, android.graphics.Outline outline) {
+          outline.setRoundRect(0, 0, view.getWidth(), view.getHeight(), dp(20));
+        }
+      });
+    }
 
     LinearLayout root = new LinearLayout(context);
     root.setOrientation(LinearLayout.VERTICAL);
@@ -292,8 +302,12 @@ public class MiniPlayerView {
     bgImage = new ImageView(context);
     bgImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
     floatingView.addView(bgImage, new FrameLayout.LayoutParams(-1, -1));
+    // 极光层(在模糊封面之上,遮罩之下)
+    auroraView = new AuroraView(context);
+    auroraView.setColors(new int[]{0xFF00E676, 0xFF00B0FF, 0xFFD500F9, 0xFF00E676});
+    floatingView.addView(auroraView, new FrameLayout.LayoutParams(-1, -1));
     bgOverlay = new View(context);
-    bgOverlay.setBackgroundColor(0x99000000); // 60% 暗色
+    bgOverlay.setBackgroundColor(0x47000000); // 28% 暗色(极光更透)
     floatingView.addView(bgOverlay, new FrameLayout.LayoutParams(-1, -1));
     
     floatingView.addView(root, new FrameLayout.LayoutParams(-1, -1));
@@ -569,6 +583,19 @@ public class MiniPlayerView {
     }
   }
 
+  // 设置极光颜色(hex 数组,如 "#00e676,#00b0ff")
+  public void setAuroraColors(String hexList) {
+    try {
+      if (auroraView == null || hexList == null || hexList.isEmpty()) return;
+      String[] parts = hexList.split(",");
+      int[] colors = new int[parts.length];
+      for (int i = 0; i < parts.length; i++) {
+        colors[i] = android.graphics.Color.parseColor(parts[i].trim());
+      }
+      auroraView.setColors(colors);
+    } catch (Exception e) { Log.w(TAG, "aurora colors: " + e.getMessage()); }
+  }
+
   // 原生播放模式循环(后台 JS 冻结也能用)
   public void cyclePlayMode() {
     final String[] MODES = {"listLoop", "random", "list", "singleLoop", "none"};
@@ -604,10 +631,32 @@ public class MiniPlayerView {
     try {
       int w = src.getWidth(), h = src.getHeight();
       if (w <= 0 || h <= 0) return;
-      android.graphics.Bitmap small = android.graphics.Bitmap.createScaledBitmap(src, Math.max(1, w/12), Math.max(1, h/12), true);
-      android.graphics.Bitmap blurred = android.graphics.Bitmap.createScaledBitmap(small, w, h, true);
-      if (blurred != null && bgImage != null) bgImage.setImageBitmap(blurred);
+      // 下采样 1/8 → RenderScript 高斯模糊 → 放大回原尺寸(毛玻璃)
+      android.graphics.Bitmap small = android.graphics.Bitmap.createScaledBitmap(src, Math.max(1, w/8), Math.max(1, h/8), true);
+      android.graphics.Bitmap blurred = gaussianBlur(small, 18f);
+      if (small != blurred && small != src) small.recycle();
+      android.graphics.Bitmap full = android.graphics.Bitmap.createScaledBitmap(blurred, w, h, true);
+      if (full != null && bgImage != null) bgImage.setImageBitmap(full);
     } catch (Exception e) { Log.w(TAG, "blur bg: " + e.getMessage()); }
+  }
+
+  // RenderScript 高斯模糊(API 26-35 可用,minSdk 26)
+  private android.graphics.Bitmap gaussianBlur(android.graphics.Bitmap src, float radius) {
+    try {
+      android.renderscript.RenderScript rs = android.renderscript.RenderScript.create(context);
+      android.renderscript.Allocation input = android.renderscript.Allocation.createFromBitmap(rs, src);
+      android.renderscript.Allocation output = android.renderscript.Allocation.createTyped(rs, input.getType());
+      android.renderscript.ScriptIntrinsicBlur script = android.renderscript.ScriptIntrinsicBlur.create(rs, android.renderscript.Element.U8_4(rs));
+      script.setRadius(radius);
+      script.setInput(input);
+      script.forEach(output);
+      output.copyTo(src);
+      rs.destroy();
+      return src;
+    } catch (Throwable e) {
+      Log.w(TAG, "rs blur failed: " + e.getMessage());
+      return src;
+    }
   }
   public void updateLrc(String text) {
     // 存储原始 LRC(带时间戳),由原生解析器定位歌词行并应用偏移

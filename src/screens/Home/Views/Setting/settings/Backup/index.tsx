@@ -1,7 +1,7 @@
 import { useI18n } from '@/lang'
 import { memo } from 'react'
 
-import Section from '../../components/Section'
+import Section from '../../components/AppCardSection'
 import Part from './Part'
 // import MaxCache from './MaxCache'
 

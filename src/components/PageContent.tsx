@@ -8,6 +8,8 @@ import { scaleSizeAbsHR } from '@/utils/pixelRatio'
 import { defaultHeaders } from './common/Image'
 import SizeView from './SizeView'
 import { useBgPic } from '@/store/common/hook'
+import AuroraBackground, { AURORA_PRESETS } from '@/components/common/AuroraBackground'
+import { useSettingValue } from '@/store/setting/hook'
 
 interface Props {
   children: React.ReactNode
@@ -19,6 +21,11 @@ export default ({ children }: Props) => {
   const theme = useTheme()
   const windowSize = useWindowSize()
   const pic = useBgPic()
+  const auroraEnabled = useSettingValue('app.background.aurora.enabled')
+  const auroraPreset = useSettingValue('app.background.aurora.preset')
+  const auroraIntensity = useSettingValue('app.background.aurora.intensity')
+  // 无动态背景图时,用极光做全局背景(header+body 贯通)
+  const showAurora = auroraEnabled && !pic
   // const [wh, setWH] = useState<{ width: number | string, height: number | string }>({ width: '100%', height: Dimensions.get('screen').height })
 
   // 固定宽高度 防止弹窗键盘时大小改变导致背景被缩放
@@ -41,17 +48,24 @@ export default ({ children }: Props) => {
 
   const themeComponent = useMemo(() => (
     <View style={{ flex: 1, overflow: 'hidden' }}>
-      <ImageBackground
-        style={{ position: 'absolute', left: 0, top: 0, height: windowSize.height, width: windowSize.width, backgroundColor: theme['c-content-background'] }}
-        source={theme['bg-image']}
-        resizeMode="cover"
-      >
-      </ImageBackground>
+      {showAurora ? (
+        <AuroraBackground
+          colors={AURORA_PRESETS[auroraPreset] || AURORA_PRESETS.aurora}
+          intensity={auroraIntensity || 1}
+        />
+      ) : (
+        <ImageBackground
+          style={{ position: 'absolute', left: 0, top: 0, height: windowSize.height, width: windowSize.width, backgroundColor: theme['c-content-background'] }}
+          source={theme['bg-image']}
+          resizeMode="cover"
+        >
+        </ImageBackground>
+      )}
       <View style={{ flex: 1, flexDirection: 'column' }}>
         {children}
       </View>
     </View>
-  ), [children, theme, windowSize.height, windowSize.width])
+  ), [children, theme, windowSize.height, windowSize.width, showAurora, auroraPreset, auroraIntensity])
   const picComponent = useMemo(() => {
     return (
       <View style={{ flex: 1, overflow: 'hidden' }}>

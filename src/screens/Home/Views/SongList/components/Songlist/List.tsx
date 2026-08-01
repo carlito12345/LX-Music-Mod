@@ -156,11 +156,6 @@ export default forwardRef<ListType, ListProps>(({ onRefresh, onLoadMore, onOpenD
                 columnWrapperStyle={{ justifyContent: 'space-evenly' }}
                 numColumns={rowInfo.num}
                 data={list}
-                maxToRenderPerBatch={4}
-                // updateCellsBatchingPeriod={80}
-                windowSize={8}
-                removeClippedSubviews={true}
-                // initialNumToRender={12}
                 renderItem={renderItem}
                 keyExtractor={getkey}
                 // getItemLayout={getItemLayout}

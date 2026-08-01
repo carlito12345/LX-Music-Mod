@@ -45,8 +45,6 @@ const Content = () => {
     >
       <Header />
       <Main />
-      {/* <View style={styles.container}>
-      </View> */}
     </DrawerLayoutFixed>
   )
 }

@@ -1,6 +1,6 @@
 import { memo, useState } from 'react'
 
-import Section from '../../components/Section'
+import Section from '../../components/AppCardSection'
 import IsEnable from './IsEnable'
 import History from './History'
 import { useI18n } from '@/lang'

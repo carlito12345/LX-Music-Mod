@@ -1,5 +1,5 @@
 import { memo, useMemo, useEffect, useRef, useCallback } from 'react'
-import { View, FlatList, type FlatListProps, type LayoutChangeEvent, type NativeSyntheticEvent, type NativeScrollEvent } from 'react-native'
+import { View, Animated, FlatList, type FlatListProps, type LayoutChangeEvent, type NativeSyntheticEvent, type NativeScrollEvent } from 'react-native'
 // import { useLayout } from '@/utils/hooks'
 import { type Line, useLrcPlay, useLrcSet } from '@/plugins/lyric'
 import { createStyle } from '@/utils/tools'
@@ -66,6 +66,18 @@ interface LineProps {
 }
 const LrcLine = memo(({ line, lineNum, activeLine, onLayout, backgroundColor }: LineProps & { backgroundColor: string }) => {
   const theme = useTheme()
+  const proximityEnabled = useSettingValue('playDetail.effect.lyricProximity.enabled')
+  // VariableProximity: 当前行放大突出(1.0→1.18),其他行恢复
+  const PROXIMITY_SCALE = 1.18
+  const scale = useRef(new Animated.Value(activeLine === lineNum && proximityEnabled ? PROXIMITY_SCALE : 1)).current
+  useEffect(() => {
+    Animated.spring(scale, {
+      toValue: activeLine === lineNum && proximityEnabled ? PROXIMITY_SCALE : 1,
+      tension: 160,
+      friction: 14,
+      useNativeDriver: true,
+    }).start()
+  }, [activeLine, lineNum, proximityEnabled])
   const lrcFontSize = useSettingValue('playDetail.vertical.style.lrcFontSize')
   const lrcLineCount = useSettingValue('playDetail.vertical.style.lrcLineCount')
   const textAlign = useSettingValue('playDetail.style.align')
@@ -116,7 +128,7 @@ const LrcLine = memo(({ line, lineNum, activeLine, onLayout, backgroundColor }: 
   // textBreakStrategy="simple" 用于解决某些设备上字体被截断的问题
   // https://stackoverflow.com/a/72822360
   return (
-    <View style={styles.line} onLayout={handleLayout}>
+    <Animated.View style={[styles.line, proximityEnabled && { transform: [{ scale }] }]} onLayout={handleLayout}>
       {isActiveLine && gradientEnable ? (
         <GradientText
           text={line.text}
@@ -155,7 +167,7 @@ const LrcLine = memo(({ line, lineNum, activeLine, onLayout, backgroundColor }: 
           }} textBreakStrategy="simple" key={index} color={colors[1]} opacity={colors[2]} size={size * 0.8}>{lrc}</AnimatedColorText>)
         })
       }
-    </View>
+    </Animated.View>
   )
 }, (prevProps, nextProps) => {
   return prevProps.line === nextProps.line &&

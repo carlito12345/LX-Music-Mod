@@ -72,7 +72,7 @@ export default memo(() => {
 
 const styles = createStyle({
   container: {
-    paddingHorizontal: 15,
+    paddingHorizontal: 16,
     paddingVertical: 10,
   },
   title: {

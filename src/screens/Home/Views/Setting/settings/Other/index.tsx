@@ -1,6 +1,6 @@
 import { memo } from 'react'
 
-import Section from '../../components/Section'
+import Section from '../../components/AppCardSection'
 import ResourceCache from './ResourceCache'
 import MetaCache from './MetaCache'
 import DislikeList from './DislikeList'

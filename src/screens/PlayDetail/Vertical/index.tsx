@@ -17,6 +17,7 @@ import { usePlayerMusicInfo } from '@/store/player/hook'
 import { useEntryAnimation, useBackgroundCrossfade } from '@/components/cinematic/CinematicTransition'
 import { CoverEnhance } from '@/components/coverenhance/CoverEnhance'
 import { StarfieldBackground } from '@/components/starfield/StarfieldBackground'
+import AuroraBackground, { AURORA_PRESETS } from '@/components/common/AuroraBackground'
 import { WallpaperView } from '@/components/wallpaper/WallpaperView'
 import { SlideshowBg } from '@/components/slideshow/SlideshowBg'
 import { AudioEchoWallpaper } from '@/components/echo/AudioEchoWallpaper'
@@ -82,6 +83,9 @@ export default memo(({ componentId }: { componentId: string }) => {
 
   // 根据背景类型决定背景样式
   const wallpaperEnabled = useSettingValue('playDetail.effect.wallpaper.enabled')
+  const auroraEnabled = useSettingValue('playDetail.effect.aurora.enabled') || useSettingValue('app.background.aurora.enabled')
+  const auroraPreset = useSettingValue('playDetail.effect.aurora.preset')
+  const auroraIntensity = useSettingValue('playDetail.effect.aurora.intensity')
   const backgroundStyle = useMemo(() => {
     if (wallpaperEnabled) {
       return { backgroundColor: 'transparent' }
@@ -178,6 +182,13 @@ export default memo(({ componentId }: { componentId: string }) => {
           />
           <View style={[StyleSheet.absoluteFill, { backgroundColor: 'rgba(0,0,0,0.3)' }]} />
         </View>
+      )}
+      {/* 极光流动背景(可选用,位于模糊层之上) */}
+      {auroraEnabled && (
+        <AuroraBackground
+          colors={AURORA_PRESETS[auroraPreset] || AURORA_PRESETS.aurora}
+          intensity={auroraIntensity || 1}
+        />
       )}
       {/* 粒子星空背景 */}
       <StarfieldBackground active={true} />

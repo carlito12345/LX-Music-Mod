@@ -1,7 +1,7 @@
 import { memo } from 'react'
 
 import Theme from '../Theme'
-import Section from '../../components/Section'
+import AppCardSection from '../../components/AppCardSection'
 import Source from './Source'
 import SourceName from './SourceName'
 import Language from './Language'
@@ -24,23 +24,26 @@ export default memo(() => {
 
 
   return (
-    <Section title={t('setting_basic')}>
-      <IsStartupAutoPlay />
-      <IsStartupPushPlayDetailScreen />
-      <IsShowBackBtn />
-      <IsShowExitBtn />
-      <IsAutoHidePlayBar />
-      <IsHomePageScroll />
-      <IsAllowProgressBarSeek />
-      <IsUseSystemFileSelector />
-      <IsAlwaysKeepStatusbarHeight />
+    <>
+      <AppCardSection title={t('setting_basic')}>
+        <IsStartupAutoPlay />
+        <IsStartupPushPlayDetailScreen />
+        <IsShowBackBtn />
+        <IsShowExitBtn />
+        <IsAutoHidePlayBar />
+        <IsHomePageScroll />
+        <IsAllowProgressBarSeek />
+        <IsUseSystemFileSelector />
+        <IsAlwaysKeepStatusbarHeight />
+        <DrawerLayoutPosition />
+        <Language />
+        <FontSize />
+        <ShareType />
+        <Source />
+        <SourceName />
+      </AppCardSection>
+      {/* 主题设置独立分组, 不被基本设置卡片包围 */}
       <Theme />
-      <DrawerLayoutPosition />
-      <Language />
-      <FontSize />
-      <ShareType />
-      <Source />
-      <SourceName />
-    </Section>
+    </>
   )
 })

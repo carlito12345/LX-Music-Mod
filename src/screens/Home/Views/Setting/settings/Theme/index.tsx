@@ -1,21 +1,26 @@
 import { memo } from 'react'
 
-// import Section from '../../components/Section'
+import AppCardSection from '../../components/AppCardSection'
 import Theme from './Theme'
 import IsAutoTheme from './IsAutoTheme'
 import IsHideBgDark from './IsHideBgDark'
 import IsDynamicBg from './IsDynamicBg'
 import IsFontShadow from './IsFontShadow'
-// import { useI18n } from '@/lang/i18n'
+import IsGlobalAurora from './IsGlobalAurora'
 
 export default memo(() => {
   return (
     <>
-      <Theme />
-      <IsAutoTheme />
-      <IsHideBgDark />
-      <IsDynamicBg />
-      <IsFontShadow />
+      <AppCardSection title="主题">
+        <Theme />
+        <IsAutoTheme />
+        <IsHideBgDark />
+        <IsFontShadow />
+      </AppCardSection>
+      <AppCardSection title="背景">
+        <IsDynamicBg />
+        <IsGlobalAurora />
+      </AppCardSection>
     </>
   )
 })

@@ -65,11 +65,6 @@ export default () => {
       renderItem={renderItem}
       keyExtractor={getkey}
       contentContainerStyle={styles.content}
-      maxToRenderPerBatch={5}
-      // updateCellsBatchingPeriod={80}
-      windowSize={7}
-      // removeClippedSubviews={true}
-      initialNumToRender={3}
     />
   )
 }

@@ -2,11 +2,12 @@ import { createStyle } from '@/utils/tools'
 
 export default createStyle({
   container: {
-    paddingTop: 5,
-    paddingLeft: 15,
-    paddingRight: 15,
-    paddingBottom: 15,
+    paddingLeft: 16,
+    paddingRight: 16,
+    paddingTop: 9,
+    paddingBottom: 9,
     alignItems: 'flex-start',
+    alignSelf: 'stretch',
   },
   // title: {
 

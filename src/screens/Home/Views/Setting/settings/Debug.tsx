@@ -5,7 +5,7 @@
 import { memo, useRef, useState, useEffect } from 'react'
 import { View, ScrollView, TextInput } from 'react-native'
 import { createStyle, toast } from '@/utils/tools'
-import SubTitle from '../components/SubTitle'
+import AppCardSection from '../components/AppCardSection'
 import Button from '../components/Button'
 import CheckBoxItem from '../components/CheckBoxItem'
 import Text from '@/components/common/Text'
@@ -104,14 +104,14 @@ export default memo(() => {
 
   return (
     <ScrollView>
-      <SubTitle title="日志记录">
+      <AppCardSection title="日志记录">
         <View style={styles.row}>
           <CheckBoxItem check={logEnabled} label="开启日志记录" onChange={handleToggleLog} />
         </View>
         <Text style={styles.hint}>开启后日志将保存到 Download/LXMusic_Logs/ 目录</Text>
-      </SubTitle>
+      </AppCardSection>
 
-      <SubTitle title="日志级别">
+      <AppCardSection title="日志级别">
         <View style={styles.levelRow}>
           {LEVELS.map(l => (
             <Button key={l.key} onPress={() => handleSetLevel(l.key)} style={logLevel === l.key ? styles.activeBtn : undefined}>
@@ -119,17 +119,17 @@ export default memo(() => {
             </Button>
           ))}
         </View>
-      </SubTitle>
+      </AppCardSection>
 
-      <SubTitle title="日志操作">
+      <AppCardSection title="日志操作">
         <View style={styles.row}>
           <Button onPress={handleViewLog}>查看日志</Button>
           <Button onPress={handleExportLog}>导出日志</Button>
           <Button onPress={handleCleanLog}>清除日志</Button>
         </View>
-      </SubTitle>
+      </AppCardSection>
 
-      <SubTitle title="过滤">
+      <AppCardSection title="过滤">
         <TextInput
           style={styles.input}
           placeholder="输入关键字过滤..."
@@ -137,7 +137,7 @@ export default memo(() => {
           onChangeText={setSearchText}
           onSubmitEditing={refreshLog}
         />
-      </SubTitle>
+      </AppCardSection>
 
       <ConfirmAlert
         ref={alertRef}

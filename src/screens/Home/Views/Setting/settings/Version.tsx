@@ -1,7 +1,7 @@
 import { memo, useState, useEffect } from 'react'
 import { StyleSheet, View } from 'react-native'
 
-import Section from '../components/Section'
+import Section from '../components/AppCardSection'
 import SubTitle from '../components/SubTitle'
 import Button from '../components/Button'
 import { sizeFormate } from '@/utils'

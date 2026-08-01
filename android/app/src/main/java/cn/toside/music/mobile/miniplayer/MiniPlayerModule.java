@@ -115,6 +115,12 @@ public class MiniPlayerModule extends ReactContextBaseJavaModule {
     promise.resolve(true);
   }
   @ReactMethod
+  public void setAuroraColors(String hexList, Promise promise) {
+    MiniPlayerService.setAuroraColors(hexList);
+    promise.resolve(true);
+  }
+
+  @ReactMethod
   public void setLiked(boolean liked, Promise promise) {
     MiniPlayerService.setLiked(liked);
     promise.resolve(true);

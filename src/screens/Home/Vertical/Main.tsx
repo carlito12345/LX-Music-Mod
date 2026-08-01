@@ -10,6 +10,7 @@ import Download from '../Views/Download'
 import commonState, { type InitState as CommonState } from '@/store/common/state'
 import { createStyle } from '@/utils/tools'
 import PagerView, { type PageScrollStateChangedNativeEvent, type PagerViewOnPageSelectedEvent } from 'react-native-pager-view'
+
 import { setNavActiveId } from '@/core/common'
 import settingState from '@/store/setting/state'
 

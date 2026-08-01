@@ -112,6 +112,8 @@ function checkAndRefreshService(attempt: number = 0) {
 }
 try { checkAndRefreshService() } catch {}
 
+
+
 if (isAvailable) {
   eventEmitter = new NativeEventEmitter(MiniPlayerModule)
   eventEmitter.addListener('onMiniPlayerAction', (data: { action: string, ratio?: number }) => {
@@ -206,6 +208,8 @@ function syncSettings() {
     }
     setStyle(bg, lines, hc, fontSize, lineSpacing)
     setLyricOffset(s['miniPlayer.lyricOffsetMs'] || 0)
+    // 极光背景配色(跟随全局极光预设)
+    setAuroraColors(AURORA_COLOR_MAP[s['app.background.aurora.preset']] || AURORA_COLOR_MAP.aurora)
   } catch (e) { console.warn('[MiniPlayer] syncSettings err:', e) }
 }
 
@@ -327,6 +331,7 @@ function pushState() {
     updatePlaybackInfo(mi.name || '', mi.singer || '', ps.isPlay, (ps?.progress?.nowPlayTime || 0) * 1000, (ps?.progress?.maxPlayTime || mi.interval || 0) * 1000)
     // 同步喜欢状态(防抖)
     syncLikedState()
+
     // 同步更新歌词(作为 setInterval 的 fallback)
     tickLrc()
   } catch {}
@@ -401,6 +406,23 @@ export async function updatePlaybackInfo(
 ): Promise<void> {
   if (!isAvailable) return
   try { await MiniPlayerModule.updatePlaybackInfo(title || '', artist || '', playing, progress || 0, maxProgress || 100) } catch {}
+}
+
+export async function setAuroraColors(hexList: string): Promise<void> {
+  if (!isAvailable) return
+  try { await MiniPlayerModule.setAuroraColors(hexList) } catch {}
+}
+
+// 极光预设 → 原生色值列表
+const AURORA_COLOR_MAP: Record<string, string> = {
+  aurora: '#00e676,#00b0ff,#d500f9',
+  sunset: '#ff9800,#ff1744,#d500f9',
+  ocean: '#00b0ff,#1de9b6,#00e676',
+  flame: '#ffea00,#ff6d00,#ff1744',
+  neon: '#ea80fc,#7c4dff,#2979ff',
+  candy: '#ff4081,#f48fb1,#ea80fc',
+  gold: '#ffea00,#ffab00,#ff6d00',
+  ice: '#80d8ff,#00b0ff,#2979ff',
 }
 
 export async function setLikedState(liked: boolean): Promise<void> {

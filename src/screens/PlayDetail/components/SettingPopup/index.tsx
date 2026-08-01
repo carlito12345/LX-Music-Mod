@@ -19,6 +19,8 @@ import SettingLrcLineCount from './settings/SettingLrcLineCount'
 import SettingEffects from './settings/SettingEffects'
 import SettingMiniPlayer, { SettingLyricGradient } from './settings/SettingMiniPlayer'
 import SettingLayout from './settings/SettingLayout'
+import SettingSection from './components/SettingSection'
+import { useTheme } from '@/store/theme/hook'
 
 export interface SettingPopupProps extends Omit<PopupProps, 'children'> {
   direction: 'vertical' | 'horizontal'
@@ -29,6 +31,8 @@ export interface SettingPopupType {
 }
 
 export default forwardRef<SettingPopupType, SettingPopupProps>(({ direction, ...props }, ref) => {
+  const theme = useTheme()
+  const isDark = !!theme.isDark
   const [visible, setVisible] = useState(false)
   const popupRef = useRef<PopupType>(null)
   const t = useI18n()
@@ -46,24 +50,43 @@ export default forwardRef<SettingPopupType, SettingPopupProps>(({ direction, ...
 
   return (
     visible ? (
-      <Popup ref={popupRef} title={t('play_detail_setting_title')} {...props}>
-        <ScrollView>
+      <Popup ref={popupRef} title={t('play_detail_setting_title')} contentBackgroundColor={isDark ? '#000000' : '#ffffff'} {...props}>
+        <ScrollView contentContainerStyle={{ paddingVertical: 8, paddingHorizontal: 12 }}>
           <View onStartShouldSetResponder={() => true}>
-            <SettingTimer />
-            <SettingBackground />
-            <SettingCover />
-            <SettingEffects />
-            <SettingMiniPlayer />
-            <SettingLyricGradient />
-            <SettingProgressShimmer />
-            <SettingLyricProgress />
-            <SettingVolume />
-            <SettingPlaybackRate />
-            <SettingLrcFontSize direction={direction} />
-            <SettingLrcAlign />
-            <SettingLrcLineCount />
-          
-          <SettingLayout />
+            <SettingSection title="播放">
+              <SettingVolume />
+              <SettingPlaybackRate />
+            </SettingSection>
+
+            <SettingSection title="背景">
+              <SettingBackground />
+              <SettingCover />
+            </SettingSection>
+
+            <SettingSection title="歌词">
+              <SettingLrcFontSize direction={direction} />
+              <SettingLrcAlign />
+              <SettingLrcLineCount direction={direction} />
+              <SettingLyricProgress />
+              <SettingProgressShimmer />
+              <SettingLyricGradient />
+            </SettingSection>
+
+            <SettingSection title="特效">
+              <SettingEffects />
+            </SettingSection>
+
+            <SettingSection title="迷你播放器">
+              <SettingMiniPlayer />
+            </SettingSection>
+
+            <SettingSection title="布局">
+              <SettingLayout />
+            </SettingSection>
+
+            <SettingSection title="其他">
+              <SettingTimer />
+            </SettingSection>
           </View>
         </ScrollView>
       </Popup>

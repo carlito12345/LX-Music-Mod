@@ -12,6 +12,7 @@ import { createStyle } from '@/utils/tools'
 import { useWindowSize } from '@/utils/hooks'
 import { BTN_WIDTH } from './MoreBtn/Btn'
 import { getContrastTextColor } from '@/utils/colorContrast'
+import MagicRings from '@/components/common/MagicRings'
 
 interface ControlBtnProps {
   backgroundColor: string
@@ -41,17 +42,18 @@ const PressBtn = memo(({ icon, size, onPress, controlColor }: { icon: string; si
     }).start()
   }
 
+  const magicRings = useSettingValue('playDetail.effect.magicRings.enabled')
   return (
     <Animated.View style={{ transform: [{ scale }] }}>
-      <TouchableOpacity
-        activeOpacity={0.6}
+      <MagicRings
+        enabled={magicRings}
+        color={controlColor}
+        radius={size * 0.55}
         onPress={onPress}
-        onPressIn={handlePressIn}
-        onPressOut={handlePressOut}
         style={{ width: size, height: size, justifyContent: 'center', alignItems: 'center' }}
       >
         <Icon name={icon} color={controlColor} rawSize={size * 0.7} />
-      </TouchableOpacity>
+      </MagicRings>
     </Animated.View>
   )
 })
@@ -61,14 +63,17 @@ const InstantPlayBtn = ({ size, backgroundColor }: { size: number; backgroundCol
   const isPlay = useIsPlay()
   const color = getContrastTextColor(backgroundColor)
 
+  const magicRings = useSettingValue('playDetail.effect.magicRings.enabled')
   return (
-    <TouchableOpacity
-      activeOpacity={0.6}
+    <MagicRings
+      enabled={magicRings}
+      color={color}
+      radius={size * 0.55}
       onPress={togglePlay}
       style={{ width: size, height: size, justifyContent: 'center', alignItems: 'center' }}
     >
       <Icon name={isPlay ? 'pause' : 'play'} color={color} rawSize={size * 0.85} />
-    </TouchableOpacity>
+    </MagicRings>
   )
 }
 

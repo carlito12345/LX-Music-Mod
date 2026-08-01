@@ -1,9 +1,8 @@
 import { memo } from 'react'
 
-import Section from '../../components/Section'
+import Section from '../../components/AppCardSection'
 import IsSavePlayTime from './IsSavePlayTime'
 import PlayHighQuality from './PlayHighQuality'
-import IsDownloadEnabled from './IsDownloadEnabled'
 import IsHandleAudioFocus from './IsHandleAudioFocus'
 import IsEnableAudioOffload from './IsEnableAudioOffload'
 import IsAutoCleanPlayedList from './IsAutoCleanPlayedList'
@@ -14,8 +13,6 @@ import IsShowLyricTranslation from './IsShowLyricTranslation'
 import IsShowLyricRoma from './IsShowLyricRoma'
 import IsS2T from './IsS2T'
 import MaxCache from './MaxCache'
-import PlayDetailBackground from './PlayDetailBackground'
-import PlayDetailCover from './PlayDetailCover'
 import { useI18n } from '@/lang'
 
 
@@ -36,9 +33,6 @@ export default memo(() => {
       <IsS2T />
       <MaxCache />
       <PlayHighQuality />
-      <IsDownloadEnabled />
-      <PlayDetailBackground />
-      <PlayDetailCover />
     </Section>
   )
 })

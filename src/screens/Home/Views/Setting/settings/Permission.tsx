@@ -5,7 +5,7 @@
 import { memo, useState, useEffect } from 'react'
 import { View, Platform } from 'react-native'
 import { createStyle, toast } from '@/utils/tools'
-import SubTitle from '../components/SubTitle'
+import AppCardSection from '../components/AppCardSection'
 import Button from '../components/Button'
 import Text from '@/components/common/Text'
 import { useI18n } from '@/lang'
@@ -155,7 +155,7 @@ export default memo(() => {
 
   return (
     <View>
-      <SubTitle title="权限状态">
+      <AppCardSection title="权限状态">
         {permissionList.map(p => (
           <View key={p.key} style={styles.item}>
             <View style={styles.info}>
@@ -172,7 +172,7 @@ export default memo(() => {
             )}
           </View>
         ))}
-      </SubTitle>
+      </AppCardSection>
       <View style={styles.footer}>
         <Button onPress={checkAll}>刷新状态</Button>
       </View>

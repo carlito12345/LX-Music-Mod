@@ -15,6 +15,11 @@ const MAIN_EFFECTS = [
   { key: 'spectrum', label: '📊 频谱', setting: 'playDetail.effect.spectrum.enabled' },
   { key: 'echo', label: '🔊 音域回响', setting: 'playDetail.effect.echo.enabled' },
   { key: 'slideshow', label: '🖼️ 幻灯片', setting: 'playDetail.effect.slideshow.enabled' },
+  { key: 'aurora', label: '🌌 极光背景', setting: 'playDetail.effect.aurora.enabled' },
+  { key: 'magicRings', label: '💫 点击涟漪', setting: 'playDetail.effect.magicRings.enabled' },
+  { key: 'shinyText', label: '✨ 歌名闪光', setting: 'playDetail.effect.shinyText.enabled' },
+  { key: 'lyricProximity', label: '🔍 歌词聚焦', setting: 'playDetail.effect.lyricProximity.enabled' },
+  { key: 'elasticSlider', label: '🎛️ 弹性进度条', setting: 'playDetail.effect.elasticSlider.enabled' },
 ] as const
 
 // 粒子控制选项
@@ -25,6 +30,17 @@ const PARTICLE_SPEEDS = [
   { label: '1.5x', value: 1.5 },
   { label: '2x', value: 2 },
 ]
+const AURORA_PRESETS_UI = [
+  { label: '极光', value: 'aurora' },
+  { label: '日落', value: 'sunset' },
+  { label: '海洋', value: 'ocean' },
+  { label: '烈焰', value: 'flame' },
+  { label: '霓虹', value: 'neon' },
+  { label: '糖果', value: 'candy' },
+  { label: '流金', value: 'gold' },
+  { label: '冰雪', value: 'ice' },
+] as const
+
 const PATTERNS = [
   { label: '随机', value: 'random' },
   { label: '星云', value: 'nebula' },
@@ -41,6 +57,16 @@ export default memo(() => {
   const spectrum = useSettingValue('playDetail.effect.spectrum.enabled')
   const echo = useSettingValue('playDetail.effect.echo.enabled')
   const slideshow = useSettingValue('playDetail.effect.slideshow.enabled')
+  const aurora = useSettingValue('playDetail.effect.aurora.enabled')
+  const auroraPreset = useSettingValue('playDetail.effect.aurora.preset')
+  const auroraIntensity = useSettingValue('playDetail.effect.aurora.intensity')
+  const magicRings = useSettingValue('playDetail.effect.magicRings.enabled')
+  const shinyText = useSettingValue('playDetail.effect.shinyText.enabled')
+  const lyricProximity = useSettingValue('playDetail.effect.lyricProximity.enabled')
+  const elasticSlider = useSettingValue('playDetail.effect.elasticSlider.enabled')
+  const globalAurora = useSettingValue('app.background.aurora.enabled')
+  const globalAuroraPreset = useSettingValue('app.background.aurora.preset')
+  const globalAuroraIntensity = useSettingValue('app.background.aurora.intensity')
 
   const echoColor = useSettingValue('playDetail.effect.echo.color')
   const echoSpeed = useSettingValue('playDetail.effect.echo.speed')
@@ -52,7 +78,7 @@ export default memo(() => {
   const speed = useSettingValue('playDetail.effect.starfield.speed')
   const pattern = useSettingValue('playDetail.effect.starfield.pattern')
 
-  const effectMap: Record<string, boolean> = { starfield, lyricStage, cinematic, controlBtn, spectrum, echo, slideshow }
+  const effectMap: Record<string, boolean> = { starfield, lyricStage, cinematic, controlBtn, spectrum, echo, slideshow, aurora, magicRings, shinyText, lyricProximity, elasticSlider }
 
   const getSettingKey = (key: string) => {
     const found = MAIN_EFFECTS.find(e => e.key === key)
@@ -62,6 +88,46 @@ export default memo(() => {
   return (
     <View style={styles.container}>
       <Text size={14} color={theme['c-primary-font']} style={styles.title}>新增特效</Text>
+      {/* 全局极光背景(默认开启) */}
+      <View style={styles.globalSection}>
+        <View style={styles.rowBetween}>
+          <Text size={13} color={theme['c-font']}>🌐 全局极光背景</Text>
+          <TouchableOpacity
+            style={[styles.chip, globalAurora && { backgroundColor: theme['c-primary'] }]}
+            onPress={() => updateSetting({ 'app.background.aurora.enabled': !globalAurora } as any)}
+          >
+            <Text size={12} color={globalAurora ? '#fff' : theme['c-font']}>{globalAurora ? '已开启' : '已关闭'}</Text>
+          </TouchableOpacity>
+        </View>
+        {globalAurora && (
+          <>
+            <Text size={12} color={theme['c-font-label']} style={{ marginTop: 6, marginBottom: 4 }}>配色</Text>
+            <View style={styles.row}>
+              {AURORA_PRESETS_UI.map(p => (
+                <TouchableOpacity
+                  key={p.value}
+                  style={[styles.chip, globalAuroraPreset === p.value && { backgroundColor: theme['c-primary'] }]}
+                  onPress={() => updateSetting({ 'app.background.aurora.preset': p.value } as any)}
+                >
+                  <Text size={11} color={globalAuroraPreset === p.value ? '#fff' : theme['c-font']}>{p.label}</Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+            <Text size={12} color={theme['c-font-label']} style={{ marginTop: 4, marginBottom: 4 }}>强度</Text>
+            <View style={styles.row}>
+              {[0.3, 0.5, 0.75, 1].map(v => (
+                <TouchableOpacity
+                  key={v}
+                  style={[styles.chip, globalAuroraIntensity === v && { backgroundColor: theme['c-primary'] }]}
+                  onPress={() => updateSetting({ 'app.background.aurora.intensity': v } as any)}
+                >
+                  <Text size={11} color={globalAuroraIntensity === v ? '#fff' : theme['c-font']}>{v}x</Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </>
+        )}
+      </View>
       <View style={styles.row}>
         {MAIN_EFFECTS.map(e => {
           const isOn = effectMap[e.key]
@@ -183,6 +249,34 @@ export default memo(() => {
           </View>
         </View>
       )}
+      {aurora && (
+        <View style={styles.subSection}>
+          <Text size={13} color={theme['c-font-label']} style={{ marginBottom: 6 }}>极光配色</Text>
+          <View style={styles.row}>
+            {AURORA_PRESETS_UI.map(p => (
+              <TouchableOpacity
+                key={p.value}
+                style={[styles.chip, auroraPreset === p.value && { backgroundColor: theme['c-primary'] }]}
+                onPress={() => updateSetting({ 'playDetail.effect.aurora.preset': p.value } as any)}
+              >
+                <Text size={12} color={auroraPreset === p.value ? '#fff' : theme['c-font']}>{p.label}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+          <Text size={13} color={theme['c-font-label']} style={{ marginBottom: 6 }}>动画强度</Text>
+          <View style={styles.row}>
+            {[0.3, 0.5, 0.75, 1].map(v => (
+              <TouchableOpacity
+                key={v}
+                style={[styles.chip, auroraIntensity === v && { backgroundColor: theme['c-primary'] }]}
+                onPress={() => updateSetting({ 'playDetail.effect.aurora.intensity': v } as any)}
+              >
+                <Text size={12} color={auroraIntensity === v ? '#fff' : theme['c-font']}>{v}x</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </View>
+      )}
     </View>
   )
 })
@@ -207,6 +301,17 @@ const styles = createStyle({
     paddingLeft: 8,
     borderLeftWidth: 2,
     borderLeftColor: 'rgba(128,128,128,0.2)',
+  },
+  globalSection: {
+    padding: 10,
+    borderRadius: 12,
+    backgroundColor: 'rgba(128,128,128,0.12)',
+    marginBottom: 8,
+  },
+  rowBetween: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
   chip: {
     paddingHorizontal: 12,

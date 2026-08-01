@@ -12,6 +12,8 @@ import { useStatusbarHeight } from '@/store/common/hook'
 import Btn from './Btn'
 import { getContrastTextColor, getSecondaryTextColor } from '@/utils/colorContrast'
 import { toast } from '@/utils/tools'
+import ShinyText from '@/components/common/ShinyText'
+import { useSettingValue } from '@/store/setting/hook'
 import { useTheme } from '@/store/theme/hook'
 
 export const HEADER_HEIGHT = scaleSizeH(_HEADER_HEIGHT)
@@ -25,9 +27,15 @@ const Title = ({ backgroundColor }: HeaderProps) => {
   const textColor = getContrastTextColor(backgroundColor)
   const secondaryColor = getSecondaryTextColor(backgroundColor)
   
+  const shinyText = useSettingValue('playDetail.effect.shinyText.enabled')
   return (
     <View style={styles.titleContent} pointerEvents="none">
-      <Text numberOfLines={1} style={styles.title} color={textColor}>{musicInfo.name}</Text>
+      <ShinyText
+        text={musicInfo.name || ''}
+        color={textColor}
+        style={styles.title}
+        enabled={shinyText}
+      />
       <Text numberOfLines={1} style={styles.title} size={12} color={secondaryColor}>{musicInfo.singer}</Text>
     </View>
   )

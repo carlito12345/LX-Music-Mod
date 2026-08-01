@@ -1,6 +1,6 @@
 import { memo, useState, useEffect, useCallback } from 'react'
 import { View, TouchableOpacity } from 'react-native'
-import Section from '../../components/Section'
+import Section from '../../components/AppCardSection'
 import Text from '@/components/common/Text'
 import { createStyle, toast } from '@/utils/tools'
 import { useTheme } from '@/store/theme/hook'
