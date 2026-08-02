@@ -61,6 +61,14 @@ const ICON_MAP: Record<string, string> = {
   'exit': 'exit-run',
   'exit2': 'exit-to-app',
   'logo': 'music',
+  'shield': 'shield-check',
+  'document': 'file-document',
+  'folder': 'folder',
+  'bell': 'bell-outline',
+  'battery': 'battery-charging',
+  'windows': 'window-closed-variant',
+  'refresh': 'refresh',
+  'delete': 'delete',
 }
 
 export interface IconProps extends Omit<ComponentProps<typeof MCIcon>, 'style'> {

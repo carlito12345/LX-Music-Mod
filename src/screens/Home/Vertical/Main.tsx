@@ -5,6 +5,8 @@ import SongList from '../Views/SongList'
 import Mylist from '../Views/Mylist'
 import Leaderboard from '../Views/Leaderboard'
 import Setting from '../Views/Setting'
+import Permission from '../Views/Permission'
+import Log from '../Views/Log'
 import LocalMusic from '../Views/LocalMusic'
 import Download from '../Views/Download'
 import commonState, { type InitState as CommonState } from '@/store/common/state'
@@ -217,6 +219,8 @@ const viewMap = {
   nav_local: 4,
   nav_download: 5,
   nav_setting: 6,
+  nav_permission: 7,
+  nav_log: 8,
 }
 const indexMap = [
   'nav_search',
@@ -226,7 +230,43 @@ const indexMap = [
   'nav_local',
   'nav_download',
   'nav_setting',
+  'nav_permission',
+  'nav_log',
 ] as const
+
+
+const PermissionPage = () => {
+  const [visible, setVisible] = useState(commonState.navActiveId == 'nav_permission')
+  const component = useMemo(() => <Permission />, [])
+  useEffect(() => {
+    const handleNavIdUpdate = (id: CommonState['navActiveId']) => {
+      if (id == 'nav_permission') {
+        requestAnimationFrame(() => { setVisible(true) })
+      } else if (visible) {
+        setVisible(false)
+      }
+    }
+    global.state_event.on('navActiveIdUpdated', handleNavIdUpdate)
+    return () => { global.state_event.off('navActiveIdUpdated', handleNavIdUpdate) }
+  }, [visible])
+  return visible ? component : null
+}
+const LogPage = () => {
+  const [visible, setVisible] = useState(commonState.navActiveId == 'nav_log')
+  const component = useMemo(() => <Log />, [])
+  useEffect(() => {
+    const handleNavIdUpdate = (id: CommonState['navActiveId']) => {
+      if (id == 'nav_log') {
+        requestAnimationFrame(() => { setVisible(true) })
+      } else if (visible) {
+        setVisible(false)
+      }
+    }
+    global.state_event.on('navActiveIdUpdated', handleNavIdUpdate)
+    return () => { global.state_event.off('navActiveIdUpdated', handleNavIdUpdate) }
+  }, [visible])
+  return visible ? component : null
+}
 
 const Main = () => {
   const pagerViewRef = useRef<ComponentRef<typeof PagerView>>(null)
@@ -329,6 +369,12 @@ const Main = () => {
       </View>
       <View collapsable={false} key="nav_setting" style={styles.pageStyle}>
         <SettingPage />
+      </View>
+      <View collapsable={false} key="nav_permission" style={styles.pageStyle}>
+        <PermissionPage />
+      </View>
+      <View collapsable={false} key="nav_log" style={styles.pageStyle}>
+        <LogPage />
       </View>
       {/* <View collapsable={false} key="nav_search" style={styles.pageStyle}>
         <Search />

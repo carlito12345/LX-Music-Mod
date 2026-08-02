@@ -1,6 +1,11 @@
 import { memo } from 'react'
 import { TouchableOpacity, View } from 'react-native'
 import { NAV_MENUS } from '@/config/constant'
+
+// 底部栏只显示核心导航项(排除下载/权限/日志)
+const BOTTOM_BAR_MENUS = NAV_MENUS.filter(item =>
+  !['nav_download', 'nav_permission', 'nav_log'].includes(item.id)
+)
 import { setNavActiveId } from '@/core/common'
 import { useI18n } from '@/lang'
 import { useBgPic, useNavActiveId } from '@/store/common/hook'
@@ -68,7 +73,7 @@ export default memo(() => {
         backgroundColor: bgPic ? 'rgba(0,0,0,0.3)' : theme['c-content-background'],
       },
     ]}>
-      {NAV_MENUS.map(item => (
+      {BOTTOM_BAR_MENUS.map(item => (
         <TabItem
           key={item.id}
           id={item.id}

@@ -533,7 +533,7 @@
   "download_add_tip": "已加入下载队列",
   "download_exists_tip": "该歌曲已在下载列表中",
   "download_delete_confirm": "确认删除?已下载的文件将被同时删除",
-  "download_clear_history": "清空历史记录",
+  "download_clear_history": "清除历史记录",
   "download_clear_history_confirm": "确认清空所有下载历史?已下载的文件将保留",
   "download_status_downloading": "下载中",
   "download_status_waiting": "等待中",
@@ -558,20 +558,18 @@
   "download_tab_history": "历史记录",
   "download_empty_tasks": "暂无下载任务",
   "download_empty_history": "暂无下载历史",
-
   "download_settings": "下载设置",
   "download_path": "下载路径",
   "download_clear_completed": "清除已完成",
-  "download_clear_history": "清除历史记录",
   "download_clear_completed_success": "已清除已完成任务",
   "download_clear_history_success": "已清除历史记录",
-  "close": "关闭",
-
   "download_file_not_found": "文件不存在",
   "download_play_failed": "播放失败",
   "download_delete_file_confirm": "确认删除本地文件?",
   "download_file_deleted": "文件已删除",
   "download_delete_file_failed": "删除文件失败",
   "download_delete_file": "删除本地文件",
-  "share": "分享"
+  "share": "分享",
+  "nav_permission": "权限管理",
+  "nav_log": "日志记录"
 }

@@ -15,6 +15,7 @@ import cn.toside.music.mobile.logger.NativeLoggerPackage;
 import cn.toside.music.mobile.lyric.LyricPackage;
 import cn.toside.music.mobile.userApi.UserApiPackage;
 import cn.toside.music.mobile.palette.PalettePackage;
+import cn.toside.music.mobile.permission.PermissionPackage;
 import cn.toside.music.mobile.miniplayer.MiniPlayerPackage;
 import cn.toside.music.mobile.usb.USBPackage;
 import cn.toside.music.mobile.utils.UtilsPackage;
@@ -43,6 +44,7 @@ public class MainApplication extends NavigationApplication {
           packages.add(new NativeLoggerPackage());
           packages.add(new UserApiPackage());
       packages.add(new PalettePackage());
+      packages.add(new PermissionPackage());
           return packages;
         }
 
