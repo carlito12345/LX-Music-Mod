@@ -6,7 +6,6 @@ import { setStop } from '@/plugins/player'
 import { delayUpdateMusicInfo } from '@/plugins/player/playList'
 import playerState from '@/store/player/state'
 import settingState from '@/store/setting/state'
-import mediaInteraction from './mediaInteraction'
 
 
 export default async(setting: LX.AppSetting) => {
@@ -64,5 +63,4 @@ export default async(setting: LX.AppSetting) => {
   global.state_event.on('configUpdated', handleConfigUpdated)
 
   // Initialize media interaction for car integration
-  void mediaInteraction()
 }

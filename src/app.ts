@@ -30,21 +30,6 @@ void Promise.all([getFontSize(), windowSizeTools.init()]).then(async([fontSize])
     if (isInited) return
     void initLog()
     const { default: init } = await import('@/core/init')
-    void import('@/plugins/carkey').then(async(mod) => {
-      try {
-        await mod.startCarKeyListening()
-        // 检测无障碍服务状态,如果未开启则提示
-        if (mod.isAvailable) {
-          const isRunning = await mod.isAccessibilityServiceRunning().catch(() => false)
-          if (!isRunning) {
-            setTimeout(() => {
-              const { toast } = require('@/utils/tools')
-              toast('方向盘控制: 建议开启无障碍服务以获得更好的方控体验')
-            }, 10000)
-          }
-        }
-      } catch {}
-    })
     void import('@/plugins/usb').then(mod => mod.startUSBListening().catch(() => {}))
     // 首次安装显示权限引导页
     try {

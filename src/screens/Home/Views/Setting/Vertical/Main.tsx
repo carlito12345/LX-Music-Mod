@@ -10,7 +10,6 @@ import LocalMusic from '../settings/LocalMusic'
 import Download from '../settings/Download'
 import Sync from '../settings/Sync'
 import Backup from '../settings/Backup'
-import CarKey from '../settings/CarKey'
 import Debug from '../settings/Debug'
 import Permission from '../settings/Permission'
 import Other from '../settings/Other'
@@ -44,7 +43,6 @@ const ListItem = memo(({
     case 'download': return <Download />
     case 'sync': return <Sync />
     case 'backup': return <Backup />
-    case 'carKey': return <CarKey />
     case 'debug': return <Debug />
     case 'permission': return <Permission />
     case 'other': return <Other />

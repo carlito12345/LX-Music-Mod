@@ -195,10 +195,6 @@ dependencies {
     implementation("com.facebook.react:flipper-integration")
     
     // Geely/ECarX media interaction modules
-    implementation project(':adaptapi')
-    implementation project(':com_geely')
-    implementation project(':ecarx_car')
-    implementation project(':ecarx_fw')
     // implementation "androidx.javascriptengine:javascriptengine:1.0.0-alpha07"
     // implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
     implementation 'wang.harlon.quickjs:wrapper-android:2.4.0'

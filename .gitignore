@@ -70,3 +70,6 @@ buck-out/
 # Signing keys
 lx-music-mod.jks
 lx-music-mod.jks.base64
+
+# 车机代码本地备份(不推送到仓库)
+backup_car_code/

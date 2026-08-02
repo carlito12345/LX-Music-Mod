@@ -1,4 +1,2 @@
 <resources>
-    <string name="app_name">LX Music</string>
-    <string name="accessibility_service_description">LX Music Mod CarKey - 用于捕获方向盘按键以控制音乐播放</string>
-</resources>
+    <string name="app_name">LX Music</string></resources>
